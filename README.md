@@ -5,6 +5,7 @@
   팀원 : 명도균, 박성호, 이병훈, 장수민, 차민석
 
 ## Gantt
+```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     title       Adding GANTT diagram functionality to mermaid
