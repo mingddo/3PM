@@ -5,7 +5,7 @@
   팀원 : 명도균, 박성호, 이병훈, 장수민, 차민석
 
 ## Gantt
-```mermaid
+
 gantt
     dateFormat  YYYY-MM-DD
     title       Adding GANTT diagram functionality to mermaid
@@ -19,7 +19,7 @@ gantt
     개발 환경 구성             :done,    2021-01-15, 3d
 
     section Critical tasks
-    Completed task in the critical line :crit, done, 2014-01-06,24h
+    Completed task in the critical line :crit, done, 2021-01-06,24h
     Implement parser and jison          :crit, done, after des1, 2d
     Create tests for parser             :crit, active, 3d
     Future task in critical line        :crit, 5d
