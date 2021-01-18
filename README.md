@@ -6,6 +6,7 @@
 
 ## Gantt
 
+```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     title       Adding GANTT diagram functionality to mermaid
