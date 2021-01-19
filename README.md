@@ -21,7 +21,7 @@ gantt
     section 통합
     주제 선정 :done,    2021-01-18, 1d
     화면 기획 :active,    2021-01-18, 5d
-    기능 목록 상세 도출 :active,  2021-01-19, 4d
+    기능 목록 상세 도출 :after,  2021-01-19, 4d
     PPT 제작 :active, 2021-01-28, 1d
     
     section Frontend
