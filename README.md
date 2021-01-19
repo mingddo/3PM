@@ -17,10 +17,10 @@ gantt
     주제 선정                  :done,    2021-01-18, 1d
     (꽃보다집, 만수무강, 청산별곡)화면 기획                  :active,    2021-01-18, 5d
     (꽃보다집, 만수무강, 청산별곡)기능 목록 상세 도출         :active,  2021-01-19, 4d
-    개발 환경 구성             :active,    2021-01-20, 1d
+    개발 환경 구성             :active,    2021-01-22, 1d
 
     section Frontend
-    test  :active, 2021-01-20, 10d
+    기술학습 (Vue)  :active, 2021-01-18, 14d
 
     section Backend
     기술학습 (JPA, Spring Security)  :active, 2021-01-18, 14d
