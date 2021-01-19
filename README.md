@@ -25,7 +25,7 @@ gantt
     Test :after, 2021-01-25, 4d
     유지보수 :after, 2021-01-25, 4d
     PPT 제작 :crit, after, 2021-01-28, 1d
-    Sub PJT 2 발표 :crit, after, s021-01-29, 1d
+    Sub PJT 2 발표 :crit, after, 2021-01-29, 1d
     
     section Frontend
     기술학습 (Vue) :active, 2021-01-18, 12d
