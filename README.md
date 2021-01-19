@@ -25,7 +25,7 @@ gantt
     기능 목록 상세 도출          :active,  2021-01-19, 4d
     
     section Frontend
-    기술학습 (Vue)  :active, 2021-01-18, 14d
+    기술학습 (Vue)  :active, 2021-01-18, 12d
     개발 환경 세팅 : active, 2021-01-21, 1d
     UI 디자인   :active, 2021-01-21, 9d
     로그인, 회원가입, 소개 페이지   :active, 2021-01-21, 2d
@@ -34,7 +34,7 @@ gantt
     검색, 알림 기능 :active, 2021-01-28, 2d
 
     section Backend
-    기술학습 (JPA, Spring Security)  :active, 2021-01-18, 14d
+    기술학습 (JPA, Spring Security)  :active, 2021-01-18, 12d
     개발 환경 세팅 : active, 2021-01-21, 1d
     데이터베이스 설계   : active, 2021-01-21, 2d
     로그인, 회원가입, 소개 기능   :active, 2021-01-22, 1d
