@@ -44,13 +44,9 @@ gantt
     알림 기능 :after, 2021-01-27, 1d
 
     section Backend
-    기술학습 (JPA, Spring Security)  :active, 2021-01-18, 12d
-    개발 환경 세팅 : active, 2021-01-21, 1d
-    데이터베이스 설계   : active, 2021-01-21, 2d
-    로그인, 회원가입, 소개 기능   :active, 2021-01-22, 1d
-    뉴스피드 페이지, 게시글, 댓글, 대댓글 기능    :active, 2021-01-25, 2d
-    마이페이지, 팔로우, 팔로잉 기능 :active, 2021-01-27, 1d
-    검색, 알림 기능 :active, 2021-01-28, 2d
+    기술학습 (JPA, Spring Security) :after, 2021-01-18, 12d
+    개발 환경 세팅 :after, 2021-01-21, 1d
+    데이터베이스 설계 :after, 2021-01-21, 2d
 ```
 
 ## 주제
