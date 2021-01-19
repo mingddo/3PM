@@ -29,7 +29,7 @@ gantt
     
     section Frontend
     기술학습 (Vue) :active, 2021-01-18, 12d
-    웹 디자인 :active, 2021-01-21, 9d
+    웹 디자인 :after, 2021-01-21, 9d
     개발 환경 세팅 :after, 2021-01-21, 1d
     소개 페이지 :after, 2021-01-21, 1d
     회원가입 페이지 :after, 2021-01-21, 2d
@@ -45,7 +45,7 @@ gantt
     알림 기능 :after, 2021-01-27, 1d
 
     section Backend
-    기술학습 (JPA, Spring Security) :after, 2021-01-18, 12d
+    기술학습 (JPA, Spring Security) :active, 2021-01-18, 12d
     개발 환경 세팅 :after, 2021-01-21, 1d
     데이터베이스 설계 :after, 2021-01-21, 2d
     회원가입 기능 :after, 2021-01-22, 4d
