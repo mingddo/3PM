@@ -17,23 +17,20 @@
 gantt
     dateFormat  YYYY-MM-DD
     title       8팀 sub PJT 2
-    %% excludes    weekends
-    %% (`excludes` accepts specific dates in YYYY-MM-DD format, days of the week ("sunday") or "weekends", but not the word "weekdays".)
 
     section 통합
-    주제 선정                  :done,    2021-01-18, 1d
-    화면 기획                  :active,    2021-01-18, 5d
-    기능 목록 상세 도출          :active,  2021-01-19, 4d
-    UCC :active, 2021-01-
+    주제 선정 :done,    2021-01-18, 1d
+    화면 기획 :active,    2021-01-18, 5d
+    기능 목록 상세 도출 :active,  2021-01-19, 4d
+    PPT 제작 :active, 2021-01-28, 1d
     
     section Frontend
     기술학습 (Vue)      :active, 2021-01-18, 12d
+    웹 디자인           :active, 2021-01-21, 9d
     개발 환경 세팅      :active, 2021-01-21, 1d
-    UI 디자인           :active, 2021-01-21, 9d
-    로그인 페이지       :active, 2021-01-21, 3d
+    로그인 페이지       :active, 2021-01-21, 2d
     회원가입 페이지     :active, 2021-01-21, 1d
     소개 페이지         :active, 2021-01-22, 1d
-    
     뉴스피드:active, 2021-01-25, 1d
     게시글  :active, 2021-01-25, 1d
     댓글 :active, 2021-01-26, 1d
