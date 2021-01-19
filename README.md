@@ -13,7 +13,6 @@
 
 ## Gantt
 
-```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     title       8팀 sub PJT 2
@@ -49,7 +48,6 @@ gantt
     뉴스피드 페이지, 게시글, 댓글, 대댓글 기능    :active, 2021-01-25, 2d
     마이페이지, 팔로우, 팔로잉 기능 :active, 2021-01-27, 1d
     검색, 알림 기능 :active, 2021-01-28, 2d
-```
 
 
 ## 주제
