@@ -13,7 +13,7 @@
 
 ## Gantt
 
-```
+```mermaid
 gantt
     dateFormat  YYYY-MM-DD
     title       8팀 sub PJT 2
