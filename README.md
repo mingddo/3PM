@@ -62,7 +62,7 @@ gantt
 ```
 
 ## 주제
-- 프로젝트명 : 여보 어디가?
+- 프로젝트명 :
 - 설명입력
 
 ## 기술스택
@@ -99,6 +99,11 @@ Merge 후 Branch 삭제.
 ```
 
 #### Commit
+
+Commit template 추가 방법
+
+> git config commit.template .gittemplate
+
 ```
 # [타입, (fe/be)] 제목
 # 제목은 최대 50 글자까지만 입력
