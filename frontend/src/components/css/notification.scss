@@ -1,0 +1,99 @@
+@charset "utf-8";
+@import './common';
+
+.notification {
+
+    .notification-list {
+
+        h4.title {
+            @include wrap;
+            color:#787878;
+            font-weight: $f600;
+            transform: rotate(.1deg);
+            padding-top: 15px;
+            border-top:1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        .notification-list-item {
+
+            @include wrap;
+            margin-bottom: 20px;
+            .profile-image {
+                width: 40px; height: 40px;
+                border-radius: 40px;
+                float:left;
+                margin-right: 10px;
+            }
+            .user-info {
+                width: calc(100% - 60px);
+                margin-top: 4px;
+                float:left;
+                .nickname {
+                    a {
+                        font-size: 1em;
+                        color:#000;
+                        font-weight: $f600;
+                        span {
+                            font-weight: $f400;
+                        }
+                    }
+                }
+                .date {
+                    margin-top: 3px;
+                    font-size: $font-size__5;
+                    color:#787878;
+                    display: block;
+                }
+                .request-text {
+                    font-size: 1em;
+                    color:#333;
+                }
+
+            }
+
+            // 알림 - 요청
+            &.request {
+                .user-info {
+                    width:calc(100% - 200px);
+                    .request-text {
+                        font-size: 1em;
+                        color:#333;
+                    }
+                }
+
+                .request-btn {
+                    float:right;
+                    button {
+                        width: 70px;
+                        height: 40px;
+                        line-height: 40px;
+                        border-radius: 30px;
+                        margin-right: 5px;
+                        border:1px solid #000;
+                        box-sizing: border-box;
+                        font-size: $font-size__5;
+                        font-weight: $f600;
+                        transition: .2s;
+                        cursor: pointer;
+                        &:hover {
+                            box-shadow: 0 0 0 1px #000;
+                        }
+                        &:last-of-type {
+                            margin-right: 0;
+                            border-color: rgba(0, 0, 0, .8);
+                            background: rgba(0, 0, 0, .8);
+                            color:#fff;
+                            &:hover {
+                                border-color:#000;
+                                background: #000;
+                                box-shadow: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

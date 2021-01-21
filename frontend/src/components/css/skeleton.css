@@ -1,0 +1,149 @@
+/* COLOR */
+/* FONT */
+/*25px*/
+/*20px*/
+/*18px*/
+/*14px*/
+/*12px*/
+/*12px*/
+@-webkit-keyframes shine-lines {
+  0% {
+    background-position: -100px;
+  }
+  40%, 100% {
+    background-position: 140px;
+  }
+}
+@keyframes shine-lines {
+  0% {
+    background-position: -100px;
+  }
+  40%, 100% {
+    background-position: 140px;
+  }
+}
+
+@-webkit-keyframes shine-avatar {
+  0% {
+    background-position: -32px;
+  }
+  40%, 100% {
+    background-position: 208px;
+  }
+}
+
+@keyframes shine-avatar {
+  0% {
+    background-position: -32px;
+  }
+  40%, 100% {
+    background-position: 208px;
+  }
+}
+
+.skeleton-loading {
+  background-image: linear-gradient(90deg, #ddd 0px, #e8e8e8 40px, #ddd 80px);
+  background-size: 600px;
+  -webkit-animation: shine-avatar 1.6s infinite linear;
+          animation: shine-avatar 1.6s infinite linear;
+  border-radius: 3px;
+}
+
+.skeleton-loading.bar100 {
+  width: 100%;
+  float: left;
+  height: 50px;
+  margin-top: 15px;
+}
+
+.skeleton-loading.bar50 {
+  width: 50%;
+  height: 30px;
+  float: left;
+  margin-top: 15px;
+}
+
+.skeleton-loading.margin {
+  width: 100%;
+  float: left;
+  margin-bottom: 25px;
+}
+
+.skeleton-loading.box100-right {
+  width: 100px;
+  height: 100px;
+  float: right;
+  margin: 15px 0;
+}
+
+.skeleton-loading.with-box100-right {
+  width: calc(100% - 120px);
+  height: 100px;
+  float: left;
+  margin: 15px 0;
+}
+
+.skeleton-loading.box100-left {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin: 15px 0;
+}
+
+.skeleton-loading.with-box100-left {
+  width: calc(100% - 120px);
+  height: 100px;
+  float: right;
+  margin: 15px 0;
+}
+
+.skeleton-loading.circle40-left {
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  float: left;
+  margin-bottom: 20px;
+}
+
+.skeleton-loading.with-circle40-left {
+  width: calc(100% - 55px);
+  height: 50px;
+  border-radius: 5px;
+  float: right;
+  margin-bottom: 3px;
+}
+
+.skeleton-loading.box80vw {
+  width: calc(80vw - 10px);
+  height: calc(80vw - 10px);
+  float: left;
+  margin-bottom: 60px;
+}
+
+.skeleton-loading.with_box80vw {
+  width: calc(100% - 80vw - 10px);
+  height: calc(80vw - 10px);
+  float: right;
+}
+
+.skeleton-loading.feed-box {
+  width: 300px;
+  height: 280px;
+  float: right;
+  margin-top: 10px;
+}
+
+.skeleton-loading.left-bar {
+  width: 45%;
+  height: 30px;
+  float: left;
+  margin-bottom: 15px;
+}
+
+.skeleton-loading.right-bar {
+  width: 45%;
+  height: 30px;
+  float: right;
+  margin-bottom: 15px;
+}
+/*# sourceMappingURL=skeleton.css.map */

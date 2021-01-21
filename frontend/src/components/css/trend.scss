@@ -1,0 +1,76 @@
+@charset "utf-8";
+@import './common';
+
+.trend {
+    h2 {
+        font-weight: $f600;
+        margin-bottom: 30px;
+        transform: rotate(.1deg);
+        float:left;
+        + button {
+            float:right;
+            font-weight: $f600;
+            color:$ssafy;
+            transform: rotate(.1deg);
+        }
+    }
+    .keyword {
+        ul {
+            margin-bottom: 80px;
+            li {
+                @include wrap;
+                margin-top: -1px;
+                label {
+                    @include wrap;
+                    > span {
+                        @include wrap;
+                        padding:10px;
+                        box-sizing: border-box;
+                        display: block;
+                        span {
+                            float:left;
+                            font-size: 1.286em;
+                        }
+                        .index {
+                            color:#666;
+                            font-weight: $f600;
+                            margin-right: 40px;
+                        }
+                        .name {
+                            color:#000;
+                            font-weight: $f600;
+                        }
+                        .btn-text {
+                            float:right;
+                            color:$ssafy;
+                            font-size: 1em;
+                            &:after {
+                                content: '선택';
+                            }
+                            &.en:after {
+                                content: 'Select';
+                            }
+                        }
+                        &:before, &:after {
+                            display: none;
+                        }
+                    }
+                    [type="checkbox"]:checked + span {
+                        background: $ssafy;
+                        * {
+                            color:#fff;
+                        }
+                        .btn-text {
+                            &:after {
+                                content: '취소';
+                            }
+                            &.en:after {
+                                content: 'Cancel';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

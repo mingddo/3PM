@@ -1,0 +1,164 @@
+@charset "utf-8";
+@import '../../css/common';
+
+.user-feed {
+    // 상단 프로필 & 탭
+    .user-feed-profile {
+        .top {
+            margin-bottom: 15px;
+            .profile-image {
+                width: 60px;
+                height: 60px;
+                margin-right: 20px;
+                float:left;
+            }
+            .stat {
+                width: calc(100% - 80px);
+                float:left;
+                margin-top: 5px;
+                ul {
+                    @include wrap;
+                    li {
+                        float:left;
+                        margin-right: 15px;
+                        &:last-of-type {
+                            margin-right: 0;
+                        }
+                        .stat-count {
+                            color:#333;
+                            font-weight: $f600;
+                            margin-right: 5px;
+                            float:left;
+                        }
+                        .stat-text {
+                            font-size: $font-size__5;
+                            color:#787878;
+                            float:left;
+                            margin-top: 1px;
+                        }
+                    }
+                }
+                .intro {
+                    @include ellipsisMulti(2);
+                    @include wrap;
+                    font-size: $font-size__5;
+                    color:#787878;
+                    margin-top: 7px;
+                }
+            }
+        }
+    }
+
+    // 피드 리스트
+    .user-feed-list {
+        .message {
+            margin-top: 10vh;
+            h3 {
+                margin-bottom: 10px;
+                font-weight: $f600;
+            }
+        }
+    }
+
+    //큐레이션
+    .user-feed-curation-list {
+        @include wrap;
+        padding-bottom: 50px;
+        h4.title {
+            font-weight: $f600;
+            margin-bottom: 20px;
+            transform: rotate(.1deg);
+        }
+        .message {
+            margin-top: 10vh;
+            h3 {
+                margin-bottom: 10px;
+                font-weight: $f600;
+            }
+        }
+        .user-feed-curation-list-item {
+            @include wrap;
+            margin-bottom: 10px;
+            border:1px solid #000;
+            border-radius: 3px;
+            box-sizing: border-box;
+            padding:15px;
+        }
+    }
+
+    // 큐레이션 추가
+    .user-feed-add-curation {
+        padding-bottom: 80px;
+        h4.title {
+            color:#000;
+            font-weight: $f600;
+            float:left;
+            + button {
+                float:right;
+                font-size: 1em;
+                color:$ssafy;
+                transform: rotate(.1deg);
+            }
+        }
+        .sub-title {
+            @include wrap;
+            color:#666;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        ul.items {
+            @include wrap;
+            li {
+                @include wrap;
+                margin-bottom: 10px;
+            }
+        }
+
+        &.user-curation-add-mine {
+            position: fixed;
+            width: 100%;
+            height: calc(100vh - 50px);
+            box-sizing: border-box;
+            background: #fff;
+            padding-bottom: 0;
+            h3 {
+                font-weight: $f600;
+                margin-bottom: 5px;
+                + h4 {
+                    color:rgba(0, 0, 0, .7);
+                    margin-bottom: 30px;
+                }
+            }
+            .add-item-wrap {
+                @include wrap;
+                position: relative;
+                input {
+                    @include wrap;
+                    padding-right: 50px;
+                    padding-left: 20px;
+                }
+                button {
+                    position: absolute;
+                    right: 0;
+                    top:0;
+                    padding:17px 20px;
+                    color:$ssafy;
+                }
+            }
+        }
+    }
+}
+
+
+@media (min-width: 1200px) {
+
+    .user-feed {
+        // 큐레이션 추가
+        .user-feed-add-curation {
+            &.user-curation-add-mine {
+                width: 580px;
+            }
+        }
+    }
+
+}

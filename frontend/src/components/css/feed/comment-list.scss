@@ -1,0 +1,267 @@
+@charset "utf-8";
+@import '../common';
+
+.comment-list-item {
+    @include wrap;
+    .profile-image {
+        width: 40px;
+        height:40px;
+        border-radius: 40px;
+        margin-right: 10px;
+        &.small {
+            width: 40px;
+            height:40px;
+        }
+    }
+    .box {
+        float:right;
+        width: calc(100% - 50px);
+        .user-info {
+            @include wrap;
+            margin-bottom: 5px;
+            .nickname {
+                float:left;
+                font-weight: $f600;
+                transform: rotate(.1deg);
+                line-height: 1em;
+                color:#000;
+            }
+            .date {
+                float:right;
+            }
+        }
+        .comment-text {
+            @include wrap;
+            margin-bottom: 10px;
+            font-size: .929em;
+            &.deleteComment {
+                color:#999;
+            }
+        }
+        .btns {
+            &.deleteComment {
+                button {
+                    .icon {
+                        color:#999;
+                    }
+                }
+            }
+            button {
+                margin-right: 20px;
+                &:last-of-type {
+                    margin-right: 0;
+                }
+                .icon {
+                    color:$ssafy;
+                }
+                &.del-btn {
+                    float:right;
+                    color:$red;
+                    font-size: $font-size__5;
+                }
+                &.like-btn {
+                    position: relative;
+                    text-indent: 18px;
+                    &.active {
+                        color:$ssafy;
+                        .icon {
+                            &.full {
+                                display: inline-block;
+                            }
+                            &.empty {
+                                display: none;
+                            }
+                        }
+                    }
+                    .icon {
+                        position: absolute;
+                        top:0;
+                        left: 0;
+                        &.full {
+                            display: none;
+                        }
+                        &.empty {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .sub-comment {
+        @include wrap;
+        background: #eee;
+        margin-top: 20px;
+        padding-left: 45px;
+        box-sizing: border-box;
+    }
+}
+
+
+.comment-list {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: #fff;
+    z-index: 99;
+
+    // 댓글 리스트
+    .comment-view {
+        @include wrap;
+        ul {
+            li {
+                @include wrap;
+                padding:20px 0;
+            }
+            &.main-comment-list {
+                @include wrap;
+                height: calc(100vh - 102px);
+                overflow: auto;
+            }
+        }
+        .bottom-btn-group {
+            position: absolute;
+            bottom:0;
+            width: 100%;
+            left: 0;
+            border-top: 1px solid #ddd;
+            button {
+                height: 50px;
+                float:left;
+                border-right: 1px solid #ddd;
+                text-align: center;
+                line-height: 51px;
+                width: 21%;
+                color:#000;
+                cursor: pointer;
+                font-weight: $f600;
+                font-size: .929em;
+                .icon {
+                    color:$ssafy;
+                    font-size: 16px;
+                    margin-right: 3px;
+                }
+                &.write-comment-btn {
+                    color:$ssafy;
+                }
+                &:last-of-type {
+                    border-right: none;
+                    width: 37%;
+                }
+                &.highlight {
+                    background: #333;
+                    color:$ssafy;
+                }
+                &.likeScrap {
+                    position: relative;
+                    text-indent: 25px;
+                    &.active {
+                        color:$ssafy;
+                        .icon {
+                            &.full {
+                                display: inline-block;
+                            }
+                            &.empty {
+                                display: none;
+                            }
+                        }
+                    }
+                    .icon {
+                        position: absolute;
+                        top:16px;
+                        left: 23px;
+                        &.full {
+                            display: none;
+                        }
+                        &.empty {
+                            display: inline-block;
+                        }
+                    }
+                }
+
+            }
+        }
+        .no-list {
+            h4 {
+                font-weight: $f600;
+                transform: rotate(.1deg);
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            button {
+                font-size: $font-size__5;
+                font-weight: $f600;
+                transform: rotate(.1deg);
+                color:$ssafy;
+            }
+        }
+
+    }
+
+    .share-wrap {
+        position: absolute;
+        width: 100%;
+        top:0;
+        height: calc(100% - 50px);
+        .close-popup {
+            width: 100%;
+            height: calc(100% - 170px);
+            background: rgba(0, 0, 0, .5);
+        }
+        ul {
+            position: absolute;
+            bottom:0;
+            width: 100%;
+            box-sizing: border-box;
+            background: #333;
+            padding: 30px 0 15px;
+            border-radius: 10px 10px 0 0;
+            li, a {
+                @include wrap;
+                box-sizing: border-box;
+                padding:5px 20px;
+                margin-bottom: 15px;
+                font-size: $font-size__3;
+                color:#fff;
+                font-weight: $f600;
+                transform: rotate(.1deg);
+                span {
+                    float:right;
+                    color:$ssafy;
+                }
+            }
+        }
+    }
+
+    // 댓글 쓰기
+   .comment-write {
+       padding-top: 20px;
+       .comment-list-item {
+           margin-bottom: 30px;
+       }
+       .comment-length {
+           position: absolute;
+           right: 15px;
+           top:15px;
+           font-size: $font-size__5;
+       }
+        textarea {
+            @include wrap;
+            height: 200px;
+            border:1px solid #000;
+            border-radius: 3px;
+            box-sizing: border-box;
+            padding:45px 15px 15px;
+            outline:none;
+        }
+        .not-absolute {
+            @include wrap;
+            position: inherit;
+        }
+    }
+
+
+}
+

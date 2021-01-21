@@ -1,0 +1,285 @@
+@charset "utf-8";
+@import './common';
+
+.setting {
+
+    padding-bottom: 50px;
+
+    .setting-item {
+        @include wrap;
+        margin-bottom: 30px;
+        h3 {
+            float:left;
+            font-weight: $f600;
+            color:#000;
+            + button {
+                width: 40px;
+                height: 18px;
+                border-radius: 30px;
+                background: #999;
+                float:right;
+                position: relative;
+                font-size: $font-size__5;
+                text-align: left;
+                color:rgba(255, 255, 255, .5);
+                padding:0 8px;
+                &:before {
+                    content:"";
+                    position:absolute;
+                    width: 26px; height: 26px; border-radius: 26px;
+                    background: #eee;
+                    left:-2px;
+                    top:-4px;
+                    box-sizing: border-box;
+                    transition: .2s;
+                }
+                &.active {
+                    background: rgba(56, 147, 168, .5);
+                    color:#fff;
+                    text-align: right;
+                    &:before {
+                        background: $ssafy;
+                        left:15px;
+                    }
+                }
+                //float:right;
+                //margin-top: 4px;
+            }
+        }
+        p {
+            @include wrap;
+            margin-top: 15px;
+            color:$black;
+        }
+    }
+
+    .curation-search-item-wrap {
+        @include wrap;
+        margin-bottom: 30px;
+        margin-top: 15px;
+        .title-wrap {
+            @include wrap;
+            margin-bottom: 10px;
+            h4 {
+                float:left;
+                font-weight: $f600;
+                transform: rotate(.1deg);
+            }
+            span {
+                float:left;
+                font-size: .857em;
+                margin-left: 5px;
+                margin-top: 4px;
+                color:#999;
+                .red {
+                    color:$red;
+                    margin-right: 5px;
+                }
+            }
+        }
+        ul {
+            @include wrap;
+            li {
+                @include wrap;
+                position: relative;
+                background: #eee;
+                border-radius: 3px;
+                padding:18px 20px;
+                box-sizing: border-box;
+                margin-bottom: 5px;
+                .title {
+                    font-size: 1em;
+                    font-weight: $f600;
+                    line-height: 1em;
+                    color:#787878;
+                }
+                button {
+                    position: absolute;
+                    right: 0;
+                    top:0;
+                    padding:18px 20px 16px;
+                    color:$red;
+                }
+            }
+        }
+        .add-item-wrap {
+            @include wrap;
+            position: relative;
+            input {
+                @include wrap;
+                padding-right: 50px;
+                padding-left: 20px;
+            }
+            button {
+                position: absolute;
+                right: 0;
+                top:0;
+                padding:17px 20px;
+                color:$ssafy;
+            }
+        }
+        select {
+            @include select-custom;
+            &:hover ,&:focus {
+                border-width: 2px;
+            }
+        }
+        + .delete-btn {
+            color:$red;
+            font-weight: $f600;
+            transform: rotate(.1deg);
+        }
+    }
+
+    // 설정 리스트
+    &.setting-list {
+        ul {
+            li {
+                @include wrap;
+                a {
+                    @include wrap;
+                    font-size: $font-size__3;
+                    font-weight: $f600;
+                    padding: 10px 0;
+                    color:#000;
+                }
+                &.logout {
+                    margin-top: 2em;
+                }
+            }
+        }
+    }
+
+    // 계정설정
+    &.setting-account {
+        .select-profile {
+            position: relative;
+            margin-bottom: 25px;
+            input {
+                display: none;
+            }
+            .img {
+                width: 60px;
+                height: 60px;
+                border-radius: 60px;
+                object-fit: cover;
+            }
+            label {
+                position: absolute;
+                text-align: center;
+                box-sizing: border-box;
+                padding-top: 6px;
+                display: inline-block;
+                width: 27px;
+                height: 27px;
+                background: #000;
+                border-radius: 27px;
+                bottom:5px;
+                left: 40px;
+                .fa-pen {
+                    color:#Fff;
+                }
+            }
+        }
+        .change-pwd {
+            input {
+                color:$ssafy;
+                font-weight: $f600;
+                &:focus {
+                    border:1px solid #000;
+                }
+            }
+        }
+        .about {
+            textarea {
+                @include wrap;
+                box-sizing: border-box;
+                padding:45px 15px 15px 15px;
+                border-radius: 3px;
+                border:1px solid #000;
+                outline:none;
+                transition: .2s;
+                height: 96px;
+                &:focus, &:focus {
+                    border:2px solid #000;
+                }
+            }
+            span {
+                position: absolute;
+                right:15px;
+                top:18px;
+                font-size: $font-size__5;
+                &.error {
+                    color:$red;
+                }
+            }
+        }
+        .btn--secession {
+            margin-top: 100px;
+            color:$ssafy;
+            font-weight: $f600;
+            transform: rotate(.1deg);
+        }
+    }
+
+    // 큐레이션 설정
+    &.setting-quration {
+        padding-bottom: 40px;
+
+        .quration-item {
+            @include wrap;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+            border:1px solid #000;
+            border-radius: 3px;
+            padding:14px 15px;
+            h4 {
+                float:left;
+                width: calc(100% - 50px);
+                font-weight: $f600;
+                transform: rotate(.1deg);
+            }
+            .fa-chevron-right {
+                float:right;
+                margin-top: 3px;
+            }
+        }
+    }
+
+    // 큐레이션 추가,수정
+    &.curation-manage {
+        .no-curation-title {
+            font-weight: $f600;
+            margin-bottom: 40px;
+            transform: rotate(.1deg);
+        }
+    }
+
+
+    // 알림 설정
+    &.setting-notification {
+        h4 {
+            @include wrap;
+            color:#7B7B7B;
+            margin-bottom: 15px;
+            font-weight: $f600;
+            transform: rotate(.1deg);
+            + div {
+                margin-bottom: 50px;
+            }
+        }
+        .setting-item {
+            margin-bottom: 20px;
+        }
+    }
+
+    // 언어 설정
+    &.setting-language {
+        ul {
+            li {
+                @include wrap;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
