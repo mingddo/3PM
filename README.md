@@ -1,5 +1,4 @@
 # 팀명
-
 - 팀명 : 상원없는 상원팀
 - 팀원 소개
 
@@ -63,38 +62,19 @@ gantt
 ```
 
 ## 주제
-
 - 프로젝트명 :
 - 설명입력
 
 ## 기술스택
-
-### Frontend
+- Frontend
 
   Vue.js, Vuetify
 
-### Backend
+- Backend
 
-#### 기술스택
-    
-    Java, Spring, JPA, MariaDB
-
-#### 개발 환경
-
-- JDK
-    - 11
-    
-- IDE
-    - IntelliJ IDEA Ultimate
-
-- Spring Boot
-    - 2.4.2
-    
-- 빌드
-    - Gradle
+  Java, Spring, JPA, MariaDB
 
 ## 기능
-
 - 기능1
     - 세부기능1
     - 세부기능2
@@ -105,7 +85,7 @@ gantt
     - 세부기능1
     - 세부기능2
 
-## Git 규칙
+## 개발규칙
 
 #### Branch
 ```
@@ -156,94 +136,3 @@ Commit template 추가 방법
 # ------------------
 ```
 
-## Frontend 개발 규칙
-
-## Backend 개발 규칙
-
-### 1. Package 구조
-
-- controller
-
-- service
-
-- domian
-
-- repository
- 
-
-### 2. 포매팅
-
-#### 1.1 중괄호
-
-- 시작하는 중괄호는 새로운 라인에 시작하지 않고 제어문과 같은 라인을 사용한다.
-
-```
-if (superHero == theTick) {
-    System.out.println("Spoon!");   
-}
-```
-
-- 제어문이 한 줄이더라도 중괄호를 생락하지 않는다.
-
-```
-if (superHero == theTick) {
-        System.out.println("Spoon!");
-}
-```
-
-#### 1.2 띄어쓰기
-
-- 메소드 이름 다음에는 띄어쓰기 없이 왼쪽 괄호를 사용 // foo(i, j)
-
-- 배열 다음에는 띄어쓰기 없이 왼쪽 괄호를 사용 // args[0]
-
-- 이진 연산자 간에는 양쪽에 띄어쓰기를 사용 // a = b + c
-
-- 쉼표와 세미콜론 뒤에는 띄어쓰기를 사용 // for (int i = 0; i < 10; i++)
-
-- cast 사용시 띄어쓰기 없이 작성 // (MyClass)v.get(3)
-
-- if, while, for, switch, catch 문 뒤에는 띄어쓰기를 사용 // if (check)
-
-
-#### 1.3 클래스 멤버 정렬
-
-- 클래스 멤버는 필드, 생성자, 메소드 순서로 정렬한다.
-
-
-#### 1.4 라인 최대 길이
-
-- 120칸을 넘지 않는다. (Intellij 기준)
-
-
-### 2. 네이밍
-
-#### 2.1 클래스와 인터페이스명
-
-- 각 단어의 첫 글자는 대문자로 나머지는 소문자를 사용 // Customer, SalesOrder
-
-#### 2.2 패키지명
-
-- 소문자만 사용
- 
-- 복합단어를 사용하지 않는다.
-
-### 3. 코딩
-
-#### 3.1 피해야할 상황
-
-- do-while 사용하지 않는다.
-
-- 한 메소드에 한 reutrn, 마지막에 return
-
-#### 3.2 증감 연산자
-
-- 증감 연산자는 분리된 라인에서 단독으로 사용한다.
-
-#### 3.3 초기화
-
-- 변수가 사용되는 곳의 가까운 위치에 변수를 선언
-
-#### 3.4 접근
-
-- 상수를 제외한 모든 필드는 private 해야한다.
