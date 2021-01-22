@@ -21,8 +21,8 @@ gantt
 
     section 통합
     주제 선정 :done,    2021-01-18, 1d
-    화면 기획 :active,    2021-01-18, 5d
-    기능 목록 상세 도출 :active,  2021-01-19, 4d
+    화면 기획 :done,    2021-01-18, 5d
+    기능 목록 상세 도출 :done,  2021-01-19, 4d
     Test :after, 2021-01-25, 4d
     유지보수 :after, 2021-01-25, 4d
     PPT 제작 :crit, after, 2021-01-28, 1d
@@ -31,7 +31,7 @@ gantt
     section Frontend
     기술학습 (Vue) :active, 2021-01-18, 12d
     웹 디자인 :active, 2021-01-21, 9d
-    개발 환경 세팅 :active, 2021-01-21, 1d
+    개발 환경 세팅 :done, 2021-01-21, 1d
     소개 페이지 :active, 2021-01-21, 1d
     회원가입 페이지 :active, 2021-01-21, 2d
     로그인 페이지 :active, 2021-01-21, 2d
@@ -47,8 +47,8 @@ gantt
 
     section Backend
     기술학습 (JPA, Spring Security) :active, 2021-01-18, 12d
-    개발 환경 세팅 :active, 2021-01-21, 1d
-    데이터베이스 설계 :active, 2021-01-21, 2d
+    개발 환경 세팅 :done, 2021-01-21, 1d
+    데이터베이스 설계 :done, 2021-01-21, 2d
     회원가입 기능 :active, 2021-01-22, 4d
     로그인 기능 :active, 2021-01-22, 4d
     뉴스피드 기능 :after, 2021-01-25, 2d
