@@ -158,9 +158,6 @@ Commit template 추가 방법
 
 ## Frontend 개발 규칙
 
-### FE 컨벤션
-
-
 
 1. .vue 파일명 : 대문자 시작 + 카멜케이스
 
