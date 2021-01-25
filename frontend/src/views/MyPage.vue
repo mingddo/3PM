@@ -1,72 +1,178 @@
 <template>
   <section class="myPagemainSection">
-    <header class="myPageHeader">
-      <!-- 프로필 정보들 -->
-      <div class="profileInfo1">
-        <!-- 커버사진 및 본인 프로필 사진, 이름 -->
-        <div class="profileImgFrame">
-          <img
-            class="pofileImg"
-            src="https://lh3.googleusercontent.com/proxy/nhF8zAo7bmBI0DmEaDB5z45y60SaBo8ikkatFdGOl3K5bPkz3kzq2r-WHxN-ry3WBxgKeujWotOlXGg"
-            alt="프로필사진"
-          />
-        </div>
-        <h1>{{ userinfo.name }}</h1>
-      </div>
-      <hr class="myPageHeaderhr" />
-      <div class="profileInfo2">
-        <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
-        <div class="profileDetailInfo">
-          <h3>내가 추가한 친구</h3>
-          <div>{{ userinfo.following }}</div>
-        </div>
-        <div class="profileDetailInfo">
-          <h3>나를 추가한 친구</h3>
-          <div>{{ userinfo.following }}</div>
-        </div>
-        <div class="profileDetailInfo">
-          <h3>내가 속한 그룹</h3>
-          <div>{{ userinfo.group }}</div>
-        </div>
-      </div>
-      <div class="settings">설정 변경</div>
-    </header>
-    <article class="myPagearticle">
-      <!-- 최근활동 -->
-      <section>
-        <h2>최근 활동</h2>
-        <div>
-          <!-- 최근활동 3개? 미리보기 -->
-        </div>
-      </section>
-      <!-- 피드 -->
-      <section>
-        <!-- 게시물, 필터 들어가는 부분 -->
-        <header>
-          <h2>게시물</h2>
-          <div>필터</div>
-          <div>
-            <div>모두</div>
-            <div>꽃보다 집</div>
+    <header class="myPageHeaderFrame">
+      <div class="myPageHeader">
+        <!-- 프로필 정보들 -->
+        <div class="profileInfo1">
+          <!-- 커버사진 및 본인 프로필 사진, 이름 -->
+          <div class="profileImgFrame">
+            <img
+              class="pofileImg"
+              src="@/assets/loverduck.png"
+              alt="프로필사진"
+            />
           </div>
-        </header>
-        <!-- 게시물들이 나옴 컴포넌트들이 v-for돌기, 무한스크롤로 내릴 수 있음 -->
+          <h1>{{ profileinfo.name }}</h1>
+          <div class="myPageSubscribe">
+            <div
+              :class="{ profielSubscribedNone: subscribed }"
+              class="myPageSubscribed"
+            >
+              {{ profileinfo.name }}님의 소식 받기
+            </div>
+            <div
+              :class="{ profielSubscribedNone: !subscribed }"
+              class="myPageSubscribed"
+            >
+              {{ profileinfo.name }}님의 소식 끊기
+            </div>
+          </div>
+        </div>
 
-        <article></article>
-      </section>
+        <div class="profileInfoDetailFrame">
+          <div class="profileInfoDetail">
+            <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
+            <div class="profileDetailInfo">
+              <h3 :class="{ profile_none: mypage }">
+                {{ profileinfo.name }}님이 구독한 사람
+              </h3>
+              <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3>
+              <div>{{ profileinfo.following }}</div>
+            </div>
+            <div class="profileDetailInfo">
+              <h3 :class="{ profile_none: mypage }">
+                {{ profileinfo.name }}님을 구독한 사람
+              </h3>
+              <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3>
+              <div>{{ profileinfo.following }}</div>
+            </div>
+            <div class="profileDetailInfo">
+              <h3 :class="{ profile_none: mypage }">
+                {{ profileinfo.name }}님이 가입한 그룹
+              </h3>
+              <h3 :class="{ profile_none: !mypage }">내가 가입한 그룹</h3>
+              <div>{{ profileinfo.group }}</div>
+            </div>
+          </div>
+          <hr class="myPageHeaderhr" />
+          <div class="myPageBottom">
+            <div class="myPageTabLink">
+              <div class="myPageTabLinkContent">
+                <a
+                  @click.prevent="activetab = 1"
+                  :class="[activetab === 1 ? 'active' : '']"
+                  >게시물</a
+                >
+                <div
+                  :class="[activetab === 1 ? 'active' : '']"
+                  class="activeBar"
+                ></div>
+              </div>
+              <div class="myPageTabLinkContent">
+                <a
+                  @click.prevent="activetab = 2"
+                  :class="[activetab === 2 ? 'active' : '']"
+                  >최근 활동</a
+                >
+                <div
+                  :class="[activetab === 2 ? 'active' : '']"
+                  class="activeBar"
+                ></div>
+              </div>
+              <div class="myPageTabLinkContent">
+                <a
+                  @click.prevent="activetab = 3"
+                  :class="[activetab === 3 ? 'active' : '']"
+                  >구독자</a
+                >
+                <div
+                  :class="[activetab === 3 ? 'active' : '']"
+                  class="activeBar"
+                ></div>
+              </div>
+              <div class="myPageTabLinkContent">
+                <a
+                  @click.prevent="activetab = 4"
+                  :class="[activetab === 4 ? 'active' : '']"
+                  >그룹</a
+                >
+                <div
+                  :class="[activetab === 4 ? 'active' : '']"
+                  class="activeBar"
+                ></div>
+              </div>
+            </div>
+            <div class="settings">설정 변경</div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <article class="myPagearticleFrame">
+      <div class="myPagearticle">
+        <!-- 최근활동 -->
+
+        <section v-if="activetab === 1" class="myPageActivity">
+          <Activity :profileinfo="profileinfo" />
+        </section>
+        <!-- 피드 -->
+        <section>
+          <!-- 게시물, 필터 들어가는 부분 -->
+          <header>
+            <h2>게시물</h2>
+            <div>필터</div>
+            <div>
+              <div>모두</div>
+              <div>꽃보다 집</div>
+            </div>
+          </header>
+          <!-- 게시물들이 나옴 컴포넌트들이 v-for돌기, 무한스크롤로 내릴 수 있음 -->
+
+          <article></article>
+        </section>
+      </div>
     </article>
   </section>
 </template>
 
 <script>
+import Activity from "../components/MyPage/Activity.vue";
+
 export default {
+  components: { Activity },
   data() {
     return {
-      userinfo: {
+      current_user_id: 5,
+      // 해당 페이지 유저를 구독했는지 여부
+      subscribed: false,
+      // 내 홈페이지 여부
+      mypage: false,
+      activetab: 1,
+      profileinfo: {
         name: "명도균",
+        user_id: 1,
         following: 100,
         follow: 1000,
         group: 4,
+        activities: [
+          {
+            username: "명도균",
+            dayInfo: "2021년 1월 25일",
+            content: "장수민님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+            article_id: 30,
+          },
+          {
+            username: "명도균",
+            dayInfo: "2021년 1월 11일",
+            content: "이병훈님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+            article_id: 30,
+          },
+          {
+            username: "명도균",
+            dayInfo: "2021년 1월 1일",
+            content: "박성호님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+            article_id: 30,
+          },
+        ],
         feed: [{}, {}],
       },
     };
@@ -78,18 +184,25 @@ export default {
 * {
   box-sizing: border-box;
 }
-.myPageHeader {
+
+.myPageHeaderFrame {
   width: 100%;
   height: auto;
-  padding: 25px 0;
   background-color: #ffffff;
+}
+
+.myPageHeader {
+  width: 940px;
+  margin: auto;
+  padding: 15px;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .profileInfo1 {
-  width: 940px;
+  width: 90%;
   margin: auto;
   padding: 15px 0;
   display: flex;
@@ -97,40 +210,155 @@ export default {
   justify-content: space-around;
   align-items: center;
 }
-.profileInfo2 {
-  width: 940px;
-  margin: auto;
+
+.myPageSubscribe {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.myPageSubscribed {
+  width: 300px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 800;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.profielSubscribedNone {
+  display: none;
+}
+
+.profileInfoDetailFrame {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileInfoDetail {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile_none {
+  display: none;
+}
+
 .profileDetailInfo {
   height: 60px;
+  margin: 30px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  margin: 30px;
+  cursor: pointer;
 }
 
 .myPageHeaderhr {
-  width: 940px;
+  width: 100%;
   height: 1px;
   border: none;
   background-color: rgba(0, 0, 0, 0.2);
   box-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.2);
 }
 
-.settings {
-  width: 150px;
+.myPageBottom {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.myPagearticle {
+
+.myPageTabLink {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.myPageTabLink a {
+  width: 100px;
+  height: 50px;
+  padding: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.myPageTabLinkContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.activeBar {
+  width: 100px;
+  height: 3px;
+}
+.activeBar.active {
+  border-bottom: solid 3px #1876f2;
+}
+
+.myPageTabLink a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.myPageTabLink a.active {
+  color: #1876f2;
+}
+
+.settings {
+  width: 100px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.myPagearticleFrame {
   width: 100%;
   height: auto;
   padding: 15px 0;
   background-color: #f0f2f5;
 }
+
+.myPagearticle {
+  width: 900px;
+  margin: auto;
+}
+
+.myPageActivity {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .myPagemainSection {
   display: flex;
   flex-direction: column;
