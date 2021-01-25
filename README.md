@@ -140,7 +140,7 @@ gantt
 
 #### Branch
 ```
-master -> develop -> feature/(branch name)
+master -> develop -> feature/(branch name)_(FE/BE)
 ```
 
 #### Merge
