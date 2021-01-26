@@ -13,7 +13,7 @@
             />
           </div>
           <h1>{{ profileinfo.name }}</h1>
-          <div class="myPageSubscribe">
+          <div class="myPageSubscribe" @click="gotoprofile">
             <div
               :class="{ profielSubscribedNone: subscribed }"
               class="myPageSubscribed"
@@ -68,17 +68,20 @@
                   class="activeBar"
                 ></div>
               </div>
-              <div class="myPageTabLinkContent">
-                <a
-                  @click.prevent="activetab = 2"
-                  :class="[activetab === 2 ? 'active' : '']"
-                  >최근 활동</a
-                >
-                <div
-                  :class="[activetab === 2 ? 'active' : '']"
-                  class="activeBar"
-                ></div>
-              </div>
+              <span :class="[mypage ? '' : 'profile_none']">
+                <div class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 2"
+                    :class="[activetab === 2 ? 'active' : '']"
+                    >최근 활동</a
+                  >
+                  <div
+                    :class="[activetab === 2 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
+              </span>
+
               <div class="myPageTabLinkContent">
                 <a
                   @click.prevent="activetab = 3"
@@ -102,7 +105,9 @@
                 ></div>
               </div>
             </div>
-            <div class="settings">설정 변경</div>
+            <span :class="[mypage ? '' : 'profile_none']">
+              <div class="settings">설정 변경</div>
+            </span>
           </div>
         </div>
       </div>
@@ -110,39 +115,34 @@
     <article class="myPagearticleFrame">
       <div class="myPagearticle">
         <!-- 최근활동 -->
-
         <section v-if="activetab === 1" class="myPageActivity">
           <Activity :profileinfo="profileinfo" />
         </section>
-        <!-- 피드 -->
-        <section>
-          <!-- 게시물, 필터 들어가는 부분 -->
-          <header>
-            <h2>게시물</h2>
-              <div style="height:100vh"></div>
-
-            <div>필터</div>
-            <div>
-              <div>모두</div>
-              <div>꽃보다 집</div>
-            </div>
-          </header>
-          <!-- 게시물들이 나옴 컴포넌트들이 v-for돌기, 무한스크롤로 내릴 수 있음 -->
-
-          <article></article>
+        <section v-if="activetab === 2" class="myPageActivity">
+          <Activity :profileinfo="profileinfo" />
         </section>
+        <section v-if="activetab === 3" class="myPageActivity">
+          <SubscribedList :profileinfo="profileinfo" />
+        </section>
+        <section v-if="activetab === 4" class="myPageActivity">
+          <GroupList :profileinfo="profileinfo" />
+        </section>
+        <!-- 피드 -->
       </div>
     </article>
   </section>
 </template>
 
 <script>
-import Activity from "../components/MyPage/Activity.vue";
+import Activity from "@/components/MyPage/Activity.vue";
+import SubscribedList from "@/components/MyPage/SubscribedList.vue";
+import GroupList from "@/components/MyPage/GroupList.vue";
 
 export default {
-  components: { Activity },
+  components: { Activity, SubscribedList, GroupList },
   data() {
     return {
+      name: "명도균",
       current_user_id: 5,
       // 해당 페이지 유저를 구독했는지 여부
       subscribed: false,
@@ -155,6 +155,35 @@ export default {
         following: 100,
         follow: 1000,
         group: 4,
+        grouplist: [
+          {
+            groupname: "윈터솔져",
+            group_id: 100,
+            signupDate: "2020년 12월 1일",
+          },
+        ],
+        subscribedlist: [
+          {
+            username: "장수민",
+            user_id: 4,
+            profilesrc: "@/assets/loverduck.png",
+          },
+          {
+            username: "이병훈",
+            user_id: 5,
+            profilesrc: "@/assets/loverduck.png",
+          },
+          {
+            username: "박성호",
+            user_id: 8,
+            profilesrc: "@/assets/loverduck.png",
+          },
+          {
+            username: "김상원",
+            user_id: 31,
+            profilesrc: "@/assets/loverduck.png",
+          },
+        ],
         activities: [
           {
             username: "명도균",
@@ -178,6 +207,23 @@ export default {
         feed: [{}, {}],
       },
     };
+  },
+  methods: {
+    confirm() {
+      console.log(this.$route.query);
+    },
+    gotoprofile() {
+      this.$router.push({ name: "MyPage", query: { userId: this.name } });
+      // this.$router.push({ path: `/mypage/${this.profileinfo.name}` });
+    },
+  },
+  // watch: {
+  //   $route() {
+  //     this.confirm();
+  //   },
+  // },
+  created() {
+    this.confirm();
   },
 };
 </script>
