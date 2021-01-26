@@ -1,24 +1,24 @@
 <template>
   <div class="ActivityComponent">
     <header class="myPageActivityHeader">
-      <h2>최근 활동</h2>
+      <h2>가입한 그룹 목록</h2>
     </header>
     <hr class="myPageActivityhr" />
     <div class="myPageActivityContentFrame">
-      <MyPageActivity
-        v-for="(activity, idx) in profileinfo.activities"
+      <Group
+        v-for="(group, idx) in profileinfo.grouplist"
         :key="idx"
-        :activity="activity"
+        :group="group"
       />
     </div>
   </div>
 </template>
 
 <script>
-import MyPageActivity from "@/components/MyPage/MyPageActivity.vue";
+import Group from "./Group.vue";
 
 export default {
-  components: { MyPageActivity },
+  components: { Group },
   props: {
     profileinfo: Object,
   },
