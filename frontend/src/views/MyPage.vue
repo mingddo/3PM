@@ -119,6 +119,8 @@
           <!-- 게시물, 필터 들어가는 부분 -->
           <header>
             <h2>게시물</h2>
+              <div style="height:100vh"></div>
+
             <div>필터</div>
             <div>
               <div>모두</div>
