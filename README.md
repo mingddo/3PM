@@ -136,6 +136,12 @@ gantt
 
     - 그룹 내 게시물 작성
 
+
+## Database 구조
+
+![image](/uploads/0ac6bb35610bfb2974017dff58236668/image.png)
+
+
 ## Git 규칙
 
 #### Branch
