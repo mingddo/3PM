@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <button class="login-btn"><router-link to="/login" class="login-btn-text">로그인</router-link></button>
+    <button v-if="!isLoginUser" class="login-btn"><router-link to="/login" class="login-btn-text">로그인</router-link></button>
     <section class="home-section">
       <h1>오후 세시.</h1>
     </section>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-
+import {mapState} from 'vuex'
 export default {
   name: 'Home',
   data () {
@@ -22,6 +22,9 @@ export default {
       loginBtn : null,
       loginBtnText : null,
     }
+  },
+  computed : {
+    ...mapState(['isLoginUser'])
   },
   methods : {
     scrollStatus() {
@@ -36,9 +39,11 @@ export default {
     },
   },
   mounted () {
-    this.loginBtn = document.querySelector('.login-btn');
-    this.loginBtnText = document.querySelector('.login-btn-text');
-    window.addEventListener("scroll",this.scrollStatus);
+    if(!this.isLoginUser) {
+      this.loginBtn = document.querySelector('.login-btn');
+      this.loginBtnText = document.querySelector('.login-btn-text');
+      window.addEventListener("scroll",this.scrollStatus);
+    }
   },
 }
 </script>
@@ -54,7 +59,7 @@ export default {
   }
 
   .login-btn {
-    width: 20%;
+    width: 80px;
     position: absolute;
     top: 5vh;
     right: 5%;
