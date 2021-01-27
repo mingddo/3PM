@@ -27,6 +27,10 @@ public class User {
     @Column(name = "user_nickname", nullable = false)
     private String nickname;
 
+    // 유저 이름 ( 추가 )
+    @Column(name = "user_name", nullable = false)
+    private String name;
+
     // 유저 소개
     @Column(name = "user_bio")
     private String bio;

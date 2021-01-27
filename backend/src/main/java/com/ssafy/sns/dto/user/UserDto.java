@@ -10,6 +10,7 @@ import lombok.*;
 public class UserDto {
 
     private Long id;
+    private String name;
     private String email;
     private String nickname;
     private String bio;
@@ -18,6 +19,7 @@ public class UserDto {
 
     public UserDto(User user) {
         this.id = user.getId();
+        this.name = user.getName();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.bio = user.getBio();
