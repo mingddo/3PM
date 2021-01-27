@@ -1,17 +1,25 @@
 <template>
   <div id="app">
-    <div id="nav" v-if="true">
-      <button><router-link to="/">오후 세시</router-link></button>
-      <!-- <button><router-link to="/">프로필</router-link></button>
-      <button><router-link to="/">검색아이콘</router-link></button> -->
+    <div id="nav" v-if="isLoginUser">
+      <button><router-link to="/">홈</router-link></button>
+      <button><router-link to="/">핵인싸</router-link></button>
+      <button><router-link to="/">청산별곡</router-link></button>
+      <button><router-link to="/">만수무강</router-link></button>
+      <button><router-link to="/">꽃보다집</router-link></button>
+      <button><router-link to="/">🔍</router-link></button>
+      <button><router-link to="/">프로필</router-link></button>
     </div>
     <router-view/>
   </div>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 
 export default {
+  computed : {
+    ...mapState(['isLoginUser'])
+  },
 }
 
 </script>
@@ -27,9 +35,10 @@ export default {
   }
 
   #nav {
+    width: 100%;
     position: fixed;
     top: 5vh;
-    left: 5%;
+    /* left: 5%; */
     z-index: 1000;
     height: 60px;
   }
@@ -50,8 +59,8 @@ export default {
     color : black;
   }
   button {
-    
-    padding : 0.25rem 1rem;
+    margin : 2px;
+    padding : 0.25rem 0.5rem;
     background: none;
     border: none;
     box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
@@ -63,5 +72,8 @@ export default {
   button.active {
     background: #585858;
     color: white;
+  }
+  .nav-menu-wrapper {
+    display: inline ;
   }
 </style>
