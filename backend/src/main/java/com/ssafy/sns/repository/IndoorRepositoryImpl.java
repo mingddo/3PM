@@ -1,34 +1,33 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Repository
-public class FeedRepositoryImpl implements FeedRepository {
+@RequiredArgsConstructor
+public class IndoorRepositoryImpl implements FeedRepository {
 
-    @PersistenceContext
-    private EntityManager em;
+    private final EntityManager em;
 
     @Override
-    public Indoor selectFeed(Long id) {
-        return null;
+    public Indoor findOne(Long id) {
+        return em.find(Indoor.class, id);
     }
 
     @Override
-    public void insertFeed(Indoor indoor) {
+    public Long save(Indoor indoor) {
         em.persist(indoor);
+        return indoor.getId();
     }
 
-    @Override
-    public void deleteFeed(Long id) {
 
-    }
-
-    @Override
-    public void updateFeed(Indoor indoor) {
-
+    // 임시 메소드 (merge시 제거)
+    public User findUser(Long id) {
+        return em.find(User.class, id);
     }
 }

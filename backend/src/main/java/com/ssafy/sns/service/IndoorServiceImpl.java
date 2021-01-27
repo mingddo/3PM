@@ -1,42 +1,50 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.dto.FeedDto;
+import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.SimpleUserDto;
+import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
+import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.repository.FeedRepository;
+import com.ssafy.sns.repository.IndoorRepositoryImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class FeedServiceImpl implements FeedService {
+@RequiredArgsConstructor
+public class IndoorServiceImpl implements FeedService {
 
-    private final FeedRepository feedRepository;
-
-    @Autowired
-    public FeedServiceImpl(FeedRepository feedRepository) { this.feedRepository = feedRepository; }
+    private final IndoorRepositoryImpl indoorRepository;
 
     @Override
-    public List<FeedDto> showList(Long cnt) {
-        return null;
+    public IndoorResponseDto read(Long id) {
+        Indoor indoor = indoorRepository.findOne(id);
+
+        return IndoorResponseDto.builder()
+                .user(SimpleUserDto.builder()
+                        .id(indoor.getUser().getId())
+                        .nickname(indoor.getUser().getNickname())
+                        .img(indoor.getUser().getImg())
+                        .build())
+                .content(indoor.getContent())
+                .file(indoor.getFile())
+                .tags(null)
+                .commentCnt(null)
+                .likeCnt(null)
+                .build();
     }
 
     @Override
-    public FeedDto read(Long id) {
-        return null;
+    @Transactional
+    public Long write(IndoorRequestDto indoorRequestDto) {
+
+        User user = indoorRepository.findUser(indoorRequestDto.getUserId());
+
+        return indoorRepository.save(indoorRequestDto.toEntity(user));
     }
 
-    @Override
-    public boolean write(FeedDto feed) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Long id) {
-        return false;
-    }
-
-    @Override
-    public boolean modify(FeedDto feed) {
-        return false;
-    }
 }

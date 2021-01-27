@@ -1,37 +1,62 @@
 package com.ssafy.sns.controller;
 
-import com.ssafy.sns.dto.FeedDto;
-import com.ssafy.sns.service.FeedServiceImpl;
+import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
+import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
+import com.ssafy.sns.service.IndoorServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/feed")
-public class FeedController {
+public class IndoorController {
 
-    private final FeedServiceImpl feedService;
+    public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
+    private final IndoorServiceImpl indoorService;
 
     @Autowired
-    public FeedController(FeedServiceImpl feedService) {
-        this.feedService = feedService;
+    public IndoorController(IndoorServiceImpl indoorService) {
+        this.indoorService = indoorService;
     }
-
 
     @GetMapping(value = "list")
-    public void getFeedList() {
+    public void getFeedList() { }
 
+    @GetMapping(value = "{no}", produces = "application/json; charset=utf8")
+    public ResponseEntity<IndoorResponseDto> getFeed(@PathVariable("no") Long id) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        IndoorResponseDto indoorResponseDto = null;
+        try {
+            indoorResponseDto = indoorService.read(id);
+            logger.info("getFeed = 뉴스 피드 글 가져오기 : {}", indoorResponseDto);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("etFeed - 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(indoorResponseDto, status);
     }
 
-    @GetMapping(value = "{no}")
-    public ResponseEntity<FeedDto> getFeed() {
-        return null;
-    }
+    @PostMapping(value = "", produces = "application/json; charset=utf8")
+    public ResponseEntity<String> postFeed(@RequestBody IndoorRequestDto indoorRequestDto) {
+        HttpStatus status = HttpStatus.ACCEPTED;
 
-    @PostMapping(value = "")
-    public ResponseEntity<String> postFeed() {
-        return null;
+        try {
+            indoorService.write(indoorRequestDto);
+            logger.info("postFeed - 뉴스 피드 글 작성 : {}", indoorRequestDto);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("postFeed - 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
     }
 
     @PutMapping(value = "{no}")
