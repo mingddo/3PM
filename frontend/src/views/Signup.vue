@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: 'Signup',
   data () {
@@ -34,8 +35,12 @@ export default {
     },
   },
   methods : {
+    ...mapActions(['setloginUser']),
     signup() {
-      alert(`NICKNAME : ${this.nickname}`)
+      alert(`NICKNAME : ${this.nickname}`);
+      this.setloginUser();
+      this.$router.push({name : "Home"});
+
     },
     nicknameValidate() {
       const nickname = this.nickname;
@@ -50,8 +55,8 @@ export default {
     },
     checkOverlap() {
       // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
-      alert('사용 가능한 아이디입니다')
-      this.isOverlaped = false
+      alert('사용 가능한 아이디입니다');
+      this.isOverlaped = false;
     },
   },
 };
