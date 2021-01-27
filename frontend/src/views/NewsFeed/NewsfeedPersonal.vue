@@ -6,6 +6,7 @@
     />
     <NewsFeedRecommend 
       :reco="reco"
+      :Category="Category"
     />
     <NewsFeedList
       :feed="feed"
@@ -29,99 +30,443 @@ export default {
   data () {
     return {
       reco: [
+        // {
+        //   'id' : 1,
+        //   'content' : '첫 피드입니다',
+        //   'date' : '2020-01-25',
+        //   'tag' : ['#시작', '#첫번째'],
+        //   'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
+        //   'user_id' : 10,
+        //   'like_cnt' : 7,
+        //   'comment_cnt' : 15,
+        // },
         {
           'id' : 1,
-          'content' : '첫 피드입니다',
-          'date' : '2020-01-25',
-          'tag' : '#시작',
+          'content' : '첫번째 피드입니다',
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '첫번째'],
           'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : 10,
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
+          'user': {
+            'id' : 5,
+            'nickname' : '이병훈',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
           'id' : 2,
           'content' : '두번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#두번째',
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '두번째'],
           'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11'
+          'user': {
+            'id' : 5,
+            'nickname' : '김상원',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
-          'id' : 2,
+          'id' : 3,
           'content' : '세번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#세번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11'
-        },
-        {
-          'id' : 2,
-          'content' : '네번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#네번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11'
-        },
-        {
-          'id' : 2,
-          'content' : '다섯번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#다섯번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11'
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '세번째'],
+          'file' : ``,
+          'user': {
+            'id' : 5,
+            'nickname' : '차민석',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
       feed: [
         {
           'id' : 1,
-          'content' : '첫 피드입니다',
-          'date' : '2020-01-25',
-          'tag' : '#시작',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : 10,
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
+          'content' : '첫번째 피드입니다',
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '첫번째'],
+          'file' : ``,
+          'user': {
+            'id' : 5,
+            'nickname' : '명도균',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
           'id' : 2,
           'content' : '두번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#두번째',
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '두번째'],
           'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11',
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
+          'user': {
+            'id' : 5,
+            'nickname' : '이병훈',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
         {
-          'id' : 2,
+          'id' : 3,
           'content' : '세번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#세번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11',
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
-        },
-        {
-          'id' : 2,
-          'content' : '네번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#네번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11',
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
-        },
-        {
-          'id' : 2,
-          'content' : '다섯번째 피드입니다',
-          'date' : '2020-01-30',
-          'tag' : '#다섯번째',
-          'file' : `https://newsimg.hankookilbo.com/cms/articlerelease/2019/04/29/201904291390027161_3.jpg`,
-          'user_id' : '11',
-          'like_cnt' : 7,
-          'comment_cnt' : 15,
+          'date' : '2020-01-29',
+          'tag' : ['테스트', '세번째'],
+          'file' : ``,
+          'user': {
+            'id' : 5,
+            'nickname' : '박성호',
+          },
+          'like' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 10,
+                'nickname' : '장수민'
+              },
+              'date' : '2021-01-31',
+            },
+            {
+              'id' : 2,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-30',
+            },
+          ],
+          'comment' : [
+            {
+              'id' : 1,
+              'user': {
+                'id' : 11,
+                'nickname' : '명도균'
+              },
+              'date' : '2021-01-31',
+              'content' : '훌륭합니다!',
+              'like' : [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                },
+              ],
+              'nested_comment': [
+                {
+                  'id' : 1,
+                  'user': {
+                    'id' : 10,
+                    'nickname' : '장수민'
+                  },
+                  'date' : '2021-01-31',
+                  'content' : '대댓글!!',
+                  'like' : [
+                    {
+                      'id' : 1,
+                      'user': {
+                        'id' : 10,
+                        'nickname' : '장수민'
+                      },
+                      'date' : '2021-01-31',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
       Category: '꽃보다 집'
@@ -141,9 +486,7 @@ export default {
 .newsfeed-header {
   display: flex;
   justify-content: space-between;
-}
-.newsfeed-header-search {
-  vertical-align: bottom;
+  align-items: center;
 }
 .newsfeed-recommend-content {
   border: 1px solid;

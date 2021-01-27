@@ -9,6 +9,7 @@
         <Feed
           class="newsfeed-recommend-content"
           :fd="rec"
+          :Category="Category"
         />
       </slide>
     </carousel>
@@ -22,6 +23,7 @@ export default {
   name: 'NewsFeedRecommend',
   props: {
     reco: Array,
+    Category: String,
   },
   components: {
     Carousel,

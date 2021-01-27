@@ -9,11 +9,11 @@
       <h2>피드 작성하기</h2>
       <div>
         <label for="tags">태그</label>
-        <input id="tags" type="text" placeholder="태그를 입력해주세요">
+        <input id="tags" type="text" placeholder="태그를 입력해주세요" v-model="tag">
       </div>
       <div>
         <label for="file">파일 첨부하기 </label>
-        <input id="file" type="file" v-on:change="selectFile">
+        <input id="file" type="file" @change="selectFile">
       </div>
       
       <div>
@@ -37,16 +37,23 @@ export default {
   },
   data() {
     return {
-      Category: this.$route.query.Category,
+      Category: this.$route.params.Category,
       completed: false,
       content: "",
       file: "",
+      tag: "",
     };
   },
   mounted() {
     
   },
   methods: {
+    setDefault () {
+      if (this.$route.params.type == 'MODI') {
+        this.content = this.$route.params.feed.content
+        this.tag = this.$route.params.feed.tag
+      }
+    },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.lenght)
@@ -54,8 +61,18 @@ export default {
     },
     createFeed () {
       this.completed = true;
+      if (this.$route.params.type == 'NEW') {
+        // axios create 요청
+        alert('새글작성!')
+      } else {
+        // axios put 요청
+        alert('수정완료!')
+      }
       this.$router.push({ name: 'NewsfeedDetail' })
     },
+  },
+  created () {
+    this.setDefault();
   },
   beforeRouteLeave (to, from, next) {
     if (this.completed) {
