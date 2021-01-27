@@ -9,7 +9,7 @@
       <button><router-link to="/">🔍</router-link></button>
       <button><router-link to="/">프로필</router-link></button>
     </div>
-    <router-view/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
@@ -24,15 +24,15 @@ export default {
 
 </script>
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    display: flex;
-    justify-content: center;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  display: flex;
+  justify-content: center;
+}
 
   #nav {
     width: 100%;
@@ -43,14 +43,14 @@ export default {
     height: 60px;
   }
 
-  #nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
 
-  #nav a.router-link-exact-active {
-    color: black;
-  }
+#nav a.router-link-exact-active {
+  color: black;
+}
 
   button a {
     text-decoration: none;
