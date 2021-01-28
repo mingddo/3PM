@@ -80,6 +80,9 @@ export default {
   width: 10%;
   height: 10%;
 }
+.feed-userprofile-content {
+
+}
 .feed-userprofile-name {
   vertical-align: text-bottom;
 }

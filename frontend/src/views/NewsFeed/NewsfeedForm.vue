@@ -29,6 +29,7 @@
 
 <script>
 import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
+import { createFeed } from '@/api/feed.js'
 
 export default {
   name: 'NewsfeedForm',
@@ -67,6 +68,18 @@ export default {
       if (this.$route.params.type == 'NEW') {
         // axios create 요청
         alert('새글작성!')
+        createFeed (
+          {
+            "content" : "suemin",
+            "userId" : 4
+          },
+          (res) => {
+            console.log(res)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
       } else {
         // axios put 요청
         alert('수정완료!')
