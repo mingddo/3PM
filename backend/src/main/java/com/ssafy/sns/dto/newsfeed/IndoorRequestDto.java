@@ -19,7 +19,6 @@ public class IndoorRequestDto {
 
     @Builder
     public IndoorRequestDto(Long indoorId, String content, String file, List<String> tags, Long userId) {
-        this.indoorId = indoorId;
         this.content = content;
         this.file = file;
         this.tags = tags;

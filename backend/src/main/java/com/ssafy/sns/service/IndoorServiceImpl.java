@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class IndoorServiceImpl implements FeedService {
 
@@ -23,7 +24,7 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public IndoorResponseDto read(Long id) {
         Indoor indoor = indoorRepository.findOne(id);
-
+        System.out.println("indoor.getUser().getNickname() = " + indoor.getUser().getNickname());
         return IndoorResponseDto.builder()
                 .user(SimpleUserDto.builder()
                         .id(indoor.getUser().getId())
@@ -35,11 +36,11 @@ public class IndoorServiceImpl implements FeedService {
                 .tags(null)
                 .commentCnt(null)
                 .likeCnt(null)
+                .localDateTime(indoor.getCreatedDate())
                 .build();
     }
 
     @Override
-    @Transactional
     public Long write(IndoorRequestDto indoorRequestDto) {
 
         User user = indoorRepository.findUser(indoorRequestDto.getUserId());
@@ -47,4 +48,13 @@ public class IndoorServiceImpl implements FeedService {
         return indoorRepository.save(indoorRequestDto.toEntity(user));
     }
 
+    @Override
+    public void delete(Long id) {
+        indoorRepository.remove(id);
+    }
+
+    @Override
+    public Long modify(Long indoorId, IndoorRequestDto indoorRequestDto) {
+        return indoorRepository.update(indoorId, indoorRequestDto);
+    }
 }

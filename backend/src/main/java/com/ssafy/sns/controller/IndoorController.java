@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,14 +35,14 @@ public class IndoorController {
             logger.info("getFeed = 뉴스 피드 글 가져오기 : {}", indoorResponseDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            logger.warn("etFeed - 에러 : {}", e.getMessage());
+            logger.warn("getFeed - 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(indoorResponseDto, status);
     }
 
-    @PostMapping(value = "", produces = "application/json; charset=utf8")
+    @PostMapping(value = "")
     public ResponseEntity<String> postFeed(@RequestBody IndoorRequestDto indoorRequestDto) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
@@ -60,12 +59,21 @@ public class IndoorController {
     }
 
     @PutMapping(value = "{no}")
-    public ResponseEntity<String> putFeed() {
-        return null;
+    public ResponseEntity<String> putFeed(@PathVariable("no") Long id,
+                                          @RequestBody IndoorRequestDto indoorRequestDto) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        try {
+            indoorService.modify(id, indoorRequestDto);
+            logger.info("putFeed - 뉴스 피드 글 수정 : {}", indoorRequestDto);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("putFeed - 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
     }
 
-    @DeleteMapping(value = "{no}")
-    public ResponseEntity<String> deleteFeed() {
-        return null;
-    }
+
 }

@@ -14,8 +14,8 @@ public interface FeedRepository {
     public Long save(Indoor indoor);
 
     // 피드 글삭제
-//    public void remove(Long id);
+    public void remove(Long id);
 
     // 피드 글수정
-//    public Long update(IndoorRequestDto indoorDto);
+    public Long update(Long indoorId, IndoorRequestDto indoorDto);
 }

@@ -25,6 +25,18 @@ public class IndoorRepositoryImpl implements FeedRepository {
         return indoor.getId();
     }
 
+    @Override
+    public void remove(Long id) {
+        Indoor indoor = em.find(Indoor.class, id);
+        em.remove(indoor);
+    }
+
+    @Override
+    public Long update(Long indoorId, IndoorRequestDto indoorDto) {
+        Indoor findIndoor = em.find(Indoor.class, indoorId);
+        findIndoor.update(indoorDto.getContent(), indoorDto.getFile(), indoorDto.getTags());
+        return findIndoor.getId();
+    }
 
     // 임시 메소드 (merge시 제거)
     public User findUser(Long id) {

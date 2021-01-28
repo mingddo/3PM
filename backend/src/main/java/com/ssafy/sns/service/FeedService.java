@@ -17,8 +17,8 @@ public interface FeedService {
     public Long write(IndoorRequestDto indoorRequestDto);
 
     // 피드 글삭제
-//    public boolean delete(Long id);
+    public void delete(Long id);
 
     // 피드 글수정
-//    public Long modify(IndoorRequestDto indoorRequestDto);
+    public Long modify(Long indoorId, IndoorRequestDto indoorRequestDto);
 }
