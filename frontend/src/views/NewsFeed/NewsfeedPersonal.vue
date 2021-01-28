@@ -481,6 +481,7 @@ export default {
 <style>
 .newsfeed {
   width: 940px;
+  padding: 15px;
   margin: 0 auto;
 }
 .newsfeed-header {
