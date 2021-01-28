@@ -1,22 +1,24 @@
 <template>
-  <div id="app">
-    <div id="nav" v-if="isLoginUser">
-      <button><router-link to="/">홈</router-link></button>
-      <button><router-link to="/">핵인싸</router-link></button>
-      <button><router-link to="/">청산별곡</router-link></button>
-      <button><router-link to="/">만수무강</router-link></button>
-      <button><router-link to="/">꽃보다집</router-link></button>
-      <button><router-link to="/">🔍</router-link></button>
-      <button><router-link to="/">프로필</router-link></button>
-    </div>
+  <div>
+    <Nav />
     <router-view :key="$route.fullPath" />
   </div>
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import Nav from './components/Common/Nav.vue'
 
 export default {
+  components: { Nav },
+  methods: {
+    goToPersonal () {
+      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+    },
+    goToProfile () {
+      this.$router.push({name: 'MyPage'})
+    },
+  },
   computed : {
     ...mapState(['isLoginUser'])
   },
@@ -30,27 +32,27 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
 }
 
-  #nav {
-    width: 100%;
-    position: fixed;
-    top: 5vh;
-    /* left: 5%; */
-    z-index: 1000;
-    height: 60px;
-  }
+/* #nav {
+  width: 100%;
+  position: fixed;
+  top: 5vh;
+  left: 5%;
+  z-index: 1000;
+  height: 60px;
+} */
 
-#nav a {
+/* #nav a {
   font-weight: bold;
   color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
   color: black;
-}
+} */
 
   button a {
     text-decoration: none;
@@ -73,7 +75,7 @@ export default {
     background: #585858;
     color: white;
   }
-  .nav-menu-wrapper {
+  /* .nav-menu-wrapper {
     display: inline ;
-  }
+  } */
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>
-      {{ Category }}
+      <i class="fas fa-house-user">{{ Category }}</i>
     </h1>
     <!-- <div class="newsfeed-header-search">
       <i class="fas fa-search"></i>

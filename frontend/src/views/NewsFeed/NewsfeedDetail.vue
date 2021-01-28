@@ -14,7 +14,8 @@
         >
         <div class="feed-detail-userprofile-content">
           <div>
-            <h3 class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+            <h3 v-if="fd.user.nickname" class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+            <h3 v-else class="feed-detail-userprofile-name" @click="goToProfile">anonymous</h3>
           </div>
           
           <div>
@@ -48,13 +49,14 @@
         </button>
       </div>
 
+      
       <div class="feed-detail-like-comment">
         <span>
             <i class="far fa-thumbs-up"></i>
-            {{ fd.likeCnt }}
+            좋아요가 <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
         </span>
         <span>
-          <i class="far fa-comment"></i> 댓글 {{ fd.commentCnt }}개
+          <i class="far fa-comment"></i> 댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
         </span>
       </div>
 
@@ -118,7 +120,7 @@ export default {
   },
   methods: {
     likeFeed () {
-      alert(`${this.fd.id} 번째 글을 좋아합니다.`)
+      alert(`${this.fd.indoorId} 번째 글을 좋아합니다.`)
       // like axios
     },
     shareFeed () {
@@ -219,6 +221,7 @@ export default {
   margin: auto;
   padding: 10px;
   border: 1px solid;
+  border-radius: 10px;
   text-align: left;
   width: 95%;
 }
@@ -227,7 +230,7 @@ export default {
   text-align: right;
 }
 .feed-detail-like-comment {
-  margin: 10px;
+  margin: 20px;
   display: flex;
   justify-content: space-between;
 }
@@ -249,6 +252,7 @@ export default {
 }
 .feed-detail-like-comment-share-btn:hover{
   background-color: rgb(233, 232, 232);
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 }
 .feed-detail-comment-input-box {
   display: flex;
