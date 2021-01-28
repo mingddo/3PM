@@ -12,13 +12,11 @@ import javax.persistence.*;
 @Entity
 public class Hashtag {
 
-    // 해시태그 id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hashtag_id")
     private Long id;
 
-    // 해시태그 명
     @Column(name = "hashtag_name")
     private String tagName;
 }

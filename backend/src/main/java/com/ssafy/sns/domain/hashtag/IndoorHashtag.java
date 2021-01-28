@@ -13,18 +13,15 @@ import javax.persistence.*;
 @Entity
 public class IndoorHashtag {
 
-    // 뉴스피드 해시태그 id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "indoor_hashtag_id")
     private Long id;
 
-    // 뉴스피드
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indoor_id")
     private Indoor indoor;
 
-    // 해시태그
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
