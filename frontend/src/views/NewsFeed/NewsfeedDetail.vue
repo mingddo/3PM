@@ -58,8 +58,8 @@
         </span>
       </div>
 
-      <div @click="likeFeed" class="feed-detail-like-comment-share-btn-box">
-        <div class="feed-detail-like-comment-share-btn">
+      <div class="feed-detail-like-comment-share-btn-box">
+        <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
           <i class="far fa-thumbs-up"></i>
           좋아요
         </div>
@@ -141,6 +141,7 @@ export default {
       } else {
         alert(`${this.commentInput} 내용의 댓글을 작성할게요`)
         // axios 댓글 create  요청 보내기 
+        this.commentInput = ''
       }
     },
     goToProfile () {
@@ -154,7 +155,7 @@ export default {
       // 현재는 가상 데이터 하나만 고정해서 보여주기
       this.fd = {
         'id' : 3,
-        'content' : '세번째 피드입니다 뭐하냐',
+        'content' : '세번째 피드입니다  뭐하냐',
         'date' : '2020-01-29',
         'tag' : ['테스트', '세번째'],
         'file' : `https://images.mypetlife.co.kr/content/uploads/2019/07/24140006/zoltan-tasi-qLXa-miMhbw-unsplash-e1563944529868.jpg`,

@@ -99,6 +99,7 @@ export default {
       } else {
         alert(`${this.nestedCommentInput} 내용의 댓글을 작성할게요`)
         // axios 대댓글 create  요청 보내기 
+        this.nestedCommentInput = ''
       }
     },
     changeNested () {

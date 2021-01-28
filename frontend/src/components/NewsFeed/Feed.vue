@@ -1,6 +1,5 @@
 <template>
-  <article>
-
+  <article class="feed-box">
     <div class="feed-userprofile-box">
       <img
         src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
@@ -8,7 +7,16 @@
         class="feed-userprofile-img"
         @click="goToProfile"
       >
-      <h3 class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+      <div class="feed-userprofile-content">
+        <div>
+          <h3 class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+        </div>
+        
+        <div>
+          <p>{{ fd.date }}</p>
+        </div>
+        
+      </div>
     </div>
 
     <div class="feed-content-box">
