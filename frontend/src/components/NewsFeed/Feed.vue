@@ -9,38 +9,39 @@
       >
       <div class="feed-userprofile-content">
         <div>
-          <h3 class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+          <h3 v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+          <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
         </div>
         
         <div>
-          <p>{{ fd.date }}</p>
+          <p>{{ year }} 년 {{ month }} 월 {{ day}} 일 {{ time }} </p>
         </div>
         
       </div>
     </div>
 
-    <div class="feed-content-box">
+    <div class="feed-content-box" @click="goToDetail">
       <span v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></span>
 
       <div v-if="fd.file">
-        <img @click="goToDetail" :src="fd.file" alt="업로드 파일">
+        <img :src="fd.file" alt="업로드 파일">
       </div>
 
       <div v-else>
-        <p @click="goToDetail">
+        <p>
           {{ fd.content }}
         </p>
       </div>
 
     </div>
-    <div>
+    <div class="feed-like-comment-box" @click="goToDetail">
       <span>
         <i class="far fa-thumbs-up"></i>
-        {{ fd.likeCnt }}
+        좋아요가 <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
       </span>
       <span>
         <i class="far fa-comment"></i>
-        {{ fd.commentCnt }}
+        댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
       </span>
     </div>
   </article>
@@ -55,10 +56,22 @@ export default {
   },
   data() {
     return {
-      
+      year: 0,
+      month: 0,
+      day: 0,
+      time: null,
     };
   },
   methods: {
+    setDateTime () {
+      if (this.fd) {
+        let date = this.fd.localDateTime.split('T')[0]
+        this.time = this.fd.localDateTime.split('T')[1]
+        this.year = date.split('-')[0]
+        this.month = date.split('-')[1]
+        this.day = date.split('-')[2]
+      }
+    },
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.fd.user.nickname}})
     },
@@ -69,6 +82,9 @@ export default {
       this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.indoorId, Category: this.Category }, params: {fd: this.fd}})
     }
   },
+  mounted () {
+    this.setDateTime();
+  },
 };
 </script>
 
@@ -77,17 +93,32 @@ export default {
   display: flex;
 }
 .feed-userprofile-img {
+  cursor: pointer;
   width: 10%;
   height: 10%;
+  text-align: left;
 }
 .feed-userprofile-content {
-
+  margin: 10px;
+  /* padding: 10px; */
 }
 .feed-userprofile-name {
-  vertical-align: text-bottom;
+  cursor: pointer;
 }
 .feed-content-box {
+  cursor: pointer;
   margin: 0 auto;
-  text-align: center;
+  text-align: left;
+  padding: 10px;
+}
+/* .feed-content-box:hover {
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+} */
+.feed-like-comment-box {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  font-size: 20px;
 }
 </style>
