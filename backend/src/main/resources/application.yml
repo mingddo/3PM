@@ -13,7 +13,7 @@ spring:
   # jpa settings
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     generate-ddl: true
     show-sql: true
     database: mysql
