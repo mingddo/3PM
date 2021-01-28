@@ -1,7 +1,6 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

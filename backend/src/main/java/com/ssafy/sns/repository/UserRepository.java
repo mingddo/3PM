@@ -1,7 +1,6 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.user.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

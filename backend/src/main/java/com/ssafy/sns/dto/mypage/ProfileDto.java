@@ -1,7 +1,6 @@
 package com.ssafy.sns.dto.mypage;
 
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.user.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

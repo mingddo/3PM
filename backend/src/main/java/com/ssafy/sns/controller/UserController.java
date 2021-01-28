@@ -3,7 +3,6 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.user.KakaoDto;
-import com.ssafy.sns.dto.user.UserDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.UserService;
 import lombok.RequiredArgsConstructor;

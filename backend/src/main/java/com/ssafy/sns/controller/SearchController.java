@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,16 +22,16 @@ import java.util.List;
 @RequestMapping("/search")
 public class SearchController {
 
-    @Autowired
-    private SearchService searchService;
-
-    @GetMapping("/all")
-    public ResponseEntity search(@RequestParam(value = "keyword") String keyword){
-        Hashtag hash = searchService.searchHashtag(keyword);
-//        System.out.println(hash.getTagName());
-        List<Indoor> IndoorList = new ArrayList<>();
-        IndoorList = searchService.searchIndoorAll(hash.getTagName());
-        System.out.println(IndoorList.toString());
-        return new ResponseEntity(IndoorList, HttpStatus.OK);
-    }
+//    @Autowired
+//    private SearchService searchService;
+//
+//    @GetMapping("/all")
+//    public ResponseEntity search(@RequestParam(value = "keyword") String keyword){
+//        Hashtag hash = searchService.searchHashtag(keyword);
+////        System.out.println(hash.getTagName());
+//        List<Indoor> IndoorList = new ArrayList<>();
+//        IndoorList = searchService.searchIndoorAll(hash.getTagName());
+//        System.out.println(IndoorList.toString());
+//        return new ResponseEntity(IndoorList, HttpStatus.OK);
+//    }
 }

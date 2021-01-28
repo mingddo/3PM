@@ -1,7 +1,6 @@
 package com.ssafy.sns.dto.user;
 
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 @Setter
 @Getter

@@ -4,8 +4,6 @@ import com.ssafy.sns.dto.newsfeed.IndoorListResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 
-import java.util.List;
-
 public interface FeedService {
 
     // 한페이지 불러오기

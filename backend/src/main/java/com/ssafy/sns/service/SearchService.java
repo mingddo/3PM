@@ -5,9 +5,7 @@ import com.ssafy.sns.domain.hashtag.IndoorHashtag;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.repository.IndoorHashtagRepository;
 import com.ssafy.sns.repository.SearchRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

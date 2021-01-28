@@ -1,6 +1,5 @@
 package com.ssafy.sns.dto.mypage;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import lombok.*;
 
