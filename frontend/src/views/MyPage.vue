@@ -13,7 +13,7 @@
             />
           </div>
           <h1>{{ profileinfo.name }}</h1>
-          <div class="myPageSubscribe" @click="gotoprofile">
+          <div class="myPageSubscribe">
             <div
               :class="{ profielSubscribedNone: subscribed }"
               class="myPageSubscribed"
@@ -143,7 +143,7 @@ export default {
   data() {
     return {
       name: "명도균",
-      current_user_id: 5,
+      current_user: 5,
       // 해당 페이지 유저를 구독했는지 여부
       subscribed: false,
       // 내 홈페이지 여부
@@ -209,21 +209,21 @@ export default {
     };
   },
   methods: {
-    confirm() {
-      console.log(this.$route.query);
+    usercheck() {
+      this.current_user = this.$route.query.username;
+      if (this.current_user === undefined) {
+        this.mypage = true;
+      } else {
+        this.mypage = false;
+      }
     },
-    gotoprofile() {
-      this.$router.push({ name: "MyPage", query: { userId: this.name } });
-      // this.$router.push({ path: `/mypage/${this.profileinfo.name}` });
+    getprofileInfo() {
+      // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
+      // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
     },
   },
-  // watch: {
-  //   $route() {
-  //     this.confirm();
-  //   },
-  // },
   created() {
-    this.confirm();
+    this.usercheck();
   },
 };
 </script>
@@ -246,7 +246,7 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .profileInfo1 {
@@ -265,7 +265,7 @@ export default {
   align-items: center;
   border-radius: 10px;
   background-color: #e4e6e9;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
@@ -384,7 +384,7 @@ export default {
   align-items: center;
   border-radius: 10px;
   background-color: #e4e6e9;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
@@ -404,10 +404,11 @@ export default {
   width: 100%;
   border-radius: 10px;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .myPagemainSection {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -418,7 +419,7 @@ export default {
   height: 150px;
   border: solid 1px rgba(0, 0, 0, 0.2);
   border-radius: 70%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   display: flex;
   justify-content: center;
