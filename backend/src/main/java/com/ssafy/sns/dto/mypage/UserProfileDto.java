@@ -14,7 +14,7 @@ import java.util.List;
 public class UserProfileDto {
 
     private String username;
-    private String user_id; // email
+    private Long user_id;
     private int fromMeToOthersCnt;
     private int toMeFromOthersCnt;
     private int groupCnt;

@@ -9,13 +9,13 @@ import lombok.*;
 @NoArgsConstructor
 public class FollowMeInfo {
 
-    private String email;
-    private String imgAddr;
+    private Long user_id;
+    private String profilesrc;
     private String username;
 
     public FollowMeInfo(User user) {
-        this.email = user.getEmail();
-        this.imgAddr = user.getImg();
+        this.user_id = user.getId();
+        this.profilesrc = user.getImg();
         this.username = user.getNickname();
     }
 }

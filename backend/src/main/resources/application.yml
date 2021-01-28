@@ -9,4 +9,15 @@ spring:
     url: jdbc:mysql://spring-study.cfhtw7hbyeyq.ap-northeast-2.rds.amazonaws.com/melon_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8
     username: melon
     password: ssafymelon
+    initialization-mode: always
 
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        format_sql: true

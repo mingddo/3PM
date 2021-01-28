@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> { // Entity 타입, Entity 식별자 타입 (id)
 
-    Optional<User> findByEmail(String email);
-
     List<User> findAllById(Long id);
+
+    Optional<User> findByKakaoId(Long kakaoId);
 
 }

@@ -11,11 +11,11 @@ public class SubscribeUserDto {
 
     private UserConfig profile;
     private String username;
-    private String user_id; // email
+    private Long user_id;
 
     public SubscribeUserDto(User user) {
         this.profile = user.getUserConfig();
         this.username = user.getNickname();
-        this.user_id = user.getEmail();
+        this.user_id = user.getId();
     }
 }

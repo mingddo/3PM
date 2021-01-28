@@ -18,8 +18,16 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findUserByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public User findUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        return null;
+    }
+
+    public User findUserByKakaoId(Long id) {
+        Optional<User> user = userRepository.findByKakaoId(id);
         if (user.isPresent()) {
             return user.get();
         }
@@ -33,21 +41,19 @@ public class UserService {
 
     public void updateUserProfile(Long id, ProfileDto dto) { // id 가 유효할 경우 이 메소드가 실행된다
         User user = userRepository.findById(id).get();
-        user.setBio(dto.getIntroduce());
-        user.setNickname(dto.getUsername());
-        user.setEmail(dto.getUser_id());
-        user.setImg(dto.getImgAddr());
+        user.setIntroduce(dto.getIntroduce());
+        user.setNickname(dto.getNickname());
+        user.setImg(dto.getProfilesrc());
     }
 
-    public void saveUser(KakaoDto dto) {
+    public User saveUser(KakaoDto dto) {
         User user = new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        userRepository.save(user);
+        user.setKakaoId(dto.getKakaoId());
+        return userRepository.save(user);
     }
 
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             return;
         }

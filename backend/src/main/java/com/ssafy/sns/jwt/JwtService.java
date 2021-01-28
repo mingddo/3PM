@@ -30,11 +30,12 @@ public class JwtService {
 //		Header 설정
         jwtBuilder.setHeaderParam("typ", "JWT"); // 토큰의 타입으로 고정 값.
 
+
 //		Payload 설정
         jwtBuilder
                 .setSubject("로그인토큰") // 토큰의 제목 설정
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin)) // 유효기간 설정
-                .claim("user", user).claim("greeting", "환영합니다. " + user.getNickname()); // 담고 싶은 정보 설정.
+                .claim("user", user).claim("greeting", "환영합니다. " + user.getKakaoId()); // 담고 싶은 정보 설정.
 
 //		signature 설정
         jwtBuilder.signWith(SignatureAlgorithm.HS256, signature.getBytes());

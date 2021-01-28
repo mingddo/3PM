@@ -13,7 +13,7 @@ public class IndoorService {
 
     private final IndoorRepository indoorRepository;
 
-    public List<Indoor> findAll() {
-        return indoorRepository.findAll();
+    public List<Indoor> findAllByUserId(Long userId) {
+        return indoorRepository.findAllByUserId(userId);
     }
 }

@@ -16,9 +16,9 @@ public class Follow extends BaseTimeEntity {
     @Column(name = "follow_id")
     private Long id;
 
-    @Column(name = "from")
+    @Column(name = "from_id")
     private Long fromId; // 내가 구독하는 사람들
 
-    @Column(name = "to")
+    @Column(name = "to_id")
     private Long toId; // 나를 구독하는 사람들
 }

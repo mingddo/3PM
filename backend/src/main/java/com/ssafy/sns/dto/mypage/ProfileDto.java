@@ -11,15 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ProfileDto {
 
-    private String username;
-    private String user_id;
-    private String imgAddr;
+    private String nickname;
+    private Long user_id;
+    private String profilesrc;
     private String introduce;
 
     public ProfileDto(User user) {
-        this.username = user.getNickname();
-        this.user_id = user.getEmail();
-        this.imgAddr = user.getImg();
-        this.introduce = user.getBio();
+        this.nickname = user.getNickname();
+        this.user_id = user.getId();
+        this.profilesrc = user.getImg();
+        this.introduce = user.getIntroduce();
     }
 }

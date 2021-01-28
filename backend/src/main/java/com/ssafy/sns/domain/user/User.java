@@ -1,15 +1,15 @@
 package com.ssafy.sns.domain.user;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter // 비추천 코드
 @NoArgsConstructor // 기본 생성자
+@AllArgsConstructor
+@Builder
+@ToString
 @Entity
 public class User {
 
@@ -19,34 +19,24 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    // 유저 email
-    @Column(name = "user_email", nullable = false, unique = true) // length 입력 안하면 기본이 255
-    private String email;
+    // 카카오에서 주는 ID
+    @Column(name = "kakao_id", nullable = false, unique = true) // length 입력 안하면 기본이 255
+    private Long kakaoId;
 
     // 유저 닉네임
-    @Column(name = "user_nickname", nullable = false)
+    @Column(name = "user_nickname")
     private String nickname;
 
-    // 유저 이름 ( 추가 )
-    @Column(name = "user_name", nullable = false)
-    private String name;
-
     // 유저 소개
-    @Column(name = "user_bio")
-    private String bio;
+    @Column(name = "user_introduce")
+    private String introduce;
 
     // 유저 이미지
     @Column(name = "user_img")
     private String img;
 
     // 유저 설정 정보
-    @OneToOne
-    @JoinColumn(name = "config_id")
+    @Embedded
     private UserConfig userConfig;
 
-    @Builder
-    public User(String email, String nickname) {
-        this.email = email;
-        this.nickname = nickname;
-    }
 }

@@ -1,17 +1,14 @@
 package com.ssafy.sns.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 @Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class KakaoDto {
 
-    private String email;
-    private String name;
+    private Long kakaoId;
 
 }

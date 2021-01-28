@@ -10,20 +10,26 @@ import lombok.*;
 public class UserDto {
 
     private Long id;
-    private String name;
-    private String email;
     private String nickname;
-    private String bio;
+    private String introduce;
     private String img;
     private UserConfig userConfig;
 
     public UserDto(User user) {
         this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
         this.nickname = user.getNickname();
-        this.bio = user.getBio();
+        this.introduce = user.getIntroduce();
         this.img = user.getImg();
         this.userConfig = user.getUserConfig();
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .id(id)
+                .nickname(nickname)
+                .introduce(introduce)
+                .img(img)
+                .userConfig(userConfig)
+                .build();
     }
 }
