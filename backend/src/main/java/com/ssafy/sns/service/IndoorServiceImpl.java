@@ -6,6 +6,7 @@ import com.ssafy.sns.dto.newsfeed.IndoorListResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
+import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class IndoorServiceImpl implements FeedService {
 
     private final IndoorRepositoryImpl indoorRepository;
+    private final UserRepository userRepository;
 
     @Override
     public IndoorListResponseDto readList(int num) {
@@ -37,7 +39,7 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public Long write(IndoorRequestDto indoorRequestDto) {
 
-        User user = indoorRepository.findUser(indoorRequestDto.getUserId());
+        User user = userRepository.findById(indoorRequestDto.getUserId()).orElse(null);
 
         return indoorRepository.save(indoorRequestDto.toEntity(user));
     }

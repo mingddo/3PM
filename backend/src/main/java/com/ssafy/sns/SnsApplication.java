@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-<<<<<<< HEAD
 
-=======
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 
 @AllArgsConstructor
->>>>>>> feature/mypage_BE
 @EnableJpaAuditing
 @SpringBootApplication
 public class SnsApplication implements WebMvcConfigurer {

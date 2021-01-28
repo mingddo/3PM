@@ -50,9 +50,4 @@ public class IndoorRepositoryImpl implements FeedRepository {
         findIndoor.update(indoorDto.getContent(), indoorDto.getFile(), indoorDto.getTags());
         return findIndoor.getId();
     }
-
-    // 임시 메소드 (merge시 제거)
-    public User findUser(Long id) {
-        return em.find(User.class, id);
-    }
 }

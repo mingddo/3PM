@@ -1,12 +1,10 @@
 package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
-import com.ssafy.sns.domain.hashtag.IndoorHashtag;
 import com.ssafy.sns.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -51,8 +49,4 @@ public class Indoor extends BaseTimeEntity {
         this.file = file;
         // 태그추가하기
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feature/mypage_BE
