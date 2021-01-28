@@ -39,4 +39,3 @@ public class User {
     @Embedded
     private UserConfig userConfig;
 }
-
