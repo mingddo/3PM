@@ -2,13 +2,13 @@ import { createInstance } from './index.js'
 
 const instance = createInstance();
 
-function getFeed(success, fail) {
+function createFeed(feed, success, fail) {
   instance
-    .get('corona/')
+    .post('feed', feed)
     .then(success)
     .catch(fail);
 }
 
 export {
-  getFeed,
+  createFeed,
 }
