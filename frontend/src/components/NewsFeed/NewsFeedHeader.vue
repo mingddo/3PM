@@ -3,10 +3,10 @@
     <h1>
       {{ Category }}
     </h1>
-    <div class="newsfeed-header-search">
+    <!-- <div class="newsfeed-header-search">
       <i class="fas fa-search"></i>
-      <input type="text">
-    </div>
+      <input type="text" v-model="keyword" @keyup.enter="goToSearch">
+    </div> -->
   </div>
 </template>
 
@@ -18,11 +18,7 @@ export default {
   },
   data() {
     return {
-      
     };
-  },
-  mounted() {
-    
   },
   methods: {
     
