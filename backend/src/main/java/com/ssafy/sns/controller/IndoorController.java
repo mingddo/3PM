@@ -75,5 +75,19 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
+    @DeleteMapping(value = "{no}")
+    public ResponseEntity<String> deleteFeed(@PathVariable("no") Long id) {
+        HttpStatus status = HttpStatus.ACCEPTED;
 
+        try {
+            indoorService.delete(id);
+            logger.info("deleteFeed - 뉴스 피드 글 삭제 : {}", id);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("deleteFeed - 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
+    }
 }
