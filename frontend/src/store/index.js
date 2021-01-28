@@ -1,31 +1,38 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    //토큰을 확인하여 로그인 상태인지 판별..
-    isLoginUser : localStorage.getItem('isLoginUser'),
+    userStatus : null,
+    authToken : null,
+    kakaoId : null,
   },
   mutations: {
-    setLoginUser(state) {
-      state.isLoginUser = true;
-      localStorage.setItem('isLoginUser',true)
+    setUserStatus(state,payload) {
+      state.userStatus = payload
     },
-    setLogoutUser(state) {
-      state.isLoginUser = false;
-      localStorage.setItem('isLoginUser',false)
+    setAuthToken(state,payload) {
+      state.authToken = payload
+    },
+    setKakaoId(state,payload) {
+      state.kakaoId = payload
     }
   },
   actions: {
-    setLoginUser : ({commit}) => { // === function({commit})
-      commit('setLoginUser')
+    setUserStatus : function(context,payload) {
+      context.commit('setUserStatus',payload)
     },
-    setLogoutUser : ({commit}) => {
-      commit('setLogoutUser')
+    setAuthToken : function(context,payload) {
+      context.commit('setAuthToken',payload)
     },
+    setKakaoId : function(context,payload) {
+      context.commit('setKakaoId',payload)
+    }
   },
-  modules: {
-  }
+  plugins: [
+    createPersistedState()
+  ]
 })
