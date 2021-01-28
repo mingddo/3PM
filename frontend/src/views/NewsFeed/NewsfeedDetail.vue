@@ -4,7 +4,7 @@
       :Category="Category"
       class="newsfeed-header"
     />
-    <section class="feed-detail">
+    <section v-if="fd" v-cloak class="feed-detail">
       <div class="feed-detail-userprofile-box">
         <img
           src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
@@ -18,7 +18,7 @@
           </div>
           
           <div>
-            <p>{{ fd.date }}</p>
+            <p>{{ date }} {{ time }} </p>
           </div>
           
         </div>
@@ -51,10 +51,10 @@
       <div class="feed-detail-like-comment">
         <span>
             <i class="far fa-thumbs-up"></i>
-            {{ fd.like.length }}
+            {{ fd.likeCnt }}
         </span>
         <span>
-          <i class="far fa-comment"></i> 댓글 {{ fd.comment.length }}개
+          <i class="far fa-comment"></i> 댓글 {{ fd.commentCnt }}개
         </span>
       </div>
 
@@ -83,32 +83,37 @@
         <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
       </div>
 
-      <section>
+      <!-- <section>
         <div v-for="(comment, idx) in fd.comment" :key="idx">
           <NewsFeedCommentItem
             :comment="comment"
           />
         </div>
-      </section>
+      </section> -->
     </section>
   </div>
 </template>
 
 <script>
-import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
+// import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
 import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
+
+import { readFeed } from '@/api/feed.js'
+import { deleteFeed } from '@/api/feed.js'
 
 export default {
   name: 'NewsfeedDetail',
   components: {
     NewsFeedHeader,
-    NewsFeedCommentItem,
+    // NewsFeedCommentItem,
   },
   data() {
     return {
       Category: this.$route.query.Category,
       fd: "",
       commentInput: "",
+      date: null,
+      time: null,
     };
   },
   methods: {
@@ -129,7 +134,13 @@ export default {
     deleteFeed () {
       const answer = window.confirm('정말로 삭제하시겠습니까?')
       if (answer) {
-        //axios 요청으로 DELETE 보내기
+        deleteFeed(
+          this.fd.id,
+          {},
+          (err) => {
+            console.log(err)
+          }
+        )
       }
     },
     changeModiForm () {
@@ -153,77 +164,18 @@ export default {
     setFeedDetail () {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
-      this.fd = {
-        'id' : 3,
-        'content' : '세번째 피드입니다  뭐하냐',
-        'date' : '2020-01-29',
-        'tag' : ['테스트', '세번째'],
-        'file' : `https://images.mypetlife.co.kr/content/uploads/2019/07/24140006/zoltan-tasi-qLXa-miMhbw-unsplash-e1563944529868.jpg`,
-        'user': {
-          'id' : 5,
-          'nickname' : '차민석',
+      readFeed (
+        this.$route.query.id,
+        (res) => {
+          this.fd = res.data
+          console.log(res)
+          this.date = this.fd.localDateTime.split('T')[0];
+          this.time = this.fd.localDateTime.split('T')[1];
         },
-        'like' : [
-          {
-            'id' : 1,
-            'user': {
-              'id' : 10,
-              'nickname' : '장수민'
-            },
-            'date' : '2021-01-31',
-          },
-          {
-            'id' : 2,
-            'user': {
-              'id' : 11,
-              'nickname' : '명도균'
-            },
-            'date' : '2021-01-30',
-          },
-        ],
-        'comment' : [
-          {
-            'id' : 1,
-            'user': {
-              'id' : 11,
-              'nickname' : '명도균'
-            },
-            'date' : '2021-01-31',
-            'content' : '훌륭합니다!',
-            'like' : [
-              {
-                'id' : 1,
-                'user': {
-                  'id' : 10,
-                  'nickname' : '장수민'
-                },
-                'date' : '2021-01-31',
-              },
-            ],
-            'nested_comment': [
-              {
-                'id' : 1,
-                'user': {
-                  'id' : 10,
-                  'nickname' : '장수민'
-                },
-                'date' : '2021-01-31',
-                'content' : '대댓글!!',
-                'like' : [
-                  {
-                    'id' : 1,
-                    'user': {
-                      'id' : 10,
-                      'nickname' : '장수민'
-                    },
-                    'date' : '2021-01-31',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      };
+        (err) => {
+          console.log(err)
+        }
+      )
     },
   },
   created () {
