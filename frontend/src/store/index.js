@@ -6,20 +6,25 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     //토큰을 확인하여 로그인 상태인지 판별..
-    isLoginUser : false,
+    isLoginUser : localStorage.getItem('isLoginUser'),
   },
   mutations: {
-    setloginUser(state) {
+    setLoginUser(state) {
       state.isLoginUser = true;
+      localStorage.setItem('isLoginUser',true)
     },
-    setlogoutUser(state) {
+    setLogoutUser(state) {
       state.isLoginUser = false;
+      localStorage.setItem('isLoginUser',false)
     }
   },
   actions: {
-    setloginUser : ({commit}) => { // function({commit})
-      commit('setloginUser')
-    }
+    setLoginUser : ({commit}) => { // === function({commit})
+      commit('setLoginUser')
+    },
+    setLogoutUser : ({commit}) => {
+      commit('setLogoutUser')
+    },
   },
   modules: {
   }
