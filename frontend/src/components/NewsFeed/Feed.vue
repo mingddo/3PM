@@ -58,7 +58,7 @@ export default {
       this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})
     },
     goToDetail () {
-      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.id }, params: {Category: this.Category, fd: this.fd}})
+      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.id, Category: this.Category }, params: {fd: this.fd}})
     }
   },
 };

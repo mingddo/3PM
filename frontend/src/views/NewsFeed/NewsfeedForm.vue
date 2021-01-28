@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      Category: this.$route.params.Category,
+      Category: this.$route.query.Category,
       completed: false,
       content: "",
       file: "",
@@ -51,6 +51,9 @@ export default {
     setDefault () {
       if (this.$route.params.type == 'MODI') {
         this.content = this.$route.params.feed.content
+        this.tag = this.$route.params.feed.tag
+      } else if (this.$route.params.type == 'SHARE') {
+        this.content = `[공유] ${this.$route.params.feed.content}`
         this.tag = this.$route.params.feed.tag
       }
     },

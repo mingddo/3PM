@@ -27,13 +27,8 @@
             
           </div>
         </div>
-        <!-- <div v-if="!modiForm">
-          <button @click="changeCommentModiForm">수정</button>
-          <button @click="deleteComment">삭제</button>
-        </div> -->
       </div>
-
-      <div class="feed-comment-content-box" v-if="!modiForm">
+      <div class="feed-comment-content-box" v-if="!modiForm" @click="changeNested">
         {{ commentForFeed }}
       </div>
       <div v-else class="feed-comment-modiInput-box">
@@ -43,27 +38,38 @@
         </button>
         
       </div>
-
-
-
-      <div>
-        <i class="far fa-thumbs-up" @click="likeComment"></i>
-        {{ comment.like.length }}
-      </div>
-
-      <div>
-        <i class="far fa-comment" @click="changeNested"></i>
-        {{ comment.nested_comment.length }}
+      <div class="feed-comment-like-nested">
+        <div class="feed-comment-like-btn">
+          <i class="far fa-comment" @click="changeNested">
+            {{ comment.nested_comment.length }}
+          </i>
+        </div>
+        <div>
+          <i class="far fa-thumbs-up" @click="likeComment">
+            {{ comment.like.length }}
+          </i>
+        </div>
       </div>
     </div>
 
     <div v-if="!foldNested">
-      <input type="text" v-model.trim="nestedCommentInput" @keyup.enter="createNestedComment" placeholder="답글을 입력해주세요">
-      <button @click="createNestedComment">댓글 작성</button>
-      <div v-for="(nestedComment, idx) in comment.nested_comment" :key="idx">
+      <div class="feed-comment-nested-box">
+        <img
+          src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
+          alt="유저프로필이미지"
+          class="feed-comment-nested-img"
+        >
+        <input class="feed-comment-nested-input" type="text" v-model.trim="nestedCommentInput" @keyup.enter="createNestedComment" placeholder="답글을 입력해주세요">
+        <button class="feed-comment-nested-btn" @click="createNestedComment"><i class="fas fa-plus"></i></button>
+      </div>
+
+      <div v-for="(nestedComment, idx) in comment.nested_comment" :key="idx" class="feed-comment-nested-box">
         <NewsFeedCommentNested
           :comment="nestedComment"
         />
+      </div>
+      <div @click="changeNested" class="feed-comment-nested-close-btn">
+        답글 접기
       </div>
     </div>
   </article>
@@ -72,8 +78,8 @@
 <script>
 import NewsFeedCommentNested from './NewsFeedCommentNested.vue';
 export default {
-  components: { NewsFeedCommentNested },
   name: 'NewsFeedCommentItem',
+  components: { NewsFeedCommentNested },
   props: {
     comment: Object,
   },
@@ -128,7 +134,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .feed-comment {
   margin: 20px;
 }
@@ -187,7 +193,12 @@ export default {
 }
 .feed-comment-content-box {
   margin: 10px;
+  padding: 10px;
   text-align: left;
+}
+.feed-comment-content-box:hover {
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 5px;
 }
 .feed-comment-modiInput-box {
   display: flex;
@@ -204,5 +215,44 @@ export default {
   margin: auto;
   padding: 10px;
   width: 10%;
+}
+.feed-comment-like-nested {
+  display: flex;
+}
+.feed-comment-like-nested > div {
+  cursor: pointer;
+  margin: 10px;
+}
+.feed-comment-like-btn {
+  cursor: pointer;
+  margin: 10px;
+}
+.feed-comment-nested-box {
+  display: flex;
+  width: 95%;
+  margin-left: auto;
+}
+.feed-comment-nested-img {
+  margin: 10px;
+  width: 5%;
+}
+.feed-comment-nested-input {
+  margin: 10px;
+  width: 90%;
+  padding: 5px;
+}
+.feed-comment-nested-btn {
+  font-size: 20px;
+  margin: 10px;
+  width: 5%;
+  padding: 5px;
+}
+.feed-comment-nested-close-btn {
+  padding: 10px;
+  cursor: pointer;
+}
+.feed-comment-nested-close-btn:hover {
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 5px;
 }
 </style>

@@ -58,7 +58,7 @@
         </span>
       </div>
 
-      <div class="feed-detail-like-comment-share-btn-box">
+      <div @click="likeFeed" class="feed-detail-like-comment-share-btn-box">
         <div class="feed-detail-like-comment-share-btn">
           <i class="far fa-thumbs-up"></i>
           좋아요
@@ -67,7 +67,7 @@
           <i class="far fa-comment"></i>
           댓글달기
         </div>
-        <div class="feed-detail-like-comment-share-btn">
+        <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
           <i class="fas fa-share"></i>
           공유하기
         </div>
@@ -106,12 +106,22 @@ export default {
   },
   data() {
     return {
-      Category: this.$route.params.Category,
+      Category: this.$route.query.Category,
       fd: "",
       commentInput: "",
     };
   },
   methods: {
+    likeFeed () {
+      alert(`${this.fd.id} 번째 글을 좋아합니다.`)
+      // like axios
+    },
+    shareFeed () {
+      const answer = window.confirm('내 피드에 공유하시겠습니까?')
+      if (answer) {
+        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'SHARE', feed: this.fd }})
+      }
+    },
     focusComment () {
       let input = document.getElementById('comment')
       input.focus();
@@ -123,7 +133,7 @@ export default {
       }
     },
     changeModiForm () {
-      this.$router.push({ name: 'NewsfeedForm', params: { Category: this.Category, type: 'MODI', feed: this.fd }})
+      this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
     },
     createComment () {
       if (!this.commentInput) {

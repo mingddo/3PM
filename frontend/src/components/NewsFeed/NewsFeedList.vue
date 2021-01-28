@@ -36,7 +36,7 @@ export default {
   methods: {
     goToCreateForm () {
       alert('새글 작성하러 가기!')
-      this.$router.push({ name: 'NewsfeedForm', params: { Category: this.Category, type: 'NEW' }})
+      this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'NEW' }})
     },
   },
 };
