@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://spring-study.cfhtw7hbyeyq.ap-northeast-2.rds.amazonaws.com/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
-    username: melon
-    password: ssafymelon
+    url: jdbc:mysql://i4b208.p.ssafy.io:3306/sns?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: ssafy208
 
   # jpa settings
   jpa:
@@ -17,3 +17,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+server:
+  port: 8081
