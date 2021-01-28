@@ -3,6 +3,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+<<<<<<< HEAD
     url: jdbc:mysql://localhost:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
     username: root
     password: ssafy
@@ -21,4 +22,23 @@ spring:
     properties:
       hibernate:
         format_sql: true
+=======
+#    url: jdbc:mysql://localhost:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+#    username: root
+#    password: 0000
+    url: jdbc:mysql://spring-study.cfhtw7hbyeyq.ap-northeast-2.rds.amazonaws.com/melon_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+    username: melon
+    password: ssafymelon
+    initialization-mode: always
+>>>>>>> feature/mypage_BE
 
+  jpa:
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        format_sql: true

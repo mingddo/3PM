@@ -8,6 +8,10 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
+<<<<<<< HEAD
+=======
+@Setter
+>>>>>>> feature/mypage_BE
 @NoArgsConstructor
 @Entity
 public class IndoorHashtag {
@@ -19,7 +23,10 @@ public class IndoorHashtag {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indoor_id")
+<<<<<<< HEAD
     @Setter
+=======
+>>>>>>> feature/mypage_BE
     private Indoor indoor;
 
     @ManyToOne(fetch = FetchType.LAZY)

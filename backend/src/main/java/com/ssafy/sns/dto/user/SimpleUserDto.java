@@ -20,4 +20,8 @@ public class SimpleUserDto {
         this.nickname = nickname;
         this.img = img;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/mypage_BE

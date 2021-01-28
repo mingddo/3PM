@@ -51,4 +51,8 @@ public class Indoor extends BaseTimeEntity {
         this.file = file;
         // 태그추가하기
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/mypage_BE
