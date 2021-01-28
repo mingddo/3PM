@@ -20,12 +20,12 @@ public class IndoorHashtag {
     private Long id;
 
     // 뉴스피드
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indoor_id")
     private Indoor indoor;
 
     // 해시태그
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 }

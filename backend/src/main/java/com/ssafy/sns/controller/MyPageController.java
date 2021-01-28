@@ -7,7 +7,6 @@ import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.service.FollowService;
 import com.ssafy.sns.service.IndoorService;
-import com.ssafy.sns.service.MyPageService;
 import com.ssafy.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

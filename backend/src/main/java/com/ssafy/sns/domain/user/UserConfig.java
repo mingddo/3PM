@@ -9,7 +9,5 @@ import javax.persistence.*;
 @Embeddable
 public class UserConfig {
 
-    private String test;
-    private String test2;
     // 설정들 넣기
 }
