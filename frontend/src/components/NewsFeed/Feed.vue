@@ -20,7 +20,7 @@
     </div>
 
     <div class="feed-content-box">
-      <h2> | <span v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)">{{ tag }} | </span> </h2>
+      <span v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></span>
 
       <div v-if="fd.file">
         <img @click="goToDetail" :src="fd.file" alt="업로드 파일">
@@ -36,11 +36,11 @@
     <div>
       <span>
         <i class="far fa-thumbs-up"></i>
-        {{ fd.like.length }}
+        {{ fd.likeCnt }}
       </span>
       <span>
         <i class="far fa-comment"></i>
-        {{ fd.comment.length }}
+        {{ fd.commentCnt }}
       </span>
     </div>
   </article>
@@ -66,7 +66,7 @@ export default {
       this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})
     },
     goToDetail () {
-      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.id, Category: this.Category }, params: {fd: this.fd}})
+      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.indoorId, Category: this.Category }, params: {fd: this.fd}})
     }
   },
 };
