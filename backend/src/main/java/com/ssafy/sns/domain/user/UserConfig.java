@@ -1,10 +1,6 @@
 package com.ssafy.sns.domain.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class UserConfig {

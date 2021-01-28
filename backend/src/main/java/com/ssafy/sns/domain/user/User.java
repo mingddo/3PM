@@ -38,5 +38,4 @@ public class User {
     // 유저 설정 정보
     @Embedded
     private UserConfig userConfig;
-
 }
