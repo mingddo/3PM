@@ -10,7 +10,7 @@
       </div>
       <div class="signup-input">
         <button 
-        @click="signup"
+        @click="onClickSignup"
         :disabled="isOverlaped"
         :class="{disabledBtn:isOverlaped}">회원가입</button>
       </div>
@@ -19,7 +19,9 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions,mapState} from 'vuex'
+import { createUser } from '@/api/signup.js'
+
 export default {
   name: 'Signup',
   data () {
@@ -29,6 +31,9 @@ export default {
       isOverlaped : true,
     }
   },
+  computed : {
+    ...mapState(['setKakaoId']),
+  },
   watch : {
     nickname : function() {
       this.nicknameValidate();
@@ -36,11 +41,22 @@ export default {
   },
   methods : {
     ...mapActions(['setloginUser']),
-    signup() {
-      alert(`NICKNAME : ${this.nickname}`);
-      this.setloginUser();
-      this.$router.push({name : "Home"});
+    onClickSignup() {
+      const userId = localStorage.getItem('kakaoId')
 
+      createUser(
+        {
+        "kakaoId" : userId,
+        "username" : this.nickname,
+        },
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+
+      );
     },
     nicknameValidate() {
       const nickname = this.nickname;
@@ -58,6 +74,7 @@ export default {
       alert('사용 가능한 아이디입니다');
       this.isOverlaped = false;
     },
+
   },
 };
 </script>
