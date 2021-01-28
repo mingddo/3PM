@@ -2,7 +2,6 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.SimpleUserDto;
 import com.ssafy.sns.dto.newsfeed.IndoorListResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
@@ -10,7 +9,6 @@ import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 

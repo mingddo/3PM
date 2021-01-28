@@ -1,7 +1,7 @@
 package com.ssafy.sns.dto.newsfeed;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.dto.SimpleUserDto;
+import com.ssafy.sns.dto.user.SimpleUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

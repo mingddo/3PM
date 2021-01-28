@@ -1,4 +1,4 @@
-package com.ssafy.sns.dto;
+package com.ssafy.sns.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;
