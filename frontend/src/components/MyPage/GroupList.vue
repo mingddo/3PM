@@ -5,11 +5,7 @@
     </header>
     <hr class="myPageActivityhr" />
     <div class="myPageActivityContentFrame">
-      <Group
-        v-for="(group, idx) in profileinfo.grouplist"
-        :key="idx"
-        :group="group"
-      />
+      <Group v-for="(group, idx) in grouplist" :key="idx" :group="group" />
     </div>
   </div>
 </template>
@@ -20,7 +16,7 @@ import Group from "./Group.vue";
 export default {
   components: { Group },
   props: {
-    profileinfo: Object,
+    grouplist: Array,
   },
 };
 </script>

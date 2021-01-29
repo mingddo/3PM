@@ -12,19 +12,20 @@
               alt="프로필사진"
             />
           </div>
-          <h1>{{ profileinfo.name }}</h1>
-          <div class="myPageSubscribe">
+          <h1 v-cloak>{{ profileinfo.username }}</h1>
+          <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
+          <div :class="[mypage ? '' : '!profile_none']" class="myPageSubscribe">
             <div
               :class="{ profielSubscribedNone: subscribed }"
               class="myPageSubscribed"
             >
-              {{ profileinfo.name }}님의 소식 받기
+              {{ profileinfo.username }}님의 소식 받기
             </div>
             <div
               :class="{ profielSubscribedNone: !subscribed }"
               class="myPageSubscribed"
             >
-              {{ profileinfo.name }}님의 소식 끊기
+              {{ profileinfo.username }}님의 소식 끊기
             </div>
           </div>
         </div>
@@ -34,24 +35,24 @@
             <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
             <div class="profileDetailInfo">
               <h3 :class="{ profile_none: mypage }">
-                {{ profileinfo.name }}님이 구독한 사람
+                {{ profileinfo.username }}님이 구독한 사람
               </h3>
               <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3>
-              <div>{{ profileinfo.following }}</div>
+              <div>{{ profileinfo.fromMeToOthersCnt }}</div>
             </div>
             <div class="profileDetailInfo">
               <h3 :class="{ profile_none: mypage }">
-                {{ profileinfo.name }}님을 구독한 사람
+                {{ profileinfo.username }}님을 구독한 사람
               </h3>
               <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3>
-              <div>{{ profileinfo.following }}</div>
+              <div>{{ profileinfo.toMeFromOthersCnt }}</div>
             </div>
             <div class="profileDetailInfo">
               <h3 :class="{ profile_none: mypage }">
-                {{ profileinfo.name }}님이 가입한 그룹
+                {{ profileinfo.username }}님이 가입한 그룹
               </h3>
               <h3 :class="{ profile_none: !mypage }">내가 가입한 그룹</h3>
-              <div>{{ profileinfo.group }}</div>
+              <div>{{ profileinfo.groupCnt }}</div>
             </div>
           </div>
           <hr class="myPageHeaderhr" />
@@ -116,16 +117,16 @@
       <div class="myPagearticle">
         <!-- 최근활동 -->
         <section v-if="activetab === 1" class="myPageActivity">
-          <Activity :profileinfo="profileinfo" />
+          <NewsFeedList :feed="feed" />
         </section>
         <section v-if="activetab === 2" class="myPageActivity">
-          <Activity :profileinfo="profileinfo" />
+          <Activity :activities="activities" />
         </section>
         <section v-if="activetab === 3" class="myPageActivity">
-          <SubscribedList :profileinfo="profileinfo" />
+          <SubscribedList :subscribedlist="subscribedlist" />
         </section>
         <section v-if="activetab === 4" class="myPageActivity">
-          <GroupList :profileinfo="profileinfo" />
+          <GroupList :grouplist="grouplist" />
         </section>
         <!-- 피드 -->
       </div>
@@ -137,16 +138,46 @@
 import Activity from "@/components/MyPage/Activity.vue";
 import SubscribedList from "@/components/MyPage/SubscribedList.vue";
 import GroupList from "@/components/MyPage/GroupList.vue";
+import NewsFeedList from "../components/NewsFeed/NewsFeedList.vue";
+import { getprofileInfo } from "@/api/mypage.js";
+import { feedList } from "@/api/feed.js";
 
 export default {
-  components: { Activity, SubscribedList, GroupList },
+  components: { Activity, SubscribedList, GroupList, NewsFeedList },
   data() {
     return {
       name: "명도균",
-      current_user: 5,
+      current_user: 1,
       // 해당 페이지 유저를 구독했는지 여부
       subscribed: false,
       // 내 홈페이지 여부
+      grouplist: [
+        {
+          groupname: "윈터솔져",
+          group_id: 100,
+          signupDate: "2020년 12월 1일",
+        },
+      ],
+      activities: [
+        {
+          username: "명도균",
+          dayInfo: "2021년 1월 25일",
+          content: "장수민님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+          article_id: 30,
+        },
+        {
+          username: "명도균",
+          dayInfo: "2021년 1월 11일",
+          content: "이병훈님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+          article_id: 30,
+        },
+        {
+          username: "명도균",
+          dayInfo: "2021년 1월 1일",
+          content: "박성호님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+          article_id: 30,
+        },
+      ],
       mypage: false,
       activetab: 1,
       profileinfo: {
@@ -155,75 +186,91 @@ export default {
         following: 100,
         follow: 1000,
         group: 4,
-        grouplist: [
-          {
-            groupname: "윈터솔져",
-            group_id: 100,
-            signupDate: "2020년 12월 1일",
-          },
-        ],
-        subscribedlist: [
-          {
-            username: "장수민",
-            user_id: 4,
-            profilesrc: "@/assets/loverduck.png",
-          },
-          {
-            username: "이병훈",
-            user_id: 5,
-            profilesrc: "@/assets/loverduck.png",
-          },
-          {
-            username: "박성호",
-            user_id: 8,
-            profilesrc: "@/assets/loverduck.png",
-          },
-          {
-            username: "김상원",
-            user_id: 31,
-            profilesrc: "@/assets/loverduck.png",
-          },
-        ],
-        activities: [
-          {
-            username: "명도균",
-            dayInfo: "2021년 1월 25일",
-            content: "장수민님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-            article_id: 30,
-          },
-          {
-            username: "명도균",
-            dayInfo: "2021년 1월 11일",
-            content: "이병훈님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-            article_id: 30,
-          },
-          {
-            username: "명도균",
-            dayInfo: "2021년 1월 1일",
-            content: "박성호님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-            article_id: 30,
-          },
-        ],
-        feed: [{}, {}],
       },
+      feed: [],
+      subscribedlist: [
+        {
+          username: "장수민",
+          user_id: 4,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "이병훈",
+          user_id: 5,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "박성호",
+          user_id: 8,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "김상원",
+          user_id: 31,
+          profilesrc: "@/assets/loverduck.png",
+        },
+      ],
+
+      feed_page_no: 0,
     };
   },
   methods: {
     usercheck() {
-      this.current_user = this.$route.query.username;
-      if (this.current_user === undefined) {
+      if (this.$route.query.username === undefined) {
         this.mypage = true;
+        // this.current_user = 뷰엑스나 세션에서 아이디 가지고 오기
       } else {
+        this.current_user = this.$route.query.username;
         this.mypage = false;
       }
     },
     getprofileInfo() {
+      getprofileInfo(
+        this.current_user,
+        (res) => {
+          console.log(res);
+          this.profileinfo = res.data;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
       // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
       // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
     },
+    // getFeed() {
+    //   feedList(
+    //     this.feed_page_no,
+    //     (res) => {
+    //       console.log(res);
+    //     },
+    //     (err) => {
+    //       console.error(err);
+    //     }
+    //   );
+    // },
+    setFeedList() {
+      feedList(
+        0,
+        (res) => {
+          console.log(res);
+          this.feed = res.data.indoorResponseDtoList;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    },
   },
   created() {
+    console.log(this.current_user);
     this.usercheck();
+    this.getprofileInfo();
+    // this.getFeed();
+    this.setFeedList();
+  },
+  mounted() {
+    this.setFeedList();
   },
 };
 </script>
@@ -235,6 +282,7 @@ export default {
 
 .myPageHeaderFrame {
   width: 100%;
+  padding-top: 80px;
   height: auto;
   background-color: #ffffff;
 }
@@ -257,6 +305,11 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+.myPageInroduce {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: 400;
 }
 
 .myPageSubscribe {

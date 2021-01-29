@@ -5,18 +5,10 @@
     </header>
     <hr class="myPageActivityhr" />
     <div class="subscribedContentFrame">
+      <h3>구독 목록</h3>
       <div class="subscribedContent">
-        <h3>구독 목록</h3>
         <SubscribedUser
-          v-for="(subscriber, idx) in profileinfo.subscribedlist"
-          :key="idx"
-          :subscriber="subscriber"
-        />
-      </div>
-      <div class="subscribedContent">
-        <h3>구독 목록</h3>
-        <SubscribedUser
-          v-for="(subscriber, idx) in profileinfo.subscribedlist"
+          v-for="(subscriber, idx) in subscribedlist"
           :key="idx"
           :subscriber="subscriber"
         />
@@ -30,7 +22,7 @@ import SubscribedUser from "@/components/MyPage/SubscribedUser.vue";
 export default {
   components: { SubscribedUser },
   props: {
-    profileinfo: Object,
+    subscribedlist: Array,
   },
 };
 </script>
@@ -67,8 +59,9 @@ export default {
   padding: 15px;
   margin: auto;
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .subscribedContent {
@@ -76,10 +69,9 @@ export default {
   margin: 10px;
   padding: 15px 0;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  /* flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-}
-.subscribedContent h3 {
+  align-items: flex-start; */
 }
 </style>
