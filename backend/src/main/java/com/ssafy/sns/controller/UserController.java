@@ -2,9 +2,11 @@ package com.ssafy.sns.controller;
 
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.user.DuplDto;
 import com.ssafy.sns.dto.user.KakaoDto;
 import com.ssafy.sns.dto.user.KakaoDto2;
 import com.ssafy.sns.jwt.JwtService;
+import com.ssafy.sns.repository.UserRepository;
 import com.ssafy.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,6 +27,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/kakao")
@@ -36,7 +40,7 @@ public class UserController {
         // 존재하지 않는 경우 회원 가입
         if (user == null) {
             System.out.println("회원가입 지금 한다");
-            userService.saveUser(dto);
+//            userService.saveUser(dto);
             return new ResponseEntity(false, HttpStatus.OK);
         } else {
             Map<String, Object> resultMap = new HashMap<>();
@@ -59,6 +63,7 @@ public class UserController {
         User user = new User();
         user.setKakaoId(dto.getKakaoId());
         user.setNickname(dto.getUsername());
+        userRepository.save(user);
         System.out.println(user);
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -82,6 +87,17 @@ public class UserController {
 
         return new ResponseEntity("탈퇴 성공", HttpStatus.OK);
 
+    }
+
+    @PostMapping("/dupl")
+    public ResponseEntity dupl(@RequestBody DuplDto dto) {
+        User user = userRepository.findByNickname(dto.getUsername()).orElse(null);
+
+        boolean result = true;
+        if (user != null) {
+            result = false;
+        }
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
 }
