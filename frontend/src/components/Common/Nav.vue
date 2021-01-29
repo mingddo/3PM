@@ -1,14 +1,14 @@
 <template>
   <header>
     <div class="nav">
-      <div class="nav-logo">
+      <div class="nav-logo" @click="goToHome">
         <i class="far fa-clock"></i>
         오후 세시.
       </div>
       <div class="nav-content">
-        <div @click="goToHome">
+        <!-- <div @click="goToHome">
           <i class="fas fa-home">홈</i>
-        </div>
+        </div> -->
         <div @click="goToPersonal">
           <i class="fas fa-house-user">꽃보다 집</i>
         </div>

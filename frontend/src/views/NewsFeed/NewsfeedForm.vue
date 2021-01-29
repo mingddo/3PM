@@ -83,7 +83,8 @@ export default {
         this.form.content = this.$route.params.feed.content
         this.form.tags = this.$route.params.feed.tag
       } else if (this.$route.params.type == 'SHARE') {
-        this.form.content = `[공유] ${this.$route.params.feed.content}`
+        let link = document.location.href; 
+        this.form.content = `[공유] ${link} ${this.$route.params.feed.content}`
         this.form.tags = this.$route.params.feed.tag
       }
     },
@@ -108,9 +109,10 @@ export default {
       } else {
         // axios put 요청
         await updateFeed (
+          this.$route.params.feed.indoorId,
           this.form,
           (res) => {
-            console.log(res)
+            this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
           },
           (err) => {
             console.log(err)
