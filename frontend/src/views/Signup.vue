@@ -6,6 +6,7 @@
         <input v-model="nickname" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력">
         <button 
         @click="checkOverlap"
+        :disabled="isOverlaped"
         :class="{disabledBtn:!isPossibleName}">중복확인</button>
       </div>
       <div class="signup-input">
@@ -32,7 +33,7 @@ export default {
     }
   },
   computed : {
-    ...mapState(['setKakaoId']),
+    ...mapState(['kakaoId']),
   },
   watch : {
     nickname : function() {
@@ -42,8 +43,7 @@ export default {
   methods : {
     ...mapActions(['setloginUser']),
     onClickSignup() {
-      const userId = localStorage.getItem('kakaoId')
-
+      const userId = this.kakaoId;
       createUser(
         {
         "kakaoId" : userId,

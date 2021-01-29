@@ -26,7 +26,7 @@ export default {
     }
   },
   computed : {
-    ...mapState(['userStatus']),
+    ...mapState(['userStatus','kakaoId']),
   },
   methods : {
     ...mapActions(['setUserStatus','setAuthToken','setKakaoId']),
@@ -97,6 +97,7 @@ export default {
     kakaoLogout() {
       window.Kakao.Auth.logout(()=>{           
         this.setUserStatus(false)
+        alert('logout')
       })
     },
 
