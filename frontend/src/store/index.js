@@ -9,6 +9,7 @@ export default new Vuex.Store({
     userStatus : null,
     authToken : null,
     kakaoId : null,
+    userId : null,
   },
   mutations: {
     setUserStatus(state,payload) {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     setKakaoId(state,payload) {
       state.kakaoId = payload
+    },
+    setUserId(state,payload) {
+      state.userId = payload
     }
   },
   actions: {
@@ -30,6 +34,9 @@ export default new Vuex.Store({
     },
     setKakaoId : function(context,payload) {
       context.commit('setKakaoId',payload)
+    },
+    setUserId : function(context,payload) {
+      context.commit('setUserId',payload)
     }
   },
   plugins: [
