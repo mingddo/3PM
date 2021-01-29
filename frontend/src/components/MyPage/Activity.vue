@@ -6,7 +6,7 @@
     <hr class="myPageActivityhr" />
     <div class="myPageActivityContentFrame">
       <MyPageActivity
-        v-for="(activity, idx) in profileinfo.activities"
+        v-for="(activity, idx) in activities"
         :key="idx"
         :activity="activity"
       />
@@ -20,7 +20,7 @@ import MyPageActivity from "@/components/MyPage/MyPageActivity.vue";
 export default {
   components: { MyPageActivity },
   props: {
-    profileinfo: Object,
+    activities: Array,
   },
 };
 </script>

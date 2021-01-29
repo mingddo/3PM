@@ -7,6 +7,7 @@ import NewsfeedPersonal from '../views/NewsFeed/NewsfeedPersonal.vue'
 import NewsfeedDetail from '../views/NewsFeed/NewsfeedDetail.vue'
 import NewsfeedForm from '../views/NewsFeed/NewsfeedForm.vue'
 import MyPage from '../views/MyPage.vue'
+import MyPageEdit from '../views/MyPageEdit.vue'
 import Search from '../views/Search.vue'
 
 Vue.use(VueRouter)
@@ -31,6 +32,11 @@ const routes = [
     path: '/mypage',
     name: 'MyPage',
     component: MyPage
+  },
+  {
+    path: '/mypage-edit',
+    name: 'MyPageEdit',
+    component: MyPageEdit
   },
   {
     path: '/newsfeed-personal',

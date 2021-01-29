@@ -19,7 +19,7 @@ export default {
 
 <style scoped>
 .subscribedComponentFrame {
-  width: 90%;
+  width: 45%;
   height: 85px;
   display: flex;
   justify-content: flex-start;
