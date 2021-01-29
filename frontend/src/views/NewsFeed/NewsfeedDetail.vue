@@ -137,13 +137,16 @@ export default {
       const answer = window.confirm('정말로 삭제하시겠습니까?')
       if (answer) {
         deleteFeed(
-          this.fd.id,
-          {},
+          this.fd.indoorId,
+          () => {
+            this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+          },
           (err) => {
             console.log(err)
           }
         )
       }
+      
     },
     changeModiForm () {
       this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
