@@ -42,6 +42,7 @@
 import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import { createFeed } from '@/api/feed.js'
 import { updateFeed } from '@/api/feed.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'NewsfeedForm',
@@ -57,7 +58,7 @@ export default {
         tags: [],
         file: null,
         content: null,
-        userId: 1,
+        userId: null,
       },
     };
   },
@@ -95,6 +96,7 @@ export default {
     },
     async createFeed () {
       this.completed = true;
+      this.form.userId = this.userpk
       if (this.$route.params.type == 'NEW' || this.$route.params.type == 'SHARE') {
         // axios create 요청
         await createFeed (
@@ -137,7 +139,12 @@ export default {
         next(false);
       }
     }
-  }
+  },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
+  },
 };
 </script>
 
