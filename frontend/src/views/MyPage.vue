@@ -14,7 +14,7 @@
           </div>
           <h1 v-cloak>{{ profileinfo.username }}</h1>
           <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
-          <div :class="[mypage ? '' : '!profile_none']" class="myPageSubscribe">
+          <div :class="[!mypage ? '' : 'profile_none']" class="myPageSubscribe">
             <div
               :class="{ profielSubscribedNone: subscribed }"
               class="myPageSubscribed"
@@ -139,15 +139,15 @@ import Activity from "@/components/MyPage/Activity.vue";
 import SubscribedList from "@/components/MyPage/SubscribedList.vue";
 import GroupList from "@/components/MyPage/GroupList.vue";
 import NewsFeedList from "../components/NewsFeed/NewsFeedList.vue";
-import { getprofileInfo } from "@/api/mypage.js";
-import { feedList } from "@/api/feed.js";
+import { getprofileInfo, getprofileFeed } from "@/api/mypage.js";
 
 export default {
   components: { Activity, SubscribedList, GroupList, NewsFeedList },
   data() {
     return {
       name: "명도균",
-      current_user: 1,
+      current_user: 0,
+      profile_user: 0,
       // 해당 페이지 유저를 구독했는지 여부
       subscribed: false,
       // 내 홈페이지 여부
@@ -210,23 +210,28 @@ export default {
           profilesrc: "@/assets/loverduck.png",
         },
       ],
-
       feed_page_no: 0,
     };
   },
   methods: {
     usercheck() {
-      if (this.$route.query.username === undefined) {
+      if (
+        this.$route.query.name === undefined ||
+        this.$route.query.name === this.$store.state.userId
+      ) {
+        this.current_user = this.$store.state.userId;
+        this.profile_user = this.$store.state.userId;
         this.mypage = true;
         // this.current_user = 뷰엑스나 세션에서 아이디 가지고 오기
       } else {
-        this.current_user = this.$route.query.username;
+        this.profile_user = this.$route.query.name;
         this.mypage = false;
+        console.log(this.profileinfo);
       }
     },
     getprofileInfo() {
       getprofileInfo(
-        this.current_user,
+        this.profile_user,
         (res) => {
           console.log(res);
           this.profileinfo = res.data;
@@ -238,39 +243,25 @@ export default {
       // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
       // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
     },
-    // getFeed() {
-    //   feedList(
-    //     this.feed_page_no,
-    //     (res) => {
-    //       console.log(res);
-    //     },
-    //     (err) => {
-    //       console.error(err);
-    //     }
-    //   );
-    // },
-    setFeedList() {
-      feedList(
-        0,
+    getFeed() {
+      getprofileFeed(
+        this.profile_user,
+        this.feed_page_no,
         (res) => {
-          console.log(res);
+          console.log(res.data);
           this.feed = res.data.indoorResponseDtoList;
         },
         (err) => {
-          console.log(err);
+          console.error(err);
         }
       );
     },
   },
   created() {
-    console.log(this.current_user);
+    console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
-    // this.getFeed();
-    this.setFeedList();
-  },
-  mounted() {
-    this.setFeedList();
+    this.getFeed();
   },
 };
 </script>

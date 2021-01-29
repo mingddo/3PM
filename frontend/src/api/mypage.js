@@ -9,9 +9,9 @@ function getprofileInfo(user_id,success,fail){
     .catch(fail)
 }
 
-function getprofileFeed(num,success,fail){
+function getprofileFeed(id,num,success,fail){
   instance
-    .get(`feed/list/${num}`)
+    .get(`feed/list/${id}/${num}`)
     .then(success)
     .catch(fail)
 }
