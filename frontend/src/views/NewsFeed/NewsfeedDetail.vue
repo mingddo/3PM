@@ -34,8 +34,8 @@
           <button v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>
         </div>
         <div class="feed-detail-content">
-          <p>
-            {{fd.content}}
+          <p v-html="fd.content">
+            <!-- {{fd.content}} -->
           </p>
         </div>
       </article>
@@ -126,7 +126,7 @@ export default {
     shareFeed () {
       const answer = window.confirm('내 피드에 공유하시겠습니까?')
       if (answer) {
-        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'SHARE', feed: this.fd }})
+        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'SHARE', feed: this.fd, link: document.location.href, }})
       }
     },
     focusComment () {
@@ -161,7 +161,7 @@ export default {
       }
     },
     goToProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.nickname}})
+      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
     },  
     goToSearchTag (tag) {
       this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})

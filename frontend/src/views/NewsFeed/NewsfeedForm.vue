@@ -83,8 +83,8 @@ export default {
         this.form.content = this.$route.params.feed.content
         this.form.tags = this.$route.params.feed.tag
       } else if (this.$route.params.type == 'SHARE') {
-        let link = document.location.href; 
-        this.form.content = `[공유] ${link} ${this.$route.params.feed.content}`
+        // let link = document.location.href; 
+        this.form.content = `<b>[공유]</b> <br> <a href="${this.$route.params.link}">원문이동</a> <br> ${this.$route.params.feed.content}`
         this.form.tags = this.$route.params.feed.tag
       }
     },

@@ -5,7 +5,7 @@
         <i class="far fa-clock"></i>
         오후 세시.
       </div>
-      <div class="nav-content">
+      <div class="nav-content" v-if="userStatus">
         <!-- <div @click="goToHome">
           <i class="fas fa-home">홈</i>
         </div> -->
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Nav',
   data() {
@@ -52,6 +53,11 @@ export default {
     goToProfile () {
       this.$router.push({name: 'MyPage'})
     },
+  },
+  computed : {
+    ...mapState({
+      userStatus : (state) => state.userStatus,
+    })
   },
 };
 </script>

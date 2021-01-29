@@ -28,8 +28,8 @@
       </div>
 
       <div v-else>
-        <p>
-          {{ fd.content }}
+        <p v-html="fd.content">
+          <!-- {{ fd.content }} -->
         </p>
       </div>
 
@@ -73,7 +73,7 @@ export default {
       }
     },
     goToProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.nickname}})
+      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
     },
     goToSearchTag (tag) {
       this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})
