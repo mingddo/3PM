@@ -30,8 +30,9 @@
         <label for="content">내용</label>
         <textarea class="newsfeed-form-content-input" name="content" placeholder="내용을 입력해주세요" id="content" cols="30" rows="10" v-model="form.content"></textarea>
       </div>
-
-      <button @click="createFeed">작성하기</button>
+      <div class="newsfeed-form-submit-btn">
+        <button @click="createFeed">작성하기</button>
+      </div>
     </section>
 
   </div>
@@ -56,7 +57,7 @@ export default {
         tags: [],
         file: null,
         content: null,
-        userId: 4,
+        userId: 1,
       },
     };
   },
@@ -66,13 +67,14 @@ export default {
       this.form.tags.splice(check, 1)
     },
     addTag () {
-      // console.log(this.form.tag.find(element => element === this.inputTag))
-      // console.log(this.form.tag.findIndex(element => element === this.inputTag))
-      let check = this.form.tags.findIndex(element => element === this.inputTag)
-      if (check !== -1) {
-        alert('이미 존재하는 태그입니다') 
-      } else {
-        this.form.tags.push(this.inputTag);
+      if (this.form.tags) {
+
+        let check = this.form.tags.findIndex(element => element === this.inputTag)
+        if (check !== -1) {
+          alert('이미 존재하는 태그입니다') 
+        } else {
+          this.form.tags.push(this.inputTag);
+        }
       }
       this.inputTag = '';
     },
@@ -92,7 +94,7 @@ export default {
     },
     async createFeed () {
       this.completed = true;
-      if (this.$route.params.type == 'NEW') {
+      if (this.$route.params.type == 'NEW' || this.$route.params.type == 'SHARE') {
         // axios create 요청
         await createFeed (
           this.form,
@@ -139,11 +141,14 @@ export default {
 
 <style>
 .newsfeed-form-content {
+  text-align: center;
   border: 1px solid;
   padding: 20px;
+  
 }
 .newsfeed-form-content div {
   margin: 10px;
+  padding: 10px;
   /* padding: 10px; */
 }
 .newsfeed-form-tag-input {
@@ -180,5 +185,9 @@ export default {
   overflow: hidden; 
   clip:rect(0,0,0,0); 
   border: 0;
+}
+.newsfeed-form-submit-btn {
+  display: flex;
+  justify-content: center;
 }
 </style>
