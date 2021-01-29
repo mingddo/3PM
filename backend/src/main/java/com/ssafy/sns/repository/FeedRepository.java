@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface FeedRepository {
 
+    // 내가 쓴글 불러오기
+    public List<Indoor> findMyList(Long id, int num);
+
     // 한페이지 불러오기
     public List<Indoor> findList(int num);
 
