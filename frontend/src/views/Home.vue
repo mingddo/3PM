@@ -26,10 +26,10 @@ export default {
     }
   },
   computed : {
-    ...mapState(['userStatus','kakaoId']),
+    ...mapState(['userStatus','kakaoId','userId','authToken']),
   },
   methods : {
-    ...mapActions(['setUserStatus','setAuthToken','setKakaoId']),
+    ...mapActions(['setUserStatus','setAuthToken','setKakaoId','setUserId']),
     scrollStatus() {
       let viewportHeight = window.innerHeight;
       let scrollPos = window.scrollY
@@ -58,19 +58,20 @@ export default {
         url:'/v2/user/me',
       })
       .then((res)=>{
-        const userId = res.id;
+        const kakaoId = res.id; 
         console.log(res)
         getUser(
           {
-            "kakaoId" : userId,
+            "kakaoId" : kakaoId,
           },
           (res) => {
-            console.log(res)
+            this.setKakaoId(kakaoId)
             // true -> user 정보가 있으면  Home
-            this.setKakaoId(userId)
             if(res.data) {
               // 세션에 토큰 설정
+              const responseUserId = res.data.id
               const authToken = res.data['auth-token']
+              this.setUserId(responseUserId)
               this.setAuthToken(authToken)
               this.setUserStatus(true)
             }
@@ -95,8 +96,11 @@ export default {
     },
 
     kakaoLogout() {
-      window.Kakao.Auth.logout(()=>{           
-        this.setUserStatus(false)
+      window.Kakao.Auth.logout(()=>{ 
+        this.setUserId(null)
+        this.setAuthToken(null)
+        this.setKakaoId(null)
+        this.setUserStatus(null)
         alert('logout')
       })
     },
@@ -115,13 +119,10 @@ export default {
     },
     onClickLogin() {
       this.kakaoLogin();
-      // this.setUserStatus(true)
-
     },
 
     onClickLogout() {
       this.kakaoLogout();
-      // this.setUserStatus(false)
     },
 
     // onClickDeleteUserConnection() {

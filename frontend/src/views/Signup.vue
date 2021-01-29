@@ -12,8 +12,8 @@
       <div class="signup-input">
         <button 
         @click="onClickSignup"
-        :disabled="isOverlaped"
-        :class="{disabledBtn:isOverlaped}">회원가입</button>
+        :disabled="isOverlapped"
+        :class="{disabledBtn:isOverlapped}">회원가입</button>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
 import {mapActions,mapState} from 'vuex'
-import { createUser } from '@/api/signup.js'
+import { createUser,checkOverlapped } from '@/api/signup.js'
 
 export default {
   name: 'Signup',
@@ -29,11 +29,11 @@ export default {
     return {
       nickname : '',
       isPossibleName : false,
-      isOverlaped : true,
+      isOverlapped : true,
     }
   },
   computed : {
-    ...mapState(['kakaoId']),
+    ...mapState(['userStatus','kakaoId','userId']),
   },
   watch : {
     nickname : function() {
@@ -41,16 +41,21 @@ export default {
     },
   },
   methods : {
-    ...mapActions(['setloginUser']),
+    ...mapActions(['setUserStatus','setAuthToken','setUserId']),
     onClickSignup() {
-      const userId = this.kakaoId;
+      const kakaoId = this.kakaoId;
       createUser(
         {
-        "kakaoId" : userId,
+        "kakaoId" : kakaoId,
         "username" : this.nickname,
         },
         (res) => {
-          console.log(res);
+          const responseUserId = res.data.id;
+          const authToken = res.data['auth-token'];
+          this.setUserId(responseUserId);
+          this.setAuthToken(authToken);
+          this.setUserStatus(true);
+          this.$router.push({name : "Home"});
         },
         (err) => {
           console.log(err);
@@ -71,10 +76,25 @@ export default {
     },
     checkOverlap() {
       // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
-      alert('사용 가능한 아이디입니다');
-      this.isOverlaped = false;
+      console.log(this.nickname)
+      checkOverlapped(
+        {
+          'username' : this.nickname,
+        },
+        (res) => {
+          this.isOverlapped = !res.data;
+          if(this.isOverlapped) {
+            alert('사용 불가능한 ❌❌ 아이디입니다');
+            }
+          else {
+            alert('사용 가능한 ⭕⭕ 아이디입니다');
+          }
+        },
+        (err) => {
+          alert('err',err)
+        }
+      )
     },
-
   },
 };
 </script>
