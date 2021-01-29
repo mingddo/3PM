@@ -22,6 +22,12 @@ public class IndoorServiceImpl implements FeedService {
     private final UserRepository userRepository;
 
     @Override
+    public IndoorListResponseDto readMyList(Long id, int num) {
+        List<Indoor> indoorList = indoorRepository.findMyList(id, num);
+        return new IndoorListResponseDto(indoorList, num + indoorList.size());
+    }
+
+    @Override
     public IndoorListResponseDto readList(int num) {
 
         List<Indoor> indoorList = indoorRepository.findList(num);

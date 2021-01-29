@@ -15,15 +15,24 @@ public class IndoorRepositoryImpl implements FeedRepository {
     private final EntityManager em;
 
     @Override
-    public List<Indoor> findList(int num) {
-        int readPageCnt = 10;
+    public List<Indoor> findMyList(Long id, int num) {
+        int readPageCnt = 100;
 
-        List<Indoor> resultList = em.createQuery("SELECT i FROM Indoor i ORDER BY i.createdDate DESC", Indoor.class)
+        return em.createQuery("SELECT i FROM Indoor i WHERE i.user.id = :id ORDER BY i.createdDate DESC", Indoor.class)
+                .setParameter("id", id)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
                 .getResultList();
+    }
 
-        return resultList;
+    @Override
+    public List<Indoor> findList(int num) {
+        int readPageCnt = 100;
+
+        return em.createQuery("SELECT i FROM Indoor i ORDER BY i.createdDate DESC", Indoor.class)
+                .setFirstResult(num)
+                .setMaxResults(readPageCnt)
+                .getResultList();
     }
 
     @Override

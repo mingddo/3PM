@@ -3,6 +3,7 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.user.KakaoDto;
+import com.ssafy.sns.dto.user.KakaoDto2;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -53,17 +54,12 @@ public class UserController {
     }
 
     @PostMapping("/kakao2")
-    public ResponseEntity kakaoLogin(@RequestBody KakaoDto dto) {
+    public ResponseEntity kakaoLogin(@RequestBody KakaoDto2 dto) {
 
-        // 해당 유저가 존재하는지 확인
-        User user = userService.findUserByKakaoId(dto.getKakaoId());
-
-        // 존재하지 않는 경우 회원 가입
-        if (user == null) {
-            System.out.println("회원가입 지금 한다");
-            user = userService.saveUser(dto);
-        }
-
+        User user = new User();
+        user.setKakaoId(dto.getKakaoId());
+        user.setNickname(dto.getUsername());
+        System.out.println(user);
 
         Map<String, Object> resultMap = new HashMap<>();
         String token = jwtService.create(user);
@@ -87,4 +83,5 @@ public class UserController {
         return new ResponseEntity("탈퇴 성공", HttpStatus.OK);
 
     }
+
 }
