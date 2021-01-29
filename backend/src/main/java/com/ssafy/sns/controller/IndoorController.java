@@ -24,6 +24,22 @@ public class IndoorController {
         this.indoorService = indoorService;
     }
 
+    @GetMapping(value = "/list/{id}/{no}", produces = "application/json; charset=utf8")
+    public ResponseEntity<IndoorListResponseDto> getFeedMyList(@PathVariable("id") Long id, @PathVariable("no") int num) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        IndoorListResponseDto indoorListResponseDto = null;
+        try {
+            indoorListResponseDto = indoorService.readMyList(id, num);
+            logger.info("getFeedMyList = 뉴스 피드 내 글 리스트 가져오기 : {}", num);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getFeedMyList - 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(indoorListResponseDto, status);
+    }
+
     @GetMapping(value = "/list/{no}", produces = "application/json; charset=utf8")
     public ResponseEntity<IndoorListResponseDto> getFeedList(@PathVariable("no") int num) {
         HttpStatus status = HttpStatus.ACCEPTED;
