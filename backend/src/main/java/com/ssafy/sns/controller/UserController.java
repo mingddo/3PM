@@ -7,7 +7,7 @@ import com.ssafy.sns.dto.user.KakaoDto;
 import com.ssafy.sns.dto.user.KakaoDto2;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.repository.UserRepository;
-import com.ssafy.sns.service.UserService;
+import com.ssafy.sns.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class UserController {
 
     private final JwtService jwtService;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     private final UserRepository userRepository;
 
@@ -60,11 +60,7 @@ public class UserController {
     @PostMapping("/kakao2")
     public ResponseEntity kakaoLogin(@RequestBody KakaoDto2 dto) {
 
-        User user = new User();
-        user.setKakaoId(dto.getKakaoId());
-        user.setNickname(dto.getUsername());
-        userRepository.save(user);
-        System.out.println(user);
+        User user = userService.joinMember(dto);
 
         Map<String, Object> resultMap = new HashMap<>();
         String token = jwtService.create(user);
@@ -77,7 +73,6 @@ public class UserController {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         return new ResponseEntity<>(resultMap, status);
-
     }
 
     @DeleteMapping("/{id}")
@@ -91,13 +86,9 @@ public class UserController {
 
     @PostMapping("/dupl")
     public ResponseEntity dupl(@RequestBody DuplDto dto) {
-        User user = userRepository.findByNickname(dto.getUsername()).orElse(null);
 
-        boolean result = true;
-        if (user != null) {
-            result = false;
-        }
-        return new ResponseEntity(result, HttpStatus.OK);
+        boolean isDuplicated = userService.isDuplicate(dto.getUsername());
+
+        return new ResponseEntity(isDuplicated, HttpStatus.OK);
     }
-
 }

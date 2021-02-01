@@ -5,9 +5,8 @@ import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileDto;
 import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
-import com.ssafy.sns.service.FollowService;
-import com.ssafy.sns.service.IndoorService;
-import com.ssafy.sns.service.UserService;
+import com.ssafy.sns.service.FollowServiceImpl;
+import com.ssafy.sns.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;;
@@ -28,11 +27,9 @@ public class MyPageController {
 
 //    private final MyPageService myPageService;
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    private final FollowService followService;
-
-    private final IndoorService indoorService;
+    private final FollowServiceImpl followService;
 
     /**
      * [마이페이지 유저 정보] [프로필 정보]
@@ -53,7 +50,7 @@ public class MyPageController {
         int fromMeToOthersCnt = followService.fromMeToOthers(id);
         int toMeFromOthersCnt = followService.toMeFromOthers(id);
         int groupCnt = 0; // 나중에 Group Entity 생기면 추가 예정
-        List<Indoor> newsfeeds = indoorService.findAllByUserId(id);
+        List<Indoor> newsfeeds = null;
 
         UserProfileDto result = UserProfileDto.builder()
                 .username(userDto.getNickname())
