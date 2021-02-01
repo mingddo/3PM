@@ -24,5 +24,6 @@ public class IndoorHashtag {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hashtag_id")
+    @Setter
     private Hashtag hashtag;
 }
