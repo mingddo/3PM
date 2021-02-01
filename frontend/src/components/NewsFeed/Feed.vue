@@ -22,11 +22,13 @@
 
     <div class="feed-content-box" @click="goToDetail">
       <span v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></span>
-
+      <h1>
+        {{ fd.indoorId }}
+      </h1>
       <div v-if="fd.file">
         <img :src="fd.file" alt="업로드 파일">
       </div>
-
+      
       <div v-else>
         <p v-html="fd.content">
           <!-- {{ fd.content }} -->
