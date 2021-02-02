@@ -1,5 +1,6 @@
 package com.ssafy.sns.repository;
 
+import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 
@@ -17,7 +18,7 @@ public interface FeedRepository {
     public Indoor findOne(Long id);
 
     // 피드 글쓰기
-    public Long save(Indoor indoor);
+    public Long save(Indoor indoor, List<Hashtag> hashtags);
 
     // 피드 글삭제
     public void remove(Long id);

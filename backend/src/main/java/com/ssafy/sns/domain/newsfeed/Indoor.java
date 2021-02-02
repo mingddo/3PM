@@ -31,24 +31,31 @@ public class Indoor extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "indoor")
+    @OneToMany(mappedBy = "indoor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IndoorHashtag> indoorHashtags = new ArrayList<>();
 
     @Builder
-    public Indoor(String content, String file, User user) {
+    public Indoor(String content, String file, User user, List<IndoorHashtag> indoorHashtags) {
         this.content = content;
         this.file = file;
         this.user = user;
+        this.indoorHashtags = indoorHashtags;
     }
 
     public void addIndoorHashtag(IndoorHashtag indoorHashtag) {
+        if (indoorHashtags == null) indoorHashtags = new ArrayList<>();
         indoorHashtags.add(indoorHashtag);
         indoorHashtag.setIndoor(this);
     }
 
-    public void update(String content, String file, List<String> tags) {
+    public void update(String content, String file) {
         this.content = content;
+        // 실제 파일 삭제 추가
         this.file = file;
-        // 태그추가하기
+    }
+
+    public void deleteIndoorHashtag(IndoorHashtag indoorHashtag) {
+        indoorHashtags.remove(indoorHashtag);
+        indoorHashtag.setIndoor(null);
     }
 }

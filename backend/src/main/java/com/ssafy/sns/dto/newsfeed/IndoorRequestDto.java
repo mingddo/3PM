@@ -11,14 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 public class IndoorRequestDto {
 
-    private Long indoorId;
     private String content;
     private String file;
     private List<String> tags;
     private Long userId;
 
     @Builder
-    public IndoorRequestDto(Long indoorId, String content, String file, List<String> tags, Long userId) {
+    public IndoorRequestDto(String content, String file, List<String> tags, Long userId) {
         this.content = content;
         this.file = file;
         this.tags = tags;
@@ -30,6 +29,7 @@ public class IndoorRequestDto {
                 .content(content)
                 .file(file)
                 .user(user)
+//                .indoorHashtags(tags)
                 .build();
     }
 }

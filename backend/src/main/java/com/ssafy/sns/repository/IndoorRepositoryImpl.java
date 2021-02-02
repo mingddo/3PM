@@ -1,5 +1,7 @@
 package com.ssafy.sns.repository;
 
+import com.ssafy.sns.domain.hashtag.Hashtag;
+import com.ssafy.sns.domain.hashtag.IndoorHashtag;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,7 @@ public class IndoorRepositoryImpl implements FeedRepository {
 
     @Override
     public List<Indoor> findMyList(Long id, int num) {
-        int readPageCnt = 100;
+        int readPageCnt = 10;
 
         return em.createQuery("SELECT i FROM Indoor i WHERE i.user.id = :id ORDER BY i.createdDate DESC", Indoor.class)
                 .setParameter("id", id)
@@ -27,7 +29,7 @@ public class IndoorRepositoryImpl implements FeedRepository {
 
     @Override
     public List<Indoor> findList(int num) {
-        int readPageCnt = 100;
+        int readPageCnt = 10;
 
         return em.createQuery("SELECT i FROM Indoor i ORDER BY i.createdDate DESC", Indoor.class)
                 .setFirstResult(num)
@@ -41,8 +43,14 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Long save(Indoor indoor) {
+    public Long save(Indoor indoor, List<Hashtag> hashtags) {
         em.persist(indoor);
+        for (Hashtag tag : hashtags) {
+            IndoorHashtag indoorHashtag = new IndoorHashtag();
+            indoor.addIndoorHashtag(indoorHashtag);
+            tag.addIndoorHashtag(indoorHashtag);
+            em.persist(indoorHashtag);
+        }
         return indoor.getId();
     }
 
@@ -55,7 +63,7 @@ public class IndoorRepositoryImpl implements FeedRepository {
     @Override
     public Long update(Long indoorId, IndoorRequestDto indoorDto) {
         Indoor findIndoor = em.find(Indoor.class, indoorId);
-        findIndoor.update(indoorDto.getContent(), indoorDto.getFile(), indoorDto.getTags());
+        findIndoor.update(indoorDto.getContent(), indoorDto.getFile());
         return findIndoor.getId();
     }
 }
