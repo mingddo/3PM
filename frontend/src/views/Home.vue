@@ -1,7 +1,14 @@
 <template>
   <div class="home">
-    <button v-if="!userStatus" class="login-btn" @click="onClickLogin">카카오로그인</button>
-    <button v-else class="login-btn" style="z-index:1000" @click="onClickLogout">로그아웃</button>
+    <div v-if="!userStatus">
+      <button class="login-btn" @click="onClickLogin">카카오로그인</button>
+    </div>
+    <div v-else>
+        <div @click="goToPersonal">
+          <i class="fas fa-house-user">꽃보다 집</i>
+        </div>
+      <button  class="login-btn" style="z-index:1000" @click="onClickLogout">로그아웃</button>
+    </div>
     <!-- <button class="login-btn" @click="deleteKakaoConnection">회원연결끊기</button> -->
     <section class="home-section">
       <h1>오후 세시.</h1>
@@ -124,7 +131,9 @@ export default {
     onClickLogout() {
       this.kakaoLogout();
     },
-
+    goToPersonal () {
+      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+    },
     // onClickDeleteUserConnection() {
     //   deleteKakaoConnection();
     // }
@@ -140,45 +149,5 @@ export default {
 </script>
 
 <style scoped>
-  .home-section {
-    height: 100vh;
-    padding-top: 5vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-  }
-
-  .login-btn {
-    width: 120px;
-    position: absolute;
-    top: 5vh;
-    right: 5%;
-    font-weight: bold;
-    color: #2c3e50;
-    transition: all 0.8s ease-in-out;
-    padding : 0.25rem 1rem;
-    background: none;
-    border: none;
-    box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #585858;
-  }
-  .login-btn.active {
-    background: #585858;
-    color: white;
-  }
-  .login-btn-moved {
-    width: 100%;
-    position: fixed;
-    font-weight: bold;
-    color: #2c3e50;
-    transition: all 1s ease-in-out;
-    top: 90vh;   
-    right: 0; 
-    border-radius: 0px;
-
-  }
+  
 </style>

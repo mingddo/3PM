@@ -7,12 +7,10 @@
       <i class="fas fa-plus feed-create-btn" @click="goToCreateForm">새 피드 작성</i> 
     </div>
     <div v-if="feed">
-      <Feed
-        class="feed-box"
+      <FeedForGroup 
         v-for="(fd, idx) in feed"
         :key="idx"
         :fd="fd"
-        :Category="Category"
       />
     </div>
     <div v-else>
@@ -33,11 +31,10 @@
 </template>
 
 <script>
-import Feed from './Feed.vue';
-
+import FeedForGroup from './FeedForGroup.vue';
 export default {
-  components: { Feed },
-  name: 'NewsFeedList',
+  components: { FeedForGroup },
+  name: 'GroupFeedList',
   props: {
     feed: Array,
     Category: String,
@@ -50,7 +47,7 @@ export default {
   },
   methods: {
     goToCreateForm () {
-      this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'NEW' }})
+      this.$router.push({ name: 'groupnewsfeedform', params: {type: 'NEW' }})
     },
   },
   watch: {},

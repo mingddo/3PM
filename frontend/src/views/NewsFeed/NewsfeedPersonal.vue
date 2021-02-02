@@ -1,8 +1,13 @@
 <template>
-  <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-    <NewsFeedHeader :Category="Category" class="newsfeed-header" />
-    <NewsFeedRecommend :reco="reco" :Category="Category" />
-    <NewsFeedList :feed="feed" :Category="Category" :last="last" />
+  <div>
+    <div>
+      <Sidebar/>
+    </div>
+    <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
+      <NewsFeedHeader :Category="Category" class="newsfeed-header" />
+      <NewsFeedRecommend :reco="reco" :Category="Category" />
+      <NewsFeedList :feed="feed" :Category="Category" :last="last" />
+    </div>
   </div>
 </template>
 
@@ -10,6 +15,7 @@
 import NewsFeedHeader from "../../components/NewsFeed/NewsFeedHeader.vue";
 import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
+import Sidebar from "../../components/Common/Sidebar.vue";
 
 import { feedList } from "@/api/feed.js";
 
@@ -19,6 +25,7 @@ export default {
     NewsFeedHeader,
     NewsFeedRecommend,
     NewsFeedList,
+    Sidebar,
   },
   data() {
     return {
@@ -294,28 +301,5 @@ export default {
 </script>
 
 <style>
-.newsfeed {
-  width: 940px;
-  padding: 15px;
-  margin: 0 auto;
-}
-.newsfeed-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.loading {
-  display: flex;
-  width: 100%;
-  padding: auto;
-}
-.spinner {
-  margin: auto;
-  animation: spin 1000ms infinite linear;
-}
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
+
 </style>
