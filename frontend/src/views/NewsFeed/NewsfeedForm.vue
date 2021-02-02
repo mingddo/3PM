@@ -149,54 +149,5 @@ export default {
 </script>
 
 <style>
-.newsfeed-form-content {
-  text-align: center;
-  border: 1px solid;
-  padding: 20px;
-  
-}
-.newsfeed-form-content div {
-  margin: 10px;
-  padding: 10px;
-  /* padding: 10px; */
-}
-.newsfeed-form-tag-input {
-  width: 90%;
-  padding: 10px;
-}
-.newsfeed-form-content-input {
-  width: 90%;
-  border-radius: 5px;
-}
-.newsfeed-form-file-box {
-  display: flex;
-  justify-content: space-evenly;
-}
-.newsfeed-form-img-box label {
-  display: inline-block; 
-  padding: .5em .75em; 
-  color: #999; 
-  font-size: inherit; 
-  line-height: normal; 
-  vertical-align: middle; 
-  background-color: #fdfdfd; 
-  cursor: pointer; 
-  border: 1px solid #ebebeb; 
-  border-bottom-color: #e2e2e2; 
-  border-radius: .25em;
-}
-.newsfeed-form-img-box input[type="file"] {
-  position: absolute; 
-  width: 1px; 
-  height: 1px; 
-  padding: 0; 
-  margin: -1px; 
-  overflow: hidden; 
-  clip:rect(0,0,0,0); 
-  border: 0;
-}
-.newsfeed-form-submit-btn {
-  display: flex;
-  justify-content: center;
-}
+
 </style>

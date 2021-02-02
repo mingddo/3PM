@@ -1,5 +1,9 @@
 <template>
-  <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
+  <div>
+    <div>
+      <Sidebar/>
+    </div>
+      <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
     <NewsFeedHeader
       :Category="Category"
       class="newsfeed-header"
@@ -13,11 +17,14 @@
       :Category="Category"
     />
   </div>
+  </div>
+
 </template>
 
 <script>
 import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
+import Sidebar from '../../components/Common/Sidebar.vue';
 // import NewsFeedRecommend from '../../components/NewsFeed/NewsFeedRecommend.vue';
 
 import { feedList } from '@/api/feed.js'
@@ -28,6 +35,7 @@ export default {
     NewsFeedHeader,
     // NewsFeedRecommend,
     NewsFeedList,
+    Sidebar,
   },
   data () {
     return {
@@ -285,14 +293,5 @@ export default {
 </script>
 
 <style>
-.newsfeed {
-  width: 940px;
-  padding: 15px;
-  margin: 0 auto;
-}
-.newsfeed-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 </style>
