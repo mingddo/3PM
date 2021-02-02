@@ -34,6 +34,7 @@
 
 <script>
 import Feed from './Feed.vue';
+
 export default {
   components: { Feed },
   name: 'NewsFeedList',

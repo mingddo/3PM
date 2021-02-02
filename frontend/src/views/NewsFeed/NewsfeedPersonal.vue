@@ -4,6 +4,8 @@
     <NewsFeedRecommend :reco="reco" :Category="Category" />
     <NewsFeedList :feed="feed" :Category="Category" :last="last" />
   </div>
+  </div>
+
 </template>
 
 <script>
@@ -19,6 +21,7 @@ export default {
     NewsFeedHeader,
     NewsFeedRecommend,
     NewsFeedList,
+    Sidebar,
   },
   data() {
     return {

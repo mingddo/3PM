@@ -1,0 +1,144 @@
+/* App.vue */
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+button a {
+  text-decoration: none;
+}
+button a:visited {
+  color : black;
+}
+button {
+  margin : 2px;
+  padding : 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585858;
+}
+button.active {
+  background: #585858;
+  color: white;
+}
+
+  /* Home.vue */
+.home-section {
+  height: 100vh;
+  padding-top: 5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.login-btn {
+  width: 120px;
+  position: absolute;
+  top: 5vh;
+  right: 5%;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: all 0.8s ease-in-out;
+  padding : 0.25rem 1rem;
+  background: none;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585858;
+}
+.login-btn.active {
+  background: #585858;
+  color: white;
+}
+.login-btn-moved {
+  width: 100%;
+  position: fixed;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: all 1s ease-in-out;
+  top: 90vh;   
+  right: 0; 
+  border-radius: 0px;
+}
+
+/* Sidebar.vue */
+.side-bar {
+  /* background-color: gray; */
+  box-sizing: border-box;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  width: 300px;
+  /* height: 85%; */
+  display: flex;
+  flex-direction: column;
+}
+.nav-toggle-switch {
+  display: none;
+  padding: 30px;
+  font-size: 20px;
+}
+.nav-toggle-switch div {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.nav-toggle-bar-before {  
+  overflow: hidden;
+  z-index: 200000;
+  white-space: nowrap;
+  position: fixed;
+  height: 100%;
+  top : 10;
+  left: -250px;
+  background-color: white;
+  width: 250px;
+  transition: all 0.5s ease-in-out;
+}
+.nav-toggle-bar-before div {
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+.overlay {
+  display: none;
+  z-index: 2;
+  background-color: rgba(0,0,0,0);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+/* Nav.vue */
+
+.nav-logo {
+  padding: 30px;
+  font-size: 30px;
+  cursor: pointer;
+}
+.nav-content {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  font-size: 20px;
+}
+.nav-content > div {
+  cursor: pointer;
+  padding: 10px;
+}
+.nav-content > div:hover {
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+}
+
