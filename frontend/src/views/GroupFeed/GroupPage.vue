@@ -1,9 +1,15 @@
 <template>
-  <div></div>
+  <div>
+    <h1>핵인싸</h1>
+    <GroupRecommend />
+  </div>
 </template>
 
 <script>
-export default {};
+import GroupRecommend from "../../components/GroupRecommend.vue";
+export default {
+  components: { GroupRecommend },
+};
 </script>
 
 <style></style>
