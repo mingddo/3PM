@@ -40,7 +40,7 @@
         </div>
       </article>
 
-      <div class="feed-detail-modi-delete">
+      <div class="feed-detail-modi-delete" v-if="userpk == fd.user.id">
         <button @click="changeModiForm">
           수정하기
         </button>
@@ -99,7 +99,7 @@
 <script>
 // import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
 import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
-
+import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { deleteFeed } from '@/api/feed.js'
 
@@ -185,6 +185,11 @@ export default {
   },
   created () {
     this.setFeedDetail();
+  },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
   },
 };
 </script>

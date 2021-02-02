@@ -96,32 +96,35 @@ export default {
     },
     async createFeed () {
       this.completed = true;
-      this.form.userId = this.userpk
-      if (this.$route.params.type == 'NEW' || this.$route.params.type == 'SHARE') {
-        // axios create 요청
-        await createFeed (
-          this.form,
-          (res) => {
-            this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+      if (this.userpk) {
+        this.form.userId = this.userpk
+        if (this.$route.params.type == 'NEW' || this.$route.params.type == 'SHARE') {
+          // axios create 요청
+          await createFeed (
+            this.form,
+            (res) => {
+              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else {
+          // axios put 요청
+          await updateFeed (
+            this.$route.params.feed.indoorId,
+            this.form,
+            (res) => {
+              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
       } else {
-        // axios put 요청
-        await updateFeed (
-          this.$route.params.feed.indoorId,
-          this.form,
-          (res) => {
-            this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+        alert('로그인된 유저만 글을 작성할 수 있습니다.')
       }
-      
     },
   },
   created () {
