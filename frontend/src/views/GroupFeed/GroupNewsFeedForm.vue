@@ -1,12 +1,16 @@
 <template>
-  <div class="newsfeed">
-    <NewsFeedHeader
-      :Category="Category"
-      class="newsfeed-header"
-    />
-    
-    <section class="newsfeed-form-content">
+  <div>
+    <div v-if="!select">
+      그룹 선택창
+      <div v-for="(group, idx) of groupNames" :key="idx">
+        <button @click="selectGroup(group)"> {{ group }} </button>
+      </div>
+    </div>
+    <section v-else>
       <h2>피드 작성하기</h2>
+      <div @click="changeGroup">
+        {{ form.groupName }} 
+      </div>
       <div>
         <label for="tags">태그</label>
         <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 입력해주세요" v-model="inputTag" @keyup.enter="addTag">
@@ -25,7 +29,7 @@
           <label for="video"> <i class="fas fa-video"></i> 동영상 </label>
           <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
         </div>
-      </div>     
+      </div> 
       <div>
         <label for="content">내용</label>
         <textarea class="newsfeed-form-content-input" name="content" placeholder="내용을 입력해주세요" id="content" cols="30" rows="10" v-model="form.content"></textarea>
@@ -34,43 +38,60 @@
         <button @click="createFeed">작성하기</button>
       </div>
     </section>
-
   </div>
 </template>
 
 <script>
-import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
-import { createFeed } from '@/api/feed.js'
-import { updateFeed } from '@/api/feed.js'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'NewsfeedForm',
-  components: {
-    NewsFeedHeader,
-  },
+  name: 'groupnewsfeedform',
   data() {
     return {
-      Category: this.$route.query.Category,
       type: 'NEW',
-      completed: false,
+      select : false,
+      groupNames: [ 'Test1', 'Test2', 'Test3'],
       inputTag: "",
       form: {
         tags: [],
+        userId: null,
         file: null,
         content: null,
-        userId: null,
+        groupName: null,
       },
     };
   },
   methods: {
-    deleteTag (tag) {
-      let check = this.form.tags.findIndex(element => element === tag)
-      this.form.tags.splice(check, 1)
+    async createFeed () {
+      this.completed = true;
+      if (this.userpk) {
+        this.form.userId = this.userpk
+        if (this.type == 'NEW' || this.type == 'SHARE') {
+          // axios create 요청
+          alert('새 글 작성하는 것!')
+        } else {
+          // axios put 요청
+          alert('수정하는 것')
+        }
+      } else {
+        alert('로그인된 유저만 글을 작성할 수 있습니다.')
+      }
+    },
+    changeGroup () {
+      this.select = false;
+    },
+    selectGroup (name) {
+      this.select = true;
+      this.form.groupName = name
+    },
+    selectFile (e) {
+      let files = e.target.files || e.dataTransfer.files
+      // console.log(e)
+      if (!files.length)
+        this.file = files[0].name
     },
     addTag () {
       if (this.form.tags) {
-
         let check = this.form.tags.findIndex(element => element === this.inputTag)
         if (check !== -1) {
           alert('이미 존재하는 태그입니다') 
@@ -92,49 +113,17 @@ export default {
         this.form.tags = this.$route.params.feed.tag
       }
     },
-    selectFile (e) {
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        this.file = files[0].name
-    },
-    async createFeed () {
-      this.completed = true;
-      if (this.userpk) {
-        this.form.userId = this.userpk
-        if (this.type == 'NEW' || this.type == 'SHARE') {
-          // axios create 요청
-          await createFeed (
-            this.form,
-            (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        } else {
-          // axios put 요청
-          await updateFeed (
-            this.$route.params.feed.indoorId,
-            this.form,
-            (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        }
-      } else {
-        alert('로그인된 유저만 글을 작성할 수 있습니다.')
-      }
-    },
+  },
+  computed : {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
   },
   created () {
     this.setDefault();
   },
   beforeRouteLeave (to, from, next) {
-    if (this.completed) {
+    if (this.completed || !this.select) {
       next();
     } else {
       const answer = 
@@ -146,14 +135,9 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState({
-      userpk : (state) => state.userId,
-    })
-  },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>
