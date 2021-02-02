@@ -1,8 +1,18 @@
 <template>
   <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-    <NewsFeedHeader :Category="Category" class="newsfeed-header" />
-    <NewsFeedRecommend :reco="reco" :Category="Category" />
-    <NewsFeedList :feed="feed" :Category="Category" />
+    <NewsFeedHeader
+      :Category="Category"
+      class="newsfeed-header"
+    />
+    <!-- <NewsFeedRecommend 
+      :reco="reco"
+      :Category="Category"
+    /> -->
+    <NewsFeedList
+      :feed="feed"
+      :Category="Category"
+      :last="last"
+    />
   </div>
 </template>
 
@@ -22,7 +32,7 @@ export default {
   },
   data() {
     return {
-      feed: null,
+      feed: [],
       reco: [
         {
           id: 1,
@@ -240,26 +250,44 @@ export default {
       ],
       Category: this.$route.query.Category,
       height: 0,
-    };
+      page: 0,
+      last: false,
+      next: false,
+    }
   },
   methods: {
     setFeedList() {
       feedList(
-        0,
+        this.page,
         (res) => {
-          console.log(res);
-          this.feed = res.data.indoorResponseDtoList;
+          this.page = res.data.endNum
+          let feeds = res.data.indoorResponseDtoList
+          if (feeds.length < 100) {
+            this.last = true
+          }
+          for (let f of feeds) {
+            this.feed.push(f)
+          }
+          this.next = false;
         },
         (err) => {
           console.log(err);
         }
       );
     },
-    setScroll() {
-      const obj = document.getElementById("newsfeed");
-      // console.log(obj)
-      this.height = obj.scrollHeight;
-      console.log(this.height);
+    setScroll () {
+      window.addEventListener('scroll', () => {
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+
+        if(!this.next && !this.last && scrollLocation + windowHeight >= fullHeight){
+          this.next = true;
+          setTimeout(() => {
+            this.setFeedList();
+          }, 1000);
+        }
+      })
     },
   },
   created() {
@@ -281,5 +309,19 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.loading {
+  display: flex;
+  width: 100%;
+  padding: auto;
+}
+.spinner {
+  margin: auto;
+  animation: spin 1000ms infinite linear;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
