@@ -1,18 +1,8 @@
 <template>
   <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-    <NewsFeedHeader
-      :Category="Category"
-      class="newsfeed-header"
-    />
-    <!-- <NewsFeedRecommend 
-      :reco="reco"
-      :Category="Category"
-    /> -->
-    <NewsFeedList
-      :feed="feed"
-      :Category="Category"
-      :last="last"
-    />
+    <NewsFeedHeader :Category="Category" class="newsfeed-header" />
+    <NewsFeedRecommend :reco="reco" :Category="Category" />
+    <NewsFeedList :feed="feed" :Category="Category" :last="last" />
   </div>
 </template>
 
@@ -253,20 +243,20 @@ export default {
       page: 0,
       last: false,
       next: false,
-    }
+    };
   },
   methods: {
     setFeedList() {
       feedList(
         this.page,
         (res) => {
-          this.page = res.data.endNum
-          let feeds = res.data.indoorResponseDtoList
+          this.page = res.data.endNum;
+          let feeds = res.data.indoorResponseDtoList;
           if (feeds.length < 100) {
-            this.last = true
+            this.last = true;
           }
           for (let f of feeds) {
-            this.feed.push(f)
+            this.feed.push(f);
           }
           this.next = false;
         },
@@ -275,19 +265,23 @@ export default {
         }
       );
     },
-    setScroll () {
-      window.addEventListener('scroll', () => {
+    setScroll() {
+      window.addEventListener("scroll", () => {
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
         let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
 
-        if(!this.next && !this.last && scrollLocation + windowHeight >= fullHeight){
+        if (
+          !this.next &&
+          !this.last &&
+          scrollLocation + windowHeight >= fullHeight
+        ) {
           this.next = true;
           setTimeout(() => {
             this.setFeedList();
           }, 1000);
         }
-      })
+      });
     },
   },
   created() {
