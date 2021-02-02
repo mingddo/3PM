@@ -97,6 +97,21 @@
   justify-content: space-between;
   align-items: center;
 }
+.loading {
+  display: flex;
+  width: 100%;
+  padding: auto;
+}
+.spinner {
+  margin: auto;
+  animation: spin 1000ms infinite linear;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* NewsfeedForm */
 .newsfeed-form-content {
   text-align: center;

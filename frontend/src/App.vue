@@ -24,6 +24,9 @@ export default {
   computed : {
     ...mapState(['isLoginUser'])
   },
+  created () {
+    
+  }
 }
 
 </script>
