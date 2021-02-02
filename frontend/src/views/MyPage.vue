@@ -117,7 +117,7 @@
       <div class="myPagearticle">
         <!-- 최근활동 -->
         <section v-if="activetab === 1" class="myPageActivity">
-          <NewsFeedList :feed="feed" />
+          <NewsFeedList :feed="feed" :last="last"/>
         </section>
         <section v-if="activetab === 2" class="myPageActivity">
           <Activity :activities="activities" />
@@ -188,6 +188,9 @@ export default {
         group: 4,
       },
       feed: [],
+      page: 0,
+      last: false,
+      next: false,
       subscribedlist: [
         {
           username: "장수민",
@@ -214,6 +217,40 @@ export default {
     };
   },
   methods: {
+    setFeedList () {
+      getprofileFeed(
+        this.profile_user,
+        this.page,
+        (res) => {
+          this.page = res.data.endNum
+          let feeds = res.data.indoorResponseDtoList;
+          if (feeds.length < 100) {
+            this.last = true;
+          }
+          for (let f of feeds) {
+            this.feed.push(f)
+          }
+          this.next = false;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    setScroll () {
+      window.addEventListener('scroll', () => {
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+
+        if(!this.next && !this.last && scrollLocation + windowHeight >= fullHeight){
+          this.next = true;
+          setTimeout(() => {
+            this.setFeedList();
+          }, 1000);
+        }
+      })
+    },
     usercheck() {
       if (
         this.$route.query.name === undefined ||
@@ -261,7 +298,11 @@ export default {
     console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
-    this.getFeed();
+    // this.getFeed();
+    this.setFeedList();
+  },
+  mounted () {
+    this.setScroll();
   },
 };
 </script>
