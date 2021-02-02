@@ -1,49 +1,44 @@
 <template>
-  <section>
-    <h2>추천</h2>
-    <carousel>
-      <slide
-        v-for="(rec, idx) in reco"
-        :key="idx"
-      >
-        <Feed
-          class="newsfeed-recommend-content"
-          :fd="rec"
-          :Category="Category"
-        />
-      </slide>
-    </carousel>
-  </section>
+  <splide :options="options">
+    <splide-slide v-for="(op, idx) in c" :key="idx">
+      <RecommendCard />
+    </splide-slide>
+  </splide>
 </template>
 
 <script>
-import { Carousel, Slide } from 'vue-carousel';
-import Feed from './Feed.vue';
+import "@/assets/css/splide.css";
+import RecommendCard from "./RecommendCard.vue";
+
 export default {
-  name: 'NewsFeedRecommend',
-  props: {
-    reco: Array,
-    Category: String,
-  },
-  components: {
-    Carousel,
-    Slide,
-    Feed,
-  },
+  components: { RecommendCard },
   data() {
     return {
-      
+      c: [{}, {}, {}, {}, {}, {}, {}],
+      options: {
+        rewind: true,
+        // width: 1000,
+        // perPage: 2,
+        // gap: "5px",
+        type: "loop",
+        padding: {
+          right: "12.5rem",
+          left: "12.5rem",
+        },
+        pagination: true,
+        autoplay: true,
+        interval: 5000,
+        pauseOnHover: true,
+        classes: { pagination: "splide__pagination" },
+      },
     };
-  },
-  mounted() {
-    
-  },
-  methods: {
-    
   },
 };
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.splide {
+  padding: 0 45px;
+  margin: 15px 0;
+}
 </style>
