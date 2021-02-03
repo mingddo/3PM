@@ -24,7 +24,7 @@ public class SearchRepositoryImpl implements SearchRepository{
 
     @Override
     public List<Indoor> findIndoorAll(Hashtag hash) {
-        return em.createQuery("select i from Indoor i where i in (select ih.indoor from IndoorHashtag ih where ih.hashtag = :id)")
+        return em.createQuery("select i from Indoor i where i in (select ih.indoor from FeedHashtag ih where ih.hashtag = :id)")
                 .setParameter("id", hash)
                 .getResultList();
     }

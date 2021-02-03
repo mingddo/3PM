@@ -1,16 +1,18 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.hashtag.Hashtag;
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.newsfeed.IndoorListResponseDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
+import com.ssafy.sns.dto.newsfeed.*;
+import com.ssafy.sns.repository.HashtagRepositoryImpl;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,35 +21,45 @@ import java.util.List;
 public class IndoorServiceImpl implements FeedService {
 
     private final IndoorRepositoryImpl indoorRepository;
+    private final HashtagRepositoryImpl hashtagRepository;
     private final UserRepository userRepository;
 
     @Override
-    public IndoorListResponseDto readMyList(Long id, int num) {
-        List<Indoor> indoorList = indoorRepository.findMyList(id, num);
-        return new IndoorListResponseDto(indoorList, num + indoorList.size());
+    public FeedListResponseDto readMyList(Long id, int num) {
+        List<Feed> indoorList = indoorRepository.findMyList(id, num);
+        List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
+        for (Feed feed : indoorList) {
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed));
+        }
+        return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
 
     @Override
-    public IndoorListResponseDto readList(int num) {
-
-        List<Indoor> indoorList = indoorRepository.findList(num);
-        return new IndoorListResponseDto(indoorList, num + indoorList.size());
-
+    public FeedListResponseDto readList(int num) {
+        List<Feed> indoorList = indoorRepository.findList(num);
+        List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
+        for (Feed feed : indoorList) {
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed));
+        }
+        return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
 
     @Override
-    public IndoorResponseDto read(Long id) {
-        Indoor indoor = indoorRepository.findOne(id);
-        System.out.println("indoor.getUser().getNickname() = " + indoor.getUser().getNickname());
+    public FeedResponseDto read(Long id) {
+        Indoor indoor = (Indoor) indoorRepository.findOne(id);
         return new IndoorResponseDto(indoor);
     }
 
     @Override
-    public Long write(IndoorRequestDto indoorRequestDto) {
+    public Long write(FeedRequestDto feedRequestDto) {
+        // 유저 정보
+        User user = userRepository.findById(feedRequestDto.getUserId()).orElse(null);
+        // 글 등록
+        Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
+        // 태그 등록
+        hashtagRepository.make(feedRequestDto.getTags(), indoor);
 
-        User user = userRepository.findById(indoorRequestDto.getUserId()).orElse(null);
-
-        return indoorRepository.save(indoorRequestDto.toEntity(user));
+        return indoor.getId();
     }
 
     @Override
@@ -56,7 +68,12 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long modify(Long indoorId, IndoorRequestDto indoorRequestDto) {
-        return indoorRepository.update(indoorId, indoorRequestDto);
+    public Long modify(Long id, FeedRequestDto feedRequestDto) {
+        // 글 찾기
+        Indoor indoor = (Indoor) indoorRepository.update(id, feedRequestDto);
+        // 태그 찾고 삭제
+        hashtagRepository.change(feedRequestDto.getTags(), indoor);
+
+        return indoor.getId();
     }
 }
