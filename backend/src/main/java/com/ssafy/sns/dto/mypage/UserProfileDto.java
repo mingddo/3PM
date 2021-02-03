@@ -15,11 +15,10 @@ public class UserProfileDto {
 
     private String username;
     private Long user_id;
+    private String user_img;
     private int fromMeToOthersCnt;
     private int toMeFromOthersCnt;
     private int groupCnt;
     private String introduce;
-
-    private List<Indoor> newsfeeds; // Indoor => newsfeed 로 수정예정, 10개
 
 }

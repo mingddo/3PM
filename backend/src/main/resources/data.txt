@@ -1,2 +1,11 @@
-insert into user (user_img, user_introduce, kakao_id, user_nickname) values ('test1', '자기소개 1', 111111, '호랑이');
-insert into user (user_img, user_introduce, kakao_id, user_nickname) values ('test2', '자기소개 2', 121111, '호랑삼');
+
+insert into user (user_nickname, kakao_id) values ( '테스트1', 111);
+insert into user ( user_nickname, kakao_id) values ( '테스트2', 112);
+insert into user ( user_nickname, kakao_id) values ( '테스트3', 113);
+insert into user ( user_nickname, kakao_id) values ( '테스트4', 114);
+insert into user ( user_nickname, kakao_id) values ( '테스트5', 115);
+insert into user ( user_nickname, kakao_id) values ( '테스트6', 116);
+insert into user ( user_nickname, kakao_id) values ( '테스트7', 117);
+insert into user ( user_nickname, kakao_id) values ( '테스트8', 118);
+insert into user ( user_nickname, kakao_id) values ( '테스트9', 119);
+insert into user ( user_nickname, kakao_id) values ( '테스트10', 121);

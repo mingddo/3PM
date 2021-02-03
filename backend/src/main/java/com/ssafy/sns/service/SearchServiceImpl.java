@@ -34,7 +34,7 @@ public class SearchServiceImpl {
 //        List<Indoor> searchIndoors = searchRepository.findIndoorAll(hash);
 //        System.out.println(searchIndoors.toString());
 
-        List<IndoorHashtag> indoorHashtags = indoorHashtagRepository.findIndoorHashtagByHashtagTagName(hash);
+        List<IndoorHashtag> indoorHashtags = indoorHashtagRepository.findIndoorHashtagsByHashtagTagName(hash);
         List<Indoor> indoors = new ArrayList<>();
         indoorHashtags.stream().forEach(indoorHashtag -> indoors.add(indoorHashtag.getIndoor()));
 

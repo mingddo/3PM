@@ -2,16 +2,26 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.mypage.ProfileDto;
+import com.ssafy.sns.dto.mypage.ProfileRequestDto;
+import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
+import com.ssafy.sns.dto.user.UserByFollowDto;
 import com.ssafy.sns.service.FollowServiceImpl;
+import com.ssafy.sns.service.S3Service;
 import com.ssafy.sns.service.UserServiceImpl;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,21 +31,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/mypage")
-
-public class MyPageController {
-
-//    private final MyPageService myPageService;
+@RequestMapping("/profile")
+public class ProfileController {
 
     private final UserServiceImpl userService;
 
     private final FollowServiceImpl followService;
 
+
     /**
      * [마이페이지 유저 정보] [프로필 정보]
      * 모든 사용자의 프로필에 들어갔을 때 처음 받는 정보
      * username, user_id, 내가 구독하는 수, 나를 구독하는 수, 가입된 그룹 수, 프로필 소개,
-     * 게시글 10개씩 ( 좋아요 수, 댓글 수, 게시글 id, 게시글 사진/동영상, 게시글 내용 )
+     * 게시글 10개씩 ( 좋아요 수, 댓글 수, 게시글 id, 게시글 사진/동영상, 게시글 내용 ) => 취소
      */
     @GetMapping("/{id}")
     public ResponseEntity myPageMain(@PathVariable("id") Long id) {
@@ -50,16 +58,15 @@ public class MyPageController {
         int fromMeToOthersCnt = followService.fromMeToOthers(id);
         int toMeFromOthersCnt = followService.toMeFromOthers(id);
         int groupCnt = 0; // 나중에 Group Entity 생기면 추가 예정
-        List<Indoor> newsfeeds = null;
 
         UserProfileDto result = UserProfileDto.builder()
                 .username(userDto.getNickname())
                 .user_id(userDto.getId())
+                .user_img(userDto.getImg())
                 .fromMeToOthersCnt(fromMeToOthersCnt)
                 .toMeFromOthersCnt(toMeFromOthersCnt)
                 .groupCnt(groupCnt)
                 .introduce(userDto.getIntroduce())
-                .newsfeeds(newsfeeds)
                 .build();
 
         return new ResponseEntity(result, HttpStatus.OK);
@@ -95,7 +102,7 @@ public class MyPageController {
         }
 
         // 2. 정상 email 인 경우
-        List<Long> followingList = followService.fromMeToOthersList(id);
+//        List<Long> followingList = followService.fromMeToOthersList(id);
         List<User> users = userService.findAllById(id);
         List<SubscribeUserDto> userDtos = new ArrayList<>();
         users.stream().forEach(user -> userDtos.add(new SubscribeUserDto(user)));
@@ -107,7 +114,7 @@ public class MyPageController {
      * [프로필 정보 수정 진입시]
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
      */
-    @GetMapping("/profile/{id}")
+    @GetMapping("/detail/{id}")
     public ResponseEntity getProfile(@PathVariable("id") Long id) {
         // 0. jwt 로 본인인지 아닌지를 파악할 계획
 
@@ -117,7 +124,8 @@ public class MyPageController {
         }
 
         // 2. 정상 email 인 경우
-        ProfileDto result = new ProfileDto(userDto);
+        ProfileResponseDto result = new ProfileResponseDto(userDto);
+
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
@@ -125,8 +133,24 @@ public class MyPageController {
      * [프로필 정보 수정] Post => Put
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
      */
-    @PutMapping("/profile/{id}")
-    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestBody ProfileDto dto) {
+//    @ApiOperation("사용자의 프로필 정보를 수정한다.")
+//    @PostMapping("/{id}")
+//    public ResponseEntity updateProfile(@PathVariable("id") Long id, ProfileRequestDto dto) throws IOException {
+//        // 0. jwt 로 본인인지 아닌지를 파악할 계획
+//
+//        User userDto = userService.findUserById(id);
+//        if (userDto == null) {
+//            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
+//        }
+//
+//        userService.updateUserProfile(userDto.getId(), dto);
+//
+//        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
+//    }
+
+    @ApiOperation("사용자의 프로필 정보를 수정한다.")
+    @PostMapping("/{id}")
+    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestPart("file") MultipartFile file, ProfileRequestDto dto) throws IOException {
         // 0. jwt 로 본인인지 아닌지를 파악할 계획
 
         User userDto = userService.findUserById(id);
@@ -134,7 +158,31 @@ public class MyPageController {
             return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
         }
 
-        userService.updateUserProfile(userDto.getId(), dto);
+        userService.updateUserProfile(userDto.getId(), dto, file);
+
         return new ResponseEntity("업데이트 성공", HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "팔로우 버튼을 누른다")
+    @GetMapping("/{userId}/follow")
+    public ResponseEntity<Void> followUser(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        Long fromUserId = userService.checkUserByJwt(request).getId();
+        followService.addFollow(fromUserId, toUserId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ApiOperation(value = "팔로잉한 사람들의 리스트 가져오기")
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<List<UserByFollowDto>>getFollowingList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        Long fromUserId = userService.checkUserByJwt(request).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowingList(fromUserId, toUserId));
+    }
+
+
+    @ApiOperation(value = "팔로우한 사람들의 리스트가져오기")
+    @GetMapping("/{userId}/follower")
+    public ResponseEntity<List<UserByFollowDto>>getFollowerList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        Long fromUserId =  userService.checkUserByJwt(request).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowerList(fromUserId, toUserId));
     }
 }

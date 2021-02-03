@@ -1,5 +1,6 @@
 package com.ssafy.sns.domain.user;
 
+import com.ssafy.sns.domain.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @ToString
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     // 유저 id
     @Id
@@ -24,7 +25,7 @@ public class User {
     private Long kakaoId;
 
     // 유저 닉네임
-    @Column(name = "user_nickname")
+    @Column(name = "user_nickname", nullable = false, unique = true)
     private String nickname;
 
     // 유저 소개

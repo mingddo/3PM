@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sns
-    username: root
-    password: ssafy
+    url: jdbc:mysql://spring-study.cfhtw7hbyeyq.ap-northeast-2.rds.amazonaws.com:3306/sns?useUnicode=true&characterEncoding=utf8
+    username: melon
+    password: ssafymelon
 
   # jpa settings
   jpa:
@@ -20,3 +20,15 @@ spring:
 
 server:
   port: 8081
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAI3D44G42RL7HYUOA
+      secretKey: 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
+    s3:
+      bucket: ssafy-sns
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
