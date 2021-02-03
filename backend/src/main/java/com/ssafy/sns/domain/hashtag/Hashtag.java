@@ -1,6 +1,5 @@
 package com.ssafy.sns.domain.hashtag;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,16 +22,16 @@ public class Hashtag {
     private String tagName;
 
     @OneToMany(mappedBy = "hashtag")
-    private List<IndoorHashtag> indoorHashtags = new ArrayList<>();
+    private List<FeedHashtag> feedHashtags = new ArrayList<>();
 
     @Builder
     public Hashtag(String tagName) {
         this.tagName = tagName;
     }
 
-    public void addIndoorHashtag(IndoorHashtag indoorHashtag) {
-        if (indoorHashtags == null) indoorHashtags = new ArrayList<>();
-        this.indoorHashtags.add(indoorHashtag);
-        indoorHashtag.setHashtag(this);
+    public void addFeedHashtag(FeedHashtag feedHashtag) {
+        if (feedHashtags == null) feedHashtags = new ArrayList<>();
+        this.feedHashtags.add(feedHashtag);
+        feedHashtag.setHashtag(this);
     }
 }

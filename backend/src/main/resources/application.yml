@@ -2,15 +2,15 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://i4b208.p.ssafy.io:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
     username: root
-    password: ssafy
+    password: ssafy208
 
   # jpa settings
   jpa:
     hibernate:
-      ddl-auto: create
-    generate-ddl: true
+      ddl-auto: none
+    generate-ddl: false
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

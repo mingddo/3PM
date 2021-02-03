@@ -1,8 +1,11 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.hashtag.IndoorHashtag;
+import com.ssafy.sns.domain.hashtag.FeedHashtag;
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,10 +20,10 @@ public class IndoorRepositoryImpl implements FeedRepository {
     private final EntityManager em;
 
     @Override
-    public List<Indoor> findMyList(Long id, int num) {
+    public List<Feed> findMyList(Long id, int num) {
         int readPageCnt = 10;
 
-        return em.createQuery("SELECT i FROM Indoor i WHERE i.user.id = :id ORDER BY i.createdDate DESC", Indoor.class)
+        return em.createQuery("SELECT f FROM Feed f WHERE f.user.id = :id ORDER BY f.createdDate DESC", Feed.class)
                 .setParameter("id", id)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
@@ -28,30 +31,32 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public List<Indoor> findList(int num) {
+    public List<Feed> findList(int num) {
         int readPageCnt = 10;
 
-        return em.createQuery("SELECT i FROM Indoor i ORDER BY i.createdDate DESC", Indoor.class)
+        return em.createQuery("SELECT f FROM Feed f ORDER BY f.createdDate DESC", Feed.class)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
                 .getResultList();
     }
 
     @Override
-    public Indoor findOne(Long id) {
+    public Feed findOne(Long id) {
         return em.find(Indoor.class, id);
     }
 
     @Override
-    public Long save(Indoor indoor, List<Hashtag> hashtags) {
+    public Feed save(FeedRequestDto indoorRequestDto, User user) {
+        Indoor indoor = Indoor.builder()
+                .content(indoorRequestDto.getContent())
+                .user(user)
+                .file(null)
+                .test(((IndoorRequestDto)indoorRequestDto).getTest())
+                .build();
+
         em.persist(indoor);
-        for (Hashtag tag : hashtags) {
-            IndoorHashtag indoorHashtag = new IndoorHashtag();
-            indoor.addIndoorHashtag(indoorHashtag);
-            tag.addIndoorHashtag(indoorHashtag);
-            em.persist(indoorHashtag);
-        }
-        return indoor.getId();
+
+        return indoor;
     }
 
     @Override
@@ -61,9 +66,9 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Long update(Long indoorId, IndoorRequestDto indoorDto) {
-        Indoor findIndoor = em.find(Indoor.class, indoorId);
-        findIndoor.update(indoorDto.getContent(), indoorDto.getFile());
-        return findIndoor.getId();
+    public Feed update(Long id, FeedRequestDto feedRequestDto) {
+        Indoor indoor = (Indoor) findOne(id);
+        indoor.update(feedRequestDto.getContent(), ((IndoorRequestDto)feedRequestDto).getTest());
+        return indoor;
     }
 }
