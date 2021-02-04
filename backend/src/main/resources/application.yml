@@ -2,10 +2,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
-    #jdbc:mysql://i4b208.p.ssafy.io:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://i4b208.p.ssafy.io:3306/sns?autoReconnect=true&useUnicode=true&characterEncoding=utf8
     username: root
-    password: ssafy
+    password: ssafy208
 
   # jpa settings
   jpa:
