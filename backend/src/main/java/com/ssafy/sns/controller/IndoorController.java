@@ -11,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @CrossOrigin(origins = { "*" })
 @RestController
@@ -79,12 +84,14 @@ public class IndoorController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto) {
+    public ResponseEntity<Long> postFeed(IndoorRequestDto indoorRequestDto, @RequestParam(name = "file", required = false) MultipartFile file) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
+
+
         try {
-            result = indoorService.write(indoorRequestDto);
+            result = indoorService.write(indoorRequestDto, file);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -97,12 +104,12 @@ public class IndoorController {
 
     @PutMapping(value = "{no}")
     public ResponseEntity<Long> putFeed(@PathVariable("no") Long id,
-                                          @RequestBody IndoorRequestDto indoorRequestDto) {
+                                           IndoorRequestDto indoorRequestDto, @RequestPart(name = "file", required = false) MultipartFile file) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
         try {
-            result = indoorService.modify(id, indoorRequestDto);
+            result = indoorService.modify(id, indoorRequestDto, file);
             logger.info("putFeed - 꽃보다집 글 수정 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {

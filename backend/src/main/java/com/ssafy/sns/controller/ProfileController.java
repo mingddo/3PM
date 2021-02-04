@@ -150,7 +150,7 @@ public class ProfileController {
 
     @ApiOperation("사용자의 프로필 정보를 수정한다.")
     @PostMapping("/{id}")
-    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestPart("file") MultipartFile file, ProfileRequestDto dto) throws IOException {
+    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestPart(name = "file", required = false) MultipartFile file, ProfileRequestDto dto) throws IOException {
         // 0. jwt 로 본인인지 아닌지를 파악할 계획
 
         User userDto = userService.findUserById(id);

@@ -2,6 +2,7 @@ package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.clap.IndoorClap;
+import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
 import lombok.Getter;
@@ -27,10 +28,6 @@ public class Feed extends BaseTimeEntity {
     @Column(name = "feed_content")
     private String content;
 
-//    @Lob
-//    @Column(name = "feed_file")
-//    private List<String> file = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,6 +40,8 @@ public class Feed extends BaseTimeEntity {
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<IndoorClap> indoorClapList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<File> fileList = new ArrayList<>();
 
     public Feed(String content, User user, List<FeedHashtag> feedHashtagList) {
         this.content = content;
@@ -77,4 +76,16 @@ public class Feed extends BaseTimeEntity {
         feedHashtagList.remove(indoorClap);
         indoorClap.setFeed(null);
     }
+
+    public void addFile(File file) {
+        if (fileList == null) fileList = new ArrayList<>();
+        fileList.add(file);
+        file.setFeed(this);
+    }
+
+    public void deleteFile(File file) {
+        fileList.remove(file);
+        file.setFeed(null);
+    }
+
 }

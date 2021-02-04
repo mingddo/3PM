@@ -27,11 +27,16 @@ public class FeedResponseDto {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
-        this.file = null;
         this.date = feed.getCreatedDate();
         if (tags == null) tags = new ArrayList<>();
         for (FeedHashtag feedHashtag : feed.getFeedHashtagList()) {
             tags.add(feedHashtag.getHashtag().getTagName());
         }
+        if (feed.getFileList().size() != 0) {
+            this.file = feed.getFileList().get(0).getFileName();
+        } else {
+            this.file = null;
+        }
+
     }
 }

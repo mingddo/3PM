@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @NoArgsConstructor
@@ -52,10 +53,10 @@ public class S3Service {
                 .build();
     }
 
-    // 파일을 올리기 위한 메소드
-    public String upload(String currentFilePath, MultipartFile file) throws IOException {
+    // 프로필 올리기 위한 메소드
+    public String uploadProfile(String currentFilePath, MultipartFile file) throws IOException {
         // 고유한 key 값을 갖기위해 현재 시간을 postfix 로 붙여줌
-        SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
         String fileName = date.format(new Date()) + "_" + file.getOriginalFilename();
 
@@ -67,6 +68,25 @@ public class S3Service {
                 s3Client.deleteObject(bucket, currentFilePath);
             }
         }
+
+        // 파일 업로드
+        byte[] bytes = IOUtils.toByteArray(file.getInputStream());
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(bytes.length);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+        s3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayInputStream, metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        return fileName;
+    }
+
+    // 파일 업로드
+    public String uploadFile(MultipartFile file) throws IOException {
+        // 고유한 key 값을 갖기위해 현재 시간을 postfix 로 붙여줌
+        SimpleDateFormat date = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+
+        String fileName = date.format(new Date()) + "_" + file.getOriginalFilename();
 
         // 파일 업로드
         byte[] bytes = IOUtils.toByteArray(file.getInputStream());
