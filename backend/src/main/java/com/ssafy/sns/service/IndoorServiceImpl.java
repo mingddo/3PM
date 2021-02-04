@@ -1,17 +1,21 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
+import com.ssafy.sns.repository.FileRepository;
 import com.ssafy.sns.repository.HashtagRepositoryImpl;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +27,8 @@ public class IndoorServiceImpl implements FeedService {
     private final IndoorRepositoryImpl indoorRepository;
     private final HashtagRepositoryImpl hashtagRepository;
     private final UserRepository userRepository;
+    private final S3Service s3Service;
+    private final FileServiceImpl fileService;
 
     @Override
     public FeedListResponseDto readMyList(Long id, int num) {
@@ -51,13 +57,24 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long write(FeedRequestDto feedRequestDto) {
+    public Long write(FeedRequestDto feedRequestDto, MultipartFile file) throws IOException {
         // 유저 정보
         User user = userRepository.findById(feedRequestDto.getUserId()).orElse(null);
+
+        // 파일 업로드
+        String fileName = "";
+        if (file != null) {
+            fileName = s3Service.uploadFile(file);
+        }
+
         // 글 등록
         Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
+
         // 태그 등록
         hashtagRepository.make(feedRequestDto.getTags(), indoor);
+
+        // 파일 등록
+        fileService.addFile(fileName, indoor);
 
         return indoor.getId();
     }
@@ -68,11 +85,16 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long modify(Long id, FeedRequestDto feedRequestDto) {
+    public Long modify(Long id, FeedRequestDto feedRequestDto, MultipartFile file) {
         // 글 찾기
         Indoor indoor = (Indoor) indoorRepository.update(id, feedRequestDto);
         // 태그 찾고 삭제
         hashtagRepository.change(feedRequestDto.getTags(), indoor);
+
+        // 파일 찾기
+        List<String> filePaths = feedRequestDto.getFilePaths();
+
+
 
         return indoor.getId();
     }

@@ -64,8 +64,11 @@ public class UserServiceImpl implements UserService {
         user.setNickname(dto.getNickname());
 
         // file 업로드는 exception 날 수 있다.
-        String filename = s3Service.upload(user.getImg(), file);
-        user.setImg("https://"+s3Service.CLOUD_FRONT_DOMAIN_NAME+ "/" + filename);
+        if (file == null) {
+            return;
+        }
+        String filename = s3Service.uploadProfile(user.getImg(), file);
+        user.setImg(filename);
     }
 
     public void deleteUser(Long id) {

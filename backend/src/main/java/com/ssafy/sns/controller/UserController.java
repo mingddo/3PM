@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody KakaoDto dto,HttpServletRequest request) {
+    public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody KakaoDto dto, HttpServletRequest request) {
         User user = userService.checkUserByJwt(request);
 
         if (user.getId() != id) {
@@ -86,7 +86,6 @@ public class UserController {
         userService.deleteUser(id);
 
         return new ResponseEntity("탈퇴 성공", HttpStatus.OK);
-
     }
 
     @PostMapping("/dupl")
