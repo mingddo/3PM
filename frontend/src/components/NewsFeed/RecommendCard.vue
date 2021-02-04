@@ -7,7 +7,7 @@
         </div>
         <div class="content_preview">
           <div class="imgFrame">
-            <img src="@/assets/loverduck.png" alt="" />
+            <!-- <img src="@/assets/loverduck.png" alt="" /> -->
           </div>
           <div class="preview_username">빵빵덕</div>
           <div class="preview_content">

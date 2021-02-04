@@ -25,6 +25,16 @@
           <label for="video"> <i class="fas fa-video"></i> 동영상 </label>
           <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
         </div>
+        <div class="newsfeed-form-img-box">
+          <button @click="getLocation">
+            <i class="fas fa-map-marker-alt"></i> 현재 위치
+          </button>
+        </div>
+        <div class="newsfeed-form-img-box">
+          <button>
+            <i class="fas fa-map"></i> 지도
+          </button>
+        </div>
       </div>     
       <div>
         <label for="content">내용</label>
@@ -64,6 +74,21 @@ export default {
     };
   },
   methods: {
+    getLocation () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition (function(position) {
+          alert(`위도는${ position.coords.latitude } 경도는 ${ position.coords.longitude } `);
+        }, function(error) {
+          console.log(error);
+        }, {
+          enableHighAccuracy: false,
+          maximumAge: 0,
+          timeout: Infinity
+        });
+      } else {
+        alert('GPS를 지원하지 않습니다.')
+      }
+    },
     deleteTag (tag) {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
@@ -94,22 +119,33 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
-      if (!files.length)
-        this.file = files[0].name
+      
+      console.log(e.target.files)
+      if (files.length)
+        this.form.file = files[0]
+        console.log(this.form.file)
     },
     async createFeed () {
+      const formData = new FormData ();
+      formData.append('content', this.form.content)
+      formData.append('userId', this.userpk)
+      formData.append('file', this.form.file)
+      formData.append('tags', this.form.tags)
+
       this.completed = true;
       if (this.userpk) {
         this.form.userId = this.userpk
         if (this.type == 'NEW' || this.type == 'SHARE') {
           // axios create 요청
           await createFeed (
-            this.form,
+            formData,
             (res) => {
+              
               this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
             },
             (err) => {
               console.log(err)
+              console.log(this.form)
             }
           )
         } else {
@@ -132,6 +168,7 @@ export default {
   },
   created () {
     this.setDefault();
+    // this.getLocation();
   },
   beforeRouteLeave (to, from, next) {
     if (this.completed) {

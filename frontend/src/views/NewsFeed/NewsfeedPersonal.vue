@@ -5,8 +5,8 @@
     </div>
     <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
       <NewsFeedHeader :Category="Category" class="newsfeed-header" />
-      <NewsFeedRecommend :reco="reco" :Category="Category" />
-      <NewsFeedList :feed="feed" :Category="Category" :last="last" />
+      <!-- <NewsFeedRecommend :reco="reco" :Category="Category" /> -->
+      <NewsFeedList :feed="feed" :Category="Category" :last="last" :next="next" />
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@
 <script>
 import NewsFeedHeader from "../../components/NewsFeed/NewsFeedHeader.vue";
 import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
-import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
+// import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 
 import { feedList } from "@/api/feed.js";
@@ -23,13 +23,26 @@ export default {
   name: "NewsfeedPersonal",
   components: {
     NewsFeedHeader,
-    NewsFeedRecommend,
+    // NewsFeedRecommend,
     NewsFeedList,
     Sidebar,
   },
   data() {
     return {
-      feed: [],
+      feed: [
+        {
+          id: 1,
+          content: 'hi',
+          user: {
+            id: 1,
+            nickname: '수민',
+            img: null,
+          },
+          likeCnt: 1,
+          commentCnt: 2,
+          date: '2021-01-31T17:30:24'
+        }
+      ],
       reco: [
         {
           id: 1,
@@ -258,8 +271,8 @@ export default {
         this.page,
         (res) => {
           this.page = res.data.endNum;
-          let feeds = res.data.indoorResponseDtoList;
-          if (feeds.length < 100) {
+          let feeds = res.data.feedList;
+          if (feeds && feeds.length < 100) {
             this.last = true;
           }
           for (let f of feeds) {
