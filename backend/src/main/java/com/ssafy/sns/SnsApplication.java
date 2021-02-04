@@ -34,7 +34,10 @@ public class SnsApplication implements WebMvcConfigurer {
 						"/webjars/**",
 						"/users/login",
 						"/users/join",
-						"/users/dupl"
+						"/users/dupl",
+						"/",
+						"/swagger-ui",
+						"/swagger-ui.html/**"
 						);// 적용 제외 경로
 	}
 

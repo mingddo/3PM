@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
 
         // file 업로드는 exception 날 수 있다.
         String filename = s3Service.upload(user.getImg(), file);
-        System.out.println(filename);
         user.setImg("https://"+s3Service.CLOUD_FRONT_DOMAIN_NAME+ "/" + filename);
     }
 
