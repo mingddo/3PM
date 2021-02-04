@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -15,18 +16,21 @@ public class SearchRepositoryImpl implements SearchRepository{
     private EntityManager em;
 
     @Override
-    public Hashtag findHashtag(String keyword) {
-//        return em.find(Hashtag.class, (long)1234);
+    public List<Hashtag> findHashtag(String keyword) {
         return em.createQuery("select h from Hashtag h where h.tagName like :tagName", Hashtag.class)
                 .setParameter("tagName", "%"+keyword+"%")
-                .getSingleResult();
+                .getResultList();
     }
 
     @Override
     public List<Indoor> findIndoorAll(Hashtag hash) {
-        return em.createQuery("select i from Indoor i where i in (select ih.indoor from IndoorHashtag ih where ih.hashtag = :id)")
-                .setParameter("id", hash)
-                .getResultList();
+        List<Indoor> indoorList = new ArrayList<>();
+        hash.getIndoorHashtags().stream().forEach(indoorHashtag -> {
+                Indoor indoor = indoorHashtag.getIndoor();
+                indoorList.add(indoor);
+                System.out.println("indoor = " + indoor);
+        });
+        return indoorList;
     }
 
     @Override
