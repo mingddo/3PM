@@ -20,3 +20,15 @@ spring:
 
 server:
   port: 8081
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAI3D44G42RL7HYUOA
+      secretKey: 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
+    s3:
+      bucket: ssafy-sns
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

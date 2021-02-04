@@ -11,7 +11,7 @@ public interface FollowService {
 
     public int toMeFromOthers(Long id);
 
-    public List<Long> fromMeToOthersList(Long id);
-
-    public List<Long> toMeFromOthersList(Long id);
+//    public List<Long> fromMeToOthersList(Long id);
+//
+//    public List<Long> toMeFromOthersList(Long id);
 }

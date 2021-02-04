@@ -33,6 +33,7 @@ public class SearchServiceImpl {
 //        System.out.println(searchIndoors.toString());
 
 //        List<IndoorHashtag> indoorHashtags = indoorHashtagRepository.findIndoorHashtagByHashtagTagName(hash);
+
         List<Indoor> indoors = new ArrayList<>();
 //        indoorHashtags.stream().forEach(indoorHashtag -> indoors.add(indoorHashtag.getIndoor()));
 
