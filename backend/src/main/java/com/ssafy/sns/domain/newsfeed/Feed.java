@@ -1,6 +1,7 @@
 package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
+import com.ssafy.sns.domain.clap.IndoorClap;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
 import lombok.Getter;
@@ -34,19 +35,19 @@ public class Feed extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // casecade : 상태 전이
+    // orphanRemoval : 고아 객체 삭제
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeedHashtag> feedHashtags = new ArrayList<>();
+    private List<FeedHashtag> feedHashtagList = new ArrayList<>();
 
-    public Feed(String content, User user, List<FeedHashtag> feedHashtags) {
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IndoorClap> indoorClapList = new ArrayList<>();
+
+
+    public Feed(String content, User user, List<FeedHashtag> feedHashtagList) {
         this.content = content;
         this.user = user;
-        this.feedHashtags = feedHashtags;
-    }
-
-    public void addFeedHashtag(FeedHashtag feedHashtag) {
-        if (feedHashtags == null) feedHashtags = new ArrayList<>();
-        feedHashtags.add(feedHashtag);
-        feedHashtag.setFeed(this);
+        this.feedHashtagList = feedHashtagList;
     }
 
     public void update(String content) {
@@ -55,8 +56,25 @@ public class Feed extends BaseTimeEntity {
 //        this.file = file;
     }
 
+    public void addFeedHashtag(FeedHashtag feedHashtag) {
+        if (feedHashtagList == null) feedHashtagList = new ArrayList<>();
+        feedHashtagList.add(feedHashtag);
+        feedHashtag.setFeed(this);
+    }
+
     public void deleteFeedHashtag(FeedHashtag feedHashtag) {
-        feedHashtags.remove(feedHashtag);
+        feedHashtagList.remove(feedHashtag);
         feedHashtag.setFeed(null);
+    }
+
+    public void addIndoorClap(IndoorClap indoorClap) {
+        if (indoorClapList == null) indoorClapList = new ArrayList<>();
+        indoorClapList.add(indoorClap);
+        indoorClap.setFeed(this);
+    }
+
+    public void deleteIndoorClap(IndoorClap indoorClap) {
+        feedHashtagList.remove(indoorClap);
+        indoorClap.setFeed(null);
     }
 }

@@ -30,7 +30,7 @@ public class FeedResponseDto {
         this.file = null;
         this.date = feed.getCreatedDate();
         if (tags == null) tags = new ArrayList<>();
-        for (FeedHashtag feedHashtag : feed.getFeedHashtags()) {
+        for (FeedHashtag feedHashtag : feed.getFeedHashtagList()) {
             tags.add(feedHashtag.getHashtag().getTagName());
         }
     }

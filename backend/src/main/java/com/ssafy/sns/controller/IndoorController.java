@@ -25,10 +25,11 @@ public class IndoorController {
         this.indoorService = indoorService;
     }
 
-
+    // 내가 쓴 게시글 불러오기
     @GetMapping(value = "/list/{id}/{no}", produces = "application/json; charset=utf8")
     public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("id") Long id, @PathVariable("no") int num) {
         HttpStatus status = HttpStatus.ACCEPTED;
+
         FeedListResponseDto feedListResponseDto = null;
         try {
             feedListResponseDto = indoorService.readMyList(id, num);
@@ -42,9 +43,11 @@ public class IndoorController {
         return new ResponseEntity<>(feedListResponseDto, status);
     }
 
+    // 꽃보다집 게시글 불러오기
     @GetMapping(value = "/list/{no}", produces = "application/json; charset=utf8")
     public ResponseEntity<FeedListResponseDto> getFeedList(@PathVariable("no") int num) {
         HttpStatus status = HttpStatus.ACCEPTED;
+
         FeedListResponseDto feedListResponseDto = null;
         try {
             feedListResponseDto = indoorService.readList(num);
@@ -61,6 +64,7 @@ public class IndoorController {
     @GetMapping(value = "{no}", produces = "application/json; charset=utf8")
     public ResponseEntity<FeedResponseDto> getFeed(@PathVariable("no") Long id) {
         HttpStatus status = HttpStatus.ACCEPTED;
+
         IndoorResponseDto indoorResponseDto = null;
         try {
             indoorResponseDto = (IndoorResponseDto) indoorService.read(id);
@@ -124,4 +128,17 @@ public class IndoorController {
 
         return new ResponseEntity<>(status);
     }
+
+    @PostMapping(value = "/clap/{uno}/{fno}")
+    public ResponseEntity<String> postClap(@PathVariable("uno") Long uid, @PathVariable("fno") Long fid) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        try {
+            logger.info("postClap - 꽃보다집 박수 추가 : {} {}", uid, fid);
+        } catch (Exception e) {
+            logger.warn("postClap - 꽃보다집 에러 : {}", e.getMessage());
+        }
+        return new ResponseEntity<>(status);
+    }
+
 }

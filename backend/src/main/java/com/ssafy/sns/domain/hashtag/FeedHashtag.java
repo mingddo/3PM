@@ -27,5 +27,4 @@ public class FeedHashtag {
     @JoinColumn(name = "hashtag_id")
     @Setter
     private Hashtag hashtag;
-
 }

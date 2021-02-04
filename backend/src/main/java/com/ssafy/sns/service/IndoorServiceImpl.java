@@ -76,4 +76,12 @@ public class IndoorServiceImpl implements FeedService {
 
         return indoor.getId();
     }
+
+    @Override
+    public Long addClap(Long uid, Long fid) {
+//        // 글 찾기
+//        Indoor indoor = (Indoor) indoorRepository.findOne(fid);
+        return null;
+
+    }
 }

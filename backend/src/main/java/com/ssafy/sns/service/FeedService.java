@@ -21,4 +21,7 @@ public interface FeedService {
 
     // 피드 글수정
     public Long modify(Long id, FeedRequestDto feedRequestDto);
+
+    // 박수 추가
+    public Long addClap(Long uid, Long fid);
 }
