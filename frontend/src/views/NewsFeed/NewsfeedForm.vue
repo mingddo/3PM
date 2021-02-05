@@ -11,7 +11,7 @@
         <h2>피드 작성하기</h2>
         <div>
           <label for="tags">태그</label>
-          <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 입력해주세요" v-model="inputTag" @keyup.enter="addTag">
+          <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 입력해주세요" v-model.trim="inputTag" @keyup.enter="addTag">
         </div>
         <div>
           <span v-for="(tag, idx) in form.tags" :key="idx">
@@ -101,13 +101,17 @@ export default {
       this.form.tags.splice(check, 1)
     },
     addTag () {
-      if (this.form.tags) {
+      if (!this.inputTag) {
+        alert('태그를 입력해주세요!')
+      } else {
+        if (this.form.tags) {
 
-        let check = this.form.tags.findIndex(element => element === this.inputTag)
-        if (check !== -1) {
-          alert('이미 존재하는 태그입니다') 
-        } else {
-          this.form.tags.push(this.inputTag);
+          let check = this.form.tags.findIndex(element => element === this.inputTag)
+          if (check !== -1) {
+            alert('이미 존재하는 태그입니다') 
+          } else {
+            this.form.tags.push(this.inputTag);
+          }
         }
       }
       this.inputTag = '';
