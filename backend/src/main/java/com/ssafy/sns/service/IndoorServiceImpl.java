@@ -57,46 +57,49 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long write(FeedRequestDto feedRequestDto, MultipartFile file) throws IOException {
+    public Long write(Long userId, FeedRequestDto feedRequestDto, MultipartFile file) throws IOException {
         // 유저 정보
-        User user = userRepository.findById(feedRequestDto.getUserId()).orElse(null);
-
+        User user = userRepository.findById(userId).orElse(null);
         // 파일 업로드
         String fileName = "";
         if (file != null) {
             fileName = s3Service.uploadFile(file);
         }
-
         // 글 등록
         Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
-
         // 태그 등록
         hashtagRepository.make(feedRequestDto.getTags(), indoor);
-
         // 파일 등록
         fileService.addFile(fileName, indoor);
-
         return indoor.getId();
     }
 
     @Override
-    public void delete(Long id) {
-        indoorRepository.remove(id);
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, MultipartFile file) {
+        // 글 가져오기
+        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        if (indoor.getUser().getId().equals(userId)) {
+            // 글 수정
+            indoorRepository.update(feedId, feedRequestDto);
+            // 태그 찾고 삭제
+            hashtagRepository.change(feedRequestDto.getTags(), indoor);
+            // 파일 찾기
+            List<String> filePaths = feedRequestDto.getFilePaths();
+            return indoor.getId();
+        }
+
+        return -1L;
     }
 
     @Override
-    public Long modify(Long id, FeedRequestDto feedRequestDto, MultipartFile file) {
-        // 글 찾기
-        Indoor indoor = (Indoor) indoorRepository.update(id, feedRequestDto);
-        // 태그 찾고 삭제
-        hashtagRepository.change(feedRequestDto.getTags(), indoor);
-
-        // 파일 찾기
-        List<String> filePaths = feedRequestDto.getFilePaths();
-
-
-
-        return indoor.getId();
+    public boolean delete(Long userId, Long feedId) {
+        // 글 가져오기
+        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        if (indoor.getUser().getId().equals(userId)) {
+            indoorRepository.remove(feedId);
+            return true;
+        }
+        return false;
     }
 
     @Override

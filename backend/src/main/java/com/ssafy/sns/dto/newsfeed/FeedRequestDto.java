@@ -16,6 +16,4 @@ public class FeedRequestDto {
     private String content;
     private List<String> filePaths;
     private List<String> tags;
-    private Long userId;
-
 }

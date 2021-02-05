@@ -16,7 +16,7 @@ public class Indoor extends Feed {
     private String test;
 
     @Builder
-    public Indoor(String content, String file, User user, List<FeedHashtag> feedHashtags, String test) {
+    public Indoor(String content, User user, List<FeedHashtag> feedHashtags, String test) {
         super(content, user, feedHashtags);
         this.test = test;
     }

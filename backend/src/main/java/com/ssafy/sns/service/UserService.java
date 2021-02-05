@@ -24,9 +24,5 @@ public interface UserService {
 
     public User joinMember(KakaoDto dto);
 
-    public JwtDto makeJwt(User user);
-
-    public User checkUserByJwt(HttpServletRequest request);
-
     void updateUserProfile(Long id, ProfileRequestDto dto, MultipartFile file) throws IOException;
 }
