@@ -1,10 +1,9 @@
 package com.ssafy.sns.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.sns.controller.UserController;
+import com.ssafy.sns.controller.LoginController;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
-import com.ssafy.sns.dto.user.JwtDto;
 import com.ssafy.sns.dto.user.KakaoDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.repository.UserRepository;
@@ -14,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     private final ObjectMapper objectMapper;
 
-    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    public static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     public User findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -89,22 +86,5 @@ public class UserServiceImpl implements UserService {
         user.setNickname(dto.getUsername());
 
         return userRepository.save(user);
-    }
-
-    public JwtDto makeJwt(User user) {
-        String token = jwtService.create(user);
-        logger.trace("로그인 토큰정보 : {}", token);
-
-        return JwtDto.builder()
-                .auth_token(token)
-                .id(user.getId())
-                .name(user.getNickname())
-                .build();
-    }
-
-    @Override
-    public User checkUserByJwt(HttpServletRequest request) {
-        String jwt = request.getHeader("auth_token");
-        return objectMapper.convertValue(jwtService.get(jwt).get("user"), User.class);
     }
 }

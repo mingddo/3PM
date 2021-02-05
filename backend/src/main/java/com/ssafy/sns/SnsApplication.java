@@ -2,6 +2,7 @@ package com.ssafy.sns;
 
 import com.ssafy.sns.jwt.JwtInterceptor;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -21,6 +22,7 @@ public class SnsApplication implements WebMvcConfigurer {
 		SpringApplication.run(SnsApplication.class, args);
 	}
 
+	@Autowired
 	private JwtInterceptor jwtInterceptor;
 
 	// JWTInterceptor를 설치한다.
@@ -28,15 +30,15 @@ public class SnsApplication implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
 				.excludePathPatterns(
-						"/v2/api-docs",
-						"/swagger-resources/**",
-						"/swagger-ui.html",
-						"/webjars/**",
-						"/users/login",
-						"/users/join",
-						"/users/dupl",
-						"/swagger-ui",
-						"/swagger-ui.html/**"
+						Arrays.asList("/v2/api-docs",
+								"/swagger-resources/**",
+								"/swagger-ui.html",
+								"/webjars/**",
+								"/users/login",
+								"/users/join",
+								"/users/dupl",
+								"/swagger-ui",
+								"/swagger-ui.html/**")
 						);// 적용 제외 경로
 	}
 

@@ -18,14 +18,14 @@ public interface FeedRepository {
     public List<Feed> findList(int num);
 
     // 피드 글 불러오기
-    public Feed findOne(Long id);
+    public Feed findOne(Long feedId);
 
     // 피드 글쓰기
     Feed save(FeedRequestDto feedRequestDto, User user);
 
     // 피드 글삭제
-    public void remove(Long id);
+    public void remove(Long feedId);
 
     // 피드 글수정
-    public Feed update(Long id, FeedRequestDto feedRequestDto);
+    public void update(Long feedId, FeedRequestDto feedRequestDto);
 }

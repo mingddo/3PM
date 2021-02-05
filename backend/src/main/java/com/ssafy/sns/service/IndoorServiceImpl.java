@@ -51,31 +51,42 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long write(FeedRequestDto feedRequestDto) {
+    public Long write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
-        User user = userRepository.findById(feedRequestDto.getUserId()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
         // 글 등록
         Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
         // 태그 등록
         hashtagRepository.make(feedRequestDto.getTags(), indoor);
-
         return indoor.getId();
     }
 
     @Override
-    public void delete(Long id) {
-        indoorRepository.remove(id);
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
+        // 글 가져오기
+        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        if (indoor.getUser().getId().equals(userId)) {
+            // 글 수정
+            indoorRepository.update(feedId, feedRequestDto);
+            // 태그 찾고 삭제
+            hashtagRepository.change(feedRequestDto.getTags(), indoor);
+            return indoor.getId();
+        }
+
+        return -1L;
     }
 
     @Override
-    public Long modify(Long id, FeedRequestDto feedRequestDto) {
-        // 글 찾기
-        Indoor indoor = (Indoor) indoorRepository.update(id, feedRequestDto);
-        // 태그 찾고 삭제
-        hashtagRepository.change(feedRequestDto.getTags(), indoor);
-
-        return indoor.getId();
+    public boolean delete(Long userId, Long feedId) {
+        // 글 가져오기
+        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        if (indoor.getUser().getId().equals(userId)) {
+            indoorRepository.remove(feedId);
+            return true;
+        }
+        return false;
     }
+
 
     @Override
     public Long addClap(Long uid, Long fid) {

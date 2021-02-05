@@ -14,8 +14,8 @@ public class IndoorRequestDto extends FeedRequestDto {
     private String test;
 
     @Builder
-    public IndoorRequestDto(String content, String file, List<String> tags, Long userId, String test) {
-        super(content, null, tags, userId);
+    public IndoorRequestDto(String content, String file, List<String> tags, String test) {
+        super(content, null, tags);
         this.test = test;
     }
 }

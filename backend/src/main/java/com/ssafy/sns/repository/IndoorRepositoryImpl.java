@@ -50,7 +50,6 @@ public class IndoorRepositoryImpl implements FeedRepository {
         Indoor indoor = Indoor.builder()
                 .content(indoorRequestDto.getContent())
                 .user(user)
-                .file(null)
                 .test(((IndoorRequestDto)indoorRequestDto).getTest())
                 .build();
 
@@ -66,9 +65,8 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Feed update(Long id, FeedRequestDto feedRequestDto) {
-        Indoor indoor = (Indoor) findOne(id);
+    public void update(Long feedId, FeedRequestDto feedRequestDto) {
+        Indoor indoor = (Indoor) findOne(feedId);
         indoor.update(feedRequestDto.getContent(), ((IndoorRequestDto)feedRequestDto).getTest());
-        return indoor;
     }
 }

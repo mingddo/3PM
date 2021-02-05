@@ -4,14 +4,18 @@ import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
+import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.IndoorServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
+@RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/indoor")
@@ -19,20 +23,19 @@ public class IndoorController {
 
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
     private final IndoorServiceImpl indoorService;
-
-    @Autowired
-    public IndoorController(IndoorServiceImpl indoorService) {
-        this.indoorService = indoorService;
-    }
+    private final JwtService jwtService;
 
     // 내가 쓴 게시글 불러오기
-    @GetMapping(value = "/list/{id}/{no}", produces = "application/json; charset=utf8")
-    public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("id") Long id, @PathVariable("no") int num) {
+    @GetMapping(value = "/mylist/{no}", produces = "application/json; charset=utf8")
+    public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("no") int num, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
+
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
 
         FeedListResponseDto feedListResponseDto = null;
         try {
-            feedListResponseDto = indoorService.readMyList(id, num);
+            feedListResponseDto = indoorService.readMyList(userId, num);
             logger.info("getFeedMyList = 꽃보다집 내 글 리스트 가져오기 : {}", num);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -79,12 +82,15 @@ public class IndoorController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto) {
+    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
+
         try {
-            result = indoorService.write(indoorRequestDto);
+            result = indoorService.write(userId, indoorRequestDto);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -96,15 +102,22 @@ public class IndoorController {
     }
 
     @PutMapping(value = "{no}")
-    public ResponseEntity<Long> putFeed(@PathVariable("no") Long id,
-                                          @RequestBody IndoorRequestDto indoorRequestDto) {
+    public ResponseEntity<Long> putFeed(@PathVariable("no") Long feedId, @RequestBody IndoorRequestDto indoorRequestDto,  HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
+
         try {
-            result = indoorService.modify(id, indoorRequestDto);
-            logger.info("putFeed - 꽃보다집 글 수정 : {}", indoorRequestDto);
-            status = HttpStatus.OK;
+            result = indoorService.modify(userId, feedId, indoorRequestDto);
+            if (result == -1L) {
+                logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
+                status = HttpStatus.NOT_FOUND;
+            } else {
+                logger.info("putFeed - 꽃보다집 글 수정 : {}", indoorRequestDto);
+                status = HttpStatus.OK;
+            }
         } catch (Exception e) {
             logger.warn("putFeed - 꽃보다집 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
@@ -114,13 +127,20 @@ public class IndoorController {
     }
 
     @DeleteMapping(value = "{no}")
-    public ResponseEntity<String> deleteFeed(@PathVariable("no") Long id) {
+    public ResponseEntity<String> deleteFeed(@PathVariable("no") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
+
         try {
-            indoorService.delete(id);
-            logger.info("deleteFeed - 꽃보다집 글 삭제 : {}", id);
-            status = HttpStatus.OK;
+            if (indoorService.delete(userId, feedId)) {
+                logger.info("deleteFeed - 꽃보다집 글 삭제 : {}", feedId);
+                status = HttpStatus.OK;
+            } else {
+                logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
+                status = HttpStatus.NOT_FOUND;
+            }
         } catch (Exception e) {
             logger.warn("deleteFeed - 꽃보다집 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;

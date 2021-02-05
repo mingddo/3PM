@@ -9,8 +9,6 @@ import lombok.*;
 @Builder
 public class JwtDto {
 
-    private String auth_token;
-    private Long id;
-    private String name;
-
+    private String accToken;
+    private String refToken;
 }
