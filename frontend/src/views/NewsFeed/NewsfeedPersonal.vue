@@ -272,7 +272,7 @@ export default {
         (res) => {
           this.page = res.data.endNum;
           let feeds = res.data.feedList;
-          if (feeds && feeds.length < 100) {
+          if (feeds && feeds.length < 10) {
             this.last = true;
           }
           for (let f of feeds) {
