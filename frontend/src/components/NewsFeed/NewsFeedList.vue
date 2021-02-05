@@ -26,7 +26,7 @@
       </h3>
       <i class="fas fa-plus feed-create-btn" @click="goToCreateForm">새 피드 작성</i> 
     </div>
-    <div v-else class="loading">
+    <div v-else :class="{ loading : !next}">
       <img class="spinner" src="https://img.icons8.com/material-two-tone/96/000000/spinner--v3.png"/>
     </div>
   </section>
@@ -42,6 +42,7 @@ export default {
     feed: Array,
     Category: String,
     last: Boolean,
+    next: Boolean
   },
   data() {
     return {
@@ -87,5 +88,8 @@ export default {
 .feed-last {
   text-align: center;
   margin: auto;
+}
+.loading {
+  display: none;
 }
 </style>

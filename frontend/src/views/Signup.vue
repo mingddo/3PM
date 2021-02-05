@@ -51,7 +51,9 @@ export default {
         },
         (res) => {
           const responseUserId = res.data.id;
-          const authToken = res.data['auth-token'];
+          const authToken = res.data['accToken'];
+          // const refreshToken = res.data['refToken']
+          console.log(res.data)
           this.setUserId(responseUserId);
           this.setAuthToken(authToken);
           this.setUserStatus(true);
@@ -82,7 +84,8 @@ export default {
           'username' : this.nickname,
         },
         (res) => {
-          this.isOverlapped = !res.data;
+          console.log(res)
+          this.isOverlapped = res.data;
           if(this.isOverlapped) {
             alert('사용 불가능한 ❌❌ 아이디입니다');
             }

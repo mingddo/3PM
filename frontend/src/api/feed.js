@@ -1,17 +1,17 @@
-import { createInstance } from './index.js'
+import { AuthorizationInstance } from './index.js'
 
-const instance = createInstance();
+const instance = AuthorizationInstance();
 
 function createFeed(feed, success, fail) {
   instance
-    .post('feed', feed)
+    .post('indoor', feed)
     .then(success)
     .catch(fail);
 }
 
 function readFeed(feed_pk, success, fail) {
   instance
-    .get(`feed/${feed_pk}`)
+    .get(`indoor/${feed_pk}`)
     .then(success)
     .catch(fail);
 }
@@ -32,7 +32,7 @@ function deleteFeed(feed_pk, success, fail) {
 
 function feedList(list_pk, success, fail) {
   instance
-  .get(`feed/list/${list_pk}`)
+  .get(`indoor/list/${list_pk}`)
   .then(success)
   .catch(fail);
 }
