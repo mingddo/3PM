@@ -30,18 +30,18 @@ export default {
   data() {
     return {
       feed: [
-        {
-          id: 1,
-          content: 'hi',
-          user: {
-            id: 1,
-            nickname: '수민',
-            img: null,
-          },
-          likeCnt: 1,
-          commentCnt: 2,
-          date: '2021-01-31T17:30:24'
-        }
+        // {
+        //   id: 1,
+        //   content: 'hi',
+        //   user: {
+        //     id: 1,
+        //     nickname: '수민',
+        //     img: null,
+        //   },
+        //   likeCnt: 1,
+        //   commentCnt: 2,
+        //   date: '2021-01-31T17:30:24'
+        // }
       ],
       reco: [
         {
