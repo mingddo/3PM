@@ -4,14 +4,14 @@ const instance = createInstance();
 
 function getprofileInfo(user_id,success,fail){
   instance
-    .get(`mypage/${user_id}`)
+    .get(`profile/${user_id}`)
     .then(success)
     .catch(fail)
 }
 
 function getprofileFeed(id,num,success,fail){
   instance
-    .get(`feed/list/${id}/${num}`)
+    .get(`indoor/list/${id}/${num}`)
     .then(success)
     .catch(fail)
 }

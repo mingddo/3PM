@@ -2,7 +2,7 @@
   <article class="feed-box">
     <div class="feed-content-box">
       <div v-if="fd.file" @click="goToDetail">
-        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" width="50%">
+        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" width="100%">
       </div>
       <div v-else  @click="goToDetail">
         <p v-html="fd.content">
@@ -85,7 +85,6 @@ export default {
         this.day = date.split('-')[2] 
         // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
         // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
-        console.log(this.fd.file)
       }
     },
     goToProfile () {
