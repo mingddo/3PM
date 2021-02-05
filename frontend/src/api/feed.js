@@ -18,14 +18,14 @@ function readFeed(feed_pk, success, fail) {
 
 function updateFeed(feed_pk, feed, success, fail) {
   instance
-    .put(`feed/${feed_pk}`, feed)
+    .put(`indoor/${feed_pk}`, feed)
     .then(success)
     .catch(fail);
 }
 
 function deleteFeed(feed_pk, success, fail) {
   instance
-  .delete(`feed/${feed_pk}`)
+  .delete(`indoor/${feed_pk}`)
   .then(success)
   .catch(fail);
 }
