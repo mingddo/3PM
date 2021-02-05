@@ -51,5 +51,4 @@ public class SnsApplication implements WebMvcConfigurer {
 				.allowedHeaders("*")
 				.exposedHeaders("auth-token");
 	}
-
 }

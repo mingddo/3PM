@@ -8,11 +8,12 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedRequestDto {
 
     private String content;
-    private String file;
+    private List<String> filePaths;
     private List<String> tags;
 }

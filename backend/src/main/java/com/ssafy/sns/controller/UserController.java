@@ -6,7 +6,9 @@ import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
+import com.ssafy.sns.dto.user.KakaoDto;
 import com.ssafy.sns.dto.user.UserByFollowDto;
+import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
 import com.ssafy.sns.service.S3Service;
 import com.ssafy.sns.service.UserServiceImpl;
@@ -38,6 +40,7 @@ public class UserController {
 
     private final FollowServiceImpl followService;
 
+    private final JwtService jwtService;
 
     /**
      * [마이페이지 유저 정보] [프로필 정보]
@@ -110,6 +113,37 @@ public class UserController {
         return new ResponseEntity(userDtos, HttpStatus.OK);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity updateUser(@PathVariable("id") Long userId, @RequestBody KakaoDto dto, HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        Long tokenId = jwtService.findId(token);
+        User user = userService.findUserById(tokenId);
+
+        if (user.getId() != userId) {
+            return new ResponseEntity("사용자 접근 에러", HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setNickname(dto.getUsername());
+        return new ResponseEntity("성공", HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long userId, HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        Long tokenId = jwtService.findId(token);
+        User user = userService.findUserById(tokenId);
+
+        if (user.getId() != userId) {
+            return new ResponseEntity("사용자 접근 에러", HttpStatus.UNAUTHORIZED);
+        }
+
+        userService.deleteUser(userId);
+
+        return new ResponseEntity("탈퇴 성공", HttpStatus.OK);
+    }
+
     /**
      * [프로필 정보 수정 진입시]
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
@@ -147,7 +181,7 @@ public class UserController {
 //
 //        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
 //    }
-
+//
 //    @ApiOperation("사용자의 프로필 정보를 수정한다.")
 //    @PostMapping("/{id}")
 //    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestPart("file") MultipartFile file, ProfileRequestDto dto) throws IOException {

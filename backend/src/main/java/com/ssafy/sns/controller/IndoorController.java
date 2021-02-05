@@ -12,6 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -82,7 +87,8 @@ public class IndoorController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto, HttpServletRequest request) {
+    public ResponseEntity<Long> postFeed(IndoorRequestDto indoorRequestDto,
+                                         @RequestParam(name = "file", required = false) MultipartFile file, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -90,7 +96,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.write(userId, indoorRequestDto);
+            result = indoorService.write(userId, indoorRequestDto, file);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -102,7 +108,8 @@ public class IndoorController {
     }
 
     @PutMapping(value = "{no}")
-    public ResponseEntity<Long> putFeed(@PathVariable("no") Long feedId, @RequestBody IndoorRequestDto indoorRequestDto,  HttpServletRequest request) {
+    public ResponseEntity<Long> putFeed(@PathVariable("no") Long feedId, IndoorRequestDto indoorRequestDto,
+                                        @RequestPart(name = "file", required = false) MultipartFile file, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -110,7 +117,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.modify(userId, feedId, indoorRequestDto);
+            result = indoorService.modify(userId, feedId, indoorRequestDto, file);
             if (result == -1L) {
                 logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
                 status = HttpStatus.NOT_FOUND;
