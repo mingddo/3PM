@@ -96,7 +96,7 @@ public class JwtService {
         String refreshToken = createRefreshToken(id);
         String accessToken = createAccessToken(refreshToken);
 
-        return new JwtDto(accessToken, refreshToken);
+        return new JwtDto(accessToken, refreshToken, id);
     }
 
     public Long findId(String token) {

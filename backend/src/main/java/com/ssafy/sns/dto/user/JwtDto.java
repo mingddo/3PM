@@ -11,4 +11,5 @@ public class JwtDto {
 
     private String accToken;
     private String refToken;
+    private Long id;
 }
