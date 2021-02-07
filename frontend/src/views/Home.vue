@@ -76,8 +76,9 @@ export default {
             // true -> user 정보가 있으면  Home
             if(res.data) {
               // 세션에 토큰 설정
+              console.log('정보', res.data)
               const responseUserId = res.data.id
-              const authToken = res.data['auth-token']
+              const authToken = res.data['accToken']
               this.setUserId(responseUserId)
               this.setAuthToken(authToken)
               this.setUserStatus(true)

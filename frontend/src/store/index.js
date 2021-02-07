@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     userStatus : null,
     authToken : null,
+    refToken : null,
     kakaoId : null,
     userId : null,
   },
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     setAuthToken(state,payload) {
       state.authToken = payload
+    },
+    setRefToken(state, payload) {
+      state.refToken = payload
     },
     setKakaoId(state,payload) {
       state.kakaoId = payload

@@ -7,6 +7,13 @@
           <!-- 커버사진 및 본인 프로필 사진, 이름 -->
           <div class="profileImgFrame">
             <img
+              v-if="profileinfo.user_img"
+              class="pofileImg"
+              :src="`https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`"
+              alt="프로필사진"
+            />
+            <img
+              v-else
               class="pofileImg"
               src="@/assets/loverduck.png"
               alt="프로필사진"

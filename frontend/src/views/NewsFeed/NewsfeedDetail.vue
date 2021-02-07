@@ -1,98 +1,112 @@
 <template>
-  <div class="newsfeed">
-    <NewsFeedHeader
-      :Category="Category"
-      class="newsfeed-header"
-    />
-    <section v-if="fd" v-cloak class="feed-detail">
-      <div class="feed-detail-userprofile-box">
-        <img
-          src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-          alt="유저프로필이미지"
-          class="feed-detail-userprofile-img"
-          @click="goToProfile"
-        >
-        <div class="feed-detail-userprofile-content">
-          <div>
-            <h3 v-if="fd.user.nickname" class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
-            <h3 v-else class="feed-detail-userprofile-name" @click="goToProfile">anonymous</h3>
+  <div>
+    <Sidebar />
+    <div class="newsfeed">
+      <NewsFeedHeader
+        :Category="Category"
+        class="newsfeed-header"
+      />
+      <section v-if="fd" v-cloak class="feed-detail">
+        <div class="feed-detail-userprofile-box">
+          <div class="feed-userprofile-space">
+              <img
+              v-if="fd.user.img"
+              :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.user.img}`"
+              onerror="this.src='http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg'"
+              alt="유저프로필이미지"
+              class="feed-userprofile-image"
+              @click="goToProfile"
+            >
+            <img
+              v-else
+              src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
+              alt="유저프로필이미지"
+              class="feed-userprofile-image"
+              @click="goToProfile"
+            >
           </div>
-          
-          <div>
-            <p>{{ date }} {{ time }} </p>
+          <div class="feed-detail-userprofile-content">
+            <div>
+              <h3 v-if="fd.user.nickname" class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+              <h3 v-else class="feed-detail-userprofile-name" @click="goToProfile">anonymous</h3>
+            </div>
+            
+            <div>
+              <p>{{ date }} {{ time }} </p>
+            </div>
+            
           </div>
-          
+
         </div>
 
-      </div>
+        <article class="feed-detail-content-box">
+          <div v-if="fd.file">
+            <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" class="feed-detail-img">
+          </div>
+          <div class="feed-detail-tag">
+            <button v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>
+          </div>
+          <div class="feed-detail-content">
+            <p v-html="fd.content">
+              <!-- {{fd.content}} -->
+            </p>
+          </div>
+        </article>
 
-      <article class="feed-detail-content-box">
-        <div v-if="fd.file">
-          <img :src="fd.file" alt="업로드 파일" class="feed-detail-img">
+        <div class="feed-detail-modi-delete" v-if="userpk == fd.user.id">
+          <button @click="changeModiForm">
+            수정하기
+          </button>
+          <button @click="deleteFeed">
+            삭제하기
+          </button>
         </div>
-        <div class="feed-detail-tag">
-          <button v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>
-        </div>
-        <div class="feed-detail-content">
-          <p v-html="fd.content">
-            <!-- {{fd.content}} -->
-          </p>
-        </div>
-      </article>
 
-      <div class="feed-detail-modi-delete" v-if="userpk == fd.user.id">
-        <button @click="changeModiForm">
-          수정하기
-        </button>
-        <button @click="deleteFeed">
-          삭제하기
-        </button>
-      </div>
+        
+        <div class="feed-detail-like-comment">
+          <span>
+              <i class="far fa-thumbs-up"></i>
+              좋아요가 <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
+          </span>
+          <span>
+            <i class="far fa-comment"></i> 댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
+          </span>
+        </div>
 
-      
-      <div class="feed-detail-like-comment">
-        <span>
+        <div class="feed-detail-like-comment-share-btn-box">
+          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
             <i class="far fa-thumbs-up"></i>
-            좋아요가 <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
-        </span>
-        <span>
-          <i class="far fa-comment"></i> 댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
-        </span>
-      </div>
+            좋아요
+          </div>
+          <div class="feed-detail-like-comment-share-btn" @click="focusComment">
+            <i class="far fa-comment"></i>
+            댓글달기
+          </div>
+          <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
+            <i class="fas fa-share"></i>
+            공유하기
+          </div>
+        </div>
 
-      <div class="feed-detail-like-comment-share-btn-box">
-        <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-          <i class="far fa-thumbs-up"></i>
-          좋아요
+        <div class="feed-detail-comment-input-box">
+          <img
+            src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
+            alt="유저프로필이미지"
+            class="feed-detail-comment-img"
+          >
+          <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" v-model.trim="commentInput" @keyup.enter="createComment">
+          <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
         </div>
-        <div class="feed-detail-like-comment-share-btn" @click="focusComment">
-          <i class="far fa-comment"></i>
-          댓글달기
-        </div>
-        <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
-          <i class="fas fa-share"></i>
-          공유하기
-        </div>
-      </div>
 
-      <div class="feed-detail-comment-input-box">
-        <img
-          src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-          alt="유저프로필이미지"
-          class="feed-detail-comment-img"
-        >
-        <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" v-model.trim="commentInput" @keyup.enter="createComment">
-        <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
-      </div>
-
-      <!-- <section>
-        <div v-for="(comment, idx) in fd.comment" :key="idx">
-          <NewsFeedCommentItem
-            :comment="comment"
-          />
-        </div>
-      </section> -->
-    </section>
+        <!-- <section>
+          <div v-for="(comment, idx) in fd.comment" :key="idx">
+            <NewsFeedCommentItem
+              :comment="comment"
+            />
+          </div>
+        </section> -->
+      </section>
+    </div>
   </div>
 </template>
 
@@ -102,11 +116,13 @@ import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { deleteFeed } from '@/api/feed.js'
+import Sidebar from '../../components/Common/Sidebar.vue';
 
 export default {
   name: 'NewsfeedDetail',
   components: {
     NewsFeedHeader,
+    Sidebar,
     // NewsFeedCommentItem,
   },
   data() {
@@ -120,7 +136,7 @@ export default {
   },
   methods: {
     likeFeed () {
-      alert(`${this.fd.indoorId} 번째 글을 좋아합니다.`)
+      alert(`${this.fd.id} 번째 글을 좋아합니다.`)
       // like axios
     },
     shareFeed () {
@@ -134,19 +150,20 @@ export default {
       input.focus();
     },
     deleteFeed () {
-      const answer = window.confirm('정말로 삭제하시겠습니까?')
-      if (answer) {
-        deleteFeed(
-          this.fd.indoorId,
-          () => {
-            this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+      if (this.userpk == this.fd.user.id) {
+        const answer = window.confirm('정말로 삭제하시겠습니까?')
+        if (answer) {
+          deleteFeed(
+            this.fd.id,
+            () => {
+              this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
       }
-      
     },
     changeModiForm () {
       this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
@@ -174,8 +191,8 @@ export default {
         (res) => {
           this.fd = res.data
           console.log(res)
-          this.date = this.fd.localDateTime.split('T')[0];
-          this.time = this.fd.localDateTime.split('T')[1];
+          this.date = this.fd.date.split('T')[0];
+          this.time = this.fd.date.split('T')[1];
         },
         (err) => {
           console.log(err)
