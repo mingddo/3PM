@@ -3,8 +3,7 @@ package com.ssafy.sns.jwt;
 import java.util.Date;
 import java.util.Map;
 
-import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.user.JwtDto;
+import com.ssafy.sns.dto.user.JwtResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -92,11 +91,11 @@ public class JwtService {
         return claims.getBody();
     }
 
-    public JwtDto login(Long id) {
+    public JwtResponseDto login(Long id) {
         String refreshToken = createRefreshToken(id);
         String accessToken = createAccessToken(refreshToken);
 
-        return new JwtDto(accessToken, refreshToken, id);
+        return new JwtResponseDto(accessToken, refreshToken, id);
     }
 
     public Long findId(String token) {

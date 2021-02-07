@@ -1,14 +1,11 @@
 package com.ssafy.sns.dto.newsfeed;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.dto.user.SimpleUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @ToString
