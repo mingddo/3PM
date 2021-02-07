@@ -61,9 +61,6 @@ public class UserController {
     }
 
     @ApiOperation("로그인 여부 확인")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dto", value = "카카오 로그인 정보(카카오 ID)", required = true)
-    })
     @PostMapping("/login")
     public ResponseEntity isKakaoLogin(@RequestBody KakaoRequestDto dto) {
 
@@ -82,9 +79,6 @@ public class UserController {
     }
 
     @ApiOperation("회원 가입")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dto", value = "카카오 로그인 정보(카카오 ID, 닉네임)", required = true)
-    })
     @PostMapping("/join")
     public ResponseEntity kakaoLogin(@RequestBody KakaoRequestDto dto) {
 
@@ -97,9 +91,6 @@ public class UserController {
     }
 
     @ApiOperation("닉네임 중복 확인")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dto", value = "유저 닉네임", required = true)
-    })
     @PostMapping("/check")
     public ResponseEntity dupl(@RequestBody DuplRequestDto dto) {
 
