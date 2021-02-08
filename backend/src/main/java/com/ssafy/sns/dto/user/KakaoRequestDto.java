@@ -6,8 +6,8 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class KakaoDto {
+public class KakaoRequestDto {
 
     private Long kakaoId;
-
+    private String username;
 }

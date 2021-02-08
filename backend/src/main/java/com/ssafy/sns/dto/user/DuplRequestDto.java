@@ -7,10 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class KakaoDto2 {
+@AllArgsConstructor
+public class DuplRequestDto {
 
-    private Long kakaoId;
     private String username;
 }
