@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class FeedListResponseDto<T> {
+public class  FeedListResponseDto<T> {
 
     private List<T> feedList;
     private int endNum;
