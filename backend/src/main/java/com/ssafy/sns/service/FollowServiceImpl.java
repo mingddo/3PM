@@ -2,14 +2,13 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.follow.Follow;
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.user.UserByFollowDto;
+import com.ssafy.sns.dto.user.UserFollowDto;
 import com.ssafy.sns.repository.FollowRepository;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +63,7 @@ public class FollowServiceImpl {
     }
 
     // 팔로잉 리스트를 가져온다
-    public List<UserByFollowDto> getFollowingList(Long fromUserId, Long toUserId) {
+    public List<UserFollowDto> getFollowingList(Long fromUserId, Long toUserId) {
 
         User fromUser = userRepository.findById(fromUserId)
                 .orElseThrow(); // 토큰 (접속자)
@@ -73,12 +72,12 @@ public class FollowServiceImpl {
                 .orElseThrow(); // 페이지 주인
 
         // 페이지 주인의 팔로잉 리스트를 가져온다
-        List<UserByFollowDto> followingList = followRepository.findAllByFromUser(toUser).stream()
+        List<UserFollowDto> followingList = followRepository.findAllByFromUser(toUser).stream()
                 .map(Follow::getToUser)
-                .map(UserByFollowDto::new)
+                .map(UserFollowDto::new)
                 .collect(Collectors.toList());
 
-        for (UserByFollowDto users : followingList) {
+        for (UserFollowDto users : followingList) {
             if (followRepository.findByToUserAndFromUser(fromUser.getId(), users.getId()).isPresent()) {
                 users.setIsFollow(true);
             }
@@ -88,19 +87,19 @@ public class FollowServiceImpl {
     }
 
     // 팔로워 리스트 가져오기
-    public List<UserByFollowDto> getFollowerList(Long fromUserId, Long toUserId) {
+    public List<UserFollowDto> getFollowerList(Long fromUserId, Long toUserId) {
         User fromUser = userRepository.findById(fromUserId)
                 .orElseThrow();
 
         User toUser = userRepository.findById(toUserId)
                 .orElseThrow();
 
-        List<UserByFollowDto> followerList = followRepository.findAllByToUser(toUser).stream()
+        List<UserFollowDto> followerList = followRepository.findAllByToUser(toUser).stream()
                 .map(Follow::getFromUser)
-                .map(UserByFollowDto::new)
+                .map(UserFollowDto::new)
                 .collect(Collectors.toList());
 
-        for (UserByFollowDto users : followerList) {
+        for (UserFollowDto users : followerList) {
             if (followRepository.findByToUserAndFromUser(fromUser.getId(), users.getId()).isPresent()) {
                 users.setIsFollow(true);
             }
