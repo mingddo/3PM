@@ -13,30 +13,29 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class IndoorResponseDto {
+public class IndoorResponseDto extends FeedResponseDto {
 
-    private Long indoorId;
-    private SimpleUserDto user;
-    private String content;
-    private String file;
-    private List<String> tags;
-    private Long commentCnt;
-    private Long likeCnt;
-    private LocalDateTime localDateTime;
+    private String test;
 
     @Builder
     public IndoorResponseDto(Indoor indoor) {
-        this.indoorId = indoor.getId();
-        this.user = SimpleUserDto.builder()
-                .id(indoor.getUser().getId())
-                .nickname(indoor.getUser().getNickname())
-                .img(indoor.getUser().getImg())
-                .build();
-        this.content = indoor.getContent();
-        this.file = indoor.getFile();
-        this.tags = null;
-        this.commentCnt = null;
-        this.likeCnt = null;
-        this.localDateTime = indoor.getCreatedDate();
+        super(indoor);
+        this.test = indoor.getTest();
     }
+
+//    @Builder
+//    public IndoorResponseDto(Indoor indoor) {
+//        this.indoorId = indoor.getId();
+//        this.user = SimpleUserDto.builder()
+//                .id(indoor.getUser().getId())
+//                .nickname(indoor.getUser().getNickname())
+//                .img(indoor.getUser().getImg())
+//                .build();
+//        this.content = indoor.getContent();
+//        this.file = indoor.getFile();
+//        this.tags = null;
+//        this.commentCnt = null;
+//        this.likeCnt = null;
+//        this.localDateTime = indoor.getCreatedDate();
+//    }
 }

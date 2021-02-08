@@ -1,9 +1,6 @@
 package com.ssafy.sns.controller;
 
-
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.dto.search.SearchResponseDto;
 import com.ssafy.sns.service.SearchServiceImpl;
 import org.slf4j.Logger;
@@ -20,7 +17,6 @@ import java.util.List;
  * Search 관련 Controller
  */
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/search")
 public class SearchController {
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
@@ -29,8 +25,8 @@ public class SearchController {
     private SearchServiceImpl searchService;
 
     // return 형태 List<SearchResponseDto> -> (tagname, List<IndoorResponseDto>)
-    @GetMapping("/all/{keyword}")
-    public ResponseEntity<List<SearchResponseDto>> search(@PathVariable("keyword") String keyword){
+    @GetMapping("/all")
+    public ResponseEntity<List<SearchResponseDto>> search(@RequestParam("keyword") String keyword){
         List<Hashtag> hashtagList = searchService.searchHashtag(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {

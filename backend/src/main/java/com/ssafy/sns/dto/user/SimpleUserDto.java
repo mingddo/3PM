@@ -1,5 +1,6 @@
 package com.ssafy.sns.dto.user;
 
+import com.ssafy.sns.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,9 @@ public class SimpleUserDto {
     private String img;
 
     @Builder
-    public SimpleUserDto(Long id, String nickname, String img) {
-        this.id = id;
-        this.nickname = nickname;
-        this.img = img;
+    public SimpleUserDto(User user) {
+        this.id = user.getId();
+        this.nickname = user.getNickname();
+        this.img = user.getImg();
     }
 }

@@ -9,27 +9,13 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-public class IndoorRequestDto {
+public class IndoorRequestDto extends FeedRequestDto {
 
-    private Long indoorId;
-    private String content;
-    private String file;
-    private List<String> tags;
-    private Long userId;
+    private String test;
 
     @Builder
-    public IndoorRequestDto(Long indoorId, String content, String file, List<String> tags, Long userId) {
-        this.content = content;
-        this.file = file;
-        this.tags = tags;
-        this.userId = userId;
-    }
-
-    public Indoor toEntity(User user) {
-        return Indoor.builder()
-                .content(content)
-                .file(file)
-                .user(user)
-                .build();
+    public IndoorRequestDto(String content, String file, List<String> tags, String test) {
+        super(content, null, tags);
+        this.test = test;
     }
 }

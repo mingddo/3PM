@@ -9,5 +9,6 @@ import lombok.*;
 public class KakaoDto {
 
     private Long kakaoId;
+    private String username;
 
 }

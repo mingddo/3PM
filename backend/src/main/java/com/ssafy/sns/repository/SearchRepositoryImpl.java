@@ -1,13 +1,12 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,14 +22,10 @@ public class SearchRepositoryImpl implements SearchRepository{
     }
 
     @Override
-    public List<Indoor> findIndoorAll(Hashtag hash) {
-        List<Indoor> indoorList = new ArrayList<>();
-        hash.getIndoorHashtags().stream().forEach(indoorHashtag -> {
-                Indoor indoor = indoorHashtag.getIndoor();
-                indoorList.add(indoor);
-                System.out.println("indoor = " + indoor);
-        });
-        return indoorList;
+    public List<Feed> findIndoorAll(Hashtag hash) {
+        return em.createQuery("select f from Feed f where f.id = (select fh.feed.id from FeedHashtag fh where fh.hashtag.id = :hash)", Feed.class)
+                .setParameter("hash", hash.getId())
+                .getResultList();
     }
 
     @Override

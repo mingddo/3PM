@@ -1,2 +1,0 @@
-insert into user (user_img, user_introduce, kakao_id, user_nickname) values ('test1', '자기소개 1', 111111, '호랑이');
-insert into user (user_img, user_introduce, kakao_id, user_nickname) values ('test2', '자기소개 2', 121111, '호랑삼');
