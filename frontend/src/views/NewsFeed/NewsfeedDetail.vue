@@ -45,6 +45,9 @@
               <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" alt="업로드 파일" class="feed-detail-img">
             </div>
           </div>
+          <div v-if="Category == 2 || Category == 3">
+            위치정보!
+          </div>
           <div class="feed-detail-tag">
             <button v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>
           </div>
@@ -129,7 +132,7 @@ export default {
   },
   data() {
     return {
-      Category: this.$route.query.Category,
+      Category: null,
       fd: "",
       commentInput: "",
       date: null,
@@ -155,15 +158,23 @@ export default {
       if (this.userpk == this.fd.user.id) {
         const answer = window.confirm('정말로 삭제하시겠습니까?')
         if (answer) {
-          deleteFeed(
-            this.fd.id,
-            () => {
-              this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
+          if (this.Category == 1) {
+            deleteFeed(
+              this.fd.id,
+              () => {
+                this.$router.push({name: 'NewsfeedPersonal', query: { Category: 1}})
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
+          } else if (this.Category == 2) {
+            // 핵인싸 DELETE 요청
+          } else if (this.Category == 3) {
+            // 청산별고 DELETE 요청
+          } else if (this.Category == 4) {
+            // 워커홀릭 DELETE 요청
+          }
         }
       }
     },
@@ -188,18 +199,26 @@ export default {
     setFeedDetail () {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
-      readFeed (
-        this.$route.query.id,
-        (res) => {
-          this.fd = res.data
-          console.log(res)
-          this.date = this.fd.date.split('T')[0];
-          this.time = this.fd.date.split('T')[1];
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      this.Category = this.$route.query.Category
+      if (this.Category == 1) {
+        readFeed (
+          this.$route.query.id,
+          (res) => {
+            this.fd = res.data
+            this.date = this.fd.date.split('T')[0];
+            this.time = this.fd.date.split('T')[1];
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      } else if (this.Category == 2) {
+        // 핵인싸 get 요청
+      } else if (this.Category == 3) {
+        // 청산별곡 get 요청
+      } else if (this.Category == 4) {
+        // 워커홀릭 get 요청
+      }
     },
   },
   created () {
