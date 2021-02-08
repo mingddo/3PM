@@ -33,7 +33,7 @@ public class LoginController {
 
     public static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    @GetMapping(value = "/token", produces = "application/json; charset=utf8")
+    @GetMapping("/token")
     public ResponseEntity<Map<String, String>> getToken(HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Map<String, String> result = new HashMap<>();
@@ -76,16 +76,6 @@ public class LoginController {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         return new ResponseEntity<>(jwtDto, status);
-    }
-
-    @DeleteMapping("")
-    public ResponseEntity deleteUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        Long id = jwtService.findId(token);
-
-        userService.deleteUser(id);
-
-        return new ResponseEntity("탈퇴 성공", HttpStatus.OK);
     }
 
     @PostMapping("/dupl")

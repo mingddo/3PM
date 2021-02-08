@@ -46,7 +46,6 @@ public class UserController {
      * [마이페이지 유저 정보] [프로필 정보]
      * 모든 사용자의 프로필에 들어갔을 때 처음 받는 정보
      * username, user_id, 내가 구독하는 수, 나를 구독하는 수, 가입된 그룹 수, 프로필 소개,
-     * 게시글 10개씩 ( 좋아요 수, 댓글 수, 게시글 id, 게시글 사진/동영상, 게시글 내용 ) => 취소
      */
     @GetMapping("/{id}")
     public ResponseEntity myPageMain(@PathVariable("id") Long id) {
@@ -82,7 +81,7 @@ public class UserController {
      * 팔로우 알림 ( 나를 팔로우하는 사람 사진 및 username )
      * 본인만 접근가능 => 접근 제한
      */
-    @GetMapping("/alert/{id}")
+    @GetMapping("/{id}/alert")
     public ResponseEntity myPageAlert(@PathVariable("id") Long id) {
 
 
