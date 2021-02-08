@@ -9,13 +9,15 @@
             <img
               v-if="profileinfo.user_img"
               class="pofileImg"
-              :src="`https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`"
+              :src="
+                `https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`
+              "
               alt="프로필사진"
             />
             <img
               v-else
               class="pofileImg"
-              src="@/assets/loverduck.png"
+              :src="profileinfo.user_img"
               alt="프로필사진"
             />
           </div>
@@ -124,7 +126,7 @@
       <div class="myPagearticle">
         <!-- 최근활동 -->
         <section v-if="activetab === 1" class="myPageActivity">
-          <NewsFeedList :feed="feed" :last="last"/>
+          <NewsFeedList :feed="feed" :last="last" />
         </section>
         <section v-if="activetab === 2" class="myPageActivity">
           <Activity :activities="activities" />
@@ -224,18 +226,18 @@ export default {
     };
   },
   methods: {
-    setFeedList () {
+    setFeedList() {
       getprofileFeed(
         this.profile_user,
-        this.page,
+        this.feed_page_no,
         (res) => {
-          this.page = res.data.endNum
-          let feeds = res.data.indoorResponseDtoList;
+          this.page = res.data.endNum;
+          let feeds = res.data.feedList;
           if (feeds.length < 100) {
             this.last = true;
           }
           for (let f of feeds) {
-            this.feed.push(f)
+            this.feed.push(f);
           }
           this.next = false;
         },
@@ -244,19 +246,23 @@ export default {
         }
       );
     },
-    setScroll () {
-      window.addEventListener('scroll', () => {
+    setScroll() {
+      window.addEventListener("scroll", () => {
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
         let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
 
-        if(!this.next && !this.last && scrollLocation + windowHeight >= fullHeight){
+        if (
+          !this.next &&
+          !this.last &&
+          scrollLocation + windowHeight >= fullHeight
+        ) {
           this.next = true;
           setTimeout(() => {
             this.setFeedList();
           }, 1000);
         }
-      })
+      });
     },
     usercheck() {
       if (
@@ -308,7 +314,7 @@ export default {
     // this.getFeed();
     this.setFeedList();
   },
-  mounted () {
+  mounted() {
     this.setScroll();
   },
 };

@@ -5,7 +5,7 @@ import axios from 'axios'
 // const  API_BASE_URL = `http://172.30.1.47:8080/`
 // const  API_BASE_URL = `http://172.30.1.35:8081/`
 // const  API_BASE_URL = `http://172.30.1.51:8081/`
-const  API_BASE_URL = `http://i4b208.p.ssafy.io:8081/`
+const  API_BASE_URL = `http://i4b208.p.ssafy.io:8081/api/`
 // const  API_BASE_URL = `http://ubuntu@i4b208.p.ssafy.io:8080/`
 
 let vuex_data = localStorage.getItem('vuex')
