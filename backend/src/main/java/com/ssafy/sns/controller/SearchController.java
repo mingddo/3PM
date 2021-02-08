@@ -2,6 +2,7 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.dto.search.SearchResponseDto;
+import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.service.SearchServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,41 +35,33 @@ public class SearchController {
     })
     @GetMapping("/all")
     public ResponseEntity<List<SearchResponseDto>> searchAll(@RequestParam("keyword") String keyword){
-        List<Hashtag> hashtagList = searchService.searchHashtag(keyword);
+        List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchIndoorAll(h)));
+            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(h)));
         }
         return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
     }
 
     @GetMapping("/feed")
     public ResponseEntity<List<SearchResponseDto>> searchFeed(@RequestParam("keyword") String keyword){
-        List<Hashtag> hashtagList = searchService.searchHashtag(keyword);
+        List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchIndoorAll(h)));
+            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(h)));
         }
         return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<SearchResponseDto>> searchUser(@RequestParam("keyword") String keyword){
-        List<Hashtag> hashtagList = searchService.searchHashtag(keyword);
-        List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
-        for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchIndoorAll(h)));
-        }
-        return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
+    public ResponseEntity<List<SimpleUserDto>> searchUser(@RequestParam("keyword") String keyword){
+        List<SimpleUserDto> userDtoList = new ArrayList<>();
+        userDtoList = searchService.searchUsers(keyword);
+        return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/group")
-    public ResponseEntity<List<SearchResponseDto>> searchGroup(@RequestParam("keyword") String keyword){
-        List<Hashtag> hashtagList = searchService.searchHashtag(keyword);
-        List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
-        for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchIndoorAll(h)));
-        }
-        return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
-    }
+//    @GetMapping("/group")
+//    public ResponseEntity<List<SearchResponseDto>> searchGroup(@RequestParam("keyword") String keyword){
+//        return null;
+//    }
 }
