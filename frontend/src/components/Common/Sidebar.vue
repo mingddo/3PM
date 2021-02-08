@@ -27,14 +27,14 @@
             <i class="far fa-clock"></i>
             오후 세시.
           </div>
-          <div @click="goToPersonal">
-            <i class="fas fa-house-user">꽃보다 집</i>
+          <div @click="onClickSidebarPersonal">
+            <i class="sidebar-fas fas fa-house-user">꽃보다 집</i>
           </div>
-          <div @click="goToSearch">
-            <i class="fas fa-search">검색</i>
+          <div @click="onClickSidebarSearch">
+            <i class="sidebar-fas fas fa-search">검색</i>
           </div>
-          <div @click="goToProfile">
-            <i class="fas fa-user">프로필</i>
+          <div @click="onClickSidebarProfile">
+            <i class="sidebar-fas fas fa-user">프로필</i>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@ export default {
       const toggleBar = document.querySelector('.nav-toggle-bar-before')
       const overlay = document.querySelector('.overlay')
       if(overlay.classList.contains('disappear')) { // 사이드바 사라지기
-        if (e.target.classList.value.split(' ').includes('fas') || e.target === overlay) {
+        if (e.target.classList.value.split(' ').includes('sidebar-fas') || e.target === overlay) {
 
           overlay.classList.remove('disappear')
           overlay.style.cssText = "display: block;background-color: rgba(0,0,0,0);"
@@ -73,24 +73,54 @@ export default {
         }, 10);
       }
     },
-    goToHome (e) {
-      this.sideBarToggle(e)
+    goToHome () {
       this.$router.push({name: 'Home'})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+
     },
-    goToSearch (e) {
-      this.sideBarToggle(e)
+    goToSearch () {
       this.$router.push({name: 'Search'})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+
     },
-    goToPersonal (e) {
+    goToPersonal () {
+      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+
+    },
+    goToProfile () {
+      this.$router.push({name: 'MyPage'})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+
+    },
+    onClickSidebarPersonal(e) {
       this.sideBarToggle(e)
       setTimeout(() => {
-        this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
       }, 10);
     },
-    goToProfile (e) {
+    onClickSidebarHome(e) {
       this.sideBarToggle(e)
-      this.$router.push({name: 'MyPage'})
+      setTimeout(() => {
+        this.$router.push({name: 'Home'})
+        .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+      }, 10);
     },
+    onClickSidebarSearch(e) {
+      this.sideBarToggle(e)
+      setTimeout(() => {
+      this.$router.push({name: 'Search'})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+      }, 10);
+    },
+    onClickSidebarProfile(e) {
+      this.sideBarToggle(e)
+      setTimeout(() => {
+      this.$router.push({name: 'MyPage'})
+      .catch(err => {if (err.name === "NavigationDuplicated") {location.reload(); }})
+      }, 10);
+    }
   },
   computed : {
     ...mapState({
