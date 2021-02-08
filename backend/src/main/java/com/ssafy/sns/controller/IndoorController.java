@@ -5,6 +5,7 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.jwt.JwtService;
+import com.ssafy.sns.service.FeedClapServiceImpl;
 import com.ssafy.sns.service.IndoorServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,6 +29,7 @@ public class IndoorController {
 
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
     private final IndoorServiceImpl indoorService;
+    private final FeedClapServiceImpl feedClapService;
     private final JwtService jwtService;
 
 
@@ -182,15 +184,24 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
-//    @PostMapping(value = "/{post}/likes")
-//    public ResponseEntity<String> postClap(@PathVariable("uno") Long uid, @PathVariable("fno") Long fid) {
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//
-//        try {
-//            logger.info("postClap - 꽃보다집 박수 추가 : {} {}", uid, fid);
-//        } catch (Exception e) {
-//            logger.warn("postClap - 꽃보다집 에러 : {}", e.getMessage());
-//        }
-//        return new ResponseEntity<>(status);
-//    }
+    @PostMapping(value = "/{feedId}/likes")
+    public ResponseEntity<String> postClap(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        // 유저 정보 불러오기
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
+
+        // 좋아요
+        try {
+            feedClapService.changeClap(userId, feedId);
+            logger.info("postClap - 꽃보다집 박수");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("postClap - 꽃보다집 박수 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
+    }
 }

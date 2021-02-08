@@ -1,9 +1,11 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
+import com.ssafy.sns.repository.FeedClapRepositoryImpl;
 import com.ssafy.sns.repository.HashtagRepositoryImpl;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
@@ -23,6 +25,7 @@ public class IndoorServiceImpl implements FeedService {
 
     private final IndoorRepositoryImpl indoorRepository;
     private final HashtagRepositoryImpl hashtagRepository;
+    private final FeedClapRepositoryImpl feedClapRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
@@ -32,7 +35,7 @@ public class IndoorServiceImpl implements FeedService {
         List<Feed> indoorList = indoorRepository.findMyList(id, num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed));
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -42,7 +45,7 @@ public class IndoorServiceImpl implements FeedService {
         List<Feed> indoorList = indoorRepository.findList(num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed));
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -50,7 +53,7 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public FeedResponseDto read(Long id) {
         Indoor indoor = (Indoor) indoorRepository.findOne(id);
-        return new IndoorResponseDto(indoor);
+        return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size());
     }
 
     @Override

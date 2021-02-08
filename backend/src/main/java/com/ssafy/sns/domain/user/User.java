@@ -1,9 +1,12 @@
 package com.ssafy.sns.domain.user;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
+import com.ssafy.sns.domain.clap.FeedClap;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter // 비추천 코드
@@ -39,4 +42,18 @@ public class User extends BaseTimeEntity {
     // 유저 설정 정보
     @Embedded
     private UserConfig userConfig;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedClap> feedClapList = new ArrayList<>();
+
+    public void addFeedClap(FeedClap feedClap) {
+        if (feedClapList == null) feedClapList = new ArrayList<>();
+        feedClapList.add(feedClap);
+        feedClap.setUser(this);
+    }
+
+    public void deleteFeedClap(FeedClap feedClap) {
+        feedClapList.remove(feedClap);
+        feedClap.setUser(null);
+    }
 }
