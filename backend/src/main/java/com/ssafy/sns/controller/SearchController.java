@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Search 관련 Controller
@@ -34,13 +33,18 @@ public class SearchController {
             @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
     })
     @GetMapping("/all")
-    public ResponseEntity<List<SearchResponseDto>> searchAll(@RequestParam("keyword") String keyword){
-        List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
-        List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
-        for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(h)));
+    public ResponseEntity<Map<String, Object>> searchAll(@RequestParam("keyword") String keyword){
+        Map<String, Object> map = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+        try {
+            map.put("feedList", searchFeed(keyword));
+            map.put("userList", searchUser(keyword));
+        } catch (Exception e) {
+            logger.warn("전체 검색 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
         }
-        return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(map, status);
+
     }
 
     @GetMapping("/feed")
@@ -55,8 +59,10 @@ public class SearchController {
 
     @GetMapping("/user")
     public ResponseEntity<List<SimpleUserDto>> searchUser(@RequestParam("keyword") String keyword){
-        List<SimpleUserDto> userDtoList = new ArrayList<>();
-        userDtoList = searchService.searchUsers(keyword);
+        List<SimpleUserDto> userDtoList = searchService.searchUsers(keyword);
+        for (SimpleUserDto simpleUserDto : userDtoList) {
+            System.out.println("simpleUserDto.getNickname() = " + simpleUserDto.getNickname());
+        }
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
