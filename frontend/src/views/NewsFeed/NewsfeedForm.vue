@@ -74,9 +74,9 @@
           </div>
         </div>
         
-        <div v-if="imageUrl">
+        <!-- <div v-if="imageUrl">
           <img :src="imageUrl" alt="미리보기 이미지" width="100%">
-        </div> 
+        </div>  -->
         <div class="newsfeed-form-submit-btn">
           <button @click="createFeed">작성하기</button>
         </div>
