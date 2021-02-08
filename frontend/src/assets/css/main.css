@@ -1,5 +1,9 @@
 /* App.vue */
-
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -11,14 +15,14 @@ button a {
   text-decoration: none;
 }
 button a:visited {
-  color : black;
+  color: black;
 }
 button {
-  margin : 2px;
-  padding : 0.25rem 0.5rem;
+  margin: 2px;
+  padding: 0.25rem 0.5rem;
   background: none;
   border: none;
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: 30px;
   cursor: pointer;
   font-weight: bold;
@@ -29,7 +33,7 @@ button.active {
   color: white;
 }
 
-  /* Home.vue */
+/* Home.vue */
 .home-section {
   height: 100vh;
   padding-top: 5vh;
@@ -47,10 +51,10 @@ button.active {
   font-weight: bold;
   color: #2c3e50;
   transition: all 0.8s ease-in-out;
-  padding : 0.25rem 1rem;
+  padding: 0.25rem 1rem;
   background: none;
   border: none;
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   border-radius: 30px;
   cursor: pointer;
   font-weight: bold;
@@ -66,8 +70,8 @@ button.active {
   font-weight: bold;
   color: #2c3e50;
   transition: all 1s ease-in-out;
-  top: 90vh;   
-  right: 0; 
+  top: 90vh;
+  right: 0;
   border-radius: 0px;
 }
 
@@ -75,14 +79,16 @@ button.active {
 .side-bar {
   /* background-color: gray; */
   box-sizing: border-box;
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   position: fixed;
   top: 0px;
   bottom: 0px;
   width: 300px;
   /* height: 85%; */
   display: flex;
+  background-color: white;
   flex-direction: column;
+  z-index: 1000;
 }
 .nav-toggle-switch {
   display: none;
@@ -94,13 +100,13 @@ button.active {
   padding: 10px;
 }
 
-.nav-toggle-bar-before {  
+.nav-toggle-bar-before {
   overflow: hidden;
   z-index: 200000;
   white-space: nowrap;
   position: fixed;
   height: 100%;
-  top : 10;
+  top: 10;
   left: -250px;
   background-color: white;
   width: 250px;
@@ -114,7 +120,7 @@ button.active {
 .overlay {
   display: none;
   z-index: 2;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -139,6 +145,5 @@ button.active {
 }
 .nav-content > div:hover {
   border-radius: 5px;
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
-
