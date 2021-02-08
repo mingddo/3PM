@@ -30,7 +30,7 @@ gantt
     마이페이지 :after, 2021-02-01, 2d
 
     section Backend
-    Refactoring & Swagger 작성 :active, 2021-02-01, 5d
+    Refactoring & Swagger 작성 :active, 2021-02-01, 14d
     검색 기능 :after, 2021-02-01, 2d
     로그인(jwt) :after, 2021-02-01, 3d
     파일 업로드 기능 :after, 2021-02-02, 1d
