@@ -1,15 +1,10 @@
 package com.ssafy.sns.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.sns.controller.LoginController;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
-import com.ssafy.sns.dto.user.KakaoDto;
-import com.ssafy.sns.jwt.JwtService;
+import com.ssafy.sns.dto.user.KakaoRequestDto;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,13 +20,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final JwtService jwtService;
-
     private final S3Service s3Service;
 
-    private final ObjectMapper objectMapper;
-
-    public static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     public User findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -83,7 +73,7 @@ public class UserServiceImpl implements UserService {
         return user != null;
     }
 
-    public User joinMember(KakaoDto dto) {
+    public User joinMember(KakaoRequestDto dto) {
         User user = new User();
         user.setKakaoId(dto.getKakaoId());
         user.setNickname(dto.getUsername());

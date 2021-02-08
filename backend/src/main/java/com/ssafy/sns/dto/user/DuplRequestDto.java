@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DuplDto {
+public class DuplRequestDto {
 
     private String username;
 }

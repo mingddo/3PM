@@ -1,12 +1,9 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.domain.file.File;
-import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
-import com.ssafy.sns.repository.FileRepository;
 import com.ssafy.sns.repository.HashtagRepositoryImpl;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
