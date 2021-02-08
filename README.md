@@ -25,7 +25,7 @@ gantt
     발표 :crit, after, 2021-02-19, 1d
     
     section Frontend
-    디자인 컨셉 :active, 2021-02-01, 5d
+    디자인 UI/UX :active, 2021-02-01, 14d
     소개 페이지 :active, 2021-02-01, 2d
     마이페이지 :after, 2021-02-01, 2d
 
