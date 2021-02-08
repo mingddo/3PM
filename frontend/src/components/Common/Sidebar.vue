@@ -50,50 +50,45 @@ export default {
       toggleStatus : false,
     };
   },
-  created () {
-    const body = document.querySelector('body')
-    if (body.style.overflow !== 'auto') {
-      body.style.overflow = 'auto'
-    }
-  },
   methods: {
     sideBarToggle(e) {
       const toggleBar = document.querySelector('.nav-toggle-bar-before')
       const overlay = document.querySelector('.overlay')
-      // const body = document.querySelector('body')
-      // const houseBetterThanFlower = document.querySelector('.nav-toggle-bar-before .fa-house-user')
-      // const search = document.querySelector('.nav-toggle-bar-before .fa-search')
-      // const profile = document.querySelector('.nav-toggle-bar-before .fa-user')
-
       if(overlay.classList.contains('disappear')) { // 사이드바 사라지기
-        if (e.target !== overlay) return
-        // body.style.overflow = 'auto'
-        overlay.classList.remove('disappear')
-        overlay.style.cssText = "display: block;background-color: rgba(0,0,0,0);"
-        toggleBar.style= 'transform :translateX(0px);'
-        setTimeout(() => {
-          overlay.style = "display: none;"
-        }, 500);
+        if (e.target.classList.value.split(' ').includes('fas') || e.target === overlay) {
+
+          overlay.classList.remove('disappear')
+          overlay.style.cssText = "display: block;background-color: rgba(0,0,0,0);"
+          toggleBar.style= 'transform :translateX(0px);'
+          setTimeout(() => {
+            overlay.style = "display: none;"
+          }, 500);
+        }
       }
       else { // 사이드바 나타나기
         overlay.classList.add('disappear')
-        // body.style.overflow = 'hidden'
         overlay.style.cssText = "display: block;background-color: rgba(0,0,0,0.5);"
         setTimeout(() => {
           toggleBar.style = 'transform : translateX(250px);'
         }, 10);
       }
     },
-    goToHome () {
+    goToHome (e) {
+      this.sideBarToggle(e)
       this.$router.push({name: 'Home'})
     },
-    goToSearch () {
+    goToSearch (e) {
+      this.sideBarToggle(e)
       this.$router.push({name: 'Search'})
     },
-    goToPersonal () {
-      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+    goToPersonal (e) {
+      this.sideBarToggle(e)
+      setTimeout(() => {
+        this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+      }, 10);
     },
-    goToProfile () {
+    goToProfile (e) {
+      this.sideBarToggle(e)
       this.$router.push({name: 'MyPage'})
     },
   },

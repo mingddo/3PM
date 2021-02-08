@@ -41,7 +41,9 @@
 
         <article class="feed-detail-content-box">
           <div v-if="fd.file">
-            <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" class="feed-detail-img">
+            <div v-for="(file, idx) in fd.file" :key="idx">
+              <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" alt="업로드 파일" class="feed-detail-img">
+            </div>
           </div>
           <div class="feed-detail-tag">
             <button v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>

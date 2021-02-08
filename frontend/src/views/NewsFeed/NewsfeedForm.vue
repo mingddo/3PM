@@ -8,16 +8,37 @@
       />
       
       <section class="newsfeed-form-content">
-        <h2>피드 작성하기</h2>
-        <div>
-          <label for="tags">태그</label>
-          <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 입력해주세요" v-model.trim="inputTag" @keyup.enter="addTag">
+        <div class="newsfeed-form-profile">
+          <div class="newsfeed-form-profile-img-space">
+            <img
+              src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
+              alt="유저프로필이미지"
+              class="newsfeed-form-profile-img"
+            >
+          </div>
+          <div class="newsfeed-form-profile-name">
+            username
+          </div>
         </div>
         <div>
+          <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요" v-model.trim="inputTag" @keyup.enter="addTag">
+        </div>
+        <div>
+          추가한 태그들 : 
           <span v-for="(tag, idx) in form.tags" :key="idx">
             <button>{{ tag }} <i @click="deleteTag(tag)" class="fas fa-times-circle"></i> </button>
           </span>
         </div>
+        <div>
+          <i class="far fa-question-circle">태그가 무엇인가요?</i>
+          태그를 등록하시면, 검색창에서 해당 태그를 검색시 회원님의 게시물이 나타납니다! 많은 분들과 회원님의 피드를 나누고 싶다면? ... 태그 설명
+          
+        </div>
+        <div>
+          <!-- <label for="content">내용</label> -->
+          <textarea class="newsfeed-form-content-input" name="content" placeholder="요즘 어떤 활동을 하고 계신가요?" id="content" cols="30" rows="10" v-model="form.content"></textarea>
+        </div>
+
         <div class="newsfeed-form-file-box">
           <div class="newsfeed-form-img-box">
             <label for="image"> <i class="far fa-images"></i> 사진 </label>
@@ -27,7 +48,7 @@
             <label for="video"> <i class="fas fa-video"></i> 동영상 </label>
             <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
           </div>
-          <div class="newsfeed-form-img-box">
+          <!-- <div class="newsfeed-form-img-box">
             <button @click="getLocation">
               <i class="fas fa-map-marker-alt"></i> 현재 위치
             </button>
@@ -36,15 +57,26 @@
             <button>
               <i class="fas fa-map"></i> 지도
             </button>
-          </div>
-        </div>    
-        <div v-if="imageUrl">
-          <img :src="imageUrl" alt="미리보기 이미지" width="100%">
-        </div> 
-        <div>
-          <label for="content">내용</label>
-          <textarea class="newsfeed-form-content-input" name="content" placeholder="내용을 입력해주세요" id="content" cols="30" rows="10" v-model="form.content"></textarea>
+          </div> -->
         </div>
+        <div class="newsfeed-form-img">
+          <div v-for="(view, idx) in previewUrl" :key="idx">
+            <div class="newsfeed-form-img-prevbox">
+              <!-- <i class="fas fa-times-circle newsfeed-form-img-prevbox-delbtn"></i> -->
+              <img class="newsfeed-form-img-prevbox-delbtn" src="https://img.icons8.com/fluent/20/000000/close-window.png"/>
+              <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
+              <img :src="view" alt="미리보기 이미지" width="100%">
+            </div>
+            
+          </div>
+          <div class="newsfeed-form-img-prevbox">
+            사진
+          </div>
+        </div>
+        
+        <!-- <div v-if="imageUrl">
+          <img :src="imageUrl" alt="미리보기 이미지" width="100%">
+        </div>  -->
         <div class="newsfeed-form-submit-btn">
           <button @click="createFeed">작성하기</button>
         </div>
@@ -78,6 +110,8 @@ export default {
         content: null,
       },
       imageUrl: ``,
+      previewUrl : [],
+      fileList: [],
     };
   },
   methods: {
@@ -137,6 +171,8 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
+      this.fileList.push(files.[0])
+      console.log(this.fileList)
       if (files.length) {
         this.form.file = files[0]
         console.log(this.form.file)
@@ -146,6 +182,7 @@ export default {
         reader.onload = (e) => {
           // console.log(e.target.result)
           this.imageUrl = e.target.result;
+          this.previewUrl.push(this.imageUrl)
         } 
         reader.readAsDataURL(this.form.file);
       }
@@ -154,7 +191,7 @@ export default {
 
       const formData = new FormData ();
       formData.append('content', this.form.content)
-      formData.append('file', this.form.file)
+      formData.append('file', this.fileList)
       formData.append('tags', this.form.tags)
       this.completed = true;
       if (this.type == 'NEW' || this.type == 'SHARE') {
@@ -217,5 +254,30 @@ export default {
 </script>
 
 <style>
+.newsfeed-form-img {
+  display: flex;
+  flex-direction : row;
+  flex-wrap : wrap;
+}
+.newsfeed-form-img-prevbox-delbtn {
+  margin: 5px;
+  top: 0;
+  right: 0;
+  position: absolute;
+  z-index: 2;
+  color: red;
+  cursor: pointer;
+}
+.newsfeed-form-img-prevbox-delbtn:hover {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0)
+}
+.newsfeed-form-img-prevbox {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed;
+  margin: 20px;
+  position: relative;
 
+}
 </style>
