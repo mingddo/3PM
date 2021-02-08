@@ -30,15 +30,15 @@ public class SnsApplication implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
 				.excludePathPatterns(
-						Arrays.asList("/v2/api-docs",
-								"/swagger-resources/**",
-								"/swagger-ui.html",
-								"/webjars/**",
-								"/users/login",
-								"/users/join",
-								"/users/dupl",
-								"/swagger-ui",
-								"/swagger-ui.html/**")
+						Arrays.asList("/api/v2/api-docs",
+								"/api/swagger-resources/**",
+								"/api/swagger-ui.html",
+								"/api/webjars/**",
+								"/api/users/login",
+								"/api/users/join",
+								"/api/users/dupl",
+								"/api/swagger-ui",
+								"/api/swagger-ui.html/**")
 						);// 적용 제외 경로
 	}
 
