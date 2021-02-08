@@ -1,31 +1,30 @@
 package com.ssafy.sns.controller;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
-import com.ssafy.sns.dto.user.KakaoDto;
-import com.ssafy.sns.dto.user.UserByFollowDto;
+import com.ssafy.sns.dto.user.DuplRequestDto;
+import com.ssafy.sns.dto.user.JwtResponseDto;
+import com.ssafy.sns.dto.user.KakaoRequestDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
-import com.ssafy.sns.service.S3Service;
 import com.ssafy.sns.service.UserServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * MyPage 관련 Controller
@@ -33,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserServiceImpl userService;
@@ -42,23 +41,85 @@ public class UserController {
 
     private final JwtService jwtService;
 
+    public static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+
+    @ApiOperation("AccessToken 재발급")
+    @GetMapping("/token")
+    public ResponseEntity<Map<String, String>> getToken(HttpServletRequest request) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Map<String, String> result = new HashMap<>();
+
+        String token = request.getHeader("Authorization");
+        String accToken = jwtService.createAccessToken(token);
+        result.put("result", accToken);
+        logger.info("Access Token 재발급 완료 {}", accToken);
+
+        status = HttpStatus.OK;
+
+        return new ResponseEntity<>(result ,status);
+    }
+
+    @ApiOperation("로그인 여부 확인")
+    @PostMapping("/login")
+    public ResponseEntity isKakaoLogin(@RequestBody KakaoRequestDto dto) {
+
+        // 해당 유저가 존재하는지 확인
+        User user = userService.findUserByKakaoId(dto.getKakaoId());
+
+        // 존재하지 않는 경우 회원 가입
+        if (user == null) {
+            return new ResponseEntity(false, HttpStatus.ACCEPTED);
+        }
+
+        JwtResponseDto jwtResponseDto = jwtService.login(user.getId());
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        return new ResponseEntity<>(jwtResponseDto, status);
+    }
+
+    @ApiOperation("회원 가입")
+    @PostMapping("/join")
+    public ResponseEntity kakaoLogin(@RequestBody KakaoRequestDto dto) {
+
+        User user = userService.joinMember(dto);
+
+        JwtResponseDto jwtResponseDto = jwtService.login(user.getId());
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        return new ResponseEntity<>(jwtResponseDto, status);
+    }
+
+    @ApiOperation("닉네임 중복 확인")
+    @PostMapping("/check")
+    public ResponseEntity dupl(@RequestBody DuplRequestDto dto) {
+
+        boolean isDuplicated = userService.isDuplicate(dto.getUsername());
+
+        return new ResponseEntity(isDuplicated, HttpStatus.OK);
+    }
+
+
     /**
      * [마이페이지 유저 정보] [프로필 정보]
      * 모든 사용자의 프로필에 들어갔을 때 처음 받는 정보
-     * username, user_id, 내가 구독하는 수, 나를 구독하는 수, 가입된 그룹 수, 프로필 소개,
+     * username, user_id, 내가 구독하는 수, 나를 구독하는 수, 가입된 그룹 수, 프로필 소개
      */
-    @GetMapping("/{id}")
-    public ResponseEntity myPageMain(@PathVariable("id") Long id) {
+    @ApiOperation("회원 프로필 정보 제공")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+    })
+    @GetMapping("/{userId}")
+    public ResponseEntity myPageMain(@PathVariable("userId") Long userId) {
 
-        // 1. email 로 회원을 찾아보고 없으면 찾는 리소스가 없다고 응답 404 Not Found
-        User userDto = userService.findUserById(id);
+        User userDto = userService.findUserById(userId);
         if (userDto == null) {
             return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
         }
 
         // 2. 회원 정보가 있는 경우 dto 에 데이터 넣고 리턴
-        int fromMeToOthersCnt = followService.fromMeToOthers(id);
-        int toMeFromOthersCnt = followService.toMeFromOthers(id);
+        int fromMeToOthersCnt = followService.fromMeToOthers(userId);
+        int toMeFromOthersCnt = followService.toMeFromOthers(userId);
         int groupCnt = 0; // 나중에 Group Entity 생기면 추가 예정
 
         UserProfileDto result = UserProfileDto.builder()
@@ -81,8 +142,13 @@ public class UserController {
      * 팔로우 알림 ( 나를 팔로우하는 사람 사진 및 username )
      * 본인만 접근가능 => 접근 제한
      */
-    @GetMapping("/{id}/alert")
-    public ResponseEntity myPageAlert(@PathVariable("id") Long id) {
+    @ApiOperation("최근활동 정보 제공")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+    })
+    @GetMapping("/{userId}/history")
+    public ResponseEntity myPageHistory(@PathVariable("userId") Long userId) {
+
 
 
         return null;
@@ -93,27 +159,35 @@ public class UserController {
      * 내가 소식 받아보는 사람 목록 ( 구독한 사람 )
      * user profile, username, user_id
      */
-    @GetMapping("/subscribe/{id}")
-    public ResponseEntity subscribeList(@PathVariable("id") Long id) {
+    @ApiOperation("내가 구독한 사람 목록")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+    })
+    @GetMapping("/{userId}/following")
+    public ResponseEntity subscribeList(@PathVariable("userId") Long userId) {
         // 0. jwt 로 본인인지 아닌지를 파악할 계획
 
         // 1. email 없는 경우
-        User userDto = userService.findUserById(id);
+        User userDto = userService.findUserById(userId);
         if (userDto == null) {
             return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
         }
 
         // 2. 정상 email 인 경우
 //        List<Long> followingList = followService.fromMeToOthersList(id);
-        List<User> users = userService.findAllById(id);
+        List<User> users = userService.findAllById(userId);
         List<SubscribeUserDto> userDtos = new ArrayList<>();
         users.stream().forEach(user -> userDtos.add(new SubscribeUserDto(user)));
 
         return new ResponseEntity(userDtos, HttpStatus.OK);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity updateUser(@PathVariable("id") Long userId, @RequestBody KakaoDto dto, HttpServletRequest request) {
+    @ApiOperation("내 프로필 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true),
+    })
+    @PutMapping("{userId}")
+    public ResponseEntity updateUser(@PathVariable("userId") Long userId, @RequestBody KakaoRequestDto dto, HttpServletRequest request) {
 
         String token = request.getHeader("Authorization");
         Long tokenId = jwtService.findId(token);
@@ -127,8 +201,12 @@ public class UserController {
         return new ResponseEntity("성공", HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") Long userId, HttpServletRequest request) {
+    @ApiOperation("내 프로필 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+    })
+    @DeleteMapping("{userId}")
+    public ResponseEntity deleteUser(@PathVariable("userId") Long userId, HttpServletRequest request) {
 
         String token = request.getHeader("Authorization");
         Long tokenId = jwtService.findId(token);
@@ -147,11 +225,15 @@ public class UserController {
      * [프로필 정보 수정 진입시]
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
      */
-    @GetMapping("/detail/{id}")
-    public ResponseEntity getProfile(@PathVariable("id") Long id) {
+    @ApiOperation("프로필 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+    })
+    @GetMapping("/{userId}/detail")
+    public ResponseEntity getProfile(@PathVariable("userId") Long userId) {
         // 0. jwt 로 본인인지 아닌지를 파악할 계획
 
-        User userDto = userService.findUserById(id);
+        User userDto = userService.findUserById(userId);
         if (userDto == null) {
             return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
         }

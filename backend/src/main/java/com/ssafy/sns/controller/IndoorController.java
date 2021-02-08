@@ -6,6 +6,9 @@ import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.IndoorServiceImpl;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
@@ -30,13 +30,17 @@ public class IndoorController {
     private final IndoorServiceImpl indoorService;
     private final JwtService jwtService;
 
-    // 해당 유저가 쓴 게시물 목록 리턴
-    @GetMapping(value = "/user/{userid}", produces = "application/json; charset=utf8")
-    public ResponseEntity<FeedListResponseDto> getFeedMyList(
-            @PathVariable("userId") Long userId,
-            @RequestParam("num") int startNum) {
-        HttpStatus status = HttpStatus.ACCEPTED;
 
+    // 내가 쓴 게시글 불러오기
+    @ApiOperation("해당 유저 작성한 꽃보다집 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "사용자 ID", required = true),
+            @ApiImplicitParam(name = "startNum", value = "시작 페이지 번호", required = true)
+    })
+    @GetMapping(value = "/user/{userId}", produces = "application/json; charset=utf8")
+    public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("userId") Long userId,
+                                                             @RequestParam("startNum") int startNum) {
+        HttpStatus status = HttpStatus.ACCEPTED;
 
         FeedListResponseDto feedListResponseDto = null;
         try {
@@ -52,8 +56,12 @@ public class IndoorController {
     }
 
     // 꽃보다집 게시글 불러오기
+    @ApiOperation("꽃보다집 전체 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startNum", value = "시작 페이지 번호", required = true)
+    })
     @GetMapping
-    public ResponseEntity<FeedListResponseDto> getFeedList(@RequestParam("num") int startNum) {
+    public ResponseEntity<FeedListResponseDto> getFeedList(@RequestParam("startNum") int startNum) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         FeedListResponseDto feedListResponseDto = null;
@@ -69,7 +77,11 @@ public class IndoorController {
         return new ResponseEntity<>(feedListResponseDto, status);
     }
 
-    @GetMapping("/{feedId}")
+    @ApiOperation("꽃보다집 상세 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @GetMapping(value = "/{feedId}", produces = "application/json; charset=utf8")
     public ResponseEntity<FeedResponseDto> getFeed(@PathVariable("feedId") Long feedId) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
@@ -86,6 +98,10 @@ public class IndoorController {
         return new ResponseEntity<>(indoorResponseDto, status);
     }
 
+    @ApiOperation("꽃보다집 글 작성")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file", value = "첨부파일")
+    })
     @PostMapping
     public ResponseEntity<Long> postFeed(IndoorRequestDto indoorRequestDto,
                                          @RequestParam(name = "files", required = false) List<MultipartFile> files,
@@ -108,11 +124,14 @@ public class IndoorController {
         return new ResponseEntity<>(result, status);
     }
 
-    @PutMapping("/{feed_id}")
-    public ResponseEntity<Long> putFeed(@PathVariable("feed_id") Long feedId,
-                                        @RequestPart(name = "files", required = false) List<MultipartFile> files,
-                                        IndoorRequestDto indoorRequestDto,
-                                        HttpServletRequest request) {
+    @ApiOperation("꽃보다집 글 수정")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true),
+            @ApiImplicitParam(name = "file", value = "첨부파일")
+    })
+    @PutMapping(value = "/{feedId}")
+    public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId, IndoorRequestDto indoorRequestDto,
+                                        @RequestPart(name = "files", required = false) List<MultipartFile> files, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -136,8 +155,12 @@ public class IndoorController {
         return new ResponseEntity<>(result, status);
     }
 
-    @DeleteMapping("/{feed_id}")
-    public ResponseEntity<String> deleteFeed(@PathVariable("feed_id") Long feedId, HttpServletRequest request) {
+    @ApiOperation("꽃보다집 글 삭제")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @DeleteMapping(value = "{feedId}")
+    public ResponseEntity<String> deleteFeed(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         String token = request.getHeader("Authorization");
@@ -159,16 +182,15 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
-    @PostMapping(value = "/clap/{uno}/{fno}")
-    public ResponseEntity<String> postClap(@PathVariable("uno") Long uid, @PathVariable("fno") Long fid) {
-        HttpStatus status = HttpStatus.ACCEPTED;
-
-        try {
-            logger.info("postClap - 꽃보다집 박수 추가 : {} {}", uid, fid);
-        } catch (Exception e) {
-            logger.warn("postClap - 꽃보다집 에러 : {}", e.getMessage());
-        }
-        return new ResponseEntity<>(status);
-    }
-
+//    @PostMapping(value = "/{post}/likes")
+//    public ResponseEntity<String> postClap(@PathVariable("uno") Long uid, @PathVariable("fno") Long fid) {
+//        HttpStatus status = HttpStatus.ACCEPTED;
+//
+//        try {
+//            logger.info("postClap - 꽃보다집 박수 추가 : {} {}", uid, fid);
+//        } catch (Exception e) {
+//            logger.warn("postClap - 꽃보다집 에러 : {}", e.getMessage());
+//        }
+//        return new ResponseEntity<>(status);
+//    }
 }

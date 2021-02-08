@@ -1,7 +1,5 @@
 package com.ssafy.sns.dto.newsfeed;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
 import lombok.*;
 
 import java.util.List;

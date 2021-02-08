@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JwtDto {
+public class JwtResponseDto {
 
     private String accToken;
     private String refToken;
