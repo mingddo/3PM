@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RestController
-@RequestMapping("/indoors")
+@RequestMapping("/api/indoors")
 public class IndoorController {
 
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);

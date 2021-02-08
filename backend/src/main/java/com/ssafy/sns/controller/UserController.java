@@ -32,7 +32,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserServiceImpl userService;
