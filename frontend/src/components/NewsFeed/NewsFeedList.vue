@@ -44,7 +44,7 @@ export default {
   name: "NewsFeedList",
   props: {
     feed: Array,
-    Category: String,
+    Category: Number,
     last: Boolean,
     next: Boolean,
   },

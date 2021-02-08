@@ -14,6 +14,7 @@ import GroupPage from '../views/GroupFeed/GroupPage.vue'
 import GroupNewsFeed from '../views/GroupFeed/GroupNewsFeed.vue'
 import GroupNewsFeedDetail from '../views/GroupFeed/GroupNewsFeedDetail.vue'
 import GroupNewsFeedForm from '../views/GroupFeed/GroupNewsFeedForm.vue'
+import GroupForm from '../views/GroupFeed/GroupForm.vue'
 
 
 Vue.use(VueRouter)
@@ -88,6 +89,11 @@ const routes = [
     path: '/groupnewsfeed-form',
     name: 'groupnewsfeedform',
     component: GroupNewsFeedForm
+  },
+  {
+    path: '/groupform',
+    name: 'groupform',
+    component: GroupForm
   },
 ]
 

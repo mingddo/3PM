@@ -11,7 +11,7 @@
 export default {
   name: "NewsFeedHeader",
   props: {
-    Category: String,
+    Category: Number,
   },
   data() {
     return {};

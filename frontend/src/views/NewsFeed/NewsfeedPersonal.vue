@@ -39,7 +39,7 @@ export default {
     return {
       feed: [],
       reco: [],
-      Category: this.$route.query.Category,
+      Category: null,
       height: 0,
       page: 0,
       last: false,
@@ -48,23 +48,35 @@ export default {
   },
   methods: {
     setFeedList() {
-      feedList(
-        this.page,
-        (res) => {
-          this.page = res.data.endNum;
-          let feeds = res.data.feedList;
-          if (feeds && feeds.length < 10) {
-            this.last = true;
+      if (this.$route.query.Category == 1) {
+        this.Category = 1
+        feedList(
+          this.page,
+          (res) => {
+            this.page = res.data.endNum;
+            let feeds = res.data.feedList;
+            if (feeds && feeds.length < 10) {
+              this.last = true;
+            }
+            for (let f of feeds) {
+              this.feed.push(f);
+            }
+            this.next = false;
+          },
+          (err) => {
+            console.log(err);
           }
-          for (let f of feeds) {
-            this.feed.push(f);
-          }
-          this.next = false;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+        );
+      } else if (this.$route.query.Category == 2) {
+        this.Category = 2
+        // 핵인싸 axios Get 무한스크롤 요청보내기
+      } else if (this.$route.query.Category == 3) {
+        this.Category = 3
+        // 청산별곡 axios Get 무한스크롤 요청보내기
+      } else if (this.$route.query.Category == 4) {
+        this.Category = 4
+        // 워커홀릭 axios Get 무한스크롤 요청보내기
+      }
     },
     setScroll() {
       window.addEventListener("scroll", () => {
