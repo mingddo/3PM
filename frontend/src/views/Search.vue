@@ -1,49 +1,46 @@
 <template>
   <section class="searchFrame">
     <div class="searchFilterList">
-      <span style="height:"></span>
       <header class="seartchFilgerHeader">
         검색 결과
       </header>
-      <hr class="searchFilterHr" />
-      <div class="searchFilterField">
-        필터
-      </div>
-      <div class="searchFilter">
-        <a
-          @click="filter = 1"
-          :class="[filter === 1 ? 'active' : '']"
-          class="searchFilterTilte"
-        >
-          모두
-        </a>
-      </div>
-      <div class="searchFilter">
-        <a
-          @click="filter = 2"
-          :class="[filter === 2 ? 'active' : '']"
-          class="searchFilterTilte"
-        >
-          게시물
-        </a>
-      </div>
-      <div class="searchFilter">
-        <a
-          @click="filter = 3"
-          :class="[filter === 3 ? 'active' : '']"
-          class="searchFilterTilte"
-        >
-          사람
-        </a>
-      </div>
-      <div class="searchFilter">
-        <a
-          @click="filter = 4"
-          :class="[filter === 4 ? 'active' : '']"
-          class="searchFilterTilte"
-        >
-          그룹
-        </a>
+      <div class="filters">
+        <div class="searchFilter">
+          <a
+            @click="filter = 1"
+            :class="[filter === 1 ? 'active' : '']"
+            class="searchFilterTilte"
+          >
+            모두
+          </a>
+        </div>
+        <div class="searchFilter">
+          <a
+            @click="filter = 2"
+            :class="[filter === 2 ? 'active' : '']"
+            class="searchFilterTilte"
+          >
+            게시물
+          </a>
+        </div>
+        <div class="searchFilter">
+          <a
+            @click="filter = 3"
+            :class="[filter === 3 ? 'active' : '']"
+            class="searchFilterTilte"
+          >
+            사람
+          </a>
+        </div>
+        <div class="searchFilter">
+          <a
+            @click="filter = 4"
+            :class="[filter === 4 ? 'active' : '']"
+            class="searchFilterTilte"
+          >
+            그룹
+          </a>
+        </div>
       </div>
     </div>
     <!-- mobile -->
@@ -93,17 +90,31 @@ export default {
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   background-color: #e4e6e9;
+}
+.filters {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2%;
 }
 
 .searchFilterList {
-  width: 360px;
-  height: 100vh;
+  width: 70%;
+  height: auto;
   padding-top: 80px;
-  position: sticky;
-  top: 0;
+  /* position: sticky; */
+  /* top: 0; */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
   background-color: #ffffff;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
 }
@@ -119,31 +130,19 @@ export default {
   font-weight: 900;
 }
 
-.searchFilterHr {
-  width: 328px;
-  height: 2px;
-  background-color: #c2c2c3;
-  border: none;
-}
-
 .searchFilterField {
-  width: 360px;
-  height: 36px;
-
-  padding: 0 16px;
+  width: 20%;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   font-size: 18px;
   font-weight: 700;
-  text-align: left;
-  margin: 4px 0;
 }
 
 .searchFilter {
-  width: 360px;
+  width: 20%;
   height: 55px;
-  padding: 0 16px;
+  /* padding: 0 16px; */
   cursor: pointer;
 }
 .searchFilterTilte.active {
@@ -156,7 +155,7 @@ export default {
   height: 100%;
   padding: 0 10px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   border-radius: 10px;
   font-size: 16px;
