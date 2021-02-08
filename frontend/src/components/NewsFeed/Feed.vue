@@ -104,55 +104,5 @@ export default {
 </script>
 
 <style>
-.feed-userprofile-box {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-.feed-userprofile-space {
-  cursor: pointer;
-  width: 70px;
-  height: 70px;
-  text-align: left;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  border-radius: 70%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.feed-userprofile-image {
-  width: 70px;
-  object-fit: cover;
-}
-.feed-userprofile-name {
-  cursor: pointer;
-}
-.feed-content-box {
-  cursor: pointer;
-  margin: 0 auto;
-  text-align: left;
-  padding: 10px;
-}
-.feed-tag-box {
-  display: flex;
-}
-.feed-footer {
-  display: flex;
-}
-.feed-date {
-  width: 50%;
-}
-.feed-like-comment-box {
-  width: 100%;
-  cursor: pointer;
-  text-align: right;
-  align-items: center;
 
-}
-.feed-footer-box{
-  text-align: right;
-  width: 100%;
-}
 </style>

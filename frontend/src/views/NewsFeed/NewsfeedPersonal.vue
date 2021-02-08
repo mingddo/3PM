@@ -12,9 +12,6 @@
           <p style="padding-top : 40px; padding-bottom:40px; text-align :center;">박수를 가장 많이 받은 게시물</p>
           <p style="display:flex;justify-content:center;align-items:center;height:240px;background-color:rgba(0,0,0,0.5)">캐러셀이 있는 장소</p>
         </div>
-        <div> <!--임시로 자리차지하기-->
-            <p style="padding-top : 40px; text-align :center;">피드 리스트</p>
-        </div>
         <NewsFeedList :feed="feed" :Category="Category" :last="last" :next="next" />
       </div>
   </div>
