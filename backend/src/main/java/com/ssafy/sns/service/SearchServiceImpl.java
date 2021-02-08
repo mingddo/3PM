@@ -1,7 +1,8 @@
 package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,29 +16,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchServiceImpl {
 
-
     private final SearchRepository searchRepository;
 
-//    private final IndoorHashtagRepository indoorHashtagRepository;
+    public List<Hashtag> searchHashtag(String keyword) {
+        return searchRepository.findHashtag(keyword);
 
-
-    public Hashtag searchHashtag(String keyword) {
-        System.out.println(keyword);
-        Hashtag hash = searchRepository.findHashtag(keyword);
-        System.out.println(hash.getTagName());
-
-        return hash;
     }
-    public List<Indoor> searchIndoorAll(String hash) {
-//        List<Indoor> searchIndoors = searchRepository.findIndoorAll(hash);
-//        System.out.println(searchIndoors.toString());
+    public List<FeedResponseDto> searchIndoorAll(Hashtag hash) {
+        List<Feed> feedList = searchRepository.findIndoorAll(hash);
+        List<FeedResponseDto> indoorResponseDtoList = new ArrayList<>();
+        for (Feed feed : feedList) {
+            indoorResponseDtoList.add(new FeedResponseDto(feed));
+        }
 
-//        List<IndoorHashtag> indoorHashtags = indoorHashtagRepository.findIndoorHashtagByHashtagTagName(hash);
+        return indoorResponseDtoList;
 
-        List<Indoor> indoors = new ArrayList<>();
-//        indoorHashtags.stream().forEach(indoorHashtag -> indoors.add(indoorHashtag.getIndoor()));
-
-        return indoors;
     }
 
 }

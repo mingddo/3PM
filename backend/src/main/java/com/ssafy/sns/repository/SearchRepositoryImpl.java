@@ -1,7 +1,7 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import org.springframework.stereotype.Repository;
 
@@ -15,17 +15,16 @@ public class SearchRepositoryImpl implements SearchRepository{
     private EntityManager em;
 
     @Override
-    public Hashtag findHashtag(String keyword) {
-//        return em.find(Hashtag.class, (long)1234);
+    public List<Hashtag> findHashtag(String keyword) {
         return em.createQuery("select h from Hashtag h where h.tagName like :tagName", Hashtag.class)
                 .setParameter("tagName", "%"+keyword+"%")
-                .getSingleResult();
+                .getResultList();
     }
 
     @Override
-    public List<Indoor> findIndoorAll(Hashtag hash) {
-        return em.createQuery("select i from Indoor i where i in (select ih.indoor from FeedHashtag ih where ih.hashtag = :id)")
-                .setParameter("id", hash)
+    public List<Feed> findIndoorAll(Hashtag hash) {
+        return em.createQuery("select f from Feed f where f.id = (select fh.feed.id from FeedHashtag fh where fh.hashtag.id = :hash)", Feed.class)
+                .setParameter("hash", hash.getId())
                 .getResultList();
     }
 
