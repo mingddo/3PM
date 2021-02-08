@@ -59,12 +59,15 @@
       type="checkbox"
       name="private"
       id="private"
-      v-model="checkedprivate"
+      v-model="form.checkedprivate"
     />
+    <button @click="createGroup">그룹만들기</button>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data(){
     return{
@@ -75,9 +78,11 @@ export default {
         groupintrouduce:null,
         checkedprivate: false,
       },
+      type: 'NEW',
       imageUrl: ``,
       previewUrl : [],
       fileList: [],
+      completed: false,
     }
   },
   methods:{
@@ -99,6 +104,67 @@ export default {
         reader.readAsDataURL(this.form.file);
       }
     },
+    async createGroup () {
+      const formData = new FormData ();
+      formData.append('file', this.fileList)
+      formData.append('grouptitle', this.form.grouptitle)
+      formData.append('groupintrouduce', this.form.groupintrouduce)
+      formData.append('private', this.form.checkedprivate)
+      formData.append('user', this.userpk)
+      this.completed = true;
+      console.log(formData)
+      if (this.type == 'NEW' || this.type == 'SHARE') {
+        // axios create 요청
+
+          // await createFeed (
+          //   formData,
+          //   () => {
+          //     this.$router.push({ name: 'groupdetail' })
+          //     // this.$router.push({ name: 'groupdetail', query: { id : res.data, Category: this.Category } })
+          //   },
+          //   (err) => {
+          //     console.log(err)
+          //     alert('인증된 유저만 작성 가능합니다.')
+          //   }
+          // )
+      } else {
+        // axios put 요청
+        if (this.userpk == this.$route.params.feed.user.id) {
+            // await updateFeed (
+            //   this.$route.params.feed.id,
+            //   formData,
+            //   (res) => {
+            //     this.$router.push({ name: 'groupdetail', query: { id : res.data, Category: this.Category } })
+            //   },
+            //   (err) => {
+            //     console.log(err)
+            //     alert('본인만 수정할 수 있습니다.')
+            //   }
+            // )
+          }
+        else {
+          alert('본인만 수정할 수 있습니다.')
+        }
+      }
+    },
+  },
+    beforeRouteLeave (to, from, next) {
+    if (this.completed) {
+      next();
+    } else {
+      const answer =
+        window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
+    }
+  },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
   },
 };
 </script>
