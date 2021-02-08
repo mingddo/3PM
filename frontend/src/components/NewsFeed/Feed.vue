@@ -1,20 +1,5 @@
 <template>
-  <article class="feed-box">
-    <div class="feed-content-box">
-      <div v-if="fd.file" @click="goToDetail">
-        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" width="100%">
-      </div>
-      <div v-else  @click="goToDetail">
-        <p v-html="fd.content">
-          <!-- {{ fd.content }} -->
-        </p>
-      </div>
-    </div>
-    
-    <div class="feed-tag-box">
-      <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div>
-    </div>
-
+  <article class="feed-box">    
     <div class="feed-userprofile-box">
       <div class="feed-userprofile-space">
         <img
@@ -33,28 +18,40 @@
           @click="goToProfile"
         >
       </div>
+      
       <div class="feed-userprofile-content">
         <div>
-          <h3 v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+          <p v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</p>
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
+          <div class="feed-date">
+          <p>{{ month }}.{{ day}} {{ time }} </p>
+          </div>
         </div>
+        <div class="feed-tag-box">
+          <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div>
+        </div>    
+      </div>
+    </div>
+    <div class="feed-content-box">
+      <div v-if="fd.file" @click="goToDetail">
+        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일">
+      </div>
+      <div v-else  @click="goToDetail">
+        <p v-html="fd.content">
+          <!-- {{ fd.content }} -->
+        </p>
       </div>
     </div>
       <div class="feed-footer">
-        <div class="feed-date">
-          <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p>
-        </div>
         <div class="feed-footer-box" @click="goToDetail">
-          <p>
-            <span>
+            <div>
               <i class="far fa-thumbs-up"></i>
               <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span>
-            </span>
-            <span>
+            </div>
+            <div>
               <i class="far fa-comment"></i>
               <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
-            </span>
-          </p>
+            </div>
         </div>
       </div>
   </article>
