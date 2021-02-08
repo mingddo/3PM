@@ -2,11 +2,11 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
-import com.ssafy.sns.dto.mypage.SubscribeUserDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.DuplRequestDto;
 import com.ssafy.sns.dto.user.JwtResponseDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
+import com.ssafy.sns.dto.user.UserFollowDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
 import com.ssafy.sns.service.UserServiceImpl;
@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,28 +158,28 @@ public class UserController {
      * 내가 소식 받아보는 사람 목록 ( 구독한 사람 )
      * user profile, username, user_id
      */
-    @ApiOperation("내가 구독한 사람 목록")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
-    })
-    @GetMapping("/{userId}/following")
-    public ResponseEntity subscribeList(@PathVariable("userId") Long userId) {
-        // 0. jwt 로 본인인지 아닌지를 파악할 계획
-
-        // 1. email 없는 경우
-        User userDto = userService.findUserById(userId);
-        if (userDto == null) {
-            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
-        }
-
-        // 2. 정상 email 인 경우
-//        List<Long> followingList = followService.fromMeToOthersList(id);
-        List<User> users = userService.findAllById(userId);
-        List<SubscribeUserDto> userDtos = new ArrayList<>();
-        users.stream().forEach(user -> userDtos.add(new SubscribeUserDto(user)));
-
-        return new ResponseEntity(userDtos, HttpStatus.OK);
-    }
+//    @ApiOperation("내가 구독한 사람 목록")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
+//    })
+//    @GetMapping("/{userId}/following")
+//    public ResponseEntity subscribeList(@PathVariable("userId") Long userId) {
+//        // 0. jwt 로 본인인지 아닌지를 파악할 계획
+//
+//        // 1. email 없는 경우
+//        User userDto = userService.findUserById(userId);
+//        if (userDto == null) {
+//            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
+//        }
+//
+//        // 2. 정상 email 인 경우
+////        List<Long> followingList = followService.fromMeToOthersList(id);
+//        List<User> users = userService.findAllById(userId);
+//        List<SubscribeUserDto> userDtos = new ArrayList<>();
+//        users.stream().forEach(user -> userDtos.add(new SubscribeUserDto(user)));
+//
+//        return new ResponseEntity(userDtos, HttpStatus.OK);
+//    }
 
     @ApiOperation("내 프로필 수정")
     @ApiImplicitParams({
@@ -278,26 +277,33 @@ public class UserController {
 //        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
 //    }
 //
-//    @ApiOperation(value = "팔로우 버튼을 누른다")
-//    @GetMapping("/{userId}/follow")
-//    public ResponseEntity<Void> followUser(HttpServletRequest request, @PathVariable("userId") Long toUserId){
-//        Long fromUserId = userService.checkUserByJwt(request).getId();
-//        followService.addFollow(fromUserId, toUserId);
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
-//
-//    @ApiOperation(value = "팔로잉한 사람들의 리스트 가져오기")
-//    @GetMapping("/{userId}/following")
-//    public ResponseEntity<List<UserByFollowDto>>getFollowingList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
-//        Long fromUserId = userService.checkUserByJwt(request).getId();
-//        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowingList(fromUserId, toUserId));
-//    }
-//
-//
-//    @ApiOperation(value = "팔로우한 사람들의 리스트가져오기")
-//    @GetMapping("/{userId}/follower")
-//    public ResponseEntity<List<UserByFollowDto>>getFollowerList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
-//        Long fromUserId =  userService.checkUserByJwt(request).getId();
-//        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowerList(fromUserId, toUserId));
-//    }
+    @ApiOperation(value = "팔로우 버튼을 누른다")
+    @GetMapping("/{userId}/follow")
+    public ResponseEntity<Void> followUser(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        String token = request.getHeader("Authorization");
+        Long tokenId = jwtService.findId(token);
+        User user = userService.findUserById(tokenId);
+
+        followService.addFollow(user.getId(), toUserId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ApiOperation(value = "팔로잉한 사람들의 리스트 가져오기")
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<List<UserFollowDto>>getFollowingList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        String token = request.getHeader("Authorization");
+        Long tokenId = jwtService.findId(token);
+        User user = userService.findUserById(tokenId);
+        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowingList(user.getId(), toUserId));
+    }
+
+
+    @ApiOperation(value = "팔로우한 사람들의 리스트가져오기")
+    @GetMapping("/{userId}/follower")
+    public ResponseEntity<List<UserFollowDto>>getFollowerList(HttpServletRequest request, @PathVariable("userId") Long toUserId){
+        String token = request.getHeader("Authorization");
+        Long tokenId = jwtService.findId(token);
+        User user = userService.findUserById(tokenId);
+        return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowerList(user.getId(), toUserId));
+    }
 }
