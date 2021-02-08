@@ -33,18 +33,25 @@ export default {
 <style>
 @media screen and (max-width: 1050px) {
   .side-bar {
-    position: relative;
+    position: fixed;
+    top : 0px;
     justify-content: space-between;
     width: 100%;
-    /* height: auto; */
+    height: 80px;
     flex-direction: row;
   }
   .nav-content {
     display: none;
   }
+  .nav-logo {
+    padding-top: 0px;
+  }
   .newsfeed {
-    width: 80%;
-    padding: 15px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .newsfeed-header{
+    width : 100%;
     margin: 0 auto;
   }
   .nav-toggle-switch {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar />
-    <div class="newsfeed">
+    <div class="newsfeed newsfeed-form">
       <NewsFeedHeader
         :Category="Category"
         class="newsfeed-header"

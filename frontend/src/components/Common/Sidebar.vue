@@ -1,13 +1,17 @@
 <template>
   <div class="side-bar"> 
       <div class="nav-toggle-switch" @click="sideBarToggle">
-        <div>
+        <div style="padding-left : 15px;">
           <i class="fas fa-bars"></i>
         </div>
       </div>
-      <div class="nav-logo" @click="goToHome">
-        <i class="far fa-clock"></i>
-        오후 세시.
+      <div class="nav-logo">
+        <i class="far fa-clock">카테고리이름</i>
+      </div>
+      <div class="nav-toggle-switch">
+        <div style="padding-right : 15px;">
+          <i class="fas fa-search"></i>
+        </div>
       </div>
       <div class="nav-content" v-if="userStatus">
         <div @click="goToPersonal">
@@ -25,7 +29,7 @@
         <div class="nav-toggle-bar-before">
           <div class="nav-logo">
             <i class="far fa-clock"></i>
-            오후 세시.
+            카테고리이름
           </div>
           <div @click="onClickSidebarPersonal">
             <i class="sidebar-fas fas fa-house-user">꽃보다 집</i>

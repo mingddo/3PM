@@ -1,11 +1,8 @@
 <template>
   <section class="feed-list-frame">
-    <div>
-      <h2>피드</h2>
-    </div>
     <div class="feed-create-btn-place">
       <i class="fas fa-plus feed-create-btn" @click="goToCreateForm"
-        >새 피드 작성</i
+        >글쓰기</i
       >
     </div>
     <div v-if="feed">
@@ -30,7 +27,7 @@
         >새 피드 작성</i
       >
     </div>
-    <div v-else :class="{ loading: !next }">
+    <div class="spinner-container" v-else :class="{ loading: !next }">
       <img
         class="spinner"
         src="https://img.icons8.com/material-two-tone/96/000000/spinner--v3.png"
@@ -68,34 +65,4 @@ export default {
 </script>
 
 <style>
-.feed-box {
-  /* border: 1px solid; */
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-.feed-box:hover {
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-.feed-create-btn-place {
-  /* margin-left: auto;0 */
-  text-align: right;
-}
-.feed-create-btn {
-  cursor: pointer;
-  border: 1px solid;
-  border-radius: 5px;
-  padding: 10px;
-}
-.feed-create-btn:hover {
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-.feed-last {
-  text-align: center;
-  margin: auto;
-}
-.loading {
-  display: none;
-}
 </style>

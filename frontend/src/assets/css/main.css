@@ -84,7 +84,6 @@ button.active {
   top: 0px;
   bottom: 0px;
   width: 300px;
-  /* height: 85%; */
   display: flex;
   background-color: white;
   flex-direction: column;
@@ -92,12 +91,17 @@ button.active {
 }
 .nav-toggle-switch {
   display: none;
-  padding: 30px;
-  font-size: 20px;
+  height: 100%;
+  /* font-size: 20px; */
 }
 .nav-toggle-switch div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  padding: 10px;
+  /* padding-left: 15px; */
 }
 
 .nav-toggle-bar-before {
@@ -129,9 +133,11 @@ button.active {
 /* Nav.vue */
 
 .nav-logo {
-  padding: 30px;
-  font-size: 30px;
-  cursor: pointer;
+  padding-top: 15px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .nav-content {
   display: flex;
