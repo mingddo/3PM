@@ -8,6 +8,15 @@
       />
       
       <section class="newsfeed-form-content">
+        <div v-if="Category == 2">
+          <div @click="chooseGroup">{{groupName}} </div>
+          <div v-if="select">
+            <!-- <input type="text"> -->
+            <div v-for="(group, idx) of groupList" :key="idx">
+              <button @click="selectGroup(group)"> {{ group }} </button>
+            </div>
+          </div>
+        </div>
         <div class="newsfeed-form-profile">
           <div class="newsfeed-form-profile-img-space">
             <img
@@ -48,16 +57,16 @@
             <label for="video"> <i class="fas fa-video"></i> 동영상 </label>
             <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
           </div>
-          <!-- <div class="newsfeed-form-img-box">
+          <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
             <button @click="getLocation">
               <i class="fas fa-map-marker-alt"></i> 현재 위치
             </button>
           </div>
-          <div class="newsfeed-form-img-box">
+          <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
             <button>
               <i class="fas fa-map"></i> 지도
             </button>
-          </div> -->
+          </div>
         </div>
         <div class="newsfeed-form-img">
           <div v-for="(view, idx) in previewUrl" :key="idx">
@@ -73,10 +82,6 @@
             사진
           </div>
         </div>
-        
-        <!-- <div v-if="imageUrl">
-          <img :src="imageUrl" alt="미리보기 이미지" width="100%">
-        </div>  -->
         <div class="newsfeed-form-submit-btn">
           <button @click="createFeed">작성하기</button>
         </div>
@@ -100,9 +105,10 @@ export default {
   },
   data() {
     return {
-      Category: this.$route.query.Category,
+      Category: 'null',
       type: 'NEW',
       completed: false,
+      select: false,
       inputTag: "",
       form: {
         tags: [],
@@ -112,9 +118,18 @@ export default {
       imageUrl: ``,
       previewUrl : [],
       fileList: [],
+      groupName: "그룹을 선택해주세요",
+      groupList: [],
     };
   },
   methods: {
+    selectGroup (group) {
+      this.groupName = group
+      this.select = false
+    },
+    chooseGroup () {
+      this.select = !this.select
+    },
     getLocation () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition (function(position) {
@@ -151,6 +166,10 @@ export default {
       this.inputTag = '';
     },
     setDefault () {
+      this.Category = this.$route.query.Category
+      if (this.Category == 2) {
+        this.groupList = ['testGroup', 'testGroup2', 'testGroup3']
+      }
       if (this.$route.params.type == 'MODI') {
         this.type = 'MODI'  
         this.form.content = this.$route.params.feed.content
@@ -196,32 +215,57 @@ export default {
       this.completed = true;
       if (this.type == 'NEW' || this.type == 'SHARE') {
         // axios create 요청
-        await createFeed (
-          formData,
-          (res) => {
-            
-            this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-          },
-          (err) => {
-            console.log(err)
-            alert('인증된 유저만 작성 가능합니다.')
-          }
-        )
-      } else {
-        // axios put 요청
-        if (this.userpk == this.$route.params.feed.user.id) {
-          await updateFeed (
-          
-            this.$route.params.feed.id,
+        if (this.Category == 1) {
+          await createFeed (
             formData,
             (res) => {
               this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
             },
             (err) => {
               console.log(err)
-              alert('본인만 수정할 수 있습니다.')
+              alert('인증된 유저만 작성 가능합니다.')
             }
           )
+        } else if (this.Category == 2) {
+          if (this.GroupName == "그룹을 선택해주세요") {
+            alert('그룹을 선택해주세요!')
+          } else {
+            // 핵인싸 create 요청
+            formData.append('groupName', this.groupName)
+          }
+        } else if (this.Category == 3) {
+          // 청산별곡 create 요청
+        } else if (this.Category == 4) {
+          // 워커홀릭 create 요청
+        } else {
+          // 404 페이지 이동
+          alert('잘못된 접근입니다.')
+        }
+      } else {
+        // axios put 요청
+        if (this.userpk == this.$route.params.feed.user.id) {
+          if (this.Category == 1) {
+            await updateFeed (
+              this.$route.params.feed.id,
+              formData,
+              (res) => {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+                alert('본인만 수정할 수 있습니다.')
+              }
+            )
+          } else if (this.Category == 2) {
+            // 핵인싸 put 요청
+          } else if (this.Category == 3) {
+            // 청산별곡 put 요청
+          } else if (this.Category == 4) {
+            // 워커홀릭 put 요청
+          } else {
+            // 404 페이지 이동
+            alert('잘못된 접근입니다.')
+          }
         } else {
           alert('본인만 수정할 수 있습니다.')
         }

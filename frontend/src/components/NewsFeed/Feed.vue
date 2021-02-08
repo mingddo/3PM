@@ -65,7 +65,7 @@ export default {
   name: 'Feed',
   props: {
     fd: Object,
-    Category: String,
+    Category: Number,
   },
   data() {
     return {
