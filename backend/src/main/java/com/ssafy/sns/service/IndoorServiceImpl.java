@@ -54,25 +54,28 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long write(Long userId, FeedRequestDto feedRequestDto, MultipartFile file) throws IOException {
+    public Long write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException {
         // 유저 정보
         User user = userRepository.findById(userId).orElse(null);
-        // 파일 업로드
-        String fileName = "";
-        if (file != null) {
-            fileName = s3Service.uploadFile(file);
-        }
+
         // 글 등록
         Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
+
+        // 파일 업로드
+        for (MultipartFile file : files) {
+            String fileName = s3Service.uploadFile(file);
+            // 파일 등록
+            fileService.addFile(fileName, indoor);
+        }
+
         // 태그 등록
         hashtagRepository.make(feedRequestDto.getTags(), indoor);
-        // 파일 등록
-        fileService.addFile(fileName, indoor);
+
         return indoor.getId();
     }
 
     @Override
-    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, MultipartFile file) {
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
         // 글 가져오기
         Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
         if (indoor.getUser().getId().equals(userId)) {

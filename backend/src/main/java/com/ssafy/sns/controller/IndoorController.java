@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
@@ -28,6 +29,7 @@ public class IndoorController {
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
     private final IndoorServiceImpl indoorService;
     private final JwtService jwtService;
+
 
     // 내가 쓴 게시글 불러오기
     @ApiOperation("해당 유저 작성한 꽃보다집 전체 조회")
@@ -102,7 +104,8 @@ public class IndoorController {
     })
     @PostMapping
     public ResponseEntity<Long> postFeed(IndoorRequestDto indoorRequestDto,
-                                         @RequestParam(name = "file", required = false) MultipartFile file, HttpServletRequest request) {
+                                         @RequestParam(name = "files", required = false) List<MultipartFile> files,
+                                         HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -110,7 +113,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.write(userId, indoorRequestDto, file);
+            result = indoorService.write(userId, indoorRequestDto, files);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -128,7 +131,7 @@ public class IndoorController {
     })
     @PutMapping(value = "/{feedId}")
     public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId, IndoorRequestDto indoorRequestDto,
-                                        @RequestPart(name = "file", required = false) MultipartFile file, HttpServletRequest request) {
+                                        @RequestPart(name = "files", required = false) List<MultipartFile> files, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -136,7 +139,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.modify(userId, feedId, indoorRequestDto, file);
+            result = indoorService.modify(userId, feedId, indoorRequestDto, files);
             if (result == -1L) {
                 logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
                 status = HttpStatus.UNAUTHORIZED;
