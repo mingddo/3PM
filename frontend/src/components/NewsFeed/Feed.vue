@@ -126,7 +126,6 @@ export default {
   width: 70px;
   object-fit: cover;
 }
-
 .feed-userprofile-name {
   cursor: pointer;
 }
@@ -136,9 +135,6 @@ export default {
   text-align: left;
   padding: 10px;
 }
-/* .feed-content-box:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-} */
 .feed-tag-box {
   display: flex;
 }
