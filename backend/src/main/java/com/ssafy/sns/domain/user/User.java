@@ -2,6 +2,7 @@ package com.ssafy.sns.domain.user;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.clap.FeedClap;
+import com.ssafy.sns.domain.comment.Comment;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,6 +47,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedClap> feedClapList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+
     public void addFeedClap(FeedClap feedClap) {
         if (feedClapList == null) feedClapList = new ArrayList<>();
         feedClapList.add(feedClap);
@@ -55,5 +59,16 @@ public class User extends BaseTimeEntity {
     public void deleteFeedClap(FeedClap feedClap) {
         feedClapList.remove(feedClap);
         feedClap.setUser(null);
+    }
+
+    public void addComment(Comment comment) {
+        if (commentList == null) commentList = new ArrayList<>();
+        commentList.add(comment);
+        comment.setUser(this);
+    }
+
+    public void deleteComment(Comment comment) {
+        commentList.remove(comment);
+        comment.setUser(null);
     }
 }

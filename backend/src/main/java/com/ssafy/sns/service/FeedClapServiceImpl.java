@@ -4,8 +4,8 @@ import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.user.SimpleUserDto;
-import com.ssafy.sns.repository.FeedFeedClapRepositoryImpl;
-import com.ssafy.sns.repository.IndoorRepositoryImpl;
+import com.ssafy.sns.repository.FeedClapRepositoryImpl;
+import com.ssafy.sns.repository.FeedRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FeedClapServiceImpl implements ClapService {
 
-    private final FeedFeedClapRepositoryImpl feedClapRepository;
+    private final FeedClapRepositoryImpl feedClapRepository;
     private final UserRepository userRepository;
-    private final IndoorRepositoryImpl indoorRepository;
+    private final FeedRepositoryImpl indoorRepository;
 
     @Override
     public void changeClap(Long userId, Long feedId) {

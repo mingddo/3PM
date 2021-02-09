@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class FeedFeedClapRepositoryImpl implements FeedClapRepository {
+public class FeedClapRepositoryImpl implements FeedClapRepository {
 
     private final EntityManager em;
 

@@ -12,20 +12,17 @@ import java.util.List;
 public interface FeedRepository {
 
     // 내가 쓴글 불러오기
-    public List<Feed> findMyList(Long id, int num);
+    List<Feed> findMyList(Long id, int num);
 
     // 한페이지 불러오기
-    public List<Feed> findList(int num);
+    List<Feed> findList(int num);
 
     // 피드 글 불러오기
-    public Feed findById(Long feedId);
+    Feed findById(Long feedId);
 
     // 피드 글쓰기
-    Feed save(FeedRequestDto feedRequestDto, User user);
+    Indoor save(Indoor indoor);
 
     // 피드 글삭제
-    public void remove(Long feedId);
-
-    // 피드 글수정
-    public void update(Long feedId, FeedRequestDto feedRequestDto);
+    void remove(Feed feed);
 }

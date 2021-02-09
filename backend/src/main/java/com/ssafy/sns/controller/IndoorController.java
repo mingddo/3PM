@@ -1,6 +1,7 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
@@ -11,7 +12,6 @@ import com.ssafy.sns.service.IndoorServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class IndoorController {
 
         FeedListResponseDto feedListResponseDto = null;
         try {
-            feedListResponseDto = indoorService.readMyList(userId, startNum);
+            feedListResponseDto = indoorService.findMyList(userId, startNum);
             logger.info("getFeedMyList = 꽃보다집 내 글 리스트 가져오기 : {}", startNum);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -114,12 +114,8 @@ public class IndoorController {
                                          HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
-
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
-
         try {
-            result = indoorService.write(userId, indoorRequestDto, files);
+            result = indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto, files);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -137,12 +133,12 @@ public class IndoorController {
     })
     @PutMapping(value = "/{feedId}")
     public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId, IndoorRequestDto indoorRequestDto,
-                                        @RequestPart(name = "files", required = false) List<MultipartFile> files, HttpServletRequest request) {
+                                        @RequestPart(name = "files", required = false) List<MultipartFile> files,
+                                        HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
+        Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
             result = indoorService.modify(userId, feedId, indoorRequestDto, files);
@@ -169,17 +165,11 @@ public class IndoorController {
     public ResponseEntity<String> deleteFeed(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
+        Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
-            if (indoorService.delete(userId, feedId)) {
-                logger.info("deleteFeed - 꽃보다집 글 삭제 : {}", feedId);
-                status = HttpStatus.OK;
-            } else {
-                logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
-                status = HttpStatus.UNAUTHORIZED;
-            }
+            indoorService.delete(userId, feedId);
+            status = HttpStatus.OK;
         } catch (Exception e) {
             logger.warn("deleteFeed - 꽃보다집 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
@@ -196,13 +186,9 @@ public class IndoorController {
     public ResponseEntity<String> postClap(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        // 유저 정보 불러오기
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
-
         // 박수 토글
         try {
-            feedClapService.changeClap(userId, feedId);
+            feedClapService.changeClap(jwtService.findId(request.getHeader("Authorization")), feedId);
             logger.info("postClap - 꽃보다집 박수 토글");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -233,5 +219,22 @@ public class IndoorController {
         }
 
         return new ResponseEntity<>(resultMap, status);
+    }
+
+    @ApiOperation("꽃보다집 댓글 작성")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @PostMapping(value = "/{feedId}/comment")
+    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
+                                            @RequestBody CommentRequestDto commentRequestDto,
+                                            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Long result = null;
+
+
+
+        return new ResponseEntity<>(status);
     }
 }

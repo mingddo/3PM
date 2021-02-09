@@ -4,7 +4,7 @@ import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
-import com.ssafy.sns.repository.FeedFeedClapRepositoryImpl;
+import com.ssafy.sns.repository.FeedClapRepositoryImpl;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 public class SearchServiceImpl implements SearchService{
 
     private final SearchRepository searchRepository;
-    private final FeedFeedClapRepositoryImpl feedClapRepository;
+    private final FeedClapRepositoryImpl feedClapRepository;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {

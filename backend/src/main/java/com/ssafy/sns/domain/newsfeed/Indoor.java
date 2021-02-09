@@ -3,6 +3,7 @@ package com.ssafy.sns.domain.newsfeed;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +24,8 @@ public class Indoor extends Feed {
         this.test = test;
     }
 
-    public void update(String content, String test) {
-        super.update(content);
-        this.test = test;
+    public void update(IndoorRequestDto indoorRequestDto) {
+        super.update(indoorRequestDto.getContent());
+        this.test = indoorRequestDto.getTest();
     }
 }

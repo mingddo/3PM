@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface FeedClapRepository {
 
-    public FeedClap save(FeedClap feedClap);
+    FeedClap save(FeedClap feedClap);
 
-    public Optional<FeedClap> findClap(User user, Feed feed);
+    Optional<FeedClap> findClap(User user, Feed feed);
 
-    public void delete(FeedClap feedClap);
+    void delete(FeedClap feedClap);
 
-    public List<FeedClap> findClapAll(Feed feed);
+    List<FeedClap> findClapAll(Feed feed);
 }
