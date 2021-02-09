@@ -23,9 +23,9 @@
       <h3>
         모든 피드를 확인했습니다. 새로운 피드를 작성해주세요.
       </h3>
-      <i class="fas fa-plus feed-create-btn" @click="goToCreateForm"
+      <!-- <i class="fas fa-plus feed-create-btn" @click="goToCreateForm"
         >새 피드 작성</i
-      >
+      > -->
     </div>
     <div class="spinner-container" v-else :class="{ loading: !next }">
       <img

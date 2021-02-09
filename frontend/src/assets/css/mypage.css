@@ -1,0 +1,252 @@
+
+/* mypage */
+.myPageHeaderFrame {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.myPageHeader {
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.profileInfo1 {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.profileInfo1 h1 {
+  width: 100%;
+  text-align: center;
+  margin : 5px;
+}
+.myPageInroduce {
+}
+
+.myPageSubscribe {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  margin : 15px;
+}
+
+.myPageSubscribed {
+  width: 100%;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profielSubscribedNone {
+  display: none;
+}
+
+.profileInfoDetailFrame {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileInfoDetail {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile_none {
+  display: none;
+}
+
+.profileDetailInfo {
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+}
+
+.myPageHeaderhr {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.myPageBottom {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myPageTabLink {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myPageTabLink a {
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.myPageTabLinkContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.activeBar {
+  width: 100px;
+  height: 3px;
+}
+.activeBar.active {
+  border-bottom: solid 3px #1876f2;
+}
+
+.myPageTabLink a:hover {
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  cursor: pointer;
+}
+
+.myPageTabLink a.active {
+  color: #1876f2;
+}
+
+.settings {
+  height: 30px;
+  margin-right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.myPagearticleFrame {
+  width: 100%;
+  height: auto;
+  padding: 15px 0;
+  background-color: #f0f2f5;
+}
+
+.myPagearticle {
+}
+
+.myPageActivity {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.myPagemainSection {
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+.profileImgFrame {
+  margin: 5px;
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pofileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+}
+
+/* activity */
+.ActivityComponent {
+  width: 100%;
+}
+.myPageActivityHeader {
+  width: 90%;
+  margin: auto;
+  /* padding: 5px 50px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.myPageActivityhr {
+  width: 90%;
+}
+
+.myPageActivityHeaderMoreInfo {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fa-angle-right {
+  font-size: 30px;
+}
+
+.myPageActivityContentFrame {
+  width: 90%;
+  margin: auto;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* mypage activity */
+
+.activityComponentFrame {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin: 10px 0;
+}
+
+.activityContent {
+  width: 60%;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
