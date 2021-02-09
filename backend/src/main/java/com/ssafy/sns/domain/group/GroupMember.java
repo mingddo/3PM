@@ -15,7 +15,7 @@ public class GroupMember extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_user_id")
+    @Column(name = "group_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,7 +36,7 @@ public class GroupMember extends BaseTimeEntity {
     }
 
 
-    public void joinGroup(Group gruop) {
+    public void joinGroup(Group group) {
         this.group = group;
     }
 

@@ -3,14 +3,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://spring-study.cfhtw7hbyeyq.ap-northeast-2.rds.amazonaws.com:3306/sns?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
-    username: root
-    password: ssafy208
+    username: melon
+    password: ssafymelon
 
 
   # jpa settings
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     generate-ddl: true
     show-sql: true
     database: mysql

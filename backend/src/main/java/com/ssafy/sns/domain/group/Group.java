@@ -3,16 +3,16 @@ package com.ssafy.sns.domain.group;
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.dto.group.GroupReqDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
+@Table(name = "sns_group")
 @Entity
 public class Group extends BaseTimeEntity {
 
@@ -21,15 +21,20 @@ public class Group extends BaseTimeEntity {
     @Column(name = "group_id")
     private Long id;
 
+    @Column(name = "group_name")
+    private String name;
+
+    @Column(name = "group_desc")
+    private String description;
+
+    @Column(name = "group_img")
+    private String groupImg;
+
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<GroupMember> groupMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Insider> insiders = new ArrayList<>();
-
-    private String name;
-    private String description;
-    private String groupImg;
 
     @Builder
     public Group(String name, String description) {
@@ -58,5 +63,4 @@ public class Group extends BaseTimeEntity {
         this.name = reqDto.getName();
         this.description = reqDto.getDescription();
     }
-
 }
