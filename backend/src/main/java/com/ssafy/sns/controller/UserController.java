@@ -114,24 +114,24 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity myPageMain(@PathVariable("userId") Long userId) {
 
-        User userDto = userService.findUserById(userId);
-        if (userDto == null) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
             return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
         }
 
         // 2. 회원 정보가 있는 경우 dto 에 데이터 넣고 리턴
         int fromMeToOthersCnt = followService.fromMeToOthers(userId);
         int toMeFromOthersCnt = followService.toMeFromOthers(userId);
-        int groupCnt = 0; // 나중에 Group Entity 생기면 추가 예정
+        int groupCnt = user.getGroupMembers().size(); // 나중에 Group Entity 생기면 추가 예정
 
         UserProfileDto result = UserProfileDto.builder()
-                .username(userDto.getNickname())
-                .user_id(userDto.getId())
-                .user_img(userDto.getImg())
+                .username(user.getNickname())
+                .user_id(user.getId())
+                .user_img(user.getImg())
                 .fromMeToOthersCnt(fromMeToOthersCnt)
                 .toMeFromOthersCnt(toMeFromOthersCnt)
                 .groupCnt(groupCnt)
-                .introduce(userDto.getIntroduce())
+                .introduce(user.getIntroduce())
                 .build();
 
         return new ResponseEntity(result, HttpStatus.OK);
