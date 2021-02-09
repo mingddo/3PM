@@ -184,6 +184,10 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
+    @ApiOperation("꽃보다집 좋아요")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
     @PostMapping(value = "/{feedId}/likes")
     public ResponseEntity<String> postClap(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
