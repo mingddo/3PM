@@ -3,7 +3,7 @@
     <Sidebar />
     <div class="newsfeed newsfeed-form">
       <NewsFeedHeader
-        :Category="Category"
+        :Category="Number(Category)"
         class="newsfeed-header"
       />
       
@@ -58,15 +58,22 @@
             <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
           </div>
           <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
-            <button @click="getLocation">
+            <!-- <button @click="getLocation">
               <i class="fas fa-map-marker-alt"></i> 현재 위치
-            </button>
+            </button> -->
           </div>
           <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
-            <button>
+            <button @click="revealMap">
               <i class="fas fa-map"></i> 지도
             </button>
           </div>
+        </div>
+        <div>
+          <inputmap v-if="showMap" @sendLocation="sendLocation"/>
+            <div v-if="location">
+              {{ location.place_name }}
+              {{ location.address_name }}
+            </div>
         </div>
         <div class="newsfeed-form-img">
           <div v-for="(view, idx) in previewUrl" :key="idx">
@@ -96,16 +103,18 @@ import { createFeed } from '@/api/feed.js'
 import { updateFeed } from '@/api/feed.js'
 import { mapState } from 'vuex'
 import Sidebar from '../../components/Common/Sidebar.vue';
+import Inputmap from '../../components/NewsFeed/inputmap.vue';
 
 export default {
   name: 'NewsfeedForm',
   components: {
     NewsFeedHeader,
     Sidebar,
+    Inputmap,
   },
   data() {
     return {
-      Category: 'null',
+      Category: 0,
       type: 'NEW',
       completed: false,
       select: false,
@@ -120,9 +129,18 @@ export default {
       fileList: [],
       groupName: "그룹을 선택해주세요",
       groupList: [],
+      location: null,
+      showMap: false,
     };
   },
   methods: {
+    sendLocation (place) {
+      // this.showMap = false
+      this.location = place
+    },
+    revealMap () {
+      this.showMap = !this.showMap;
+    },
     selectGroup (group) {
       this.groupName = group
       this.select = false
@@ -130,21 +148,22 @@ export default {
     chooseGroup () {
       this.select = !this.select
     },
-    getLocation () {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition (function(position) {
-          alert(`위도는${ position.coords.latitude } 경도는 ${ position.coords.longitude } `);
-        }, function(error) {
-          console.log(error);
-        }, {
-          enableHighAccuracy: false,
-          maximumAge: 0,
-          timeout: Infinity
-        });
-      } else {
-        alert('GPS를 지원하지 않습니다.')
-      }
-    },
+    // getLocation () {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition (function(position) {
+    //       // this.x = position.coords.latitude
+    //       alert(`위도는${ position.coords.latitude } 경도는 ${ position.coords.longitude } `);
+    //     }, function(error) {
+    //       console.log(error);
+    //     }, {
+    //       enableHighAccuracy: false,
+    //       maximumAge: 0,
+    //       timeout: Infinity
+    //     });
+    //   } else {
+    //     alert('GPS를 지원하지 않습니다.')
+    //   }
+    // },
     deleteTag (tag) {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
@@ -212,6 +231,7 @@ export default {
       formData.append('content', this.form.content)
       formData.append('file', this.fileList)
       formData.append('tags', this.form.tags)
+      console.log(formData)
       this.completed = true;
       if (this.type == 'NEW' || this.type == 'SHARE') {
         // axios create 요청
@@ -276,6 +296,9 @@ export default {
     this.setDefault();
     // this.getLocation();
   },
+  mounted () {
+    console.log(this)
+  },
   beforeRouteLeave (to, from, next) {
     if (this.completed) {
       next();
@@ -298,6 +321,9 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
 .newsfeed-form-img {
   display: flex;
   flex-direction : row;
