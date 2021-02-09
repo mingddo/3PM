@@ -15,11 +15,13 @@ import GroupNewsFeed from '../views/GroupFeed/GroupNewsFeed.vue'
 import GroupNewsFeedDetail from '../views/GroupFeed/GroupNewsFeedDetail.vue'
 import GroupNewsFeedForm from '../views/GroupFeed/GroupNewsFeedForm.vue'
 import GroupForm from '../views/GroupFeed/GroupForm.vue'
+import NotFound from '../views/NotFound.vue'
 
 
 Vue.use(VueRouter)
 
 const routes = [
+
   {
     path: '/',
     name: 'Home',
@@ -95,6 +97,15 @@ const routes = [
     name: 'groupform',
     component: GroupForm
   },
+  {
+    path: "/404",
+    name: "notFound",
+    component: NotFound
+},
+{
+  path: '/:pathMatch(.*)*',
+  redirect: "/404"
+},
 ]
 
 const router = new VueRouter({
