@@ -22,8 +22,9 @@ public class FeedResponseDto {
     private String file;
     private List<String> tags = new ArrayList<>();
     private LocalDateTime date;
+    private int likeCnt;
 
-    public FeedResponseDto(Feed feed) {
+    public FeedResponseDto(Feed feed, int likeCnt) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
@@ -37,6 +38,6 @@ public class FeedResponseDto {
         } else {
             this.file = null;
         }
-
+        this.likeCnt = likeCnt;
     }
 }

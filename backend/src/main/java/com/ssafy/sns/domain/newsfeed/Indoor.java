@@ -1,10 +1,12 @@
 package com.ssafy.sns.domain.newsfeed;
 
+import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,6 +26,5 @@ public class Indoor extends Feed {
     public void update(String content, String test) {
         super.update(content);
         this.test = test;
-
     }
 }
