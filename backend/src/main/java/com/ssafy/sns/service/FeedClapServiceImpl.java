@@ -57,6 +57,5 @@ public class FeedClapServiceImpl implements ClapService {
                 .stream()
                 .map(SimpleUserDto::new)
                 .collect(Collectors.toList());
-
     }
 }
