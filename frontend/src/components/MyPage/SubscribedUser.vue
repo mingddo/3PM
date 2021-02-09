@@ -42,12 +42,6 @@ export default {
   justify-content: center;
 }
 
-.pofileImg {
-  width: 90px;
-  /* height: 1px; */
-  object-fit: cover;
-}
-
 .subscriberName {
   width: 60%;
   height: 70px;

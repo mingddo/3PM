@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <div class="GroupResultFrame">
-      <div class="resultImgFrame">
-        <img src="@/assets/loverduck.png" alt="" />
+  <div class="GroupResultFrame">
+    <div class="resultImgFrame">
+      <img src="@/assets/loverduck.png" alt="" />
+    </div>
+    <div class="reultDetail">
+      <!-- 글 내용 -->
+      <div class="rsultDetailTilte">group name</div>
+      <div class="resultDetailcontent">
+        본 교육 과정은 삼성전자가 주관하고 고용노동부와 함께 합니다.(전체 교육
+        운영은 멀티캠퍼스에 위탁 실시) 주관삼성 로고후원고용노동부 로고
       </div>
-      <div class="reultDetail">
-        <!-- 글 내용 -->
-        <div class="rsultDetailTilte">group name</div>
-        <div class="resultDetailcontent">
-          본 교육 과정은 삼성전자가 주관하고 고용노동부와 함께 합니다.(전체 교육
-          운영은 멀티캠퍼스에 위탁 실시) 주관삼성 로고후원고용노동부 로고
-        </div>
-        <div class="resultDetailcnt"><i class="fas fa-users"></i>1500명</div>
-      </div>
+      <div class="resultDetailcnt"><i class="fas fa-users"></i>1500명</div>
     </div>
   </div>
 </template>
@@ -26,12 +24,16 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .GroupResultFrame {
   width: 100%;
-  height: 94px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  padding: 12px 24px;
 }
 .resultImgFrame {
   width: 70px;

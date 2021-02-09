@@ -59,28 +59,6 @@ export default {
   border: 1px solid;
   padding: 20px;
 }
-.feed-box {
-  border: 1px solid;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-}
-.feed-box:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-}
-.feed-create-btn-place {
-  /* margin-left: auto;0 */
-  text-align: right;
-}
-.feed-create-btn {
-  cursor: pointer;
-  border: 1px solid;  
-  border-radius: 5px;
-  padding: 10px;
-}
-.feed-create-btn:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-}
 .feed-last {
   text-align: center;
   margin: auto;

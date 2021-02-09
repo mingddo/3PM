@@ -111,12 +111,12 @@ export default {
 .feed-userprofile-name {
   cursor: pointer;
 }
-.feed-content-box {
+/* .feed-content-box {
   cursor: pointer;
   margin: 0 auto;
   text-align: left;
   padding: 10px;
-}
+} */
 /* .feed-content-box:hover {
   box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 } */

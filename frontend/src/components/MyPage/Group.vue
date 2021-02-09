@@ -41,12 +41,6 @@ export default {
   justify-content: center;
 }
 
-.pofileImg {
-  width: 70px;
-  /* height: 1px; */
-  object-fit: cover;
-}
-
 .activityContent {
   width: 60%;
   height: 70px;

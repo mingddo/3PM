@@ -2,10 +2,6 @@
   <div>
     <Sidebar />
     <div class="newsfeed">
-      <NewsFeedHeader
-        :Category="Category"
-        class="newsfeed-header"
-      />
       <section v-if="fd" v-cloak class="feed-detail">
         <div class="feed-detail-userprofile-box">
           <div class="feed-userprofile-space">
@@ -41,9 +37,7 @@
 
         <article class="feed-detail-content-box">
           <div v-if="fd.file">
-            <div v-for="(file, idx) in fd.file" :key="idx">
-              <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" alt="업로드 파일" class="feed-detail-img">
-            </div>
+            <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" class="feed-detail-img">
           </div>
           <div v-if="Category == 2 || Category == 3">
             위치정보!
@@ -71,10 +65,11 @@
         <div class="feed-detail-like-comment">
           <span>
               <i class="far fa-thumbs-up"></i>
-              좋아요가 <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
+              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span>
           </span>
           <span>
-            <i class="far fa-comment"></i> 댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
+            <i class="far fa-comment"></i>
+            <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
           </span>
         </div>
 
@@ -117,7 +112,6 @@
 
 <script>
 // import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
-import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { deleteFeed } from '@/api/feed.js'
@@ -126,7 +120,6 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 export default {
   name: 'NewsfeedDetail',
   components: {
-    NewsFeedHeader,
     Sidebar,
     // NewsFeedCommentItem,
   },
@@ -233,5 +226,8 @@ export default {
 </script>
 
 <style scoped>
-
+.newsfeed {
+  position: absolute;
+  top : 80px;
+}
 </style>
