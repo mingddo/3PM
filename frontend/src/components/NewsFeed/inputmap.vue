@@ -1,0 +1,332 @@
+<template>
+  <div class="map_wrap">
+    <button @click="getLocation">
+      <i class="fas fa-map-marker-alt"></i> 현재 위치
+    </button>
+    <div class="map-space">
+      <div class="map-about">
+        <input class="map-input" type="text" id="keyword" v-model.trim="keyword" @keyup.enter="searchPlaces">
+        <hr>  
+        <div id="menu_wrap" class="bg_white map-info" v-show="!fold">
+          <div class="option">
+          </div>
+          <ul id="placesList">
+            <li class="item" v-for="(p, idx) in items" :key="idx">
+              <span :class="`markerbg marker_${index+1}`">
+                <div class="info" @click="select(p)">
+                  <h5>
+                    {{ p.place_name }}      
+                  </h5>
+                  <span v-if="p.road_address_name">
+                    <span>
+                      {{ p.road_address_name }}
+                    </span>
+                    <span class="jibun gray">
+                      {{ p.address_name }}
+                    </span>
+                  </span>
+                  <span v-else>
+                    {{ p.address_name }}
+                  </span>
+                  <span class="tel">
+                    {{ p.phone }}
+                  </span>
+                </div>
+              </span>
+            </li>
+          </ul>
+          <div id="pagination"></div>
+
+          <!-- <div v-for="(item, idx) in items" :key="idx"> 
+            <div @click="select(item)">{{ item }}</div>
+          </div> -->
+        </div>
+      </div>
+      <div id="map" class="map"></div>
+    </div>
+    <!-- <span id="centerAddr"></span> -->
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      fold: true,
+      selected: false,
+      markers: [],
+      maps: null,
+      place: null,
+      infowindow: {},
+      keyword: '',
+      items: [],
+      selectLocation: {},
+      // fragment: [],
+      index: null,
+      placePos: {},
+      pageNum: null,
+      lat: 36.353793856820566,
+      lng: 127.33999670291793,
+      type: null,
+    }
+  },
+  mounted() {
+    window.kakao && window.kakao.maps
+      ? this.setMap()
+      : this.addKakaoMapScript();
+  },
+  methods: {
+    displayCenterInfo(result, status) {
+      console.log('정보 찾기')
+    if (status === kakao.maps.services.Status.OK) {
+        console.log('ok', result)
+        // var infoDiv = document.getElementById('centerAddr');
+        for(let i = 0; i < result.length; i++) {
+          this.keyword = result[i].address.address_name
+          // this.keyword = result[i].address_name
+          // console.log(this.keyword)
+          this.searchPlaces();
+          
+        }
+      }    
+    },
+    panto (y, x) {
+      let moveLatLon = new kakao.maps.LatLng(y,x);
+      return this.map.panTo(moveLatLon)
+    },
+    handleGeoSuccess(position) {
+      this.lat = position.coords.latitude;
+      this.lng = position.coords.longitude;
+      console.log(this.lat, this.lng)
+      this.panto (this.lat, this.lng)
+      let firstPlacePosition = new kakao.maps.LatLng(this.lat, this.lng)
+      this.addMarker(firstPlacePosition, 0)
+      let geocoder = new kakao.maps.services.Geocoder();
+      // console.log(geocoder)
+      // geocoder.coord2RegionCode(this.lng, this.lat, this.displayCenterInfo);
+      geocoder.coord2Address(this.lng, this.lat, this.displayCenterInfo);      
+    },
+    handleGeoError() {
+      console.log("Cant Access geo location");
+    },
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+        this.handleGeoSuccess, //위치 정보 얻었을떄 실행되는 함수
+        this.handleGeoError);  //위치 정보 error시 실행되는 함수
+      } else {
+        alert('GPS를 지원하지 않습니다.')
+      }
+    },
+    select (item) {
+      console.log(item)
+      this.selected = true;
+      this.selectLocation = item
+      this.lat = item.y
+      this.lng = item.x
+      this.fold = true
+      this.setMap()
+      this.$emit('sendLocation', this.selectLocation)
+      this.setZoomable(false);
+    },
+    setMap () {
+      let mapContainer = document.getElementById('map'), mapOption = {
+        center : new kakao.maps.LatLng(this.lat, this.lng),
+        level: 3
+      };
+      this.map = new kakao.maps.Map(mapContainer, mapOption)
+      let firstPlacePosition = new kakao.maps.LatLng(this.lat, this.lng)
+      this.addMarker(firstPlacePosition, 0)
+    },
+    addKakaoMapScript() {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.setMap);
+      script.src =
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=4eefdb70288a52331d930637bf0a9161&libraries=services,clusterer,drawing";
+      document.head.appendChild(script);
+    },
+    searchPlaces() {
+      if (this.keyword != '') {
+        this.fold = false;
+        this.place = new kakao.maps.services.Places();
+        this.infowindow = new kakao.maps.InfoWindow({zIndex:1});
+        console.log(this.infowindow)
+        this.setZoomable(true);
+        this.place.keywordSearch(this.keyword, this.placeSearchCB)
+      } else {
+        alert('검색어를 입력해주세요')
+      }
+    },
+    placeSearchCB (data, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        // console.log('data', data, pagination)
+        this.displayPlaces(data)
+        this.displayPagination(pagination)
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색결과가 존재하지 않습니다.')
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
+      }
+    },
+    displayInfowindow(marker, title) {
+      console.log('title', title)
+      let content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+      this.infowindow.setContent(content);
+      this.infowindow.open(this.map, marker);
+    },
+    displayPlaces(places) {
+      this.items = places
+      // let listEl = document.getElementById('placesList')
+      let menuEl = document.getElementById('menu_wrap')
+      console.log(menuEl)
+      let bounds = new kakao.maps.LatLngBounds()
+
+      // this.removeAllChildNods(listEl);
+      this.removeMarker();
+      for (let i = 0; i < places.length; i++) {
+        let placePosition = new kakao.maps.LatLng(places[i].y, places[i].x)
+        let marker = this.addMarker(placePosition, i)
+        bounds.extend(placePosition);
+
+        kakao.maps.event.addListener(marker, 'mouseover', () => {
+          this.infowindow.open(this.map, marker)
+          this.displayInfowindow(marker, places[i].place_name);
+        })
+
+        kakao.maps.event.addListener(marker, 'mouseout', () => {
+          this.infowindow.close()
+        })
+        kakao.maps.event.addListener(marker, 'click', ()=> {
+          // console.log(places[i])
+          this.selectLocation = places[i]
+          this.$emit('sendLocation', this.selectLocation)
+        })
+      }
+      menuEl.scrollTop = 0;
+      this.map.setBounds(bounds);
+    },
+    addMarker(position, idx) {
+    let imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+      imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+      imgOptions =  {
+        spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+        spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+        offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+      },
+      markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+        marker = new kakao.maps.Marker({
+        position: position, // 마커의 위치
+        image: markerImage 
+      });
+
+      marker.setMap(this.map); // 지도 위에 마커를 표출합니다
+      this.markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+      if (this.selectLocation) {
+        kakao.maps.event.addListener(marker, 'mouseover', () => {
+          this.infowindow.open(this.map, marker)
+          this.displayInfowindow(marker, this.selectLocation.place_name);
+        })
+
+        kakao.maps.event.addListener(marker, 'mouseout', () => {
+          this.infowindow.close()
+        })
+      }
+      return marker;
+    },
+    displayPagination(pagination) {
+      let paginationEl = document.getElementById('pagination')
+      let fragment = document.createDocumentFragment();
+      let i
+
+      // 기존에 추가된 페이지번호를 삭제합니다
+      while (paginationEl.hasChildNodes()) {
+        paginationEl.removeChild (paginationEl.lastChild);
+      }
+      for (i=1; i<=pagination.last; i++) {
+        let el = document.createElement('button');
+        console.log('el', el)
+        el.href = "#";
+        el.innerHTML = i;
+
+        if (i===pagination.current) {
+          el.className = 'on';
+        } else {
+          el.onclick = (function(i) {
+            return function() {
+              pagination.gotoPage(i);
+            }
+          })(i);
+        }
+        fragment.appendChild(el);
+      }
+      paginationEl.appendChild(fragment);
+    },
+    removeMarker() {
+      for ( let i = 0; i < this.markers.length; i++ ) {
+        this.markers[i].setMap(null);
+      }   
+      this.markers = [];
+    },
+    removeAllChildNods(el) {   
+      while (el.hasChildNodes()) {
+        el.removeChild (el.lastChild);
+      }
+    },
+    setZoomable(zoomable) {
+    // 마우스 휠로 지도 확대,축소 가능여부를 설정합니다
+      this.map.setZoomable(zoomable);
+    }
+  }
+};
+</script>
+
+<style>
+.map {
+  width: 65%;
+  height: 40vh;
+}
+.map-space {
+  display: flex;
+  width: 100%;
+  /* height: 100%; */
+}
+.map-info {
+  width: 100%;
+  overflow: scroll;
+  height: 30vh;
+}
+.map-about {
+  width: 35%;
+  /* height: 100%; */
+}
+.map-input {
+  width: 100%;
+}
+@media screen and (max-width: 1050px) {
+  .map-space {
+    /* display: flex; */
+    display: block;
+    width: 100%;
+    /* height: 30vh; */
+    /* height: 500px; */
+    /* height: 100%; */
+  }
+  .map {
+    width: 100%;
+    height: 40vh;
+    /* height: 50%; */
+    /* height: 30vh; */
+  }
+  .map-about {
+    width: 100%;
+    /* height: 100%; */
+  }
+  .map-info {
+    width: 100%;
+    height: 50vh;
+  }
+}
+</style>
