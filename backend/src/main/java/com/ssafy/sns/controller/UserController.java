@@ -1,6 +1,7 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.DuplRequestDto;
@@ -19,8 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -153,34 +156,6 @@ public class UserController {
         return null;
     }
 
-    /**
-     * [구독 탭 선택]
-     * 내가 소식 받아보는 사람 목록 ( 구독한 사람 )
-     * user profile, username, user_id
-     */
-//    @ApiOperation("내가 구독한 사람 목록")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true)
-//    })
-//    @GetMapping("/{userId}/following")
-//    public ResponseEntity subscribeList(@PathVariable("userId") Long userId) {
-//        // 0. jwt 로 본인인지 아닌지를 파악할 계획
-//
-//        // 1. email 없는 경우
-//        User userDto = userService.findUserById(userId);
-//        if (userDto == null) {
-//            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
-//        }
-//
-//        // 2. 정상 email 인 경우
-////        List<Long> followingList = followService.fromMeToOthersList(id);
-//        List<User> users = userService.findAllById(userId);
-//        List<SubscribeUserDto> userDtos = new ArrayList<>();
-//        users.stream().forEach(user -> userDtos.add(new SubscribeUserDto(user)));
-//
-//        return new ResponseEntity(userDtos, HttpStatus.OK);
-//    }
-
     @ApiOperation("내 프로필 수정")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "회원 번호", required = true),
@@ -247,36 +222,22 @@ public class UserController {
      * [프로필 정보 수정] Post => Put
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
      */
-//    @ApiOperation("사용자의 프로필 정보를 수정한다.")
-//    @PostMapping("/{id}")
-//    public ResponseEntity updateProfile(@PathVariable("id") Long id, ProfileRequestDto dto) throws IOException {
-//        // 0. jwt 로 본인인지 아닌지를 파악할 계획
-//
-//        User userDto = userService.findUserById(id);
-//        if (userDto == null) {
-//            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
-//        }
-//
-//        userService.updateUserProfile(userDto.getId(), dto);
-//
-//        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
-//    }
-//
-//    @ApiOperation("사용자의 프로필 정보를 수정한다.")
-//    @PostMapping("/{id}")
-//    public ResponseEntity updateProfile(@PathVariable("id") Long id, @RequestPart("file") MultipartFile file, ProfileRequestDto dto) throws IOException {
-//        // 0. jwt 로 본인인지 아닌지를 파악할 계획
-//
-//        User userDto = userService.findUserById(id);
-//        if (userDto == null) {
-//            return new ResponseEntity("회원 정보가 없습니다", HttpStatus.NOT_FOUND);
-//        }
-//
-//        userService.updateUserProfile(userDto.getId(), dto, file);
-//
-//        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
-//    }
-//
+    @ApiOperation("사용자의 프로필 정보를 수정한다.")
+    @PutMapping("/{id}")
+    public ResponseEntity updateProfile(@PathVariable("id") Long id,
+                                        @RequestPart("file") MultipartFile file,
+                                        ProfileRequestDto dto,
+                                        HttpServletRequest request) throws IOException {
+        User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+
+        if (id != user.getId()) {
+            return new ResponseEntity("잘못된 접근입니다", HttpStatus.UNAUTHORIZED);
+        }
+        userService.updateUserProfile(user.getId(), dto, file);
+
+        return new ResponseEntity("업데이트 성공", HttpStatus.OK);
+    }
+
     @ApiOperation(value = "팔로우 버튼을 누른다")
     @GetMapping("/{userId}/follow")
     public ResponseEntity<Void> followUser(HttpServletRequest request, @PathVariable("userId") Long toUserId){
