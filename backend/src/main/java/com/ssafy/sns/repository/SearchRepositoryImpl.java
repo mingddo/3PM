@@ -15,28 +15,30 @@ public class SearchRepositoryImpl implements SearchRepository{
     private EntityManager em;
 
     @Override
-    public List<Hashtag> findHashtag(String keyword) {
+    public List<Hashtag> searchHashtags(String keyword) {
         return em.createQuery("select h from Hashtag h where h.tagName like :tagName", Hashtag.class)
                 .setParameter("tagName", "%"+keyword+"%")
                 .getResultList();
     }
 
     @Override
-    public List<Feed> findIndoorAll(Hashtag hash) {
+    public List<Feed> searchFeeds(Hashtag hash) {
         return em.createQuery("select f from Feed f where f.id = (select fh.feed.id from FeedHashtag fh where fh.hashtag.id = :hash)", Feed.class)
                 .setParameter("hash", hash.getId())
                 .getResultList();
     }
 
     @Override
-    public User findUserOne(String keyword) {
-        return em.find(User.class, keyword);
-    }
-
-    @Override
-    public List<User> findUserAll(String keyword) {
+    public List<User> searchUsers(String keyword) {
         return em.createQuery("select u from User u where u.nickname like :nickname", User.class)
                 .setParameter("nickname", "%"+keyword+"%")
                 .getResultList();
     }
+
+//    @Override
+//    public List<User> searchGroups(String keyword) {
+//        return em.createQuery("select u from User u where u.nickname like :nickname", User.class)
+//                .setParameter("nickname", "%"+keyword+"%")
+//                .getResultList();
+//    }
 }

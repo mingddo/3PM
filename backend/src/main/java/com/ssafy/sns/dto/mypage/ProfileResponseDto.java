@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class ProfileResponseDto {
 
-    private String nickname;
     private Long user_id;
+    private String nickname;
     private String user_img;
     private String introduce;
 
