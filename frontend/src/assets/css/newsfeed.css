@@ -92,7 +92,7 @@
   position: absolute;
   top: 300px;
   border-radius: 50px;
-  background-color: gray;
+  background-color: white;
   /* padding: 15px; */
   /* margin: 0 auto; */
   margin-left: 300px;
@@ -121,14 +121,8 @@
 /* NewsfeedList */
 
 .feed-box {
-  /* border: 1px solid; */
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-.feed-box:hover {
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 50px;
 }
 .feed-create-btn-place {
   /* margin-left: auto;0 */
@@ -252,15 +246,6 @@
   border: 1px solid;
   padding: 20px;
 }
-.feed-box {
-  border: 1px solid;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 10px;
-}
-.feed-box:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-}
 .feed-create-btn-place {
   /* margin-left: auto;0 */
   text-align: right;
@@ -273,4 +258,79 @@
 }
 .feed-create-btn:hover {
   box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+}
+
+/* feed */
+.feed-userprofile-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 5px;
+}
+.feed-userprofile-space {
+  cursor: pointer;
+  width: 60px;
+  text-align: left;
+  border: solid 1px rgba(0, 0, 0, 0.2);
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin : 5px;
+}
+.feed-userprofile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.feed-userprofile-content {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+.feed-userprofile-name {
+  cursor: pointer;
+}
+.feed-content-box {
+  cursor: pointer;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.feed-content-box div {
+  display: flex;
+  justify-content: center;
+}
+.feed-content-box img {
+  max-width: 100%;
+  max-height: 300px;
+}
+.feed-content-box p {
+  width: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.feed-tag-box {
+  display: flex;
+}
+.feed-footer {
+}
+.feed-date {
+  /* width: 50%; */
+}
+.feed-like-comment-box {
+  width: 100%;
+  cursor: pointer;
+  text-align: right;
+  align-items: center;
+
+}
+.feed-footer-box{
+  display: flex;
+  padding : 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  justify-content: space-between;
 }

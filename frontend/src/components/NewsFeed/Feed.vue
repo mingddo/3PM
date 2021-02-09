@@ -1,20 +1,5 @@
 <template>
-  <article class="feed-box">
-    <div class="feed-content-box">
-      <div v-if="fd.file" @click="goToDetail">
-        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" width="100%">
-      </div>
-      <div v-else  @click="goToDetail">
-        <p v-html="fd.content">
-          <!-- {{ fd.content }} -->
-        </p>
-      </div>
-    </div>
-    
-    <div class="feed-tag-box">
-      <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div>
-    </div>
-
+  <article class="feed-box">    
     <div class="feed-userprofile-box">
       <div class="feed-userprofile-space">
         <img
@@ -33,28 +18,40 @@
           @click="goToProfile"
         >
       </div>
+      
       <div class="feed-userprofile-content">
         <div>
-          <h3 v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+          <p v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</p>
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
+          <div class="feed-date">
+          <p>{{ month }}.{{ day}} {{ time }} </p>
+          </div>
         </div>
+        <div class="feed-tag-box">
+          <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div>
+        </div>    
+      </div>
+    </div>
+    <div class="feed-content-box">
+      <div v-if="fd.file" @click="goToDetail">
+        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일">
+      </div>
+      <div v-else  @click="goToDetail">
+        <p v-html="fd.content">
+          <!-- {{ fd.content }} -->
+        </p>
       </div>
     </div>
       <div class="feed-footer">
-        <div class="feed-date">
-          <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p>
-        </div>
         <div class="feed-footer-box" @click="goToDetail">
-          <p>
-            <span>
+            <div>
               <i class="far fa-thumbs-up"></i>
               <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span>
-            </span>
-            <span>
+            </div>
+            <div>
               <i class="far fa-comment"></i>
               <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
-            </span>
-          </p>
+            </div>
         </div>
       </div>
   </article>
@@ -104,55 +101,5 @@ export default {
 </script>
 
 <style>
-.feed-userprofile-box {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-.feed-userprofile-space {
-  cursor: pointer;
-  width: 70px;
-  height: 70px;
-  text-align: left;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  border-radius: 70%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.feed-userprofile-image {
-  width: 70px;
-  object-fit: cover;
-}
-.feed-userprofile-name {
-  cursor: pointer;
-}
-.feed-content-box {
-  cursor: pointer;
-  margin: 0 auto;
-  text-align: left;
-  padding: 10px;
-}
-.feed-tag-box {
-  display: flex;
-}
-.feed-footer {
-  display: flex;
-}
-.feed-date {
-  width: 50%;
-}
-.feed-like-comment-box {
-  width: 100%;
-  cursor: pointer;
-  text-align: right;
-  align-items: center;
 
-}
-.feed-footer-box{
-  text-align: right;
-  width: 100%;
-}
 </style>

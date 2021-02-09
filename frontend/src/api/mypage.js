@@ -1,23 +1,24 @@
-import { createInstance } from './index.js'
+import { AuthorizationInstance } from './index.js'
 
-const instance = createInstance();
+const instance = AuthorizationInstance();
 
 function getprofileInfo(user_id,success,fail){
   instance
-    .get(`profile/${user_id}`)
+    .get(`users/${user_id}`)
     .then(success)
     .catch(fail)
 }
 
-function getprofileFeed(id,num,success,fail){
+function getprofileFeed(userid, pk,success,fail){
   instance
-    .get(`indoor/list/${id}/${num}`)
+    .get(`indoors/user/${userid}`, {
+      params: {
+        startNum: pk
+      }
+    } )
     .then(success)
     .catch(fail)
 }
-
-
-
 
 export {
   getprofileInfo,getprofileFeed
