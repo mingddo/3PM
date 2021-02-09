@@ -107,9 +107,13 @@ export default {
     async createGroup () {
       const formData = new FormData ();
       formData.append('file', this.fileList)
+      console.log(formData)
       formData.append('grouptitle', this.form.grouptitle)
+      console.log(formData)
       formData.append('groupintrouduce', this.form.groupintrouduce)
+      console.log(formData.keys())
       formData.append('private', this.form.checkedprivate)
+      console.log(formData)
       formData.append('user', this.userpk)
       this.completed = true;
       console.log(formData)
