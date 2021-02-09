@@ -42,15 +42,15 @@ export default {
   box-sizing: border-box;
 }
 .resultListFrame {
-  width: 686px;
-  height: 397px;
+  width: 100%;
+  height: 500px;
   margin-bottom: 16px;
   border-radius: 10px;
   background-color: #ffffff;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
 }
 .resultCategoryTitle {
@@ -72,13 +72,18 @@ export default {
 }
 .resultContents {
   width: 100%;
-  height: 360.5px;
+  height: 90%;
+  margin: auto;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .resultMoresee {
   width: 100%;
-  height: 36px;
+  height: 45px;
   margin: auto;
   display: flex;
   justify-content: center;

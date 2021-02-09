@@ -56,7 +56,7 @@ export default {
   box-sizing: border-box;
 }
 .resultListFrame {
-  width: 686px;
+  width: 100%;
   height: 233px;
   margin-bottom: 16px;
   border-radius: 10px;
