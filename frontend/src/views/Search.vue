@@ -25,7 +25,7 @@
           <div class="filters">
             <div class="searchFilter">
               <a
-                @click="filter = 1"
+                @click="filterchange1"
                 :class="[filter === 1 ? 'active' : '']"
                 class="searchFilterTilte"
               >
@@ -34,7 +34,7 @@
             </div>
             <div class="searchFilter">
               <a
-                @click="filter = 2"
+                @click="filterchange2"
                 :class="[filter === 2 ? 'active' : '']"
                 class="searchFilterTilte"
               >
@@ -43,7 +43,7 @@
             </div>
             <div class="searchFilter">
               <a
-                @click="filter = 3"
+                @click="filterchange3"
                 :class="[filter === 3 ? 'active' : '']"
                 class="searchFilterTilte"
               >
@@ -52,7 +52,7 @@
             </div>
             <div class="searchFilter">
               <a
-                @click="filter = 4"
+                @click="filterchange4"
                 :class="[filter === 4 ? 'active' : '']"
                 class="searchFilterTilte"
               >
@@ -64,16 +64,38 @@
       </div>
       <!-- 컴포넌트 -->
       <div class="searchResultList">
-        <GroupResults v-if="filter === 1" :category="category_group" />
-        <GroupResults v-if="filter === 1" :category="category_person" />
+        <span v-if="filter === 1">
+          <GroupResults
+            :category="category_group"
+            :groupresults="search_result_all.userList.body"
+          />
+        </span>
+        <span v-if="filter === 1">
+          <GroupResults
+            :groupresults="search_result_all.userList.body"
+            :category="category_person"
+          />
+        </span>
         <span v-if="filter === 1 || filter === 2">
-          <SerachResult v-for="(result, idx) in search_result" :key="idx" />
+          <SerachResult
+            v-for="(result, idx) in search_result_feed"
+            :key="idx"
+            :result="result"
+          />
         </span>
         <span v-if="filter === 3">
-          <FilterGroup />
+          <FilterGroup
+            v-for="(grouplist, idx) in search_result_user"
+            :key="idx"
+            :grouplist="grouplist"
+          />
         </span>
         <span v-if="filter === 4">
-          <FilterGroup />
+          <GroupResult
+            v-for="(grouplist, idx) in search_result_group"
+            :key="idx"
+            :grouplist="grouplist"
+          />
         </span>
       </div>
     </div>
@@ -86,15 +108,76 @@ import GroupResults from "@/components/Search/GroupResults.vue";
 import SerachResult from "../components/Search/SerachResult.vue";
 import FilterGroup from "../components/Search/FilterGroup.vue";
 import { searchall, searchfeed, searchuser } from "@/api/search.js";
+import GroupResult from "../components/Search/GroupResult.vue";
 
 export default {
-  components: { GroupResults, SerachResult, FilterGroup },
+  components: { GroupResults, SerachResult, FilterGroup, GroupResult },
   data() {
     return {
-      search_result: [{}, {}],
-      search_result_all: [],
-      search_result_user: [],
-      search_result_feed: [],
+      search_result: [],
+      search_result_all: {
+        feedList: {
+          headers: {},
+          body: [],
+          statusCode: "OK",
+          statusCodeValue: 200,
+        },
+        userList: {
+          headers: {},
+          body: [
+            {
+              id: 1,
+              nickname: "test1",
+              img: null,
+            },
+            {
+              id: 1,
+              nickname: "test2",
+              img: null,
+            },
+            {
+              id: 1,
+              nickname: "test3",
+              img: null,
+            },
+            {
+              id: 1,
+              nickname: "test4",
+              img: null,
+            },
+          ],
+          statusCode: "OK",
+          statusCodeValue: 200,
+        },
+      },
+      search_result_user: [
+        {
+          id: 0,
+          img: null,
+          nickname: "string",
+        },
+      ],
+      search_result_feed: [
+        {
+          indoorResponseDtoList: [
+            {
+              content: "string",
+              date: "2021-02-09T11:11:00.289Z",
+              file: "string",
+              id: 0,
+              likeCnt: 0,
+              tags: ["string"],
+              user: {
+                id: 0,
+                img: null,
+                nickname: "string",
+              },
+            },
+          ],
+          tagName: "string",
+        },
+      ],
+      search_result_group: [],
       category_group: "그룹",
       category_person: "사람",
       filter: 1,
@@ -103,44 +186,90 @@ export default {
   },
   methods: {
     Allsearch() {
-      searchall(
-        this.keyword,
-        (res) => {
-          this.search_result_all = res.data;
-          console.log(res.data);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    },
-    Usersearch() {
-      searchuser(
-        this.keyword,
-        (res) => {
-          this.search_result_user = res.data;
-          console.log(res.data);
-        },
-        (err) => {
-          console.err(err);
-        }
-      );
-    },
-    Feedsearch() {
-      searchfeed(
-        this.keyword,
-        (res) => {
-          this.search_result_feed = res.data;
-          console.log(res.data);
-        },
-        (err) => {
-          console.err(err);
-        }
-      );
+      if (this.filter === 1) {
+        searchall(
+          this.keyword,
+          (res) => {
+            this.search_result_all = res.data;
+            console.log(res.data);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else if (this.filter === 2) {
+        searchfeed(
+          this.keyword,
+          (res) => {
+            this.search_result_feed = res.data;
+            console.log(res.data);
+          },
+          (err) => {
+            console.err(err);
+          }
+        );
+      } else if (this.filter === 3) {
+        searchuser(
+          this.keyword,
+          (res) => {
+            this.search_result_user = res.data;
+            console.log(res.data);
+          },
+          (err) => {
+            console.err(err);
+          }
+        );
+      }
     },
     keywordClear() {
       this.keyword = "";
     },
+    checkquery() {
+      if (this.$route.query.query === undefined) {
+        this.filter = 1;
+        console.log(this.filter);
+      } else {
+        this.filter = 2;
+        this.keyword = this.$route.query.query;
+        console.log(this.keyword, this.filter);
+        this.Allsearch();
+      }
+    },
+    filterchange1() {
+      if (this.keyword === "") {
+        this.filter = 1;
+      } else {
+        this.filter = 1;
+        this.Allsearch();
+      }
+    },
+    filterchange2() {
+      if (this.keyword === "") {
+        this.filter = 2;
+      } else {
+        this.filter = 2;
+        this.Allsearch();
+      }
+    },
+    filterchange3() {
+      if (this.keyword === "") {
+        this.filter = 3;
+      } else {
+        this.filter = 3;
+        this.Allsearch();
+      }
+    },
+    filterchange4() {
+      if (this.keyword === "") {
+        this.filter = 4;
+      } else {
+        this.filter = 4;
+        this.Allsearch();
+      }
+    },
+  },
+  created() {
+    this.checkquery();
   },
 };
 </script>
@@ -221,7 +350,7 @@ input:focus {
 .searchFilterList {
   width: 100%;
   height: auto;
-  padding: 12px;
+  padding: 0;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -269,7 +398,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 18px;
   font-weight: 550;
 }
@@ -279,7 +408,7 @@ input:focus {
 }
 
 .searchResultFrame {
-  width: 750px;
+  width: 65%;
   margin: 0 auto;
   padding-top: 80px;
 }
