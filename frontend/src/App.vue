@@ -10,6 +10,7 @@ import {mapState} from 'vuex'
 // import Nav from './components/Common/Nav.vue'
 import "@/assets/css/main.css"
 import "@/assets/css/newsfeed.css"
+import "@/assets/css/mypage.css"
 
 export default {
   components: { },
@@ -33,11 +34,11 @@ export default {
 <style>
 @media screen and (max-width: 1050px) {
   .side-bar {
-    position: fixed;
+    position: absolute;
     top : 0px;
     justify-content: space-between;
     width: 100%;
-    height: 80px;
+    height: 50px;
     flex-direction: row;
   }
   .nav-content {
