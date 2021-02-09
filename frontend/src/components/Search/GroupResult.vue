@@ -1,16 +1,22 @@
 <template>
-  <div class="GroupResultFrame">
-    <div class="resultImgFrame">
-      <img src="@/assets/loverduck.png" alt="" />
+  <div class="Group-ResultFrame">
+    <div class="Group-resultImgFrame">
+      <img
+        src="@/assets/loverduck.png"
+        alt=""
+        class="Group-resultImgFrame-img"
+      />
     </div>
-    <div class="reultDetail">
+    <div class="Group-reultDetail">
       <!-- 글 내용 -->
-      <div class="rsultDetailTilte">group name</div>
-      <div class="resultDetailcontent">
+      <div class="Group-rsultDetailTilte">group name</div>
+      <div class="Group-resultDetailcontent">
         본 교육 과정은 삼성전자가 주관하고 고용노동부와 함께 합니다.(전체 교육
         운영은 멀티캠퍼스에 위탁 실시) 주관삼성 로고후원고용노동부 로고
       </div>
-      <div class="resultDetailcnt"><i class="fas fa-users"></i>1500명</div>
+      <div class="Group-resultDetailcnt">
+        <i class="fas fa-users"></i>1500명
+      </div>
     </div>
   </div>
 </template>
@@ -20,6 +26,11 @@ export default {
   props: {
     grouplist: Object,
   },
+  data() {
+    return {};
+  },
+  methods: {},
+  mounted() {},
 };
 </script>
 
@@ -35,7 +46,7 @@ export default {
   align-items: center;
   padding: 12px 24px;
 }
-.resultImgFrame {
+.Group-resultImgFrame {
   width: 70px;
   height: 70px;
   margin-left: 12px;
@@ -45,13 +56,13 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.resultImgFrame img {
+.Group-resultImgFrame-img {
   width: 100px;
   object-fit: cover;
 }
 
-.reultDetail {
-  width: 480px;
+.Group-reultDetail {
+  width: 75%;
   height: 92px;
   margin: auto 0;
   margin-left: 12px;
@@ -60,14 +71,14 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
 }
-.rsultDetailTilte {
+.Group-rsultDetailTilte {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 5px;
 }
 
-.resultDetailcontent {
-  width: 490px;
+.Group-resultDetailcontent {
+  width: 100%;
   margin-bottom: 5px;
   font-size: 16px;
   overflow: hidden;
@@ -76,7 +87,7 @@ export default {
   word-wrap: break-word;
 }
 
-.resultDetailcnt {
+.Group-resultDetailcnt {
   font-size: 16px;
 }
 </style>

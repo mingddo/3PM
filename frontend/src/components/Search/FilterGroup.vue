@@ -1,20 +1,29 @@
 <template>
-  <div>
-    <div class="filterGroupFrame">
-      <div class="filterGroup">
-        <div class="filterGroupImgFrame">
-          <div class="filterGroupImg">
-            <img src="@/assets/loverduck.png" alt="" />
-          </div>
+  <div class="filterGroupFrame">
+    <div class="filterGroup">
+      <div class="filterGroupImgFrame">
+        <div class="filterGroupImg" @click="gotoProfile">
+          <img
+            class="filterGroupImg-img"
+            v-if="grouplist.img"
+            :src="grouplist.img"
+            alt=""
+          />
+          <img
+            v-else
+            src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
+            alt="유저프로필이미지"
+            class="filterGroupImg-img"
+          />
         </div>
-        <!-- <div class="resultHeader">sss</div> -->
-        <div class="filterGroupDetail">
-          <div class="filterGroupDetailTitle">명도균</div>
-          <div class="filterGroupDetailDescribe">
-            <div>🏋🏻‍♂️🏡</div>
-            <div>명도균님의 소식을 받고있습니다.</div>
-          </div>
-        </div>
+      </div>
+      <!-- <div class="resultHeader">sss</div> -->
+      <div class="filterGroupDetail">
+        <div class="filterGroupDetailTitle">{{ grouplist.nickname }}</div>
+        <!-- <div class="filterGroupDetailDescribe">
+          <div>🏋🏻‍♂️🏡</div>
+          <div>명도균님의 소식을 받고있습니다.</div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -24,13 +33,17 @@
 export default {
   components: {},
   props: {
-    category: String,
+    grouplist: Object,
   },
   data() {
     return {
-      grouplist: [{}, {}, {}, {}],
       search_grouplist: [{}, {}, {}],
     };
+  },
+  methods: {
+    gotoProfile() {
+      this.$router.push({ name: "MyPage", query: { name: this.grouplist.id } });
+    },
   },
 };
 </script>
@@ -40,7 +53,7 @@ export default {
   box-sizing: border-box;
 }
 .filterGroupFrame {
-  width: 686px;
+  width: 100%;
   height: 115px;
   margin-bottom: 16px;
   border-radius: 10px;
@@ -52,7 +65,7 @@ export default {
   align-items: center;
 }
 .filterGroup {
-  width: 654px;
+  width: 100%;
   height: 83px;
   margin: 16px;
   display: flex;
@@ -76,13 +89,13 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.filterGroupImg img {
+.filterGroupImg-img {
   width: 80px;
   object-fit: cover;
 }
 
 .filterGroupDetail {
-  width: 580px;
+  width: 80%;
   height: 83px;
   display: flex;
   flex-direction: column;

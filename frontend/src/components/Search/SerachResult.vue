@@ -2,33 +2,46 @@
   <div>
     <div class="resultListFrame">
       <div class="resultHeader">
-        <div class="resultImgFrame">
-          <img src="@/assets/loverduck.png" alt="" />
+        <div class="resultImgFrame" @click="goToProfile">
+          <img
+            v-if="result.indoorResponseDtoList[0].user.img"
+            class="resultImgFrame-img"
+            :src="result.indoorResponseDtoList[0].user.img"
+            alt="유저프로필이미지"
+          />
+          <img
+            v-else
+            src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
+            alt="유저프로필이미지"
+            class="resultImgFrame-img"
+          />
         </div>
         <div class="resultTitleInfo">
-          <div class="resultTitle">서울맛집</div>
+          <div @click="goToProfile" class="resultTitle">
+            {{ result.indoorResponseDtoList[0].user.nickname }}
+          </div>
           <div class="resultCategory">핵인싸</div>
         </div>
       </div>
       <!-- <div class="resultHeader">sss</div> -->
       <div class="categorytitlehr"></div>
-      <div class="resultDetailFrame">
+      <div class="resultDetailFrame" @click="gotoDetail">
         <div class="resultDetailUper">
           <div class="resultDetail">
             <div class="resulttag">
               <div class="resultdate">
-                1월 11일<i class="fas fa-globe-asia"></i>
+                {{ result.indoorResponseDtoList[0].date
+                }}<i class="fas fa-globe-asia"></i>
               </div>
               <div class="resulttags">
-                짜릿해 #❤딱 저장해놨다가 다음에 #서울맛집추천 #성수맛집추천
-                #서울데이트코스 #서울가볼만한곳
+                {{ result.indoorResponseDtoList[0].tags }}
               </div>
             </div>
           </div>
           <div class="resultthumbnail"></div>
         </div>
         <div class="resultBottomFrame">
-          <div>❤ 700명이 좋아합니다</div>
+          <div>{{ result.indoorResponseDtoList[0].likeCnt }}</div>
           <div>댓글 105개</div>
         </div>
       </div>
@@ -41,12 +54,28 @@ export default {
   components: {},
   props: {
     category: String,
+    result: Object,
   },
   data() {
     return {
       grouplist: [{}, {}, {}, {}],
       search_grouplist: [{}, {}, {}],
     };
+  },
+  methods: {
+    goToProfile() {
+      this.$router.push({
+        name: "MyPage",
+        query: { name: this.result.user.id },
+      });
+    },
+    gotoDetail() {
+      this.$router.push({
+        name: "NewsfeedDetail",
+        query: { id: this.indoorResponseDtoList.id, Category: this.Category },
+        params: { fd: this.fd },
+      });
+    },
   },
 };
 </script>
@@ -89,7 +118,7 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.resultImgFrame img {
+.resultImgFrame-img {
   width: 80px;
   object-fit: cover;
 }
@@ -108,6 +137,7 @@ export default {
   font-size: 18px;
   font-weight: 600;
   text-align: left;
+  cursor: pointer;
 }
 
 .resultCategory {
