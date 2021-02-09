@@ -1,8 +1,11 @@
 package com.ssafy.sns.domain.user;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
-import com.ssafy.sns.domain.group.Group;
+
 import com.ssafy.sns.domain.group.GroupMember;
+
+import com.ssafy.sns.domain.clap.FeedClap;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,6 +48,7 @@ public class User extends BaseTimeEntity {
     private UserConfig userConfig;
 
 
+
     // 유저가 속한 그룹 리스트
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<GroupMember> groupMembers = new ArrayList<>();
@@ -57,5 +61,20 @@ public class User extends BaseTimeEntity {
     //그룹 가입
     public void addGroup(GroupMember groupMember) {
         this.groupMembers.add(groupMember);
+    }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedClap> feedClapList = new ArrayList<>();
+
+    public void addFeedClap(FeedClap feedClap) {
+        if (feedClapList == null) feedClapList = new ArrayList<>();
+        feedClapList.add(feedClap);
+        feedClap.setUser(this);
+    }
+
+    public void deleteFeedClap(FeedClap feedClap) {
+        feedClapList.remove(feedClap);
+        feedClap.setUser(null);
+
     }
 }

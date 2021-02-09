@@ -15,8 +15,8 @@ public class IndoorResponseDto extends FeedResponseDto {
     private String test;
 
     @Builder
-    public IndoorResponseDto(Indoor indoor) {
-        super(indoor);
+    public IndoorResponseDto(Indoor indoor, int likeCnt) {
+        super(indoor, likeCnt);
         this.test = indoor.getTest();
     }
 
