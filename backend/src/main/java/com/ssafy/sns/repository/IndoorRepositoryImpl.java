@@ -1,7 +1,5 @@
 package com.ssafy.sns.repository;
 
-import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
@@ -41,7 +39,7 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Feed findOne(Long id) {
+    public Feed findById(Long id) {
         return em.find(Indoor.class, id);
     }
 
@@ -66,7 +64,7 @@ public class IndoorRepositoryImpl implements FeedRepository {
 
     @Override
     public void update(Long feedId, FeedRequestDto feedRequestDto) {
-        Indoor indoor = (Indoor) findOne(feedId);
+        Indoor indoor = (Indoor) findById(feedId);
         indoor.update(feedRequestDto.getContent(), ((IndoorRequestDto)feedRequestDto).getTest());
     }
 }

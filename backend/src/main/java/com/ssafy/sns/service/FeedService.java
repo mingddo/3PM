@@ -25,7 +25,4 @@ public interface FeedService {
 
     // 피드 글수정
     public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files);
-
-    // 박수 추가
-    public Long addClap(Long uid, Long fid);
 }

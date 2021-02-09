@@ -5,12 +5,13 @@ import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ClapRepository {
+public interface FeedClapRepository {
 
     public FeedClap save(FeedClap feedClap);
 
-    public List<FeedClap> findClap(User user, Feed feed);
+    public Optional<FeedClap> findClap(User user, Feed feed);
 
     public void delete(FeedClap feedClap);
 

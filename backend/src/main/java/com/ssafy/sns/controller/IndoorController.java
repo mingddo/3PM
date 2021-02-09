@@ -1,5 +1,6 @@
 package com.ssafy.sns.controller;
 
+import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
@@ -10,6 +11,7 @@ import com.ssafy.sns.service.IndoorServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
@@ -184,7 +188,7 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
-    @ApiOperation("꽃보다집 좋아요")
+    @ApiOperation("꽃보다집 박수 토글")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
     })
@@ -196,10 +200,10 @@ public class IndoorController {
         String token = request.getHeader("Authorization");
         Long userId = jwtService.findId(token);
 
-        // 좋아요
+        // 박수 토글
         try {
             feedClapService.changeClap(userId, feedId);
-            logger.info("postClap - 꽃보다집 박수");
+            logger.info("postClap - 꽃보다집 박수 토글");
             status = HttpStatus.OK;
         } catch (Exception e) {
             logger.warn("postClap - 꽃보다집 박수 에러 : {}", e.getMessage());
@@ -207,5 +211,27 @@ public class IndoorController {
         }
 
         return new ResponseEntity<>(status);
+    }
+
+    @ApiOperation("꽃보다집 박수 명단 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @GetMapping(value = "/{feedId}/likes")
+    public ResponseEntity<Map<String, Object>> getClap(@PathVariable("feedId") Long feedId) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Map<String, Object> resultMap = new HashMap<>();
+        List<User> users = null;
+        // 박수 불러오기
+        try {
+            resultMap.put("users", feedClapService.clapUserList(feedId));
+            logger.info("getClap - 꽃보다집 박수 조회");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getClap - 꽃보다집 박수 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
     }
 }

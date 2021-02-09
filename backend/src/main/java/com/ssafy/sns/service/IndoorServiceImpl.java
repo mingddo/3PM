@@ -1,11 +1,10 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
-import com.ssafy.sns.repository.FeedClapRepositoryImpl;
+import com.ssafy.sns.repository.FeedFeedClapRepositoryImpl;
 import com.ssafy.sns.repository.HashtagRepositoryImpl;
 import com.ssafy.sns.repository.IndoorRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
@@ -25,7 +24,7 @@ public class IndoorServiceImpl implements FeedService {
 
     private final IndoorRepositoryImpl indoorRepository;
     private final HashtagRepositoryImpl hashtagRepository;
-    private final FeedClapRepositoryImpl feedClapRepository;
+    private final FeedFeedClapRepositoryImpl feedClapRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
@@ -52,7 +51,7 @@ public class IndoorServiceImpl implements FeedService {
 
     @Override
     public FeedResponseDto read(Long id) {
-        Indoor indoor = (Indoor) indoorRepository.findOne(id);
+        Indoor indoor = (Indoor) indoorRepository.findById(id);
         return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size());
     }
 
@@ -80,7 +79,7 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
         // 글 가져오기
-        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        Indoor indoor = (Indoor) indoorRepository.findById(feedId);
         if (indoor.getUser().getId().equals(userId)) {
             // 글 수정
             indoorRepository.update(feedId, feedRequestDto);
@@ -97,19 +96,11 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public boolean delete(Long userId, Long feedId) {
         // 글 가져오기
-        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
+        Indoor indoor = (Indoor) indoorRepository.findById(feedId);
         if (indoor.getUser().getId().equals(userId)) {
             indoorRepository.remove(feedId);
             return true;
         }
         return false;
-    }
-
-    @Override
-    public Long addClap(Long uid, Long fid) {
-//        // 글 찾기
-//        Indoor indoor = (Indoor) indoorRepository.findOne(fid);
-        return null;
-
     }
 }

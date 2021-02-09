@@ -18,7 +18,7 @@ public interface FeedRepository {
     public List<Feed> findList(int num);
 
     // 피드 글 불러오기
-    public Feed findOne(Long feedId);
+    public Feed findById(Long feedId);
 
     // 피드 글쓰기
     Feed save(FeedRequestDto feedRequestDto, User user);
