@@ -4,6 +4,7 @@ import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
+import com.ssafy.sns.repository.FeedClapRepositoryImpl;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SearchServiceImpl implements SearchService{
 
     private final SearchRepository searchRepository;
+    private final FeedClapRepositoryImpl feedClapRepository;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
@@ -31,7 +33,7 @@ public class SearchServiceImpl implements SearchService{
         List<Feed> feedList = searchRepository.searchFeeds(hash);
         List<FeedResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
-            indoorResponseDtoList.add(new FeedResponseDto(feed));
+            indoorResponseDtoList.add(new FeedResponseDto(feed, feedClapRepository.findClapAll(feed).size()));
         }
         return indoorResponseDtoList;
     }
