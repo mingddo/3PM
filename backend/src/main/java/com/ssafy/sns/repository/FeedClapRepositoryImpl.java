@@ -8,10 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class FeedClapRepositoryImpl implements ClapRepository {
+public class FeedClapRepositoryImpl implements FeedClapRepository {
 
     private final EntityManager em;
 
@@ -22,11 +23,13 @@ public class FeedClapRepositoryImpl implements ClapRepository {
     }
 
     @Override
-    public List<FeedClap> findClap(User user, Feed feed) {
+    public Optional<FeedClap> findClap(User user, Feed feed) {
+
         return em.createQuery("SELECT f FROM FeedClap f WHERE f.user.id = :userId AND f.feed.id = :feedId", FeedClap.class)
                 .setParameter("userId", user.getId())
                 .setParameter("feedId", feed.getId())
-                .getResultList();
+                .getResultStream()
+                .findFirst();
     }
 
     @Override
@@ -40,6 +43,4 @@ public class FeedClapRepositoryImpl implements ClapRepository {
                 .setParameter("feedId", feed.getId())
                 .getResultList();
     }
-
-
 }
