@@ -121,9 +121,10 @@ export default {
       inputTag: "",
       form: {
         tags: [],
-        file: null,
-        content: null,
+        filePaths: [],
+        content: "",
       },
+      selectedFile: "",
       imageUrl: ``,
       previewUrl : [],
       fileList: [],
@@ -209,11 +210,12 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
-      this.fileList.push(files.[0])
-      console.log(this.fileList)
+      this.form.filePaths.push(files.[0])
+      // this.fileList.push(files.[0])
+      // console.log(this.fileList)
       if (files.length) {
-        this.form.file = files[0]
-        console.log(this.form.file)
+        this.selectedFile = files[0]
+        console.log(this.selectedFile)
         // this.imageUrl = URL.createObjectURL(this.form.file);
         // console.log(this.imageUrl)
         let reader = new FileReader(); 
@@ -222,22 +224,22 @@ export default {
           this.imageUrl = e.target.result;
           this.previewUrl.push(this.imageUrl)
         } 
-        reader.readAsDataURL(this.form.file);
+        reader.readAsDataURL(this.selectedFile);
       }
     },
     async createFeed () {
 
-      const formData = new FormData ();
-      formData.append('content', this.form.content)
-      formData.append('file', this.fileList)
-      formData.append('tags', this.form.tags)
-      console.log(formData)
+      // const formData = new FormData ();
+      // formData.append('content', this.form.content)
+      // formData.append('file', this.fileList)
+      // formData.append('tags', this.form.tags)
+      // console.log(formData)
       this.completed = true;
       if (this.type == 'NEW' || this.type == 'SHARE') {
         // axios create 요청
         if (this.Category == 1) {
           await createFeed (
-            formData,
+            this.form,
             (res) => {
               this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
             },
@@ -251,7 +253,7 @@ export default {
             alert('그룹을 선택해주세요!')
           } else {
             // 핵인싸 create 요청
-            formData.append('groupName', this.groupName)
+            // formData.append('groupName', this.groupName)
           }
         } else if (this.Category == 3) {
           // 청산별곡 create 요청
@@ -265,9 +267,10 @@ export default {
         // axios put 요청
         if (this.userpk == this.$route.params.feed.user.id) {
           if (this.Category == 1) {
+            console.log(this.$route.params.feed.id)
             await updateFeed (
               this.$route.params.feed.id,
-              formData,
+              this.form,
               (res) => {
                 this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
               },
@@ -287,7 +290,7 @@ export default {
             alert('잘못된 접근입니다.')
           }
         } else {
-          alert('본인만 수정할 수 있습니다.')
+          alert('본인만 수정할 수 있습니다!!!')
         }
       }
     },

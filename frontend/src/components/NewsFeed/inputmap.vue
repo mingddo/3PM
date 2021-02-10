@@ -132,7 +132,7 @@ export default {
     setMap () {
       let mapContainer = document.getElementById('map'), mapOption = {
         center : new kakao.maps.LatLng(this.lat, this.lng),
-        level: 3
+        level: 5
       };
       this.map = new kakao.maps.Map(mapContainer, mapOption)
       let firstPlacePosition = new kakao.maps.LatLng(this.lat, this.lng)

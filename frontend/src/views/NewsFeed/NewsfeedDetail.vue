@@ -125,6 +125,7 @@ import '@/assets/css/mention.css'
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { deleteFeed } from '@/api/feed.js'
+import { clapFeed } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 
 export default {
@@ -137,16 +138,7 @@ export default {
   data() {
     return {
       Category: null,
-      fd: {
-            id: 100,
-            content: '테스트',
-            user: {
-              nickname: '수민',
-              img: null,
-            },
-            date: '2021-02-10T10:22',
-            file: null
-          },
+      fd: null,
       commentInput: "",
       date: null,
       time: null,
@@ -206,7 +198,17 @@ export default {
       }
     },
     likeFeed () {
-      alert(`${this.fd.id} 번째 글을 좋아합니다.`)
+      clapFeed(
+        this.fd.id,
+        (res) => {
+          alert(`${this.fd.id} 번째 글을 좋아합니다.`)
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+      
       // like axios
     },
     shareFeed () {
@@ -289,6 +291,7 @@ export default {
           this.$route.query.id,
           (res) => {
             this.fd = res.data
+            console.log(res.data)
             this.date = this.fd.date.split('T')[0];
             this.time = this.fd.date.split('T')[1];
           },

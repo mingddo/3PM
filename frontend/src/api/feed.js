@@ -41,10 +41,18 @@ function feedList(pk, success, fail) {
   .catch(fail);
 }
 
+function clapFeed(pk, success, fail) {
+  instance
+    .post(`indoors/${pk}/likes`)
+    .then(success)
+    .catch(fail);
+}
+
 export {
   createFeed,
   readFeed,
   updateFeed,
   deleteFeed,
-  feedList
+  feedList,
+  clapFeed
 }
