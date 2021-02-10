@@ -58,5 +58,11 @@ export default {
   .nav-toggle-switch {
     display: block; 
   }
+  .home-section {
+    flex-direction: column;
+  }
+  .home-section-reverse {
+    flex-direction: column-reverse;
+  }
 }
 </style>
