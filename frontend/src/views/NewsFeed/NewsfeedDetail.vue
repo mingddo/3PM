@@ -94,23 +94,33 @@
             alt="유저프로필이미지"
             class="feed-detail-comment-img"
           >
-          <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" v-model.trim="commentInput" @keyup.enter="createComment">
+          <Mentionable
+            :keys="['@']"
+            :items="items"
+            offset="6"
+          >
+            <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" name="comment" id="comment" cols="30" rows="10" :value="commentInput" @keyup="commentKeyup"></textarea>
+          <!-- <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" v-model.trim="commentInput" @keyup="mentionUser"> -->
+          <!-- <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" :value="commentInput" @keyup="commentKeyup"> -->
+          </Mentionable>
           <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
         </div>
 
-        <!-- <section>
+        <section>
           <div v-for="(comment, idx) in fd.comment" :key="idx">
             <NewsFeedCommentItem
               :comment="comment"
             />
           </div>
-        </section> -->
+        </section>
       </section>
     </div>
   </div>
 </template>
 
 <script>
+import { Mentionable } from 'vue-mention'
+import '@/assets/css/mention.css'
 // import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
@@ -121,18 +131,80 @@ export default {
   name: 'NewsfeedDetail',
   components: {
     Sidebar,
+    Mentionable,
     // NewsFeedCommentItem,
   },
   data() {
     return {
       Category: null,
-      fd: "",
+      fd: {
+            id: 100,
+            content: '테스트',
+            user: {
+              nickname: '수민',
+              img: null,
+            },
+            date: '2021-02-10T10:22',
+            file: null
+          },
       commentInput: "",
       date: null,
       time: null,
+      mention: [],
+      auto:false,
+      items: [],
     };
   },
+  // updated () {
+  //   this.autoCompleted ();
+  // },
+  watch: {
+    
+  },
   methods: {
+    commentKeyup (e) {
+      this.commentInput = e.target.value;
+      let lastChar = this.commentInput.charAt(this.commentInput.length-1)
+      console.log(lastChar)
+      if (!this.auto && lastChar == '@') {
+        this.auto = true;
+      } else if (this.auto && lastChar == ' ') {
+        this.auto = false;
+      }
+      if (this.auto) {
+        let results = this.commentInput.match(/@/g); 
+        let cnt = results.length
+        let mentionedUser = this.commentInput.split('@')[cnt]
+        let saveMention = mentionedUser.split(' ')
+        if (saveMention.length > 1 || e.code == 'Space' || e.code == 'Enter') {
+          this.auto = false;
+        } else {
+          console.log('api요청 단어', this.commentInput)
+          this.items = [
+            {
+              value: '1',
+              label: '장수민',
+            },
+            {
+              value: '2',
+              label: '잔수민',
+            },
+            {
+              value: '3',
+              label: '자스민',
+            },
+            {
+              value: '4',
+              label: '장슈민',
+            },
+            {
+              value: '5',
+              label: '장수밍',
+            },
+          ]
+        }
+      }
+    },
     likeFeed () {
       alert(`${this.fd.id} 번째 글을 좋아합니다.`)
       // like axios
@@ -178,7 +250,26 @@ export default {
       if (!this.commentInput) {
         alert('내용을 입력해주세요')
       } else {
-        alert(`${this.commentInput} 내용의 댓글을 작성할게요`)
+        let results = this.commentInput.match(/@/g); 
+        if (results == null) {
+          console.log('새 댓글 작성', this.commentInput)
+        } else {
+          let cnt = results.length
+          // console.log(cnt)
+          for (let i = 1; i <= cnt; i++) {
+            console.log(i)
+            let slice = this.commentInput.split('@')[i]
+            let mentioned = slice.split(' ')[0]
+            if (mentioned) {
+              this.mention.push(mentioned)
+            }
+          }
+          console.log(this.mention)
+        }
+
+        // let mentioned = slice.split(' ')[0]
+        // console.log(mentioned)
+        // alert(`${this.commentInput} 내용의 댓글을 작성할게요`)
         // axios 댓글 create  요청 보내기 
         this.commentInput = ''
       }
@@ -229,5 +320,9 @@ export default {
 .newsfeed {
   position: absolute;
   top : 80px;
+}
+.feed-comment-input {
+  width: 100%;
+  height: 50px;
 }
 </style>
