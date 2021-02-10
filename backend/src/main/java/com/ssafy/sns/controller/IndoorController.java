@@ -221,20 +221,20 @@ public class IndoorController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-    @ApiOperation("꽃보다집 댓글 작성")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
-    })
-    @PostMapping(value = "/{feedId}/comment")
-    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
-                                            @RequestBody CommentRequestDto commentRequestDto,
-                                            HttpServletRequest request) {
-
-        HttpStatus status = HttpStatus.ACCEPTED;
-        Long result = null;
-
-
-
-        return new ResponseEntity<>(status);
-    }
+//    @ApiOperation("꽃보다집 댓글 작성")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+//    })
+//    @PostMapping(value = "/{feedId}/comment")
+//    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
+//                                            @RequestBody CommentRequestDto commentRequestDto,
+//                                            HttpServletRequest request) {
+//
+//        HttpStatus status = HttpStatus.ACCEPTED;
+//        Long result = null;
+//
+//
+//
+//        return new ResponseEntity<>(status);
+//    }
 }
