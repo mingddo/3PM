@@ -2,6 +2,7 @@ package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.clap.FeedClap;
+import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
@@ -43,6 +44,8 @@ public class Feed extends BaseTimeEntity {
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedClap> feedClapList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     public Feed(String content, User user, List<FeedHashtag> feedHashtagList) {
         this.content = content;
@@ -87,5 +90,16 @@ public class Feed extends BaseTimeEntity {
     public void deleteFeedClap(FeedClap feedClap) {
         feedClapList.remove(feedClap);
         feedClap.setFeed(null);
+    }
+
+    public void addComment(Comment comment) {
+        if (commentList == null) commentList = new ArrayList<>();
+        commentList.add(comment);
+        comment.setFeed(this);
+    }
+
+    public void deleteComment(Comment comment) {
+        commentList.remove(comment);
+        comment.setFeed(null);
     }
 }

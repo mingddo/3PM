@@ -23,7 +23,7 @@ public class InsiderService implements FeedService {
     private final FileServiceImpl fileService;
 
     @Override
-    public FeedListResponseDto readMyList(Long id, int num) {
+    public FeedListResponseDto findMyList(Long id, int num) {
 
         return null;
     }
@@ -51,6 +51,7 @@ public class InsiderService implements FeedService {
     @Override
     public boolean delete(Long userId, Long feedId) {
         return false;
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,30 +18,29 @@ public class HashtagRepositoryImpl implements HashtagRepository {
     private final EntityManager em;
 
     @Override
-    public void make(List<String> tags, Feed feed) {
-        List<Hashtag> result = new ArrayList<>();
+    public Optional<Hashtag> findByTag(String tag) {
+        return  em.createQuery("SELECT h FROM Hashtag h WHERE h.tagName = :tag", Hashtag.class)
+                .setParameter("tag", tag)
+                .getResultStream()
+                .findFirst();
+    }
 
-        // Hashtag 엔티티 추출
-        for (String tag : tags) {
-            List<Hashtag> resultTag =
-                    em.createQuery("SELECT h FROM Hashtag h WHERE h.tagName = :tag", Hashtag.class)
-                    .setParameter("tag", tag)
-                    .getResultList();
-            if (resultTag.isEmpty()) {
-                Hashtag hashtag = new Hashtag(tag);
-                em.persist(hashtag);
-                result.add(hashtag);
-            } else {
-                result.add(resultTag.get(0));
-            }
-        }
+    @Override
+    public Hashtag save(Hashtag hashtag) {
+        em.persist(hashtag);
+        return hashtag;
+    }
 
-        // FeedHashtag 생성 후 매핑
-        for (Hashtag hashtag : result) {
-            FeedHashtag feedHashtag = new FeedHashtag();
-            feed.addFeedHashtag(feedHashtag);
-            hashtag.addFeedHashtag(feedHashtag);
-        }
+    @Override
+    public List<FeedHashtag> findFeedHashTag(Feed feed) {
+        return em.createQuery("SELECT f FROM FeedHashtag f WHERE f.feed.id = :id", FeedHashtag.class)
+                .setParameter("id", feed.getId())
+                .getResultList();
+    }
+
+    @Override
+    public void remove(FeedHashtag feedHashtag) {
+        em.remove(feedHashtag);
     }
 
     @Override
@@ -57,8 +57,5 @@ public class HashtagRepositoryImpl implements HashtagRepository {
             feed.deleteFeedHashtag(feedHashtag);
             em.remove(feedHashtag);
         }
-
-        // 태그 재 등록
-        make(tags, feed);
     }
 }

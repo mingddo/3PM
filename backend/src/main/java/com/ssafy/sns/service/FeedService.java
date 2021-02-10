@@ -9,15 +9,16 @@ import java.util.List;
 public interface FeedService {
 
     // 내가 쓴 글 불러오기
-    public FeedListResponseDto readMyList(Long id, int num);
+    FeedListResponseDto findMyList(Long id, int num);
 
     // 한페이지 불러오기
-    public FeedListResponseDto readList(int num);
+    FeedListResponseDto readList(int num);
 
     // 피드 글 불러오기
-    public FeedResponseDto read(Long id);
+    FeedResponseDto read(Long id);
 
     // 피드 글쓰기
+
     public Long write(Long userId, FeedRequestDto feedRequestDto);
 
     // 피드 파일 첨부
@@ -31,4 +32,5 @@ public interface FeedService {
 
     // 박수 추가
     public Long addClap(Long uid, Long fid);
+
 }

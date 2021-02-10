@@ -1,13 +1,14 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.domain.clap.FeedClap;
+import com.ssafy.sns.domain.hashtag.FeedHashtag;
+import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.FeedClapRepositoryImpl;
 import com.ssafy.sns.repository.HashtagRepositoryImpl;
-import com.ssafy.sns.repository.IndoorRepositoryImpl;
+import com.ssafy.sns.repository.FeedRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,15 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
+
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class IndoorServiceImpl implements FeedService {
 
-    private final IndoorRepositoryImpl indoorRepository;
+    private final FeedRepositoryImpl feedRepository;
     private final HashtagRepositoryImpl hashtagRepository;
     private final FeedClapRepositoryImpl feedClapRepository;
     private final UserRepository userRepository;
@@ -32,8 +34,8 @@ public class IndoorServiceImpl implements FeedService {
     private final FileServiceImpl fileService;
 
     @Override
-    public FeedListResponseDto readMyList(Long id, int num) {
-        List<Feed> indoorList = indoorRepository.findMyList(id, num);
+    public FeedListResponseDto findMyList(Long id, int num) {
+        List<Feed> indoorList = feedRepository.findMyList(id, num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
@@ -43,7 +45,7 @@ public class IndoorServiceImpl implements FeedService {
 
     @Override
     public FeedListResponseDto readList(int num) {
-        List<Feed> indoorList = indoorRepository.findList(num);
+        List<Feed> indoorList = feedRepository.findList(num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
@@ -53,27 +55,44 @@ public class IndoorServiceImpl implements FeedService {
 
     @Override
     public FeedResponseDto read(Long id) {
-        Indoor indoor = (Indoor) indoorRepository.findOne(id);
+        Indoor indoor = (Indoor) feedRepository.findById(id);
         return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size());
     }
 
     @Override
     public Long write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
+        Indoor indoor = feedRepository.save(Indoor.builder()
+                .content(feedRequestDto.getContent())
+                .user(user)
+                .test(((IndoorRequestDto) feedRequestDto).getTest())
+                .build());
 
         // 태그 등록
-        hashtagRepository.make(feedRequestDto.getTags(), indoor);
+        List<Hashtag> hashtags = new ArrayList<>();
+
+        for (String tag : feedRequestDto.getTags()) {
+            hashtagRepository.findByTag(tag).ifPresentOrElse(
+                    hashtags::add,
+                    () -> hashtags.add(hashtagRepository.save(new Hashtag(tag))));
+        }
+
+        for (Hashtag hashtag : hashtags) {
+            FeedHashtag feedHashtag = new FeedHashtag();
+            indoor.addFeedHashtag(feedHashtag);
+            hashtag.addFeedHashtag(feedHashtag);
+        }
 
         return indoor.getId();
+
     }
 
     @Override
     public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
-        Feed feed = indoorRepository.findOne(feedId);
+        Feed feed = feedRepository.findById(feedId);
 
         // 파일 업로드
         for (MultipartFile file : files) {
@@ -85,49 +104,68 @@ public class IndoorServiceImpl implements FeedService {
 
     @Override
     public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
-        // 글 가져오기
-        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
-        if (indoor.getUser().getId().equals(userId)) {
-            // 글 수정
-            indoorRepository.update(feedId, feedRequestDto);
-            // 태그 찾고 삭제
-            hashtagRepository.change(feedRequestDto.getTags(), indoor);
+        // 유저 정보
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Indoor indoor = (Indoor) feedRepository.findById(feedId);
 
-            // 파일 찾기
-            List<String> curFileNames = feedRequestDto.getFilePaths();
-            List<String> prevFileNames = fileService.findFileNameList(feedId);
-
-            // 원래 파일 리스트와 비교 삭제
-            fileService.modifyFiles(prevFileNames, curFileNames);
-
-            return indoor.getId();
+        if (!indoor.getUser().getId().equals(user.getId())) {
+            throw new NoSuchElementException();
         }
 
-        return -1L;
-    }
+        // 글 수정
+        indoor.update((IndoorRequestDto) feedRequestDto);
 
-    @Override
-    public boolean delete(Long userId, Long feedId) throws IOException {
-        // 글 가져오기
-        Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
-        if (indoor.getUser().getId().equals(userId)) {
-            // 피드에 저장된 파일들 전부 삭제
-            List<String> fileNames = fileService.findFileNameList(feedId);
-            for (String fileName : fileNames) {
-                s3Service.deleteFile(fileName);
-            }
-            indoorRepository.remove(feedId);
-
-            return true;
+        // 태그 찾고 삭제
+        List<FeedHashtag> feedHashtags = hashtagRepository.findFeedHashTag(indoor);
+        for (FeedHashtag feedHashtag : feedHashtags) {
+            indoor.deleteFeedHashtag(feedHashtag);
+            feedHashtag.getHashtag().deleteFeedHashtag(feedHashtag);
+            hashtagRepository.remove(feedHashtag);
         }
-        return false;
+
+        List<Hashtag> hashtags = new ArrayList<>();
+
+        for (String tag : feedRequestDto.getTags()) {
+            hashtagRepository.findByTag(tag).ifPresentOrElse(
+                    hashtags::add,
+                    () -> hashtags.add(hashtagRepository.save(new Hashtag(tag))));
+        }
+
+        for (Hashtag hashtag : hashtags) {
+            FeedHashtag feedHashtag = new FeedHashtag();
+            indoor.addFeedHashtag(feedHashtag);
+            hashtag.addFeedHashtag(feedHashtag);
+        }
+
+        // 파일 찾기
+        List<String> filePaths = feedRequestDto.getFilePaths();
+
+        return indoor.getId();
+
     }
 
     @Override
     public Long addClap(Long uid, Long fid) {
-//        // 글 찾기
-//        Indoor indoor = (Indoor) indoorRepository.findOne(fid);
         return null;
-
     }
+
+    @Override
+    public boolean delete(Long userId, Long feedId) throws IOException {
+
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Indoor indoor = (Indoor) feedRepository.findById(feedId);
+        if (!indoor.getUser().getId().equals(user.getId())) {
+            throw new NoSuchElementException();
+        }
+
+        // 피드에 저장된 파일들 전부 삭제
+        List<String> fileNames = fileService.findFileNameList(feedId);
+        for (String fileName : fileNames) {
+            s3Service.deleteFile(fileName);
+        }
+
+        feedRepository.remove(indoor);
+        return true;
+    }
+
 }
