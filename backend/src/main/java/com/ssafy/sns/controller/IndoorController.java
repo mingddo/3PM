@@ -1,5 +1,7 @@
 package com.ssafy.sns.controller;
 
+import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
@@ -46,7 +50,7 @@ public class IndoorController {
 
         FeedListResponseDto feedListResponseDto = null;
         try {
-            feedListResponseDto = indoorService.readMyList(userId, startNum);
+            feedListResponseDto = indoorService.findMyList(userId, startNum);
             logger.info("getFeedMyList = 꽃보다집 내 글 리스트 가져오기 : {}", startNum);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -110,12 +114,8 @@ public class IndoorController {
                                          HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
-
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
-
         try {
-            result = indoorService.write(userId, indoorRequestDto, files);
+            result = indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto, files);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -133,12 +133,12 @@ public class IndoorController {
     })
     @PutMapping(value = "/{feedId}")
     public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId, IndoorRequestDto indoorRequestDto,
-                                        @RequestPart(name = "files", required = false) List<MultipartFile> files, HttpServletRequest request) {
+                                        @RequestPart(name = "files", required = false) List<MultipartFile> files,
+                                        HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
+        Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
             result = indoorService.modify(userId, feedId, indoorRequestDto, files);
@@ -165,17 +165,11 @@ public class IndoorController {
     public ResponseEntity<String> deleteFeed(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
+        Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
-            if (indoorService.delete(userId, feedId)) {
-                logger.info("deleteFeed - 꽃보다집 글 삭제 : {}", feedId);
-                status = HttpStatus.OK;
-            } else {
-                logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
-                status = HttpStatus.UNAUTHORIZED;
-            }
+            indoorService.delete(userId, feedId);
+            status = HttpStatus.OK;
         } catch (Exception e) {
             logger.warn("deleteFeed - 꽃보다집 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
@@ -184,18 +178,18 @@ public class IndoorController {
         return new ResponseEntity<>(status);
     }
 
+    @ApiOperation("꽃보다집 박수 토글")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
     @PostMapping(value = "/{feedId}/likes")
     public ResponseEntity<String> postClap(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        // 유저 정보 불러오기
-        String token = request.getHeader("Authorization");
-        Long userId = jwtService.findId(token);
-
-        // 좋아요
+        // 박수 토글
         try {
-            feedClapService.changeClap(userId, feedId);
-            logger.info("postClap - 꽃보다집 박수");
+            feedClapService.changeClap(jwtService.findId(request.getHeader("Authorization")), feedId);
+            logger.info("postClap - 꽃보다집 박수 토글");
             status = HttpStatus.OK;
         } catch (Exception e) {
             logger.warn("postClap - 꽃보다집 박수 에러 : {}", e.getMessage());
@@ -204,4 +198,43 @@ public class IndoorController {
 
         return new ResponseEntity<>(status);
     }
+
+    @ApiOperation("꽃보다집 박수 명단 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @GetMapping(value = "/{feedId}/likes")
+    public ResponseEntity<Map<String, Object>> getClap(@PathVariable("feedId") Long feedId) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Map<String, Object> resultMap = new HashMap<>();
+        List<User> users = null;
+        // 박수 불러오기
+        try {
+            resultMap.put("users", feedClapService.clapUserList(feedId));
+            logger.info("getClap - 꽃보다집 박수 조회");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getClap - 꽃보다집 박수 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
+    }
+
+//    @ApiOperation("꽃보다집 댓글 작성")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+//    })
+//    @PostMapping(value = "/{feedId}/comment")
+//    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
+//                                            @RequestBody CommentRequestDto commentRequestDto,
+//                                            HttpServletRequest request) {
+//
+//        HttpStatus status = HttpStatus.ACCEPTED;
+//        Long result = null;
+//
+//
+//
+//        return new ResponseEntity<>(status);
+//    }
 }
