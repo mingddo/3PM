@@ -3,6 +3,8 @@ package com.ssafy.sns.domain.comment;
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.comment.CommentRequestDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,4 +33,9 @@ public class Comment extends BaseTimeEntity {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Builder
+    public Comment(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent();
+    }
 }

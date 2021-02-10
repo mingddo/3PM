@@ -53,8 +53,8 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedResponseDto read(Long id) {
-        Indoor indoor = (Indoor) feedRepository.findById(id);
+    public FeedResponseDto read(Long feedId) {
+        Indoor indoor = (Indoor) feedRepository.findById(feedId);
         return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size());
     }
 
@@ -64,7 +64,7 @@ public class IndoorServiceImpl implements FeedService {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Indoor indoor = feedRepository.save(Indoor.builder()
+        Indoor indoor = (Indoor) feedRepository.save(Indoor.builder()
                 .content(feedRequestDto.getContent())
                 .user(user)
                 .test(((IndoorRequestDto) feedRequestDto).getTest())

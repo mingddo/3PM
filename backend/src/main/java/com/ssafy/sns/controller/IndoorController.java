@@ -7,6 +7,8 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.jwt.JwtService;
+import com.ssafy.sns.service.CommentService;
+import com.ssafy.sns.service.CommentServiceImpl;
 import com.ssafy.sns.service.FeedClapServiceImpl;
 import com.ssafy.sns.service.IndoorServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
@@ -35,6 +37,7 @@ public class IndoorController {
     private final IndoorServiceImpl indoorService;
     private final FeedClapServiceImpl feedClapService;
     private final JwtService jwtService;
+    private final CommentServiceImpl commentService;
 
 
     // 내가 쓴 게시글 불러오기
@@ -221,20 +224,24 @@ public class IndoorController {
         return new ResponseEntity<>(resultMap, status);
     }
 
-//    @ApiOperation("꽃보다집 댓글 작성")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
-//    })
-//    @PostMapping(value = "/{feedId}/comment")
-//    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
-//                                            @RequestBody CommentRequestDto commentRequestDto,
-//                                            HttpServletRequest request) {
-//
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//        Long result = null;
-//
-//
-//
-//        return new ResponseEntity<>(status);
-//    }
+    @ApiOperation("꽃보다집 댓글 작성")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
+    })
+    @PostMapping(value = "/{feedId}/comment")
+    public ResponseEntity<Long> postComment(@PathVariable("feedId") Long feedId,
+                                            @RequestBody CommentRequestDto commentRequestDto,
+                                            HttpServletRequest request) {
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Long result = null;
+
+        try {
+//            commentService.write(commentRequestDto, jw, feedId);
+        } catch (Exception e) {
+
+        }
+
+        return new ResponseEntity<>(status);
+    }
 }

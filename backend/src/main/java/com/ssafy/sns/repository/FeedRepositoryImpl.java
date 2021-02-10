@@ -44,9 +44,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Indoor save(Indoor indoor) {
-        em.persist(indoor);
-        return indoor;
+    public Feed save(Feed feed) {
+        em.persist(feed);
+        return feed;
     }
 
     @Override
