@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -57,19 +58,12 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException {
+    public Long write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElse(null);
 
         // 글 등록
         Indoor indoor = (Indoor) indoorRepository.save(feedRequestDto, user);
-
-        // 파일 업로드
-        for (MultipartFile file : files) {
-            String fileName = s3Service.uploadFile(file);
-            // 파일 등록
-            fileService.addFile(fileName, indoor);
-        }
 
         // 태그 등록
         hashtagRepository.make(feedRequestDto.getTags(), indoor);
@@ -78,7 +72,19 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
+    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
+        Feed feed = indoorRepository.findOne(feedId);
+
+        // 파일 업로드
+        for (MultipartFile file : files) {
+            String fileName = s3Service.uploadFile(file);
+            // 파일 등록
+            fileService.addFile(fileName, feed);
+        }
+    }
+
+    @Override
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
         // 글 가져오기
         Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
         if (indoor.getUser().getId().equals(userId)) {
@@ -86,8 +92,14 @@ public class IndoorServiceImpl implements FeedService {
             indoorRepository.update(feedId, feedRequestDto);
             // 태그 찾고 삭제
             hashtagRepository.change(feedRequestDto.getTags(), indoor);
+
             // 파일 찾기
-            List<String> filePaths = feedRequestDto.getFilePaths();
+            List<String> curFileNames = feedRequestDto.getFilePaths();
+            List<String> prevFileNames = fileService.findFileNameList(feedId);
+
+            // 원래 파일 리스트와 비교 삭제
+            fileService.modifyFiles(prevFileNames, curFileNames);
+
             return indoor.getId();
         }
 
@@ -95,11 +107,17 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public boolean delete(Long userId, Long feedId) {
+    public boolean delete(Long userId, Long feedId) throws IOException {
         // 글 가져오기
         Indoor indoor = (Indoor) indoorRepository.findOne(feedId);
         if (indoor.getUser().getId().equals(userId)) {
+            // 피드에 저장된 파일들 전부 삭제
+            List<String> fileNames = fileService.findFileNameList(feedId);
+            for (String fileName : fileNames) {
+                s3Service.deleteFile(fileName);
+            }
             indoorRepository.remove(feedId);
+
             return true;
         }
         return false;

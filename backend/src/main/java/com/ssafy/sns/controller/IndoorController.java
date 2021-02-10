@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RestController
-@RequestMapping("/api/indoors")
+@RequestMapping("/indoors")
 public class IndoorController {
 
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
@@ -100,14 +101,9 @@ public class IndoorController {
         return new ResponseEntity<>(indoorResponseDto, status);
     }
 
-    @ApiOperation("꽃보다집 글 작성")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "file", value = "첨부파일")
-    })
+    @ApiOperation("꽃보다집 글 작성 (파일 첨부 제외)")
     @PostMapping
-    public ResponseEntity<Long> postFeed(IndoorRequestDto indoorRequestDto,
-                                         @RequestParam(name = "files", required = false) List<MultipartFile> files,
-                                         HttpServletRequest request) {
+    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -115,7 +111,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.write(userId, indoorRequestDto, files);
+            result = indoorService.write(userId, indoorRequestDto);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -126,14 +122,32 @@ public class IndoorController {
         return new ResponseEntity<>(result, status);
     }
 
+    @ApiOperation("꽃보다집 글 파일 첨부")
+    @PostMapping("/{feedId}")
+    public ResponseEntity<Void> postFiles(@PathVariable("feedId") Long feedId, @RequestPart(name = "files", required = false) List<MultipartFile> files,
+                                         HttpServletRequest request) throws IOException {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Long result = null;
+
+        System.out.println(files.size() + "=--=-=-=-=");
+
+        String token = request.getHeader("Authorization");
+        Long userId = jwtService.findId(token);
+
+        indoorService.uploadFiles(feedId, files);
+
+        return new ResponseEntity<>(status);
+    }
+
     @ApiOperation("꽃보다집 글 수정")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true),
             @ApiImplicitParam(name = "file", value = "첨부파일")
     })
     @PutMapping(value = "/{feedId}")
-    public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId, IndoorRequestDto indoorRequestDto,
-                                        @RequestPart(name = "files", required = false) List<MultipartFile> files, HttpServletRequest request) {
+    public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId,
+                                        @RequestBody IndoorRequestDto indoorRequestDto,
+                                        HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
@@ -141,7 +155,7 @@ public class IndoorController {
         Long userId = jwtService.findId(token);
 
         try {
-            result = indoorService.modify(userId, feedId, indoorRequestDto, files);
+            result = indoorService.modify(userId, feedId, indoorRequestDto);
             if (result == -1L) {
                 logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
                 status = HttpStatus.UNAUTHORIZED;

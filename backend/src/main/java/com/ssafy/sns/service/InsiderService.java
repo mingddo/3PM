@@ -39,8 +39,13 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public Long write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException {
+    public Long write(Long userId, FeedRequestDto feedRequestDto) {
         return null;
+    }
+
+    @Override
+    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
+
     }
 
     @Override
@@ -49,7 +54,7 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
         return null;
     }
 
