@@ -11,7 +11,7 @@ function createUser(user, success, fail) {
 
 function checkOverlapped(username, success, fail) {
   instance
-    .post('users/dupl',username)
+    .post('users/check',username)
     .then(success)
     .catch(fail);
     
