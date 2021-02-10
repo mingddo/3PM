@@ -7,10 +7,11 @@
           <div class="inputframe">
             <label for="search"></label>
             <input
+              required
               type="text"
               id="search"
               placeholder="검색어를 입력해 주세요"
-              v-model="keyword"
+              v-model.trim="keyword"
             />
           </div>
           <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
@@ -63,40 +64,59 @@
         </div>
       </div>
       <!-- 컴포넌트 -->
-      <div class="searchResultList">
-        <span v-if="filter === 1">
-          <GroupResults
-            :category="category_group"
-            :groupresults="search_result_all.userList.body"
+      <transition name="fade">
+        <div v-if="loaded" class="searchResultList">
+          <span v-if="filter === 1">
+            <GroupResults
+              :category="category_group"
+              :groupresults="search_result_all.userList.body"
+            />
+          </span>
+          <span v-if="filter === 1">
+            <GroupResults
+              :groupresults="search_result_all.userList.body"
+              :category="category_person"
+            />
+          </span>
+          <span v-if="filter === 1 || filter === 2">
+            <SerachResult
+              v-for="(result, idx) in search_result_feed"
+              :key="idx"
+              :result="result"
+            />
+          </span>
+          <span v-if="filter === 3">
+            <FilterGroup
+              v-for="(grouplist, idx) in search_result_user"
+              :key="idx"
+              :grouplist="grouplist"
+            />
+          </span>
+          <span v-if="filter === 4">
+            <GroupResult
+              v-for="(grouplist, idx) in search_result_group"
+              :key="idx"
+              :grouplist="grouplist"
+            />
+          </span>
+        </div>
+      </transition>
+      <!-- <div >검색 중 ....</div> -->
+
+      <article v-if="loading" class="spiner">
+        <div style="width:100%" class="loading-img-frame">
+          <img
+            src="@/assets/searching.svg"
+            alt=""
+            width="50%"
+            id="searching-img"
           />
-        </span>
-        <span v-if="filter === 1">
-          <GroupResults
-            :groupresults="search_result_all.userList.body"
-            :category="category_person"
-          />
-        </span>
-        <span v-if="filter === 1 || filter === 2">
-          <SerachResult
-            v-for="(result, idx) in search_result_feed"
-            :key="idx"
-            :result="result"
-          />
-        </span>
-        <span v-if="filter === 3">
-          <FilterGroup
-            v-for="(grouplist, idx) in search_result_user"
-            :key="idx"
-            :grouplist="grouplist"
-          />
-        </span>
-        <span v-if="filter === 4">
-          <GroupResult
-            v-for="(grouplist, idx) in search_result_group"
-            :key="idx"
-            :grouplist="grouplist"
-          />
-        </span>
+        </div>
+      </article>
+
+      <div v-if="empty_search" class="empty-result">
+        <div class="empty-result-title">검색 결과가 없습니다</div>
+        <img src="@/assets/img/emptysearch.svg" alt="" />
       </div>
     </div>
     <!-- web 검색 결과 list -->
@@ -114,6 +134,9 @@ export default {
   components: { GroupResults, SerachResult, FilterGroup, GroupResult },
   data() {
     return {
+      loading: false,
+      loaded: true,
+      empty_search: false,
       search_result: [],
       search_result_all: {
         feedList: {
@@ -186,40 +209,64 @@ export default {
   },
   methods: {
     Allsearch() {
-      if (this.filter === 1) {
-        searchall(
-          this.keyword,
-          (res) => {
-            this.search_result_all = res.data;
-            console.log(res.data);
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
-      } else if (this.filter === 2) {
-        searchfeed(
-          this.keyword,
-          (res) => {
-            this.search_result_feed = res.data;
-            console.log(res.data);
-          },
-          (err) => {
-            console.err(err);
-          }
-        );
-      } else if (this.filter === 3) {
-        searchuser(
-          this.keyword,
-          (res) => {
-            this.search_result_user = res.data;
-            console.log(res.data);
-          },
-          (err) => {
-            console.err(err);
-          }
-        );
+      if (this.keyword === "") {
+        alert("검색어를 입력해주세요");
+        return;
       }
+      this.loading = true;
+      this.loaded = false;
+      this.empty_search = false;
+      setTimeout(() => {
+        if (this.filter === 1) {
+          searchall(
+            this.keyword,
+            (res) => {
+              console.log(res.data);
+              if (
+                res.data.feedList.body.length === 0 &&
+                res.data.userList.body.length === 0
+              ) {
+                this.loaded = false;
+                this.loading = false;
+                this.empty_search = true;
+              } else {
+                this.search_result_all = res.data;
+                this.loaded = true;
+                this.loading = false;
+              }
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+        } else if (this.filter === 2) {
+          searchfeed(
+            this.keyword,
+            (res) => {
+              this.search_result_feed = res.data;
+              console.log(res.data);
+              this.loaded = true;
+              this.loading = false;
+            },
+            (err) => {
+              console.err(err);
+            }
+          );
+        } else if (this.filter === 3) {
+          searchuser(
+            this.keyword,
+            (res) => {
+              this.search_result_user = res.data;
+              console.log(res.data);
+              this.loaded = true;
+              this.loading = false;
+            },
+            (err) => {
+              console.err(err);
+            }
+          );
+        }
+      }, 2000);
     },
     keywordClear() {
       this.keyword = "";
@@ -296,12 +343,27 @@ export default {
 }
 
 .icon-cancel:hover {
-  font-size: 19px;
 }
 
 .icon-search:hover {
   color: rgb(68, 139, 233);
-  font-size: 19px;
+}
+
+.empty-result {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 48px;
+}
+.empty-result-title {
+  width: auto;
+  font-size: 25px;
+  font-weight: 800;
+  margin: 0 24px;
+}
+.empty-result > img {
+  width: 20%;
 }
 
 .search_input {
@@ -337,7 +399,7 @@ input:focus {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: #e4e6e9;
+  background-color: whitesmoke;
 }
 .filters {
   width: 100%;
@@ -415,5 +477,59 @@ input:focus {
 .searchResultList {
   width: 100%;
   padding: 16px;
+}
+
+.loading-img-frame {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-img-frame > img {
+  width: 20%;
+}
+
+article > div {
+  width: 20%;
+  height: auto;
+  margin: 2vw;
+  animation: bounce 1s 0.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  100% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(0.6);
+  }
+}
+.spiner {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .loading-text {
+    font-size: 18px;
+  }
+  .empty-result-title {
+    width: auto;
+    font-size: 15px;
+    margin: 0 24px;
+  }
 }
 </style>
