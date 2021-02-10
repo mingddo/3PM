@@ -20,7 +20,7 @@ import java.util.*;
  * Search 관련 Controller
  */
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/search")
 public class SearchController {
     public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
 
