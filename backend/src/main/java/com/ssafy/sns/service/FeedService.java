@@ -18,11 +18,19 @@ public interface FeedService {
     FeedResponseDto read(Long id);
 
     // 피드 글쓰기
-    Long write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException;
+
+    public Long write(Long userId, FeedRequestDto feedRequestDto);
+
+    // 피드 파일 첨부
+    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException;
 
     // 피드 글삭제
-    void delete(Long userId, Long feedId);
+    public boolean delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
-    Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files);
+    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto);
+
+    // 박수 추가
+    public Long addClap(Long uid, Long fid);
+
 }

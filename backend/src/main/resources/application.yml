@@ -9,8 +9,8 @@ spring:
   # jpa settings
   jpa:
     hibernate:
-      ddl-auto: update
-    generate-ddl: true
+      ddl-auto: none
+    generate-ddl: false
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -28,6 +28,8 @@ spring:
 
 server:
   port: 8081
+  servlet:
+    context-path: /api
 
 cloud:
   aws:

@@ -12,5 +12,5 @@ public interface FileService {
 
     public void addFile(String file, Feed feed);
 
-    public void modifyFiles(Feed feed, MultipartFile file);
+    public void modifyFiles(List<String> prevFileNames, List<String> curFileNames);
 }

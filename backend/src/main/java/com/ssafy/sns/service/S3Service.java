@@ -99,4 +99,13 @@ public class S3Service {
 
         return fileName;
     }
+
+    // 파일 삭제
+    public void deleteFile(String fileName) throws IOException {
+        boolean isExistObject = s3Client.doesObjectExist(bucket, fileName);
+
+        if (isExistObject) {
+            s3Client.deleteObject(bucket, fileName);
+        }
+    }
 }

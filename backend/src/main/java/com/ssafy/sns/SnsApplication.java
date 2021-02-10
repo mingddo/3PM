@@ -28,15 +28,17 @@ public class SnsApplication implements WebMvcConfigurer {
 	// JWTInterceptor를 설치한다.
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 기본 적용 경로
+		registry.addInterceptor(jwtInterceptor)
+				.addPathPatterns("/**") // 기본 적용 경로
 				.excludePathPatterns(
-						Arrays.asList("/v2/api-docs",
+						Arrays.asList(
+								"/v2/api-docs",
 								"/swagger-resources/**",
 								"/swagger-ui.html",
 								"/webjars/**",
-								"/api/users/login",
-								"/api/users/join",
-								"/api/users/dupl",
+								"/users/login",
+								"/users/join",
+								"/users/check",
 								"/swagger-ui",
 								"/swagger-ui.html/**")
 						);// 적용 제외 경로

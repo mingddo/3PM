@@ -9,9 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -21,11 +20,11 @@ public class FileServiceImpl implements FileService{
     private final FileRepository fileRepository;
 
     @Override
-    public List<String> findFileNameList(Long indoorId) {
-        List<File> files = fileRepository.findAllByFeedId(indoorId);
-        List<String> result = new ArrayList<>();
-        files.stream().forEach(file -> result.add(file.getFileName()));
-        return result;
+    public List<String> findFileNameList(Long id) {
+        return fileRepository.findAllByFeedId(id)
+                .stream()
+                .map(file -> file.getFileName())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -37,12 +36,16 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public void modifyFiles(Feed feed, MultipartFile file) {
-        // 1. feed id 에 해당하는 모든 사진을 지운다.
-//        List<File> currentFiles = fileRepository.findAllByFeedId(feed.getId());
-//        fileRepository.delete(file);
+    public void modifyFiles(List<String> prevFileNames, List<String> curFileNames) {
+        // 삭제해야 할 리스트만 뽑는다.
+        Map<String, Boolean> map = new HashMap<>();
+        for (String fileName : prevFileNames) {
+            map.put(fileName, false);
+        }
 
-        // 2. 새로운 파일들을 저장한다.
+        for (String fileName : curFileNames) {
+            map.put(fileName, true);
+        }
 
 
     }
