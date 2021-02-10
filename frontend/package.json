@@ -12,10 +12,12 @@
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "v-tooltip": "^2.1.2",
     "vue": "^2.6.11",
     "vue-carousel": "^0.18.0",
     "vue-carousel-3d": "^1.0.1",
     "vue-infinite-loading": "^2.4.5",
+    "vue-mention": "^1.0.0",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
