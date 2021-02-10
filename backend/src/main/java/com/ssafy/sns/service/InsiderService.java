@@ -23,7 +23,7 @@ public class InsiderService implements FeedService {
     private final FileServiceImpl fileService;
 
     @Override
-    public FeedListResponseDto readMyList(Long id, int num) {
+    public FeedListResponseDto findMyList(Long id, int num) {
 
         return null;
     }
@@ -44,17 +44,11 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public boolean delete(Long userId, Long feedId) {
-        return false;
+    public void delete(Long userId, Long feedId) {
     }
 
     @Override
     public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
-        return null;
-    }
-
-    @Override
-    public Long addClap(Long uid, Long fid) {
         return null;
     }
 }
