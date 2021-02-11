@@ -171,10 +171,9 @@
 .newsfeed-form-profile-name {
   font-size: 20pt;
   padding: 5px;
-  vertical-align: bottom;
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
 }
 .newsfeed-form-tag-input-container {
   background-color: #e4e4e4;
@@ -243,6 +242,35 @@
   border-radius: 10px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
+.newsfeed-form-group-container {
+  margin-left: auto;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.newsfeed-form-group {
+  position: fixed;
+  top : 0;
+  left: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.newsfeed-form-group-list-btn {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+/* .newsfeed-form-group-list {
+  position: fixed;
+} */
 /* NewsFeedList */
 
 .spinner-container {
