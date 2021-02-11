@@ -63,7 +63,7 @@ const routes = [
     component: NewsfeedForm
   },
   {
-    path: '/search',
+    path: '/search/:filter',
     name: 'Search',
     component: Search
   },
