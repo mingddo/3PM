@@ -100,8 +100,6 @@
             offset="6"
           >
             <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" name="comment" id="comment" cols="30" rows="10" :value="commentInput" @keyup="commentKeyup"></textarea>
-          <!-- <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" v-model.trim="commentInput" @keyup="mentionUser"> -->
-          <!-- <input class="feed-detail-comment-input" id="comment" type="text" placeholder="댓글을 입력해주세요" :value="commentInput" @keyup="commentKeyup"> -->
           </Mentionable>
           <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
         </div>
@@ -151,13 +149,18 @@ export default {
   //   this.autoCompleted ();
   // },
   watch: {
-    
+    // commentInput: function () {
+    //   console.log('변화된', this.commentInput)
+    // },
   },
   methods: {
     commentKeyup (e) {
       this.commentInput = e.target.value;
       let lastChar = this.commentInput.charAt(this.commentInput.length-1)
-      console.log(lastChar)
+      if (lastChar == '@') {
+        this.auto = true;
+      }
+      
       if (!this.auto && lastChar == '@') {
         this.auto = true;
       } else if (this.auto && lastChar == ' ') {
@@ -165,13 +168,18 @@ export default {
       }
       if (this.auto) {
         let results = this.commentInput.match(/@/g); 
-        let cnt = results.length
+        let cnt = 0
+        if (results) {
+          cnt = results.length
+        }
         let mentionedUser = this.commentInput.split('@')[cnt]
         let saveMention = mentionedUser.split(' ')
         if (saveMention.length > 1 || e.code == 'Space' || e.code == 'Enter') {
           this.auto = false;
-        } else {
-          console.log('api요청 단어', this.commentInput)
+        } else if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+          console.log('api요청 단어', mentionedUser)
+          // mentionedUser 을 db에 요청하여, 관련된 문자로 시작되는 단어 리스트를 받아 this.itmes 에 저장한다.
+          // 현재는 백 api가 설정되어있지 않으므로 items를 직접 설정한다.
           this.items = [
             {
               value: '1',
@@ -280,7 +288,7 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
     },  
     goToSearchTag (tag) {
-      this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})
+      this.$router.push({ name: 'Search', query: { query: tag}, params: { filter: "feed" }})
     },
     setFeedDetail () {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
