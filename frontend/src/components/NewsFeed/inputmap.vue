@@ -6,7 +6,6 @@
     <div class="map-space">
       <div class="map-about">
         <input class="map-input" type="text" id="keyword" v-model.trim="keyword" @keyup.enter="searchPlaces">
-        <hr>  
         <div id="menu_wrap" class="bg_white map-info" v-show="!fold">
           <div class="option">
           </div>
@@ -284,6 +283,10 @@ export default {
 </script>
 
 <style>
+.map_wrap {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .map {
   width: 65%;
   height: 40vh;
@@ -291,7 +294,6 @@ export default {
 .map-space {
   display: flex;
   width: 100%;
-  /* height: 100%; */
 }
 .map-info {
   width: 100%;
@@ -300,29 +302,37 @@ export default {
 }
 .map-about {
   width: 35%;
-  /* height: 100%; */
+  background-color: #e4e4e4;
+  padding: 10px;
+  min-height: 60px;
 }
 .map-input {
   width: 100%;
+  line-height: 30px;
+  border: none;
+  background-color: white;
 }
+.info {
+  margin-bottom: 10px;
+}
+.info h5 {
+  font-size: 16px;
+}
+.info span {
+  font-size: 15px;
+}
+
 @media screen and (max-width: 1050px) {
   .map-space {
-    /* display: flex; */
     display: block;
     width: 100%;
-    /* height: 30vh; */
-    /* height: 500px; */
-    /* height: 100%; */
   }
   .map {
     width: 100%;
     height: 40vh;
-    /* height: 50%; */
-    /* height: 30vh; */
   }
   .map-about {
     width: 100%;
-    /* height: 100%; */
   }
   .map-info {
     width: 100%;
