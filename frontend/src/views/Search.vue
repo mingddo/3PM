@@ -243,23 +243,35 @@ export default {
           searchfeed(
             this.keyword,
             (res) => {
-              this.search_result_feed = res.data;
-              console.log(res.data);
-              this.loaded = true;
-              this.loading = false;
+              console.log(res);
+              if (res.data.length === 0) {
+                this.loaded = false;
+                this.loading = false;
+                this.empty_search = true;
+              } else {
+                this.search_result_feed = res.data;
+                this.loaded = true;
+                this.loading = false;
+              }
             },
             (err) => {
-              console.err(err);
+              console.log(err);
             }
           );
         } else if (this.filter === 3) {
           searchuser(
             this.keyword,
             (res) => {
-              this.search_result_user = res.data;
-              console.log(res.data);
-              this.loaded = true;
-              this.loading = false;
+              console.log(res);
+              if (res.data.length === 0) {
+                this.loaded = false;
+                this.loading = false;
+                this.empty_search = true;
+              } else {
+                this.search_result_feed = res.data;
+                this.loaded = true;
+                this.loading = false;
+              }
             },
             (err) => {
               console.err(err);
@@ -272,46 +284,146 @@ export default {
       this.keyword = "";
     },
     checkquery() {
-      if (this.$route.query.query === undefined) {
+      if (this.$route.params.filter === "all") {
         this.filter = 1;
-        console.log(this.filter);
-      } else {
+        if (this.$route.query.query === "") {
+          // 검색어를 입력해주세요
+        } else {
+          this.keyword = this.$route.query.query;
+          this.Allsearch();
+        }
+      } else if (this.$route.params.filter === "feed") {
         this.filter = 2;
-        this.keyword = this.$route.query.query;
-        console.log(this.keyword, this.filter);
-        this.Allsearch();
+        if (this.$route.query.query === "") {
+          // 검색어를 입력해주세요
+        } else {
+          this.keyword = this.$route.query.query;
+          this.Allsearch();
+        }
+      } else if (this.$route.params.filter === "user") {
+        this.filter = 3;
+        if (this.$route.query.query === "") {
+          // 검색어를 입력해주세요
+        } else {
+          this.keyword = this.$route.query.query;
+          this.Allsearch();
+        }
+      } else if (this.$route.params.filter === "group") {
+        this.filter = 4;
+        if (this.$route.query.query === "") {
+          // 검색어를 입력해주세요
+        } else {
+          this.keyword = this.$route.query.query;
+          this.Allsearch();
+        }
       }
     },
     filterchange1() {
       if (this.keyword === "") {
-        this.filter = 1;
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "all" },
+            query: { query: "" },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       } else {
-        this.filter = 1;
-        this.Allsearch();
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "all" },
+            query: { query: this.keyword },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       }
     },
     filterchange2() {
       if (this.keyword === "") {
-        this.filter = 2;
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "feed" },
+            query: { query: "" },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       } else {
-        this.filter = 2;
-        this.Allsearch();
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "feed" },
+            query: { query: this.keyword },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       }
     },
     filterchange3() {
       if (this.keyword === "") {
-        this.filter = 3;
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "user" },
+            query: { query: "" },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       } else {
-        this.filter = 3;
-        this.Allsearch();
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "user" },
+            query: { query: this.keyword },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       }
     },
     filterchange4() {
       if (this.keyword === "") {
-        this.filter = 4;
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "group" },
+            query: { query: "" },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       } else {
-        this.filter = 4;
-        this.Allsearch();
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "group" },
+            query: { query: this.keyword },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       }
     },
   },

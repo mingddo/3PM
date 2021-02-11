@@ -90,11 +90,17 @@ export default {
       });
     },
     goToSearch() {
-      this.$router.push({ name: "Search" }).catch((err) => {
-        if (err.name === "NavigationDuplicated") {
-          location.reload();
-        }
-      });
+      this.$router
+        .push({
+          name: "Search",
+          params: { filter: "all" },
+          query: { query: "" },
+        })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
     },
     goToPersonal() {
       this.$router
@@ -137,11 +143,17 @@ export default {
     onClickSidebarSearch(e) {
       this.sideBarToggle(e);
       setTimeout(() => {
-        this.$router.push({ name: "Search" }).catch((err) => {
-          if (err.name === "NavigationDuplicated") {
-            location.reload();
-          }
-        });
+        this.$router
+          .push({
+            name: "Search",
+            params: { filter: "all" },
+            query: { query: "" },
+          })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
       }, 10);
     },
     onClickSidebarProfile(e) {
