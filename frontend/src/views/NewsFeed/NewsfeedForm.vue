@@ -1,12 +1,10 @@
 <template>
   <div>
     <Sidebar />
+      <div class="newsfeed-header" >
+        <NewsFeedHeader :Category="Number(Category)" />
+      </div>
     <div class="newsfeed newsfeed-form">
-      <NewsFeedHeader
-        :Category="Number(Category)"
-        class="newsfeed-header"
-      />
-      
       <section class="newsfeed-form-content">
         <div v-if="Category == 2">
           <div @click="chooseGroup">{{groupName}} </div>
@@ -17,6 +15,7 @@
             </div>
           </div>
         </div>
+
         <div class="newsfeed-form-profile">
           <div class="newsfeed-form-profile-img-space">
             <img
@@ -29,22 +28,20 @@
             username
           </div>
         </div>
-        <div>
+
+        <div class="newsfeed-form-tag-input-container">
           <input class="newsfeed-form-tag-input" id="tags" type="text" placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요" v-model.trim="inputTag" @keyup.enter="addTag">
+          <div style="font-size : 14px; padding-left : 10px; padding-right : 10px;">
+          <i class="far fa-question-circle"></i>태그가 무엇인가요? : 게시물을 표현할 수 있는 짧은 단어를 뜻합니다. 태그를 입력하시면 검색시 회원님의 게시물이 나타납니다.
+          </div>     
         </div>
-        <div>
-          추가한 태그들 : 
+
+        <div class="newsfeed-form-tag-container">
           <span v-for="(tag, idx) in form.tags" :key="idx">
             <button>{{ tag }} <i @click="deleteTag(tag)" class="fas fa-times-circle"></i> </button>
           </span>
         </div>
-        <div>
-          <i class="far fa-question-circle">태그가 무엇인가요?</i>
-          태그를 등록하시면, 검색창에서 해당 태그를 검색시 회원님의 게시물이 나타납니다! 많은 분들과 회원님의 피드를 나누고 싶다면? ... 태그 설명
-          
-        </div>
-        <div>
-          <!-- <label for="content">내용</label> -->
+        <div class="newsfeed-form-content-input-container">
           <textarea class="newsfeed-form-content-input" name="content" placeholder="요즘 어떤 활동을 하고 계신가요?" id="content" cols="30" rows="10" v-model="form.content"></textarea>
         </div>
 
@@ -58,18 +55,13 @@
             <input class="newsfeed-form-img-input" id="video" type="file" @change="selectFile" accept="video/*">
           </div>
           <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
-            <!-- <button @click="getLocation">
-              <i class="fas fa-map-marker-alt"></i> 현재 위치
-            </button> -->
-          </div>
-          <div class="newsfeed-form-img-box" v-if="Category == 2 || Category == 3">
-            <button @click="revealMap">
+            <div class="newsfeed-form-input-map" @click="revealMap">
               <i class="fas fa-map"></i> 지도
-            </button>
+            </div>
           </div>
         </div>
-        <div>
-          <inputmap v-if="showMap" @sendLocation="sendLocation"/>
+        <div v-if="showMap">
+          <inputmap @sendLocation="sendLocation"/>
             <div v-if="location">
               {{ location.place_name }}
               {{ location.address_name }}
@@ -81,7 +73,7 @@
               <!-- <i class="fas fa-times-circle newsfeed-form-img-prevbox-delbtn"></i> -->
               <img class="newsfeed-form-img-prevbox-delbtn" src="https://img.icons8.com/fluent/20/000000/close-window.png"/>
               <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
-              <img :src="view" alt="미리보기 이미지" width="100%">
+              <img :src="view" alt="미리보기 이미지">
             </div>
             
           </div>
@@ -320,34 +312,12 @@ export default {
 };
 </script>
 
-<style>
-* {
-  box-sizing: border-box;
-}
-.newsfeed-form-img {
-  display: flex;
-  flex-direction : row;
-  flex-wrap : wrap;
-}
-.newsfeed-form-img-prevbox-delbtn {
-  margin: 5px;
-  top: 0;
-  right: 0;
+<style scoped>
+.newsfeed {
   position: absolute;
-  z-index: 2;
-  color: red;
-  cursor: pointer;
+  top : 80px;
 }
-.newsfeed-form-img-prevbox-delbtn:hover {
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-  transform: translate3d(0, 0, 0)
-}
-.newsfeed-form-img-prevbox {
-  width: 100px;
-  height: 100px;
-  border: 1px dashed;
-  margin: 20px;
-  position: relative;
-
+button {
+  background-color : #f9e7e7;
 }
 </style>
