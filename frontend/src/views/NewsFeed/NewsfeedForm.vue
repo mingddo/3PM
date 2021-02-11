@@ -6,15 +6,6 @@
       </div>
     <div class="newsfeed newsfeed-form">
       <section class="newsfeed-form-content">
-        <div v-if="Category == 2">
-          <div @click="chooseGroup">{{groupName}} </div>
-          <div v-if="select">
-            <!-- <input type="text"> -->
-            <div v-for="(group, idx) of groupList" :key="idx">
-              <button @click="selectGroup(group)"> {{ group }} </button>
-            </div>
-          </div>
-        </div>
 
         <div class="newsfeed-form-profile">
           <div class="newsfeed-form-profile-img-space">
@@ -26,6 +17,19 @@
           </div>
           <div class="newsfeed-form-profile-name">
             username
+          </div>
+          <div v-if="Category == 2" class="newsfeed-form-group-container">
+            <div @click="chooseGroup">{{groupName}}</div>
+            <div v-if="select" class="newsfeed-form-group">
+              <div class="newsfeed-form-group-list-btn">
+                <button @click="chooseGroup">X</button>
+              </div>
+              <div class="newsfeed-form-group-list">
+                <div v-for="(group, idx) of groupList" :key="idx">
+                  <button @click="selectGroup(group)"> {{ group }} </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
