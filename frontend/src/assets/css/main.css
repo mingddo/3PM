@@ -36,8 +36,9 @@ button.active {
 /* Home.vue */
 .home {
   height: 750vh;
+  width: 100%;
+  position: absolute;
 }
-
 .home-section {
   width: 100%;
   height: 100vh;

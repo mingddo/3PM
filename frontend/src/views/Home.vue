@@ -1,111 +1,110 @@
-<template>
-  <div class="home">
-    <div v-if="!userStatus">
-      <button class="login-btn" @click="onClickLogin">카카오로그인</button>
+<template> 
+  <div>
+    <div class="home">
+      <div v-if="!userStatus">
+        <button class="login-btn" @click="onClickLogin">카카오로그인</button>
+      </div>
+      <div v-else>
+        <button class="login-btn" style="z-index:1000" @click="onClickLogout">
+          로그아웃
+        </button>
+      </div>
+      <!-- <button class="login-btn" @click="deleteKakaoConnection">회원연결끊기</button> -->
+      <section class="clock-container">
+        <div class="clock-box">
+          <div class="clock">
+            <div class="clock-dot"></div>
+            <div class="hour">
+              <div class="hr" id="hr"></div>
+            </div>
+            <div class="min">
+              <div class="mn" id="mn"></div>
+            </div>
+            <div class="sec">
+              <div class="sc" id="sc"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section  class="home-section home-section-before">
+        <div class="home-section-img">
+          <img src="../assets/img/hackinsider.svg" alt="">
+        </div>
+        <div class="home-section-text">
+          <div class="home-section-title">
+            오후 세시
+          </div>
+          <div class="home-section-content">
+            우리의 서비스는 제 2의 인생을시작하는 오팔 세대를 위한 라이프 스타일 공유
+            SNS입니다
+          </div>
+        </div>
+      </section>
+      <section class="home-section-reverse home-section-before">
+        <div class="home-section-text">
+          <div class="home-section-title">
+            꽃보다 집
+          </div>
+          <div class="home-section-content">
+            다른 사람들과 함께하는 활동을 좋아하는 핵인싸, 당신을 위한
+            카테고리입니다. 같은 관심사를 가진 사람들과 함께 그룹을 만들어 모일 수
+            있습니다. 나의 그룹 사람들과 함께 정보, 사진 공유를 해보는 것은
+            어떨까요?
+          </div>
+        </div>
+        <div class="home-section-img">
+          <img src="../assets/img/indoor.svg" alt="">
+        </div>
+      </section>
+      <section class="home-section home-section-before">
+        <div class="home-section-img">
+          <img src="../assets/img/chungsan2.svg" alt="">
+        </div>
+        <div class="home-section-text">
+          <div class="home-section-title">
+            청산별곡
+          </div>
+          <div class="home-section-content">
+            자연과 함께 살고 싶은 로망이 있는 당신을 위한 카테고리 입니다. 곳곳의
+            아름다운 모습과 낚시, 주말농장 등 사진과 함께 위치를 콕! 찍어 공유해
+            보는 것은 어떨까요? 또한, 이곳이 궁금하다! 사진 속 아름 다운 명소의
+            위치를 확인해보세요!
+          </div>
+        </div>
+      </section>
+      <section class="home-section-reverse home-section-before">
+        <div class="home-section-text">
+          <div class="home-section-title">
+            핵인싸
+          </div>
+          <div class="home-section-content">
+            다른 사람들과 함께하는 활동을 좋아하는 핵인싸, 당신을 위한
+            카테고리입니다. 같은 관심사를 가진 사람들과 함께 그룹을 만들어 모일 수
+            있습니다. 나의 그룹 사람들과 함께 정보, 사진 공유를 해보는 것은
+            어떨까요?
+          </div>
+        </div>
+        <div class="home-section-img">
+          <img src="../assets/img/hackinsider.svg" alt="">
+        </div>
+      </section>
+      <section class="home-section home-section-before">
+        <div class="home-section-img">
+          <img src="../assets/img/workerholic2.svg" alt="">
+        </div>
+        <div class="home-section-text">
+          <div class="home-section-title">
+            워커홀릭
+          </div>
+          <div class="home-section-content">
+            내 인생에 은퇴란 없다. 일이 최고, 일을포기하지 못한 당신을 위해
+            준비했습니다. 은퇴 후 경제 활동에 대한 이야기를 나누어 보는 것은
+            어떨까요? 일자리 정보와 복지 정보가 궁금하다면 사이트로 바로 이동할 수
+            있습니다.
+          </div>
+        </div>
+      </section>
     </div>
-    <div v-else>
-      <div @click="goToPersonal">
-        <i class="fas fa-house-user">꽃보다 집</i>
-      </div>
-      <button class="login-btn" style="z-index:1000" @click="onClickLogout">
-        로그아웃
-      </button>
-    </div>
-    <!-- <button class="login-btn" @click="deleteKakaoConnection">회원연결끊기</button> -->
-    <section class="clock-container">
-      <div class="clock-box">
-        <div class="clock">
-          <div class="clock-dot"></div>
-          <div class="hour">
-            <div class="hr" id="hr"></div>
-          </div>
-          <div class="min">
-            <div class="mn" id="mn"></div>
-          </div>
-          <div class="sec">
-            <div class="sc" id="sc"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="home-section home-section-before">
-      <div class="home-section-img">
-        <img src="../assets/img/hackinsider.svg" alt="">
-      </div>
-      <div class="home-section-text">
-        <div class="home-section-title">
-          오후 세시
-        </div>
-        <div class="home-section-content">
-          우리의 서비스는 제 2의 인생을시작하는 오팔 세대를 위한 라이프 스타일 공유
-          SNS입니다
-        </div>
-      </div>
-    </section>
-    <section class="home-section-reverse home-section-before">
-      <div class="home-section-text">
-        <div class="home-section-title">
-          꽃보다 집
-        </div>
-        <div class="home-section-content">
-          다른 사람들과 함께하는 활동을 좋아하는 핵인싸, 당신을 위한
-          카테고리입니다. 같은 관심사를 가진 사람들과 함께 그룹을 만들어 모일 수
-          있습니다. 나의 그룹 사람들과 함께 정보, 사진 공유를 해보는 것은
-          어떨까요?
-        </div>
-      </div>
-      <div class="home-section-img">
-        <img src="../assets/img/indoor.svg" alt="">
-      </div>
-    </section>
-    <section class="home-section home-section-before">
-      <div class="home-section-img">
-        <img src="../assets/img/chungsan2.svg" alt="">
-      </div>
-      <div class="home-section-text">
-        <div class="home-section-title">
-          청산별곡
-        </div>
-        <div class="home-section-content">
-          자연과 함께 살고 싶은 로망이 있는 당신을 위한 카테고리 입니다. 곳곳의
-          아름다운 모습과 낚시, 주말농장 등 사진과 함께 위치를 콕! 찍어 공유해
-          보는 것은 어떨까요? 또한, 이곳이 궁금하다! 사진 속 아름 다운 명소의
-          위치를 확인해보세요!
-        </div>
-      </div>
-    </section>
-    <section class="home-section-reverse home-section-before">
-      <div class="home-section-text">
-        <div class="home-section-title">
-          핵인싸
-        </div>
-        <div class="home-section-content">
-          다른 사람들과 함께하는 활동을 좋아하는 핵인싸, 당신을 위한
-          카테고리입니다. 같은 관심사를 가진 사람들과 함께 그룹을 만들어 모일 수
-          있습니다. 나의 그룹 사람들과 함께 정보, 사진 공유를 해보는 것은
-          어떨까요?
-        </div>
-      </div>
-      <div class="home-section-img">
-        <img src="../assets/img/hackinsider.svg" alt="">
-      </div>
-    </section>
-    <section class="home-section home-section-before">
-      <div class="home-section-img">
-        <img src="../assets/img/workerholic2.svg" alt="">
-      </div>
-      <div class="home-section-text">
-        <div class="home-section-title">
-          워커홀릭
-        </div>
-        <div class="home-section-content">
-          내 인생에 은퇴란 없다. 일이 최고, 일을포기하지 못한 당신을 위해
-          준비했습니다. 은퇴 후 경제 활동에 대한 이야기를 나누어 보는 것은
-          어떨까요? 일자리 정보와 복지 정보가 궁금하다면 사이트로 바로 이동할 수
-          있습니다.
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -156,7 +155,6 @@ export default {
         },
       });
     },
-
     kakaoAccoutInfo() {
       window.Kakao.API.request({
         url: "/v2/user/me",
@@ -225,8 +223,8 @@ export default {
     },
     onClickLogin() {
       this.kakaoLogin();
+       this.$router.push({ name: "NewsfeedPersonal", query: { Category: "1" } })
     },
-
     onClickLogout() {
       this.kakaoLogout();
     },

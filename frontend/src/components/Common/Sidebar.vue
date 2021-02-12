@@ -10,18 +10,27 @@
     </div>
     <div class="nav-toggle-switch">
       <div style="padding-right : 15px;">
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search" @click="goToSearch"></i>
       </div>
     </div>
     <div class="nav-content" v-if="userStatus">
       <div @click="goToPersonal">
         <i class="fas fa-house-user">꽃보다 집</i>
       </div>
+      <div @click="goToChungSan">
+        <i class="fas fa-route">청산별곡</i>
+      </div>
       <div @click="goToSearch">
         <i class="fas fa-search">검색</i>
       </div>
       <div @click="goToProfile">
         <i class="fas fa-user">프로필</i>
+      </div>
+      <div @click="goToSetting">
+        <i class="fas fa-cog">설정 변경</i>
+      </div>
+      <div @click="goToLogout">
+        <i class="fas fa-sign-out-alt">로그아웃</i>
       </div>
     </div>
 
@@ -34,11 +43,20 @@
         <div @click="onClickSidebarPersonal">
           <i class="sidebar-fas fas fa-house-user">꽃보다 집</i>
         </div>
+        <div @click="onClickSidebarChungSan">
+          <i class="sidebar-fas fas fa-route">청산별곡</i>
+        </div>
         <div @click="onClickSidebarSearch">
           <i class="sidebar-fas fas fa-search">검색</i>
         </div>
         <div @click="onClickSidebarProfile">
           <i class="sidebar-fas fas fa-user">프로필</i>
+        </div>
+        <div @click="onClickSidebarSetting">
+          <i class="sidebar-fas fas fa-cog">설정 변경</i>
+        </div>
+        <div @click="onClickSidebarLogout">
+          <i class="sidebar-fas fas fa-sign-out-alt">로그아웃</i>
         </div>
       </div>
     </div>
@@ -46,7 +64,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "Nav",
   data() {
@@ -54,7 +72,11 @@ export default {
       toggleStatus: false,
     };
   },
+  created () {
+
+  },
   methods: {
+    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
     sideBarToggle(e) {
       const toggleBar = document.querySelector(".nav-toggle-bar-before");
       const overlay = document.querySelector(".overlay");
@@ -111,12 +133,28 @@ export default {
           }
         });
     },
+    goToChungSan() {
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "2" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
     goToProfile() {
       this.$router.push({ name: "MyPage" }).catch((err) => {
         if (err.name === "NavigationDuplicated") {
           location.reload();
         }
       });
+    },
+    goToSetting() {
+      alert('setting 창으로 가기')
+      location.reload();
+    },
+    goToLogout() {
+      this.kakaoLogout();
     },
     onClickSidebarPersonal(e) {
       this.sideBarToggle(e);
@@ -129,6 +167,19 @@ export default {
             }
           });
       }, 10);
+    },
+    onClickSidebarChungSan(e) {
+      this.sideBarToggle(e);
+      setTimeout(() => {
+        this.$router
+          .push({ name: "NewsfeedPersonal", query: { Category: "2" } })
+          .catch((err) => {
+            if (err.name === "NavigationDuplicated") {
+              location.reload();
+            }
+          });
+      }, 10);
+
     },
     onClickSidebarHome(e) {
       this.sideBarToggle(e);
@@ -166,11 +217,31 @@ export default {
         });
       }, 10);
     },
+    onClickSidebarSetting(e) {
+      this.sideBarToggle(e);
+      setTimeout(() => {
+        alert('setting 창으로 가기')
+        location.reload();
+      }, 10);
+    },
+    onClickSidebarLogout() {
+      this.kakaoLogout();
+      setTimeout(() => {
+        location.reload();
+      }, 10);
+    },
+    kakaoLogout() {
+      window.Kakao.Auth.logout(() => {
+        this.setUserId(null);
+        this.setAuthToken(null);
+        this.setKakaoId(null);
+        this.setUserStatus(null);
+        alert("logout");
+      });
+    },
   },
   computed: {
-    ...mapState({
-      userStatus: (state) => state.userStatus,
-    }),
+    ...mapState(["userStatus", "kakaoId", "userId", "authToken"]),
   },
 };
 </script>

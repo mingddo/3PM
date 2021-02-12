@@ -11,6 +11,7 @@ import {mapState} from 'vuex'
 import "@/assets/css/main.css"
 import "@/assets/css/newsfeed.css"
 import "@/assets/css/mypage.css"
+import "@/assets/css/search.css"
 
 export default {
   components: { },
@@ -48,6 +49,14 @@ export default {
     padding-top: 0px;
   }
   .newsfeed {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .myPagemainSection {
+    width : 100%;
+    margin: 0 auto;
+  }
+  .searchFrame {
     width: 100%;
     margin: 0 auto;
   }

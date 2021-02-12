@@ -35,59 +35,5 @@ export default {
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
 
-.GroupResultFrame {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 24px;
-}
-.Group-resultImgFrame {
-  width: 70px;
-  height: 70px;
-  margin-left: 12px;
-  overflow: hidden;
-  border-radius: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.Group-resultImgFrame-img {
-  width: 100px;
-  object-fit: cover;
-}
-
-.Group-reultDetail {
-  width: 75%;
-  height: 92px;
-  margin: auto 0;
-  margin-left: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-.Group-rsultDetailTilte {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.Group-resultDetailcontent {
-  width: 100%;
-  margin-bottom: 5px;
-  font-size: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: break-word;
-}
-
-.Group-resultDetailcnt {
-  font-size: 16px;
-}
 </style>
