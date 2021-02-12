@@ -17,4 +17,14 @@ public class CommentRepositoryImpl implements CommentRepository {
         em.persist(comment);
         return comment;
     }
+
+    @Override
+    public Comment findById(Long id) {
+        return em.find(Comment.class, id);
+    }
+
+    @Override
+    public void delete(Comment comment) {
+        em.remove(comment);
+    }
 }

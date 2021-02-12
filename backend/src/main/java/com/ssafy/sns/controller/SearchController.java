@@ -3,6 +3,7 @@ package com.ssafy.sns.controller;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.dto.search.SearchResponseDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;
+import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.SearchServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -26,6 +28,7 @@ public class SearchController {
 
     @Autowired
     private SearchServiceImpl searchService;
+    private JwtService jwtService;
 
     // return 형태 List<SearchResponseDto> -> (tagname, List<IndoorResponseDto>)
     @ApiOperation("키워드 검색을 통해 게시물 받아오기")
@@ -33,11 +36,12 @@ public class SearchController {
             @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
     })
     @GetMapping("/all")
-    public ResponseEntity<Map<String, Object>> searchAll(@RequestParam("keyword") String keyword){
+    public ResponseEntity<Map<String, Object>> searchAll(@RequestParam("keyword") String keyword,
+                                                         HttpServletRequest request){
         Map<String, Object> map = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {
-            map.put("feedList", searchFeed(keyword));
+            map.put("feedList", searchFeed(keyword, request));
             map.put("userList", searchUser(keyword));
         } catch (Exception e) {
             logger.warn("전체 검색 에러 : {}", e.getMessage());
@@ -48,11 +52,13 @@ public class SearchController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<SearchResponseDto>> searchFeed(@RequestParam("keyword") String keyword){
+    public ResponseEntity<List<SearchResponseDto>> searchFeed(@RequestParam("keyword") String keyword,
+                                                              HttpServletRequest request) {
         List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(h)));
+            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(
+                    jwtService.findId(request.getHeader("Authorization")), h)));
         }
         return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
     }

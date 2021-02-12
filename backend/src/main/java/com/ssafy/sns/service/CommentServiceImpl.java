@@ -31,4 +31,32 @@ public class CommentServiceImpl implements CommentService {
         user.addComment(comment);
         feed.addComment(comment);
     }
+
+    @Override
+    public void modify(CommentRequestDto commentRequestDto, Long userId, Long feedId, Long commentId) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        if (feedRepository.findById(feedId) == null) throw new NoSuchElementException();
+
+        Comment comment = commentRepository.findById(commentId);
+        if (commentId == null || !comment.getUser().getId().equals(user.getId())) {
+            throw new NoSuchElementException();
+        }
+        comment.update(commentRequestDto);
+    }
+
+    @Override
+    public void remove(Long userId, Long feedId, Long commentId) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Feed feed = feedRepository.findById(feedId);
+        if (feed == null) throw new NoSuchElementException();
+
+        Comment comment = commentRepository.findById(commentId);
+        if (commentId == null || !comment.getUser().getId().equals(user.getId())) {
+            throw new NoSuchElementException();
+        }
+
+        user.deleteComment(comment);
+        feed.deleteComment(comment);
+        commentRepository.delete(comment);
+    }
 }

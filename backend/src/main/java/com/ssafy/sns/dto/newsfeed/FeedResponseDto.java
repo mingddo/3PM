@@ -23,8 +23,9 @@ public class FeedResponseDto {
     private List<String> tags = new ArrayList<>();
     private LocalDateTime date;
     private int likeCnt;
+    private boolean isClap;
 
-    public FeedResponseDto(Feed feed, int likeCnt) {
+    public FeedResponseDto(Feed feed, int likeCnt,boolean isClap) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
@@ -39,5 +40,6 @@ public class FeedResponseDto {
             this.file = null;
         }
         this.likeCnt = likeCnt;
+        this.isClap = isClap;
     }
 }
