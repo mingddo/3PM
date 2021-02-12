@@ -65,9 +65,10 @@ input:focus {
 }
 
 .searchFrame {
-  width: 80%;
+  /* width: 80%; */
   position: absolute;
-  margin-left: 300px;
+  left : 350px;
+  right : 50px;
   height: auto;
   display: flex;
   flex-direction: column;

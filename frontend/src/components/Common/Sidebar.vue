@@ -154,7 +154,10 @@ export default {
       location.reload();
     },
     goToLogout() {
-      this.kakaoLogout();
+      this.kakaoLogout()
+      .then(()=> {
+        this.$router.push({ name: "Home" })
+      })
     },
     onClickSidebarPersonal(e) {
       this.sideBarToggle(e);
@@ -225,19 +228,22 @@ export default {
       }, 10);
     },
     onClickSidebarLogout() {
-      this.kakaoLogout();
-      setTimeout(() => {
-        location.reload();
-      }, 10);
+      this.kakaoLogout()
+      .then(()=> {
+        this.$router.push({ name: "Home" })
+      })
     },
     kakaoLogout() {
-      window.Kakao.Auth.logout(() => {
-        this.setUserId(null);
-        this.setAuthToken(null);
-        this.setKakaoId(null);
-        this.setUserStatus(null);
-        alert("logout");
-      });
+      return new Promise((resolve) => {
+        window.Kakao.Auth.logout(() => {
+          this.setUserId(null);
+          this.setAuthToken(null);
+          this.setKakaoId(null);
+          this.setUserStatus(null);
+          alert('logout')
+          resolve()
+        });
+      })
     },
   },
   computed: {

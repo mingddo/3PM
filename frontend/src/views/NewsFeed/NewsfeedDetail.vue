@@ -75,7 +75,7 @@
           @closeClapList="closeClapList"
         />
         <div class="feed-detail-like-comment-share-btn-box">
-          <div @click="likeFeed" class="f eed-detail-like-comment-share-btn">
+          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
             <i class="far fa-thumbs-up"></i>
             좋아요
           </div>

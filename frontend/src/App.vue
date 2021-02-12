@@ -50,19 +50,23 @@ export default {
   }
   .newsfeed {
     width: 100%;
-    margin: 0 auto;
+    left : 0;
+    right : 0;
   }
   .myPagemainSection {
     width : 100%;
-    margin: 0 auto;
+    left : 0;
+    right : 0;
   }
   .searchFrame {
     width: 100%;
-    margin: 0 auto;
+    left : 0;
+    right : 0;
   }
   .newsfeed-header{
     width : 100%;
-    margin: 0 auto;
+    left : 0;
+    right : 0;
   }
   .nav-toggle-switch {
     display: block; 
