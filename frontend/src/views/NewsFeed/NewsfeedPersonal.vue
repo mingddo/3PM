@@ -7,8 +7,10 @@
         <NewsFeedHeader :Category="Category" />
       </div>
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
+        <WorkerHolicBanner v-if="Category == 4"/>
         <!-- <NewsFeedRecommend :reco="reco" :Category="Category" /> -->
-        <div>   <!--임시로 자리차지하기-->
+        <!-- 임시로 자리차지하기 -->
+        <div v-else> 
           <p style="padding-top : 40px; padding-bottom:40px; text-align :center;">박수를 가장 많이 받은 게시물</p>
           <p style="display:flex;justify-content:center;align-items:center;height:240px;background-color:rgba(0,0,0,0.5)">캐러셀이 있는 장소</p>
         </div>
@@ -23,6 +25,7 @@ import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 // import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
+import WorkerHolicBanner from '../../components/NewsFeed/Recommend.vue/WorkerHolicBanner.vue';
 
 export default {
   name: "NewsfeedPersonal",
@@ -31,6 +34,7 @@ export default {
     // NewsFeedRecommend,
     NewsFeedList,
     Sidebar,
+    WorkerHolicBanner,
   },
   data() {
     return {
