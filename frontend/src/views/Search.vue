@@ -65,53 +65,38 @@
             </div>
           </div>
         </div>
-        <!-- 컴포넌트 -->
-        <transition name="fade">
-          <div v-if="loaded" class="searchResultList">
-            <span v-if="filter === 1">
-              <GroupResults
-                :category="category_group"
-                :groupresults="search_result_all.userList.body"
-              />
-            </span>
-            <span v-if="filter === 1">
-              <GroupResults
-                :groupresults="search_result_all.userList.body"
-                :category="category_person"
-              />
-            </span>
-            <span v-if="filter === 1 || filter === 2">
-              <SerachResult
-                v-for="(result, idx) in search_result_feed"
-                :key="idx"
-                :result="result"
-              />
-            </span>
-            <span v-if="filter === 3">
-              <FilterGroup
-                v-for="(grouplist, idx) in search_result_user"
-                :key="idx"
-                :grouplist="grouplist"
-              />
-            </span>
-            <span v-if="filter === 4">
-              <GroupResult
-                v-for="(grouplist, idx) in search_result_group"
-                :key="idx"
-                :grouplist="grouplist"
-              />
-            </span>
-          </div>
-        </transition>
-        <!-- <div >검색 중 ....</div> -->
-
-        <article v-if="loading" class="spiner">
-          <div style="width:100%" class="loading-img-frame">
-            <img
-              src="@/assets/searching.svg"
-              alt=""
-              width="50%"
-              id="searching-img"
+      </div>
+      <!-- 컴포넌트 -->
+      <transition name="fade">
+        <div v-if="loaded" class="searchResultList">
+          <!-- <span v-show="filter === 1">
+            <GroupResults :category="category_group" />
+          </span> -->
+          <span v-if="filter === 1">
+            <GroupResults
+              :groupresults="search_result_all.userList.body"
+              :category="category_person"
+            />
+          </span>
+          <span v-if="filter === 1 || filter === 2">
+            <SerachResult
+              v-for="(result, idx) in search_result_feed"
+              :key="idx"
+              :result="result"
+            />
+          </span>
+          <span v-if="filter === 3">
+            <FilterGroup
+              v-for="(grouplist, idx) in search_result_user"
+              :key="idx"
+              :grouplist="grouplist"
+            />
+          </span>
+          <span v-if="filter === 4">
+            <GroupResult
+              v-for="(grouplist, idx) in search_result_group"
+              :key="idx"
+              :grouplist="grouplist"
             />
           </div>
         </article>
@@ -153,23 +138,8 @@ export default {
           headers: {},
           body: [
             {
-              id: 1,
-              nickname: "test1",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test2",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test3",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test4",
+              id: null,
+              nickname: "",
               img: null,
             },
           ],
@@ -179,25 +149,25 @@ export default {
       },
       search_result_user: [
         {
-          id: 0,
+          id: null,
           img: null,
-          nickname: "string",
+          nickname: "",
         },
       ],
       search_result_feed: [
         {
           indoorResponseDtoList: [
             {
-              content: "string",
-              date: "2021-02-09T11:11:00.289Z",
-              file: "string",
+              content: "",
+              date: "",
+              file: "",
               id: 0,
               likeCnt: 0,
-              tags: ["string"],
+              tags: [""],
               user: {
                 id: 0,
                 img: null,
-                nickname: "string",
+                nickname: "",
               },
             },
           ],
@@ -235,6 +205,8 @@ export default {
                 this.empty_search = true;
               } else {
                 this.search_result_all = res.data;
+                this.search_result_feed = res.data.feedList.body;
+                console.log(this.search_result_all);
                 this.loaded = true;
                 this.loading = false;
               }
@@ -272,7 +244,7 @@ export default {
                 this.loading = false;
                 this.empty_search = true;
               } else {
-                this.search_result_feed = res.data;
+                this.search_result_user = res.data;
                 this.loaded = true;
                 this.loading = false;
               }
@@ -291,7 +263,7 @@ export default {
       if (this.$route.params.filter === "all") {
         this.filter = 1;
         if (this.$route.query.query === "") {
-          // 검색어를 입력해주세요
+          this.loaded = false;
         } else {
           this.keyword = this.$route.query.query;
           this.Allsearch();
@@ -299,7 +271,7 @@ export default {
       } else if (this.$route.params.filter === "feed") {
         this.filter = 2;
         if (this.$route.query.query === "") {
-          // 검색어를 입력해주세요
+          this.loaded = false;
         } else {
           this.keyword = this.$route.query.query;
           this.Allsearch();
