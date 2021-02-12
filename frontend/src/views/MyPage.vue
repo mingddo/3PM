@@ -87,20 +87,6 @@
                     class="activeBar"
                   ></div>
                 </div>
-                <span :class="[mypage ? '' : 'profile_none']">
-                  <div class="myPageTabLinkContent">
-                    <a
-                      @click.prevent="activetab = 2"
-                      :class="[activetab === 2 ? 'active' : '']"
-                      >최근 활동</a
-                    >
-                    <div
-                      :class="[activetab === 2 ? 'active' : '']"
-                      class="activeBar"
-                    ></div>
-                  </div>
-                </span>
-
                 <div class="myPageTabLinkContent">
                   <a
                     @click.prevent="activetab = 3"
@@ -123,10 +109,18 @@
                     class="activeBar"
                   ></div>
                 </div>
+                <div v-if="mypage" class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 2"
+                    :class="[activetab === 2 ? 'active' : '']"
+                    >최근 활동</a
+                  >
+                  <div
+                    :class="[activetab === 2 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
               </div>
-              <span :class="[mypage ? '' : 'profile_none']">
-                <div class="settings">설정 변경</div>
-              </span>
             </div>
           </div>
         </div>

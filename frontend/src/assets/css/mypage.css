@@ -77,7 +77,7 @@
 }
 
 .profileDetailInfo {
-  min-width: 100px;
+  min-width: 80px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -124,7 +124,7 @@
   align-items: center;
 }
 .activeBar {
-  width: 100px;
+  width: 100%;
   height: 3px;
 }
 .activeBar.active {
@@ -172,11 +172,12 @@
 .myPagemainSection {
   position: absolute;
   top: 80px;
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  margin-left: 300px;
 }
 .profileImgFrame {
   margin: 5px;
