@@ -66,12 +66,9 @@
       <!-- 컴포넌트 -->
       <transition name="fade">
         <div v-if="loaded" class="searchResultList">
-          <span v-if="filter === 1">
-            <GroupResults
-              :category="category_group"
-              :groupresults="search_result_all.userList.body"
-            />
-          </span>
+          <!-- <span v-show="filter === 1">
+            <GroupResults :category="category_group" />
+          </span> -->
           <span v-if="filter === 1">
             <GroupResults
               :groupresults="search_result_all.userList.body"
@@ -149,23 +146,8 @@ export default {
           headers: {},
           body: [
             {
-              id: 1,
-              nickname: "test1",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test2",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test3",
-              img: null,
-            },
-            {
-              id: 1,
-              nickname: "test4",
+              id: null,
+              nickname: "",
               img: null,
             },
           ],
@@ -175,25 +157,25 @@ export default {
       },
       search_result_user: [
         {
-          id: 0,
+          id: null,
           img: null,
-          nickname: "string",
+          nickname: "",
         },
       ],
       search_result_feed: [
         {
           indoorResponseDtoList: [
             {
-              content: "string",
-              date: "2021-02-09T11:11:00.289Z",
-              file: "string",
+              content: "",
+              date: "",
+              file: "",
               id: 0,
               likeCnt: 0,
-              tags: ["string"],
+              tags: [""],
               user: {
                 id: 0,
                 img: null,
-                nickname: "string",
+                nickname: "",
               },
             },
           ],
@@ -231,6 +213,8 @@ export default {
                 this.empty_search = true;
               } else {
                 this.search_result_all = res.data;
+                this.search_result_feed = res.data.feedList.body;
+                console.log(this.search_result_all);
                 this.loaded = true;
                 this.loading = false;
               }
@@ -268,7 +252,7 @@ export default {
                 this.loading = false;
                 this.empty_search = true;
               } else {
-                this.search_result_feed = res.data;
+                this.search_result_user = res.data;
                 this.loaded = true;
                 this.loading = false;
               }
@@ -287,7 +271,7 @@ export default {
       if (this.$route.params.filter === "all") {
         this.filter = 1;
         if (this.$route.query.query === "") {
-          // 검색어를 입력해주세요
+          this.loaded = false;
         } else {
           this.keyword = this.$route.query.query;
           this.Allsearch();
@@ -295,7 +279,7 @@ export default {
       } else if (this.$route.params.filter === "feed") {
         this.filter = 2;
         if (this.$route.query.query === "") {
-          // 검색어를 입력해주세요
+          this.loaded = false;
         } else {
           this.keyword = this.$route.query.query;
           this.Allsearch();

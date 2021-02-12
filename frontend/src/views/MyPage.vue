@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Sidebar/>
+    <Sidebar />
 
     <section class="myPagemainSection">
       <header class="myPageHeaderFrame">
@@ -26,7 +26,10 @@
             </div>
             <h1>{{ profileinfo.username }}</h1>
             <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
-            <div :class="[!mypage ? '' : 'profile_none']" class="myPageSubscribe">
+            <div
+              :class="[!mypage ? '' : 'profile_none']"
+              class="myPageSubscribe"
+            >
               <div
                 :class="{ profielSubscribedNone: subscribed }"
                 class="myPageSubscribed"
@@ -151,7 +154,6 @@
       </article>
     </section>
   </div>
-  
 </template>
 
 <script>
@@ -163,7 +165,13 @@ import { getprofileInfo, getprofileFeed } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
 export default {
-  components: { Sidebar,Activity, SubscribedList, GroupList, NewsFeedList },
+  components: {
+    Sidebar,
+    Activity,
+    SubscribedList,
+    GroupList,
+    NewsFeedList,
+  },
   data() {
     return {
       name: "명도균",
@@ -331,4 +339,3 @@ export default {
   },
 };
 </script>
-
