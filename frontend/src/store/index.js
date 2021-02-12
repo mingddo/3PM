@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    defaultImg: '20210205132713974_img1.jpg',
     userStatus : null,
     authToken : null,
     refToken : null,
