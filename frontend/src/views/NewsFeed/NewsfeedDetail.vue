@@ -4,23 +4,10 @@
     <div class="newsfeed">
       <section v-if="fd" v-cloak class="feed-detail">
         <div class="feed-detail-userprofile-box">
-          <div class="feed-userprofile-space">
-              <img
-              v-if="fd.user.img"
-              :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.user.img}`"
-              onerror="this.src='http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg'"
-              alt="유저프로필이미지"
-              class="feed-userprofile-image"
-              @click="goToProfile"
-            >
-            <img
-              v-else
-              src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
-              alt="유저프로필이미지"
-              class="feed-userprofile-image"
-              @click="goToProfile"
-            >
-          </div>
+          <NewsFeedProfile
+            :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+            :userId="fd.user.id"
+          />
           <div class="feed-detail-userprofile-content">
             <div>
               <h3 v-if="fd.user.nickname" class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
@@ -50,6 +37,10 @@
               <!-- {{fd.content}} -->
             </p>
           </div>
+          <!-- <div v-if="Category == 2 || Category == 3"> -->
+          <div >
+            지도위치
+          </div>
         </article>
 
         <div class="feed-detail-modi-delete" v-if="userpk == fd.user.id">
@@ -63,7 +54,7 @@
 
         
         <div class="feed-detail-like-comment">
-          <span>
+          <span @click="clapedList">
               <i class="far fa-thumbs-up"></i>
               <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span>
           </span>
@@ -71,10 +62,14 @@
             <i class="far fa-comment"></i>
             <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
           </span>
-        </div>
-
+        </div>  
+        <NewsFeedClapUser
+          v-if="clapListOpen"
+          :clapedUsers="clapedUsers"
+          @closeClapList="closeClapList"
+        />
         <div class="feed-detail-like-comment-share-btn-box">
-          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
+          <div @click="likeFeed" class="f eed-detail-like-comment-share-btn">
             <i class="far fa-thumbs-up"></i>
             좋아요
           </div>
@@ -105,9 +100,10 @@
         </div>
 
         <section>
-          <div v-for="(comment, idx) in fd.comment" :key="idx">
+          <div v-for="(comment, idx) in comments" :key="idx">
             <NewsFeedCommentItem
               :comment="comment"
+              @pushUserToComment="pushUserToComment"
             />
           </div>
         </section>
@@ -119,19 +115,24 @@
 <script>
 import { Mentionable } from 'vue-mention'
 import '@/assets/css/mention.css'
-// import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
+import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { deleteFeed } from '@/api/feed.js'
 import { clapFeed } from '@/api/feed.js'
+import { clapFeedList } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
+import NewsFeedProfile from '../../components/NewsFeed/NewsFeedProfile.vue';
+import NewsFeedClapUser from '../../components/NewsFeed/NewsFeedClapUser.vue';
 
 export default {
   name: 'NewsfeedDetail',
   components: {
     Sidebar,
     Mentionable,
-    // NewsFeedCommentItem,
+    NewsFeedCommentItem,
+    NewsFeedProfile,
+    NewsFeedClapUser,
   },
   data() {
     return {
@@ -143,17 +144,33 @@ export default {
       mention: [],
       auto:false,
       items: [],
+      comments: [],
+      clapedUsers: [],
+      clapListOpen: false,
     };
   },
-  // updated () {
-  //   this.autoCompleted ();
-  // },
-  watch: {
-    // commentInput: function () {
-    //   console.log('변화된', this.commentInput)
-    // },
-  },
   methods: {
+    closeClapList () {
+      this.clapListOpen = false;
+    },
+    clapedList () {
+      this.clapListOpen = true;
+      clapFeedList(
+        this.fd.id,
+        (res) => {
+          this.clapedUsers = res.data.users
+          console.log(this.clapedUsers)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
+    pushUserToComment (user) {
+      this.commentInput += `@${user} `
+      let input = document.getElementById('comment')
+      input.focus();
+    },
     commentKeyup (e) {
       this.commentInput = e.target.value;
       let lastChar = this.commentInput.charAt(this.commentInput.length-1)
@@ -210,6 +227,11 @@ export default {
         this.fd.id,
         (res) => {
           alert(`${this.fd.id} 번째 글을 좋아합니다.`)
+          if (this.fd.like) {
+            this.fd.likeCnt = this.fd.likeCnt - 1
+          } else {
+            this.fd.likeCnt = this.fd.likeCnt + 1
+          }
           console.log(res)
         },
         (err) => {
@@ -217,7 +239,6 @@ export default {
         }
       )
       
-      // like axios
     },
     shareFeed () {
       const answer = window.confirm('내 피드에 공유하시겠습니까?')
@@ -307,6 +328,17 @@ export default {
             console.log(err)
           }
         )
+        this.comments = [{
+          user: {
+            nickname: '잔수',
+            img: null,
+            id: 101,
+          },
+          date: '2021-02-12',
+          content: '댓글 내용입니다 ^^',
+          likeCnt : 10,
+          nested_commentCnt : 20,
+        }]
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
       } else if (this.Category == 3) {
@@ -322,6 +354,7 @@ export default {
   computed: {
     ...mapState({
       userpk : (state) => state.userId,
+      defaultImg: (state) => state.defaultImg,
     })
   },
 };

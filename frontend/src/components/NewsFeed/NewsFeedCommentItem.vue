@@ -3,12 +3,22 @@
     <div>
       <div class="feed-comment-userprofile-box">
         <div class="feed-comment-userprofile">
-          <img
+          <NewsFeedProfile
+            v-if="comment.user.img"
+            :proImg="comment.user.img"
+            :userId="comment.user.id"
+          />
+          <NewsFeedProfile
+            v-else
+            :proImg="'20210205132713974_img1.jpg'"
+            :userId="comment.user.id"
+          />
+          <!-- <img
             src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
             alt="유저프로필이미지"
             class="feed-comment-userprofile-img"
             @click="goToProfile"
-          >
+          > -->
           <div class="feed-comment-userprofile-content">
             <h3 class="feed-comment-userprofile-name" @click="goToProfile">{{ comment.user.nickname }}</h3>
             <p class="feed-comment-userprofile-date">{{ comment.date }} </p>
@@ -41,12 +51,17 @@
       <div class="feed-comment-like-nested">
         <div class="feed-comment-like-btn">
           <i class="far fa-comment" @click="changeNested">
-            {{ comment.nested_comment.length }}
+            {{ comment.nested_commentCnt }}
           </i>
         </div>
         <div>
           <i class="far fa-thumbs-up" @click="likeComment">
-            {{ comment.like.length }}
+            {{ comment.likeCnt }}
+          </i>
+        </div>
+        <div>
+          <i class="fas fa-quote-left" @click="mentionUSer">
+            소환
           </i>
         </div>
       </div>
@@ -77,9 +92,10 @@
 
 <script>
 import NewsFeedCommentNested from './NewsFeedCommentNested.vue';
+import NewsFeedProfile from './NewsFeedProfile.vue';
 export default {
   name: 'NewsFeedCommentItem',
-  components: { NewsFeedCommentNested },
+  components: { NewsFeedCommentNested, NewsFeedProfile },
   props: {
     comment: Object,
   },
@@ -93,6 +109,9 @@ export default {
     };
   },
   methods: {
+    mentionUSer () {
+      this.$emit('pushUserToComment', this.comment.user.nickname)
+    },
     createNestedComment () {
       if (!this.nestedCommentInput) {
         alert('내용을 입력해주세요')
