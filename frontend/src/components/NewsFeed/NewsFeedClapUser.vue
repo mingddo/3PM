@@ -28,7 +28,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import NewsFeedProfile from './NewsFeedProfile.vue';
+import NewsFeedProfile from './Common/NewsFeedProfile.vue';
 export default {
   components: { NewsFeedProfile },
   name: 'NewsFeedClapUser',

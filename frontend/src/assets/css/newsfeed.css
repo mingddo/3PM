@@ -2,6 +2,10 @@
 .feed-detail {
   height: auto  ;
 }
+.feed-detail-userprofile {
+  display: flex;
+  justify-content: space-between;
+}
 .feed-detail-userprofile-box {
   display: flex;
 }
@@ -17,6 +21,11 @@
 }
 .feed-detail-userprofile-name {
   cursor: pointer;
+}
+.feed-detail-userprofile-dropBtn {
+  margin: 20px;
+  cursor: pointer;
+  position: relative;
 }
 .feed-detail-tag {
   text-align : left;
@@ -318,6 +327,9 @@
 .feed-userprofile-name {
   cursor: pointer;
 }
+.feed-userprofile-name:hover {
+  text-decoration: underline;
+}
 .feed-content-box {
   cursor: pointer;
   text-align: left;
@@ -340,6 +352,7 @@
 }
 .feed-tag-box {
   display: flex;
+
 }
 .feed-footer {
 }

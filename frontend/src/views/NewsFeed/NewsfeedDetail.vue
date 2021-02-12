@@ -3,22 +3,28 @@
     <Sidebar />
     <div class="newsfeed">
       <section v-if="fd" v-cloak class="feed-detail">
-        <div class="feed-detail-userprofile-box">
-          <NewsFeedProfile
-            :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
-            :userId="fd.user.id"
-          />
-          <div class="feed-detail-userprofile-content">
-            <div>
-              <h3 v-if="fd.user.nickname" class="feed-detail-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
-              <h3 v-else class="feed-detail-userprofile-name" @click="goToProfile">anonymous</h3>
+        <div class="feed-detail-userprofile">
+          <div class="feed-detail-userprofile-box">
+            <NewsFeedProfile
+              :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+              :userId="fd.user.id"
+            />
+            <div class="feed-detail-userprofile-content">
+              <div>
+                <h3 class="feed-detail-userprofile-name" @click="goToProfile">{{ fd.user.nickname !== null ? fd.user.nickname : '회원정보 없음'}}</h3>
+              </div>
+              <div>
+                <p>{{ date }} {{ time }} </p>
+              </div>
             </div>
-            
-            <div>
-              <p>{{ date }} {{ time }} </p>
-            </div>
-            
           </div>
+
+          <UserInfoBtn 
+            class="feed-detail-userprofile-dropBtn"
+            :id="fd.user.id"
+            :follow="fd.follow"
+          />
+
 
         </div>
 
@@ -38,27 +44,20 @@
             </p>
           </div>
           <!-- <div v-if="Category == 2 || Category == 3"> -->
-          <div class="feed-detail-map">
-            <div> {{ placeName }} <button @click="showMap"> {{ aboutMap }} </button> </div>
-            
-            <NewsFeedMap
-              v-if="aboutMap =='지도 닫기'"
-              :latitude="latitude"
-              :longitude="longitude"  
-            />
-          </div>
+          <Location
+            :latitude="latitude"
+            :longitude="longitude"
+            :placeName="placeName"
+          />
         </article>
-
-        <div class="feed-detail-modi-delete" v-if="userpk == fd.user.id">
-          <button @click="changeModiForm">
-            수정하기
-          </button>
-          <button @click="deleteFeed">
-            삭제하기
-          </button>
-        </div>
-
         
+        <ModiAndDelete
+          class="feed-detail-modi-delete"
+          v-if="userpk == fd.user.id"
+          :fd="fd"
+          :Category="Number(Category)"
+        />
+
         <div class="feed-detail-like-comment">
           <span @click="clapedList">
               <i class="far fa-thumbs-up"></i>
@@ -75,7 +74,7 @@
           @closeClapList="closeClapList"
         />
         <div class="feed-detail-like-comment-share-btn-box">
-          <div @click="likeFeed" class="f eed-detail-like-comment-share-btn">
+          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
             <i class="far fa-thumbs-up"></i>
             좋아요
           </div>
@@ -124,13 +123,14 @@ import '@/assets/css/mention.css'
 import NewsFeedCommentItem from '../../components/NewsFeed/NewsFeedCommentItem.vue';
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
-import { deleteFeed } from '@/api/feed.js'
 import { clapFeed } from '@/api/feed.js'
 import { clapFeedList } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
-import NewsFeedProfile from '../../components/NewsFeed/NewsFeedProfile.vue';
+import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue';
 import NewsFeedClapUser from '../../components/NewsFeed/NewsFeedClapUser.vue';
-import NewsFeedMap from '../../components/NewsFeed/NewsFeedMap.vue';
+import ModiAndDelete from '../../components/NewsFeed/Detail/ModiAndDelete.vue';
+import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
+import Location from '../../components/NewsFeed/Detail/Location.vue';
 
 export default {
   name: 'NewsfeedDetail',
@@ -140,7 +140,10 @@ export default {
     NewsFeedCommentItem,
     NewsFeedProfile,
     NewsFeedClapUser,
-    NewsFeedMap,
+
+    ModiAndDelete,
+    UserInfoBtn,
+    Location
   },
   data() {
     return {
@@ -158,17 +161,9 @@ export default {
       latitude: 36.353793856820566,
       longitude:127.33999670291793,
       placeName: '대전광역시 유성구 봉명동 레자미3차',
-      aboutMap : '지도 열기'
     };
   },
   methods: {
-    showMap () {
-      if (this.aboutMap == '지도 열기') {
-        this.aboutMap = '지도 닫기'
-      } else {
-        this.aboutMap = '지도 열기'
-      }
-    },
     closeClapList () {
       this.clapListOpen = false;
     },
@@ -269,33 +264,6 @@ export default {
       let input = document.getElementById('comment')
       input.focus();
     },
-    deleteFeed () {
-      if (this.userpk == this.fd.user.id) {
-        const answer = window.confirm('정말로 삭제하시겠습니까?')
-        if (answer) {
-          if (this.Category == 1) {
-            deleteFeed(
-              this.fd.id,
-              () => {
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: 1}})
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
-          } else if (this.Category == 2) {
-            // 핵인싸 DELETE 요청
-          } else if (this.Category == 3) {
-            // 청산별고 DELETE 요청
-          } else if (this.Category == 4) {
-            // 워커홀릭 DELETE 요청
-          }
-        }
-      }
-    },
-    changeModiForm () {
-      this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
-    },
     createComment () {
       if (!this.commentInput) {
         alert('내용을 입력해주세요')
@@ -342,6 +310,7 @@ export default {
             console.log(res.data)
             this.date = this.fd.date.split('T')[0];
             this.time = this.fd.date.split('T')[1];
+            this.fd.content = this.fd.content.replace('\n', '<br>') // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
           },
           (err) => {
             console.log(err)
@@ -351,7 +320,7 @@ export default {
           user: {
             nickname: '잔수',
             img: null,
-            id: 101,
+            id: 3,
           },
           date: '2021-02-12',
           content: '댓글 내용입니다 ^^',
@@ -381,7 +350,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .newsfeed {
   position: absolute;
   top : 80px;
@@ -392,5 +361,8 @@ export default {
 }
 .feed-detail-map {
   margin: auto;
+}
+.feed-detail-map-name {
+  text-align: right;
 }
 </style>

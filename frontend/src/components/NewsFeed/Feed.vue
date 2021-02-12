@@ -1,37 +1,34 @@
 <template>
   <article class="feed-box">    
     <div class="feed-userprofile-box">
-      <div class="feed-userprofile-space">
-        <img
-          v-if="fd.user.img"
-          :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.user.img}`"
-          onerror="this.src='http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg'"
-          alt="유저프로필이미지"
-          class="feed-userprofile-image"
-          @click="goToProfile"
-        >
-        <img
-          v-else
-          src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
-          alt="유저프로필이미지"
-          class="feed-userprofile-image"
-          @click="goToProfile"
-        >
-      </div>
+      <NewsFeedProfile 
+        :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+      />
       
       <div class="feed-userprofile-content">
         <div>
           <p v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</p>
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
           <div class="feed-date">
-          <p>{{ month }}.{{ day}} {{ time }} </p>
+          <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p>
           </div>
         </div>
-        <div class="feed-tag-box">
-          <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div>
+        <div class="feed-tag-box" v-if="fd.tags.length > 0">
+          <div>
+            <span class="feed-tag" @click="goToSearchTag(fd.tags[0])">
+              <button>{{ fd.tags[0] }}</button>
+            </span>
+            <span v-if="(fd.tags.length - 1) > 0" class="feed-tag-plus">
+              <button @click="goToDetail">
+                + {{ fd.tags.length - 1}}
+              </button>
+            </span>
+          </div>
+          <!-- <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div> -->
         </div>    
       </div>
     </div>
+
     <div class="feed-content-box">
       <div v-if="fd.file" @click="goToDetail">
         <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일">
@@ -41,6 +38,11 @@
           <!-- {{ fd.content }} -->
         </p>
       </div>
+
+      <div v-if="Category == 2 || Category == 3">
+        {{ placeName !== null ? placeName : '위치 정보 없음' }}
+      </div>
+
     </div>
       <div class="feed-footer">
         <div class="feed-footer-box" @click="goToDetail">
@@ -58,7 +60,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import NewsFeedProfile from './Common/NewsFeedProfile.vue';
 export default {
+  components: { NewsFeedProfile },
   name: 'Feed',
   props: {
     fd: Object,
@@ -70,6 +75,7 @@ export default {
       month: 0,
       day: 0,
       time: null,
+      placeName: '대전광역시 유성구 봉명동'
     };
   },
   methods: {
@@ -97,6 +103,11 @@ export default {
   mounted () {
     this.setDateTime();
   },
+  computed: {
+    ...mapState({
+      defaultImg: (state) => state.defaultImg,
+    })
+  }
 };
 </script>
 
