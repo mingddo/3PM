@@ -46,7 +46,8 @@
           </span>
         </div>
         <div class="newsfeed-form-content-input-container">
-          <textarea class="newsfeed-form-content-input" name="content" placeholder="요즘 어떤 활동을 하고 계신가요?" id="content" cols="30" rows="10" v-model="form.content"></textarea>
+          <textarea v-if="type=='SHARE'" readonly class="newsfeed-form-content-input" name="content" placeholder="요즘 어떤 활동을 하고 계신가요?" id="content" cols="30" rows="10" v-model="this.$route.params.feed.content"></textarea>
+          <textarea v-else class="newsfeed-form-content-input" name="content" placeholder="요즘 어떤 활동을 하고 계신가요?" id="content" cols="30" rows="10" v-model="form.content"></textarea>
         </div>
 
         <div class="newsfeed-form-file-box">
@@ -200,7 +201,7 @@ export default {
           this.imageUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${this.$route.params.feed.file}`
         }
         this.form.file = this.$route.params.feed.file
-        this.form.content = `<b>[공유]</b> <br> <a href="${this.$route.params.link}">원문이동</a> <br> ${this.$route.params.feed.content}`
+        this.form.content = `<b>[공유]</b> <a href="${this.$route.params.link}">원문이동</a> <br> ${this.$route.params.feed.content}`
         this.form.tags = this.$route.params.feed.tags
       }
     },
