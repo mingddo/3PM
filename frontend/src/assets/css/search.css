@@ -165,12 +165,12 @@ input:focus {
   width: 20%;
 }
 
-/* article > div {
+.spiner > div {
   width: 20%;
   height: auto;
   margin: 2vw;
   animation: bounce 1s 0.5s ease-in-out infinite;
-} */
+}
 
 @keyframes bounce {
   100% {

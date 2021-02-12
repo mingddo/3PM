@@ -101,6 +101,16 @@
           </span>
         </div>
       </transition>
+      <article v-if="loading" class="spiner">
+        <div style="width:100%" class="loading-img-frame">
+          <img
+            src="@/assets/searching.svg"
+            alt=""
+            width="50%"
+            id="searching-img"
+          />
+        </div>
+      </article>
 
       <div v-if="empty_search" class="empty-result">
         <div class="empty-result-title">검색 결과가 없습니다</div>
