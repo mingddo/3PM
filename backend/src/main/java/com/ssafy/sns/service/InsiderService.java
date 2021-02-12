@@ -22,25 +22,24 @@ public class InsiderService implements FeedService {
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
 
-    @Override
-    public FeedListResponseDto findMyList(Long id, int num) {
 
+    @Override
+    public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
         return null;
     }
 
     @Override
-    public FeedListResponseDto readList(int num) {
+    public FeedListResponseDto readList(Long userId, int num) {
         return null;
     }
 
     @Override
-    public FeedResponseDto read(Long id) {
+    public FeedResponseDto read(Long userId, Long feedId) {
         return null;
     }
 
     @Override
-    public Long write(Long userId, FeedRequestDto feedRequestDto) {
-        return null;
+    public void write(Long userId, FeedRequestDto feedRequestDto) {
     }
 
     @Override
@@ -55,12 +54,7 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
-        return null;
+    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
     }
 
-    @Override
-    public Long addClap(Long uid, Long fid) {
-        return null;
-    }
 }

@@ -12,12 +12,12 @@ import lombok.ToString;
 @NoArgsConstructor
 public class IndoorResponseDto extends FeedResponseDto {
 
-    private String test;
+    private int category;
 
     @Builder
-    public IndoorResponseDto(Indoor indoor, int likeCnt) {
-        super(indoor, likeCnt);
-        this.test = indoor.getTest();
+    public IndoorResponseDto(Indoor indoor, int commentCnt, int likeCnt, boolean isClap) {
+        super(indoor, commentCnt, likeCnt, isClap);
+        this.category = 1;
     }
 
 //    @Builder

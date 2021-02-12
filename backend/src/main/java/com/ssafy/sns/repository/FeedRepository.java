@@ -1,11 +1,6 @@
 package com.ssafy.sns.repository;
 
-import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 
 import java.util.List;
 
@@ -21,7 +16,7 @@ public interface FeedRepository {
     Feed findById(Long feedId);
 
     // 피드 글쓰기
-    Indoor save(Indoor indoor);
+    Feed save(Feed feed);
 
     // 피드 글삭제
     void remove(Feed feed);

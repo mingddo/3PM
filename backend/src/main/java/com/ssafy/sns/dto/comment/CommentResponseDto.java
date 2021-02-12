@@ -1,15 +1,23 @@
 package com.ssafy.sns.dto.comment;
 
-import com.ssafy.sns.dto.user.SimpleUserDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@ToString
 @NoArgsConstructor
 public class CommentResponseDto {
 
-    private String content;
-    private SimpleUserDto user;
-    private LocalDateTime date;
+    private List<CommentDto> comments;
+    private int endNum;
+
+    @Builder
+    public CommentResponseDto(List<CommentDto> comments, int endNum) {
+        this.comments = comments;
+        this.endNum = endNum + comments.size();
+    }
 }

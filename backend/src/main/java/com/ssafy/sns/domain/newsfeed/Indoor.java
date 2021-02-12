@@ -15,17 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Indoor extends Feed {
 
-    // 기능 추가
-    private String test;
-
     @Builder
-    public Indoor(String content, User user, List<FeedHashtag> feedHashtags, String test) {
+    public Indoor(String content, User user, List<FeedHashtag> feedHashtags) {
         super(content, user, feedHashtags);
-        this.test = test;
     }
 
     public void update(IndoorRequestDto indoorRequestDto) {
         super.update(indoorRequestDto.getContent());
-        this.test = indoorRequestDto.getTest();
     }
 }
