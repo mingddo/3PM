@@ -237,9 +237,12 @@ public class IndoorController {
         Long result = null;
 
         try {
-//            commentService.write(commentRequestDto, jw, feedId);
+            commentService.write(commentRequestDto, jwtService.findId(request.getHeader("Authorization")), feedId);
+            logger.info("postComment - 꽃보다집 댓글 작성");
+            status = HttpStatus.OK;
         } catch (Exception e) {
-
+            logger.warn("postComment - 꽃보다집 댓글 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(status);
