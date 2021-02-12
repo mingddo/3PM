@@ -38,8 +38,14 @@
             </p>
           </div>
           <!-- <div v-if="Category == 2 || Category == 3"> -->
-          <div >
-            지도위치
+          <div class="feed-detail-map">
+            <div> {{ placeName }} <button @click="showMap"> {{ aboutMap }} </button> </div>
+            
+            <NewsFeedMap
+              v-if="aboutMap =='지도 닫기'"
+              :latitude="latitude"
+              :longitude="longitude"  
+            />
           </div>
         </article>
 
@@ -124,6 +130,7 @@ import { clapFeedList } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import NewsFeedProfile from '../../components/NewsFeed/NewsFeedProfile.vue';
 import NewsFeedClapUser from '../../components/NewsFeed/NewsFeedClapUser.vue';
+import NewsFeedMap from '../../components/NewsFeed/NewsFeedMap.vue';
 
 export default {
   name: 'NewsfeedDetail',
@@ -133,6 +140,7 @@ export default {
     NewsFeedCommentItem,
     NewsFeedProfile,
     NewsFeedClapUser,
+    NewsFeedMap,
   },
   data() {
     return {
@@ -147,9 +155,20 @@ export default {
       comments: [],
       clapedUsers: [],
       clapListOpen: false,
+      latitude: 36.353793856820566,
+      longitude:127.33999670291793,
+      placeName: '대전광역시 유성구 봉명동 레자미3차',
+      aboutMap : '지도 열기'
     };
   },
   methods: {
+    showMap () {
+      if (this.aboutMap == '지도 열기') {
+        this.aboutMap = '지도 닫기'
+      } else {
+        this.aboutMap = '지도 열기'
+      }
+    },
     closeClapList () {
       this.clapListOpen = false;
     },
@@ -341,8 +360,10 @@ export default {
         }]
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
+        // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 3) {
         // 청산별곡 get 요청
+        // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
         // 워커홀릭 get 요청
       }
@@ -368,5 +389,8 @@ export default {
 .feed-comment-input {
   width: 100%;
   height: 50px;
+}
+.feed-detail-map {
+  margin: auto;
 }
 </style>
