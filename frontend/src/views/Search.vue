@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Sidebar/>
+    <Sidebar />
     <section class="searchFrame">
       <!-- mobile -->
       <div class="searchResultFrame">
@@ -98,13 +98,13 @@
               :key="idx"
               :grouplist="grouplist"
             />
-          </div>
-        </article>
-
-        <div v-if="empty_search" class="empty-result">
-          <div class="empty-result-title">검색 결과가 없습니다</div>
-          <img src="@/assets/img/emptysearch.svg" alt="" />
+          </span>
         </div>
+      </transition>
+
+      <div v-if="empty_search" class="empty-result">
+        <div class="empty-result-title">검색 결과가 없습니다</div>
+        <img src="@/assets/img/emptysearch.svg" alt="" />
       </div>
       <!-- web 검색 결과 list -->
     </section>
@@ -120,7 +120,7 @@ import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
 export default {
-  components: { Sidebar,GroupResults, SerachResult, FilterGroup, GroupResult },
+  components: { Sidebar, GroupResults, SerachResult, FilterGroup, GroupResult },
   data() {
     return {
       loading: false,
@@ -409,6 +409,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
