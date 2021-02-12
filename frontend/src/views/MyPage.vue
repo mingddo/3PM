@@ -33,12 +33,14 @@
               <div
                 :class="{ profielSubscribedNone: subscribed }"
                 class="myPageSubscribed"
+                @click="followToggle"
               >
                 {{ profileinfo.username }}님의 소식 받기
               </div>
               <div
                 :class="{ profielSubscribedNone: !subscribed }"
                 class="myPageSubscribed"
+                @click="followToggle"
               >
                 {{ profileinfo.username }}님의 소식 끊기
               </div>
@@ -155,7 +157,13 @@ import Activity from "@/components/MyPage/Activity.vue";
 import SubscribedList from "@/components/MyPage/SubscribedList.vue";
 import GroupList from "@/components/MyPage/GroupList.vue";
 import NewsFeedList from "../components/NewsFeed/NewsFeedList.vue";
-import { getprofileInfo, getprofileFeed } from "@/api/mypage.js";
+import {
+  getprofileInfo,
+  getprofileFeed,
+  followToggle,
+  followingList,
+  history,
+} from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
 export default {
@@ -182,18 +190,6 @@ export default {
         },
       ],
       activities: [
-        {
-          username: "명도균",
-          dayInfo: "2021년 1월 25일",
-          content: "장수민님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-          article_id: 30,
-        },
-        {
-          username: "명도균",
-          dayInfo: "2021년 1월 11일",
-          content: "이병훈님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-          article_id: 30,
-        },
         {
           username: "명도균",
           dayInfo: "2021년 1월 1일",
@@ -237,6 +233,7 @@ export default {
         },
       ],
       feed_page_no: 0,
+      current_user_followingList: [],
     };
   },
   methods: {
@@ -245,6 +242,7 @@ export default {
         this.profile_user,
         this.feed_page_no,
         (res) => {
+          console.log(res.data);
           this.page = res.data.endNum;
           let feeds = res.data.feedList;
           if (feeds.length < 100) {
@@ -307,29 +305,63 @@ export default {
       // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
       // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
     },
-    getFeed() {
-      getprofileFeed(
+    followToggle() {
+      followToggle(
         this.profile_user,
-        this.feed_page_no,
         (res) => {
-          console.log(res.data);
-          this.feed = res.data.indoorResponseDtoList;
+          console.log("팔로우 되는지", res.data);
+          if (this.subscribed === false) {
+            (this.subscribed = true),
+              (this.profileinfo.toMeFromOthersCnt =
+                this.profileinfo.toMeFromOthersCnt + 1);
+          } else {
+            this.subscribed = false;
+            this.profileinfo.toMeFromOthersCnt =
+              this.profileinfo.toMeFromOthersCnt - 1;
+          }
         },
         (err) => {
           console.error(err);
         }
       );
     },
+    getfollowingList() {
+      followingList(
+        this.current_user,
+        (res) => {
+          console.log("내가팔로우하는 사람", res.data);
+          this.current_user_followingList = res.data;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    getUserHistory() {
+      if (this.mypage === true) {
+        history(
+          this.current_user,
+          (res) => {
+            console.log("최근활동", res);
+            this.activities = res.data;
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+      }
+    },
   },
   created() {
     console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
-    // this.getFeed();
     this.setFeedList();
   },
   mounted() {
     this.setScroll();
+    this.getfollowingList();
+    this.getUserHistory();
   },
 };
 </script>
