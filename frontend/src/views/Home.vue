@@ -144,16 +144,20 @@ export default {
       }
     },
     kakaoLogin() {
-      window.Kakao.Auth.login({
-        scope: "account_email, gender, age_range",
-        success: (authObj) => {
-          console.log('autoObj', authObj);
-          this.kakaoAccoutInfo();
-        },
-        fail: (err) => {
-          alert(err);
-        },
-      });
+      return new Promise((resolve, reject) => {
+        window.Kakao.Auth.login({
+          scope: "account_email, gender, age_range",
+          success: (authObj) => {
+            console.log(authObj);
+            this.kakaoAccoutInfo();
+            resolve();
+          },
+          fail: (err) => {
+            alert(err);
+            reject();
+          },
+        });
+      })
     },
     kakaoAccoutInfo() {
       window.Kakao.API.request({
@@ -224,8 +228,13 @@ export default {
         });
     },
     onClickLogin() {
-      this.kakaoLogin();
-       this.$router.push({ name: "NewsfeedPersonal", query: { Category: "1" } })
+      this.kakaoLogin()
+      .then(() => {
+        this.$router.push({ name: "NewsfeedPersonal", query: { Category: "1" } })
+      })
+      .catch(() => {
+        console.log('error')
+      })
     },
     onClickLogout() {
       this.kakaoLogout();
