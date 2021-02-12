@@ -9,11 +9,8 @@ import java.util.List;
 @NoArgsConstructor
 public class IndoorRequestDto extends FeedRequestDto {
 
-    private String test;
-
     @Builder
-    public IndoorRequestDto(String content, String file, List<String> tags, String test) {
+    public IndoorRequestDto(String content, String file, List<String> tags) {
         super(content, null, tags);
-        this.test = test;
     }
 }

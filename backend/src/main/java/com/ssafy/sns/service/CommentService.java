@@ -1,6 +1,7 @@
 package com.ssafy.sns.service;
 
 import com.ssafy.sns.dto.comment.CommentRequestDto;
+import com.ssafy.sns.dto.comment.CommentResponseDto;
 
 public interface CommentService {
 
@@ -9,4 +10,6 @@ public interface CommentService {
     void modify(CommentRequestDto commentRequestDto, Long userId, Long feedId, Long commentId);
 
     void remove(Long userId, Long feedId, Long commentId);
+
+    CommentResponseDto getList(Long feedId, int num);
 }

@@ -3,7 +3,9 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.comment.CommentDto;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
+import com.ssafy.sns.dto.comment.CommentResponseDto;
 import com.ssafy.sns.repository.CommentRepositoryImpl;
 import com.ssafy.sns.repository.FeedRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
@@ -11,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -58,5 +62,16 @@ public class CommentServiceImpl implements CommentService {
         user.deleteComment(comment);
         feed.deleteComment(comment);
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public CommentResponseDto getList(Long feedId, int num) {
+        Feed feed = feedRepository.findById(feedId);
+        if (feed == null) throw new NoSuchElementException();
+
+        return new CommentResponseDto(commentRepository.findListById(feed, num)
+                .map(CommentDto::new)
+                .collect(Collectors.toList()),
+                num);
     }
 }

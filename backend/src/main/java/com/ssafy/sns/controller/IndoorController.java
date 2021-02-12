@@ -2,6 +2,7 @@ package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
+import com.ssafy.sns.dto.comment.CommentResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
@@ -119,12 +120,10 @@ public class IndoorController {
             @ApiImplicitParam(name = "file", value = "첨부파일")
     })
     @PostMapping
-    public ResponseEntity<Void> postFeed(@RequestBody IndoorRequestDto indoorRequestDto,
-//                                         @RequestParam(name = "files", required = false) List<MultipartFile> files,
+    public ResponseEntity<Void> postFeed(IndoorRequestDto indoorRequestDto,
+                                         @RequestParam(name = "files", required = false) List<MultipartFile> files,
                                          HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
-//        Long result = null;
-        List<MultipartFile> files = null;
         try {
             indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto, files);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
@@ -143,12 +142,11 @@ public class IndoorController {
             @ApiImplicitParam(name = "file", value = "첨부파일")
     })
     @PutMapping(value = "/{feedId}")
-    public ResponseEntity<Void> putFeed(@PathVariable("feedId") Long feedId, @RequestBody IndoorRequestDto indoorRequestDto,
-//                                        @RequestPart(name = "files", required = false) List<MultipartFile> files,
+    public ResponseEntity<Void> putFeed(@PathVariable("feedId") Long feedId,
+                                        IndoorRequestDto indoorRequestDto,
+                                        @RequestPart(name = "files", required = false) List<MultipartFile> files,
                                         HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
-//        Long result = null;
-        List<MultipartFile> files = null;
 
         Long userId = jwtService.findId(request.getHeader("Authorization"));
 
@@ -301,5 +299,28 @@ public class IndoorController {
         }
 
         return new ResponseEntity<>(status);
+    }
+
+    @ApiOperation("꽃보다집 댓글 리스트")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true),
+            @ApiImplicitParam(name = "startNum", value = "시작 댓글", required = true)
+    })
+    @GetMapping(value = "/{feedId}/comments")
+    public ResponseEntity<CommentResponseDto> getComment(@PathVariable("feedId") Long feedId,
+                                                         @RequestParam("startNum") int startNum) {
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+        CommentResponseDto comments = null;
+        try {
+            comments = commentService.getList(feedId, startNum);
+            logger.info("getComment - 꽃보다집 댓글 리스트");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getComment - 꽃보다집 댓글 리스트 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(comments, status);
     }
 }

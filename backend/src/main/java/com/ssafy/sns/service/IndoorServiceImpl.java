@@ -6,10 +6,7 @@ import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
-import com.ssafy.sns.repository.FeedClapRepositoryImpl;
-import com.ssafy.sns.repository.HashtagRepositoryImpl;
-import com.ssafy.sns.repository.FeedRepositoryImpl;
-import com.ssafy.sns.repository.UserRepository;
+import com.ssafy.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +25,7 @@ public class IndoorServiceImpl implements FeedService {
     private final FeedRepositoryImpl feedRepository;
     private final HashtagRepositoryImpl hashtagRepository;
     private final FeedClapRepositoryImpl feedClapRepository;
+    private final CommentRepositoryImpl commentRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
@@ -39,6 +37,7 @@ public class IndoorServiceImpl implements FeedService {
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+                    (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
                     feedClapRepository.checkClap(feed, user).isPresent()));
         }
@@ -52,6 +51,7 @@ public class IndoorServiceImpl implements FeedService {
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+                    (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
                     feedClapRepository.checkClap(feed, user).isPresent()));
         }
@@ -61,10 +61,12 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public FeedResponseDto read(Long userId, Long feedId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        Indoor indoor = (Indoor) feedRepository.findById(feedId);
-        if (indoor == null) throw  new NoSuchElementException();
-        return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size(),
-                feedClapRepository.checkClap(indoor, user).isPresent());
+        Feed feed = feedRepository.findById(feedId);
+        if (!(feed instanceof Indoor)) throw new NoSuchElementException();
+        return new IndoorResponseDto((Indoor) feed,
+                (int) commentRepository.findListById(feed).count(),
+                feedClapRepository.findClapAll(feed).size(),
+                feedClapRepository.checkClap(feed, user).isPresent());
     }
 
     @Override
@@ -76,15 +78,14 @@ public class IndoorServiceImpl implements FeedService {
         Indoor indoor = (Indoor) feedRepository.save(Indoor.builder()
                 .content(feedRequestDto.getContent())
                 .user(user)
-                .test(((IndoorRequestDto) feedRequestDto).getTest())
                 .build());
 
-//        // 파일 업로드
-//        for (MultipartFile file : files) {
-//            String fileName = s3Service.uploadFile(file);
-//            // 파일 등록
-//            fileService.addFile(fileName, indoor);
-//        }
+        // 파일 업로드
+        for (MultipartFile file : files) {
+            String fileName = s3Service.uploadFile(file);
+            // 파일 등록
+            fileService.addFile(fileName, indoor);
+        }
 
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
@@ -138,7 +139,7 @@ public class IndoorServiceImpl implements FeedService {
         }
 
         // 파일 찾기
-//        List<String> filePaths = feedRequestDto.getFilePaths();
+        List<String> filePaths = feedRequestDto.getFilePaths();
     }
 
     @Override
