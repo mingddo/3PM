@@ -1,8 +1,17 @@
+@font-face {
+  font-family: "Jal_Onuel";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* App.vue */
 * {
-  margin : 0;
-  padding : 0;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  font-family: "Jal_Onuel";
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -137,13 +146,13 @@ button.active {
   display: flex;
   justify-content: center;
   align-items: center;
-  top : 30vh;
+  top: 30vh;
   position: fixed;
-  box-shadow: 0 20px 20px rgba(0,0,0,0.2), 0px 0px 50px rgba(0,0,0,0.2);
-  background-color:  rgba(0,0,0,0.2);
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   border-radius: 50%;
-  transition: all .8s;
+  transition: all 0.8s;
 }
 .clock-box-after {
   opacity: 0;
@@ -158,36 +167,42 @@ button.active {
   border-radius: 50%;
 }
 
-.clock-dot{
-  content: '';
+.clock-dot {
+  content: "";
   position: fixed;
   width: 15px;
   height: 15px;
   background-color: #fff;
   z-index: 100l;
-  transition: all .8s;
+  transition: all 0.8s;
 }
 
-.hour,.min,.sec {
+.hour,
+.min,
+.sec {
   position: fixed;
 }
-.hour,.hr {
+.hour,
+.hr {
   width: 120px;
   height: 120px;
 }
-.min, .mn {
+.min,
+.mn {
   width: 145px;
   height: 145px;
 }
-.sec, .sc {
+.sec,
+.sc {
   width: 180px;
   height: 180px;
 }
-.hr,.mn,.sc {
+.hr,
+.mn,
+.sc {
   display: flex;
   justify-content: center;
   position: fixed;
-  
 }
 
 .hr::before {

@@ -3,7 +3,6 @@
     <header class="myPageActivityHeader">
       <h2>구독자</h2>
     </header>
-    <hr class="myPageActivityhr" />
     <div class="subscribedContentFrame">
       <h3>구독 목록</h3>
       <div class="subscribedContent">

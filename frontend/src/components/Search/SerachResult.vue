@@ -77,11 +77,10 @@ export default {
     goToProfile() {
       this.$router.push({
         name: "MyPage",
-        query: { name: this.result.user.id },
+        query: { name: this.result.indoorResponseDtoList[0].user.id },
       });
     },
     gotoDetail() {
-      console.log();
       this.$router.push({
         name: "NewsfeedDetail",
         query: { id: this.result.indoorResponseDtoList[0].id, Category: "1" },
@@ -95,18 +94,20 @@ export default {
         this.year = date.split("-")[0];
         this.month = date.split("-")[1];
         this.day = date.split("-")[2];
-        console.log(this.year, this.month, this.data, this.time);
       }
     },
     findTagIdx() {
       if (this.result) {
-        let idxz = this.result.indoorResponseDtoList[0].tags.map((tag, idx) => {
-          if (tag === this.result.tagName) {
-            return idx;
+        let idxz = this.result.indoorResponseDtoList[0].tags.filter(
+          (tag, idx) => {
+            if (tag === this.result.tagName) {
+              return idx;
+            }
           }
-        });
-        this.result.indoorResponseDtoList[0].tags.splice(idxz, 1);
-        console.log(this.result.indoorResponseDtoList[0].tags);
+        );
+        console.log(idxz);
+        this.result.indoorResponseDtoList[0].tags.splice(idxz[0], 1);
+        console.log("여기!!", this.result.indoorResponseDtoList[0].tags);
       }
     },
   },
@@ -122,5 +123,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
