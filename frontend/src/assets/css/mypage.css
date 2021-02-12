@@ -172,12 +172,12 @@
 .myPagemainSection {
   position: absolute;
   top: 80px;
-  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  margin-left: 300px;
+  left : 350px;
+  right : 50px;
 }
 .profileImgFrame {
   margin: 5px;
