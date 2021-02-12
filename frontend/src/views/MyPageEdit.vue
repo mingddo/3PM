@@ -1,9 +1,14 @@
 <template>
-  <div></div>
+  <div>
+    <Practice />
+  </div>
 </template>
 
 <script>
-export default {};
+import Practice from "../components/Practice.vue";
+export default {
+  components: { Practice },
+};
 </script>
 
 <style></style>
