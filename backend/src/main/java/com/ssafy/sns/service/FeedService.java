@@ -17,12 +17,14 @@ public interface FeedService {
     // 피드 글 불러오기
     FeedResponseDto read(Long userId, Long feedId);
 
-    // 피드 글쓰기
-    void write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException;
+    void write(Long userId, FeedRequestDto feedRequestDto);
+
+    // 피드 파일 첨부
+    void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException;
 
     // 피드 글삭제
-    void delete(Long userId, Long feedId);
+    boolean delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
-    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files);
+    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto);
 }

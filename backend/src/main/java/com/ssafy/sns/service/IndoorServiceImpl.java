@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -70,7 +71,7 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public void write(Long userId, FeedRequestDto feedRequestDto, List<MultipartFile> files) throws IOException {
+    public void write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
@@ -79,13 +80,6 @@ public class IndoorServiceImpl implements FeedService {
                 .content(feedRequestDto.getContent())
                 .user(user)
                 .build());
-
-        // 파일 업로드
-        for (MultipartFile file : files) {
-            String fileName = s3Service.uploadFile(file);
-            // 파일 등록
-            fileService.addFile(fileName, indoor);
-        }
 
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
@@ -104,7 +98,19 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto, List<MultipartFile> files) {
+    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
+        Feed feed = feedRepository.findById(feedId);
+
+        // 파일 업로드
+        for (MultipartFile file : files) {
+            String fileName = s3Service.uploadFile(file);
+            // 파일 등록
+            fileService.addFile(fileName, feed);
+        }
+    }
+
+    @Override
+    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Indoor indoor = (Indoor) feedRepository.findById(feedId);
@@ -143,12 +149,22 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public void delete(Long userId, Long feedId) {
+    public boolean delete(Long userId, Long feedId) throws IOException {
+
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Indoor indoor = (Indoor) feedRepository.findById(feedId);
         if (!indoor.getUser().getId().equals(user.getId())) {
             throw new NoSuchElementException();
         }
+
+        // 피드에 저장된 파일들 전부 삭제
+        List<String> fileNames = fileService.findFileNameList(feedId);
+        for (String fileName : fileNames) {
+            s3Service.deleteFile(fileName);
+        }
+
         feedRepository.remove(indoor);
+        return true;
     }
+
 }
