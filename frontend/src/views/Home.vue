@@ -130,10 +130,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userStatus", "kakaoId", "userId", "authToken"]),
+    ...mapState(["userStatus", "kakaoId", "userId", "authToken", "userInfo"]),
   },
   methods: {
-    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
+    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId", "setUserInfo"]),
     scrollStatus() {
       // let viewportHeight = window.innerHeight;
       let scrollPos = window.scrollY/this.windowInnerHeight
@@ -147,7 +147,7 @@ export default {
       window.Kakao.Auth.login({
         scope: "account_email, gender, age_range",
         success: (authObj) => {
-          console.log(authObj);
+          console.log('autoObj', authObj);
           this.kakaoAccoutInfo();
         },
         fail: (err) => {
@@ -162,6 +162,7 @@ export default {
         .then((res) => {
           const kakaoId = res.id;
           console.log(res);
+          const user_age = res.kakao_account.age_range
           getUser(
             {
               kakaoId: kakaoId,
@@ -177,6 +178,7 @@ export default {
                 this.setUserId(responseUserId);
                 this.setAuthToken(authToken);
                 this.setUserStatus(true);
+                this.setUserInfo(user_age)
               }
               // false -> user 정보가 없으면 Signup
               else {

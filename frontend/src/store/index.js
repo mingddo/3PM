@@ -12,6 +12,7 @@ export default new Vuex.Store({
     refToken : null,
     kakaoId : null,
     userId : null,
+    userInfo: null,
   },
   mutations: {
     setUserStatus(state,payload) {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     setUserId(state,payload) {
       state.userId = payload
+    },
+    setUserInfo(state, payload) {
+      state.userInfo = payload
     }
   },
   actions: {
@@ -42,6 +46,9 @@ export default new Vuex.Store({
     },
     setUserId : function(context,payload) {
       context.commit('setUserId',payload)
+    },
+    setUserInfo : function(context, payload) {
+      context.commit('setUserInfo', payload)
     }
   },
   plugins: [

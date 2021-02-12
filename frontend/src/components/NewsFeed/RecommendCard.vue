@@ -62,7 +62,7 @@ export default {
   height: 300px;
   margin: auto;
   z-index: 100;
-  background-image: url("https://lh3.googleusercontent.com/proxy/PcujSRRpYc-h3fyW1hqxWQmtApbNJ3dA2FQv85P125rLnMgARRzSzuRl4e5tXmSSIaQkjYHOW6xSGvQ0MyM1Zbcn_i2bTAXB7-UjnnYW_7WPNwJzX1T9nX-vLuOyudX2kYygjnelZ7YrZuTnEgY8NUQ0Qm_34_7oNT39jdsfuFhF_P_2gwrJXtG2UPQTz_gAFBrx005hvXGlC7LhTr8CjSVFfaH98_daLtZQJEss-w_7BcGL3lYnR08wQg0g3u4vLgbQNVcJUOIk8J5Y2OVMgpPVLer51sqNjw4WLTsRQpZCDwrBCNHckAFfP8V7OE3OYmUrNlJFg48tvnDEwJSZCc1lQUm-jJIeVsOlfq9WlVn_2gOl581806mivYgoLMZHzYXzE4WHAg");
+  /* background-image: url("https://lh3.googleusercontent.com/proxy/PcujSRRpYc-h3fyW1hqxWQmtApbNJ3dA2FQv85P125rLnMgARRzSzuRl4e5tXmSSIaQkjYHOW6xSGvQ0MyM1Zbcn_i2bTAXB7-UjnnYW_7WPNwJzX1T9nX-vLuOyudX2kYygjnelZ7YrZuTnEgY8NUQ0Qm_34_7oNT39jdsfuFhF_P_2gwrJXtG2UPQTz_gAFBrx005hvXGlC7LhTr8CjSVFfaH98_daLtZQJEss-w_7BcGL3lYnR08wQg0g3u4vLgbQNVcJUOIk8J5Y2OVMgpPVLer51sqNjw4WLTsRQpZCDwrBCNHckAFfP8V7OE3OYmUrNlJFg48tvnDEwJSZCc1lQUm-jJIeVsOlfq9WlVn_2gOl581806mivYgoLMZHzYXzE4WHAg"); */
   background-color: azure;
   background-size: cover;
   border-radius: 5px;
