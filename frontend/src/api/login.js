@@ -4,7 +4,7 @@ const instance = createInstance();
 
 function getUser(userId, success, fail) {
   instance
-    .post('user/kakao', userId)
+    .post('users/login', userId)
     .then(success)
     .catch(fail);
 }

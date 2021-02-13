@@ -1,24 +1,53 @@
-import { createInstance } from './index.js'
+import { AuthorizationInstance } from './index.js'
 
-const instance = createInstance();
+const instance = AuthorizationInstance();
 
 function getprofileInfo(user_id,success,fail){
   instance
-    .get(`mypage/${user_id}`)
+    .get(`users/${user_id}`)
     .then(success)
     .catch(fail)
 }
 
-function getprofileFeed(id,num,success,fail){
+function getprofileFeed(userid, pk,success,fail){
   instance
-    .get(`feed/list/${id}/${num}`)
+    .get(`indoors/user/${userid}`, {
+      params: {
+        startNum: pk
+      }
+    } )
     .then(success)
     .catch(fail)
 }
 
+function followToggle(userid,success,fail){
+  instance
+    .get(`users/${userid}/follow`)
+    .then(success)
+    .catch(fail)
+}
 
+function followerList(userid,success,fail){
+  instance
+    .get(`users/${userid}/follower`)
+    .then(success)
+    .catch(fail)
+}
 
+function followingList(userid,success,fail){
+  instance
+    .get(`users/${userid}/following`)
+    .then(success)
+    .catch(fail)
+}
+
+function history(userid,success,fail){
+  instance
+    .get(`users/${userid}/history`)
+    .then(success)
+    .catch(fail)
+}
 
 export {
-  getprofileInfo,getprofileFeed
+  getprofileInfo,getprofileFeed, followToggle, followerList, followingList ,history
 }

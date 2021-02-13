@@ -1,58 +1,74 @@
 <template>
-  <article class="feed-box">
+  <article class="feed-box">    
     <div class="feed-userprofile-box">
-      <img
-        src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-        alt="유저프로필이미지"
-        class="feed-userprofile-img"
-        @click="goToProfile"
-      >
+      <NewsFeedProfile 
+        :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+      />
+      
       <div class="feed-userprofile-content">
         <div>
-          <h3 v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</h3>
+          <p v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</p>
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
+          <div class="feed-date">
+            <!-- <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p> -->
+            {{agoDate != '0일' ? agoDate : '오늘'}}
+          </div>
         </div>
-        
-        <div>
-          <p>{{ year }} 년 {{ month }} 월 {{ day}} 일 {{ time }} </p>
-        </div>
-        
+        <div class="feed-tag-box" v-if="fd.tags.length > 0">
+          <div>
+            <span class="feed-tag" @click="goToSearchTag(fd.tags[0])">
+              <button>{{ fd.tags[0] }}</button>
+            </span>
+            <span v-if="(fd.tags.length - 1) > 0" class="feed-tag-plus">
+              <button @click="goToDetail">
+                + {{ fd.tags.length - 1}}
+              </button>
+            </span>
+          </div>
+          <!-- <div v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></div> -->
+        </div>    
       </div>
     </div>
 
-    <div class="feed-content-box" @click="goToDetail">
-      <span v-for="(tag, idx) in fd.tag" :key="idx" @click="goToSearchTag(tag)"> <button> {{ tag }} </button></span>
-
-      <div v-if="fd.file">
-        <img :src="fd.file" alt="업로드 파일">
+    <div class="feed-content-box">
+      <div v-if="fd.file" @click="goToDetail">
+        <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일">
       </div>
-
-      <div v-else>
+      <div v-else  @click="goToDetail">
         <p v-html="fd.content">
           <!-- {{ fd.content }} -->
         </p>
       </div>
 
+      <div v-if="Category == 2 || Category == 3">
+        {{ placeName !== null ? placeName : '위치 정보 없음' }}
+      </div>
+
     </div>
-    <div class="feed-like-comment-box" @click="goToDetail">
-      <span>
-        <i class="far fa-thumbs-up"></i>
-        좋아요가 <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span> 개가 있습니다.
-      </span>
-      <span>
-        <i class="far fa-comment"></i>
-        댓글이 <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span> 개가 있습니다.
-      </span>
-    </div>
+      <div class="feed-footer">
+        <div class="feed-footer-box" @click="goToDetail">
+            <div>
+              <i class="far fa-thumbs-up"></i>
+              <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span>
+            </div>
+            <div>
+              <i class="far fa-comment"></i>
+              <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
+            </div>
+        </div>
+      </div>
   </article>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import NewsFeedProfile from './Common/NewsFeedProfile.vue';
 export default {
+  components: { NewsFeedProfile },
   name: 'Feed',
   props: {
     fd: Object,
-    Category: String,
+    Category: Number,
   },
   data() {
     return {
@@ -60,65 +76,78 @@ export default {
       month: 0,
       day: 0,
       time: null,
+      placeName: '대전광역시 유성구 봉명동',
+      agoDate: null,
     };
   },
   methods: {
+    // getDateStr(myDate){
+    //   let todayYear = myDate.getFullYear();
+    //   let todayMonth = ("0"+(myDate.getMonth()+1)).slice(-2);
+    //   let todayDay = ("0"+myDate.getDate()).slice(-2);
+    //   return ( todayYear + '-' + todayMonth + '-' + todayDay );
+    // },
     setDateTime () {
+      let d = new Date ();
+      let todayDate = d.getDate();
+      let todayMonth = d.getMonth() + 1;
+      console.log(todayMonth)
       if (this.fd) {
-        let date = this.fd.localDateTime.split('T')[0]
-        this.time = this.fd.localDateTime.split('T')[1]
+        let date = this.fd.date.split('T')[0]
+        this.time = this.fd.date.split('T')[1]
         this.year = date.split('-')[0]
         this.month = date.split('-')[1]
         this.day = date.split('-')[2]
+        if (this.month == todayMonth) {
+          let prevDay = todayDate - this.day
+          if (prevDay < 7) {
+            this.agoDate = `${prevDay}일전`
+          } else if (prevDay < 14){
+            this.agoDate = `1주전`
+          } else if (prevDay < 21) {
+            this.agoDate = '2주전'
+          } else if (prevDay < 28) {
+            this.agoDate = '3주전'
+          } else {
+            this.agoDate = '4주전'
+          }
+        } else {
+          let prevMon  = todayMonth - this.month
+          if (todayMonth < this.month) {
+            prevMon = 12 - this.month + todayMonth
+          }
+          if (prevMon < 4) {
+            this.agoDate = `${prevMon}개월전`
+          } else {
+            this.agoDate = `수개월전`
+          }
+          
+        }
+        // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
+        // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
       }
     },
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
     },
     goToSearchTag (tag) {
-      this.$router.push({ name: 'Search', query: { query: tag, filter: 'tag' }})
+      this.$router.push({ name: 'Search', query: { query: tag}, params: { filter: "feed" }})
     },
     goToDetail () {
-      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.indoorId, Category: this.Category }, params: {fd: this.fd}})
+      this.$router.push({ name: 'NewsfeedDetail', query: { id: this.fd.id, Category: this.Category }, params: {fd: this.fd}})
     }
   },
   mounted () {
     this.setDateTime();
   },
+  computed: {
+    ...mapState({
+      defaultImg: (state) => state.defaultImg,
+    })
+  }
 };
 </script>
 
 <style>
-.feed-userprofile-box {
-  display: flex;
-}
-.feed-userprofile-img {
-  cursor: pointer;
-  width: 10%;
-  height: 10%;
-  text-align: left;
-}
-.feed-userprofile-content {
-  margin: 10px;
-  /* padding: 10px; */
-}
-.feed-userprofile-name {
-  cursor: pointer;
-}
-.feed-content-box {
-  cursor: pointer;
-  margin: 0 auto;
-  text-align: left;
-  padding: 10px;
-}
-/* .feed-content-box:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-} */
-.feed-like-comment-box {
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  margin: 10px;
-  font-size: 20px;
-}
+
 </style>

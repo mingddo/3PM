@@ -3,32 +3,42 @@
     <div>
       <div class="feed-comment-userprofile-box">
         <div class="feed-comment-userprofile">
-          <img
+          <NewsFeedProfile
+            v-if="comment.user.img"
+            :proImg="comment.user.img"
+            :userId="comment.user.id"
+          />
+          <NewsFeedProfile
+            v-else
+            :proImg="'20210205132713974_img1.jpg'"
+            :userId="comment.user.id"
+          />
+          <!-- <img
             src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
             alt="유저프로필이미지"
             class="feed-comment-userprofile-img"
             @click="goToProfile"
-          >
+          > -->
           <div class="feed-comment-userprofile-content">
             <h3 class="feed-comment-userprofile-name" @click="goToProfile">{{ comment.user.nickname }}</h3>
             <p class="feed-comment-userprofile-date">{{ comment.date }} </p>
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
-        <div>
+        <div v-if="comment.user.id == userpk">
           <i class="fas fa-bars feed-comment-btn-drop" @click="openModiDeleteBtn"></i>
           <div v-show="!foldModiDrop" class="feed-comment-btn-drop-content">
-            <div>
-              <i class="fas fa-edit feed-comment-btn-modi" @click="changeCommentModiForm">수정</i> 
+            <div @click="changeCommentModiForm">
+              수정
             </div>
-            <div>
-              <i class="fas fa-trash-alt feed-comment-btn-delete" @click="deleteComment">삭제</i> 
+            <div @click="deleteComment">
+              삭제
             </div>
             
           </div>
         </div>
       </div>
-      <div class="feed-comment-content-box" v-if="!modiForm" @click="changeNested">
+      <div class="feed-comment-content-box" v-if="!modiForm">
         {{ commentForFeed }}
       </div>
       <div v-else class="feed-comment-modiInput-box">
@@ -38,21 +48,27 @@
         </button>
         
       </div>
+
       <div class="feed-comment-like-nested">
+        <!-- <div class="feed-comment-like-btn">
+          <i class="far fa-comment">
+            {{ comment.nested_commentCnt }}
+          </i>
+        </div> -->
         <div class="feed-comment-like-btn">
-          <i class="far fa-comment" @click="changeNested">
-            {{ comment.nested_comment.length }}
+          <i class="far fa-thumbs-up" @click="likeComment">
+            {{ comment.likeCnt }}
           </i>
         </div>
         <div>
-          <i class="far fa-thumbs-up" @click="likeComment">
-            {{ comment.like.length }}
+          <i class="fas fa-quote-left" @click="mentionUSer">
+            소환
           </i>
         </div>
       </div>
     </div>
 
-    <div v-if="!foldNested">
+    <!-- <div v-if="!foldNested">
       <div class="feed-comment-nested-box">
         <img
           src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
@@ -71,21 +87,23 @@
       <div @click="changeNested" class="feed-comment-nested-close-btn">
         답글 접기
       </div>
-    </div>
+    </div> -->
   </article>
 </template>
 
 <script>
-import NewsFeedCommentNested from './NewsFeedCommentNested.vue';
+// import NewsFeedCommentNested from './NewsFeedCommentNested.vue';
+import NewsFeedProfile from './Common/NewsFeedProfile.vue';
+import { mapState } from 'vuex'
 export default {
   name: 'NewsFeedCommentItem',
-  components: { NewsFeedCommentNested },
+  components: { NewsFeedProfile },
   props: {
     comment: Object,
   },
   data() {
     return {
-      foldNested: true,
+      // foldNested: true,
       nestedCommentInput: "",
       modiForm: false,
       commentForFeed: this.comment.content,
@@ -93,6 +111,9 @@ export default {
     };
   },
   methods: {
+    mentionUSer () {
+      this.$emit('pushUserToComment', this.comment.user.nickname)
+    },
     createNestedComment () {
       if (!this.nestedCommentInput) {
         alert('내용을 입력해주세요')
@@ -132,6 +153,12 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.comment.user.nickname}})
     },
   },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+      defaultImg: (state) => state.defaultImg,
+    })
+  },
 };
 </script>
 
@@ -167,39 +194,34 @@ export default {
   cursor: pointer;
   position: relative;
 }
+
 .feed-comment-btn-drop-content {
-  text-align: center;
+  /* text-align: center; */
+  /* padding: 10px; */
+  width: 70px;
   z-index: 2;
   position: absolute;
+  right: 0;
   background-color: rgb(236, 236, 236);
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 5px;
+  text-align: center;
+  margin-right: 20px;
 }
-.feed-comment-btn-modi {
-  padding: 10px;
+.feed-comment-btn-drop-content > div {
   border-bottom: 1px solid rgb(155, 155, 155);;
-  cursor: pointer;
+  padding : 10px
 }
-.feed-comment-btn-delete {
-  padding: 10px;
-  cursor: pointer;
+.feed-comment-btn-drop-content > div:hover {
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 }
-.feed-comment-btn-modi:hover {
-  background-color: rgb(202, 202, 202) ;
-  border-radius: 5px;;
-}
-.feed-comment-btn-delete:hover {
-  background-color: rgb(202, 202, 202) ;
-  border-radius: 5px;;
+.feed-comment-btn-drop-content > div:last-child {
+  border-bottom: 0px;
 }
 .feed-comment-content-box {
   margin: 10px;
   padding: 10px;
   text-align: left;
-}
-.feed-comment-content-box:hover {
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 5px;
 }
 .feed-comment-modiInput-box {
   display: flex;

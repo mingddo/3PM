@@ -6,10 +6,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    defaultImg: '20210205132713974_img1.jpg',
     userStatus : null,
     authToken : null,
+    refToken : null,
     kakaoId : null,
     userId : null,
+    userInfo: null,
   },
   mutations: {
     setUserStatus(state,payload) {
@@ -18,11 +21,17 @@ export default new Vuex.Store({
     setAuthToken(state,payload) {
       state.authToken = payload
     },
+    setRefToken(state, payload) {
+      state.refToken = payload
+    },
     setKakaoId(state,payload) {
       state.kakaoId = payload
     },
     setUserId(state,payload) {
       state.userId = payload
+    },
+    setUserInfo(state, payload) {
+      state.userInfo = payload
     }
   },
   actions: {
@@ -37,6 +46,9 @@ export default new Vuex.Store({
     },
     setUserId : function(context,payload) {
       context.commit('setUserId',payload)
+    },
+    setUserInfo : function(context, payload) {
+      context.commit('setUserInfo', payload)
     }
   },
   plugins: [

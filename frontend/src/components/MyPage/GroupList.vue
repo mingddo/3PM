@@ -3,7 +3,6 @@
     <header class="myPageActivityHeader">
       <h2>가입한 그룹 목록</h2>
     </header>
-    <hr class="myPageActivityhr" />
     <div class="myPageActivityContentFrame">
       <Group v-for="(group, idx) in grouplist" :key="idx" :group="group" />
     </div>
