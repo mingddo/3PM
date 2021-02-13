@@ -9,14 +9,14 @@ services:
       - ./frontend:/app
     stdin_open: true
 
-  nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - 80:80
-      - 443:443
+  # nginx:
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./nginx
+  #   ports:
+  #     - 80:80
+  #     - 443:443
 
   backend:
     build:
