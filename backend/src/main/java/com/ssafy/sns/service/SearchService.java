@@ -13,7 +13,7 @@ public interface SearchService {
 
     public List<Hashtag> searchHashtags(String keyword);
 
-    public List<FeedResponseDto> searchFeeds(Hashtag hash);
+    public List<FeedResponseDto> searchFeeds(Long userId, Hashtag hash);
 
     public List<SimpleUserDto> searchUsers(String keyword);
 }

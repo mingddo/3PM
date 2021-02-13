@@ -1,156 +1,367 @@
 <template>
-  <section class="myPagemainSection">
-    <header class="myPageHeader">
-      <!-- 프로필 정보들 -->
-      <div class="profileInfo1">
-        <!-- 커버사진 및 본인 프로필 사진, 이름 -->
-        <div class="profileImgFrame">
-          <img
-            class="pofileImg"
-            src="https://lh3.googleusercontent.com/proxy/nhF8zAo7bmBI0DmEaDB5z45y60SaBo8ikkatFdGOl3K5bPkz3kzq2r-WHxN-ry3WBxgKeujWotOlXGg"
-            alt="프로필사진"
-          />
-        </div>
-        <h1>{{ userinfo.name }}</h1>
-      </div>
-      <hr class="myPageHeaderhr" />
-      <div class="profileInfo2">
-        <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
-        <div class="profileDetailInfo">
-          <h3>내가 추가한 친구</h3>
-          <div>{{ userinfo.following }}</div>
-        </div>
-        <div class="profileDetailInfo">
-          <h3>나를 추가한 친구</h3>
-          <div>{{ userinfo.following }}</div>
-        </div>
-        <div class="profileDetailInfo">
-          <h3>내가 속한 그룹</h3>
-          <div>{{ userinfo.group }}</div>
-        </div>
-      </div>
-      <div class="settings">설정 변경</div>
-    </header>
-    <article class="myPagearticle">
-      <!-- 최근활동 -->
-      <section>
-        <h2>최근 활동</h2>
-        <div>
-          <!-- 최근활동 3개? 미리보기 -->
-        </div>
-      </section>
-      <!-- 피드 -->
-      <section>
-        <!-- 게시물, 필터 들어가는 부분 -->
-        <header>
-          <h2>게시물</h2>
-          <div>필터</div>
-          <div>
-            <div>모두</div>
-            <div>꽃보다 집</div>
-          </div>
-        </header>
-        <!-- 게시물들이 나옴 컴포넌트들이 v-for돌기, 무한스크롤로 내릴 수 있음 -->
+  <div>
+    <Sidebar />
 
-        <article></article>
-      </section>
-    </article>
-  </section>
+    <section class="myPagemainSection">
+      <header class="myPageHeaderFrame">
+        <div class="myPageHeader">
+          <!-- 프로필 정보들 -->
+          <div class="profileInfo1">
+            <!-- 커버사진 및 본인 프로필 사진, 이름 -->
+            <div class="profileImgFrame">
+              <img
+                v-if="profileinfo.user_img"
+                class="pofileImg"
+                :src="
+                  `https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`
+                "
+                alt="프로필사진"
+              />
+              <img
+                v-else
+                class="pofileImg"
+                src="http://www.topstarnews.net/news/photo/201903/598316_280802_2053.jpg"
+                alt="프로필사진"
+              />
+            </div>
+            <h1>{{ profileinfo.username }}</h1>
+            <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
+            <div
+              :class="[!mypage ? '' : 'profile_none']"
+              class="myPageSubscribe"
+            >
+              <div
+                :class="{ profielSubscribedNone: subscribed }"
+                class="myPageSubscribed"
+                @click="followToggle"
+              >
+                {{ profileinfo.username }}님의 소식 받기
+              </div>
+              <div
+                :class="{ profielSubscribedNone: !subscribed }"
+                class="myPageSubscribed"
+                @click="followToggle"
+              >
+                {{ profileinfo.username }}님의 소식 끊기
+              </div>
+            </div>
+          </div>
+
+          <div class="profileInfoDetailFrame">
+            <div class="profileInfoDetail">
+              <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
+              <div class="profileDetailInfo">
+                <h3 :class="{ profile_none: mypage }">
+                  <!-- {{ profileinfo.username }}님이 구독한 사람 -->
+                  팔로우
+                </h3>
+                <!-- <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3> -->
+                <h3 :class="{ profile_none: !mypage }">팔로우</h3>
+                <div>{{ profileinfo.fromMeToOthersCnt }}</div>
+              </div>
+              <div class="profileDetailInfo">
+                <h3 :class="{ profile_none: mypage }">
+                  <!-- {{ profileinfo.username }}님을 구독한 사람 -->
+                  팔로잉
+                </h3>
+                <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
+                <h3 :class="{ profile_none: !mypage }">팔로잉</h3>
+                <div>{{ profileinfo.toMeFromOthersCnt }}</div>
+              </div>
+              <div class="profileDetailInfo">
+                <h3 :class="{ profile_none: mypage }">
+                  <!-- {{ profileinfo.username }}님이 가입한 그룹 -->
+                  가입한 그룹
+                </h3>
+                <!-- <h3 :class="{ profile_none: !mypage }">내가 가입한 그룹</h3> -->
+                <h3 :class="{ profile_none: !mypage }">가입한 그룹</h3>
+                <div>{{ profileinfo.groupCnt }}</div>
+              </div>
+            </div>
+            <hr class="myPageHeaderhr" />
+            <div class="myPageBottom">
+              <div class="myPageTabLink">
+                <div class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 1"
+                    :class="[activetab === 1 ? 'active' : '']"
+                    >게시물</a
+                  >
+                  <div
+                    :class="[activetab === 1 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
+                <div class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 3"
+                    :class="[activetab === 3 ? 'active' : '']"
+                    >구독자</a
+                  >
+                  <div
+                    :class="[activetab === 3 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
+                <div class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 4"
+                    :class="[activetab === 4 ? 'active' : '']"
+                    >그룹</a
+                  >
+                  <div
+                    :class="[activetab === 4 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
+                <div v-if="mypage" class="myPageTabLinkContent">
+                  <a
+                    @click.prevent="activetab = 2"
+                    :class="[activetab === 2 ? 'active' : '']"
+                    >최근 활동</a
+                  >
+                  <div
+                    :class="[activetab === 2 ? 'active' : '']"
+                    class="activeBar"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <article class="myPagearticleFrame">
+        <div class="myPagearticle">
+          <!-- 최근활동 -->
+          <section v-if="activetab === 1" class="myPageActivity">
+            <NewsFeedList :feed="feed" :last="last" />
+          </section>
+          <section v-if="activetab === 2" class="myPageActivity">
+            <Activity :activities="activities" />
+          </section>
+          <section v-if="activetab === 3" class="myPageActivity">
+            <SubscribedList :subscribedlist="subscribedlist" />
+          </section>
+          <section v-if="activetab === 4" class="myPageActivity">
+            <GroupList :grouplist="grouplist" />
+          </section>
+          <!-- 피드 -->
+        </div>
+      </article>
+    </section>
+  </div>
 </template>
 
 <script>
+import Activity from "@/components/MyPage/Activity.vue";
+import SubscribedList from "@/components/MyPage/SubscribedList.vue";
+import GroupList from "@/components/MyPage/GroupList.vue";
+import NewsFeedList from "../components/NewsFeed/NewsFeedList.vue";
+import {
+  getprofileInfo,
+  getprofileFeed,
+  followToggle,
+  followingList,
+  history,
+} from "@/api/mypage.js";
+import Sidebar from "@/components/Common/Sidebar.vue";
+
 export default {
+  components: {
+    Sidebar,
+    Activity,
+    SubscribedList,
+    GroupList,
+    NewsFeedList,
+  },
   data() {
     return {
-      userinfo: {
+      name: "명도균",
+      current_user: 0,
+      profile_user: 0,
+      // 해당 페이지 유저를 구독했는지 여부
+      subscribed: false,
+      // 내 홈페이지 여부
+      grouplist: [
+        {
+          groupname: "윈터솔져",
+          group_id: 100,
+          signupDate: "2020년 12월 1일",
+        },
+      ],
+      activities: [
+        {
+          username: "명도균",
+          dayInfo: "2021년 1월 1일",
+          content: "박성호님이 회원님의 게시물에 좋아요를 눌렀습니다.",
+          article_id: 30,
+        },
+      ],
+      mypage: false,
+      activetab: 1,
+      profileinfo: {
         name: "명도균",
+        user_id: 1,
         following: 100,
         follow: 1000,
         group: 4,
-        feed: [{}, {}],
       },
+      feed: [],
+      page: 0,
+      last: false,
+      next: false,
+      subscribedlist: [
+        {
+          username: "장수민",
+          user_id: 4,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "이병훈",
+          user_id: 5,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "박성호",
+          user_id: 8,
+          profilesrc: "@/assets/loverduck.png",
+        },
+        {
+          username: "김상원",
+          user_id: 31,
+          profilesrc: "@/assets/loverduck.png",
+        },
+      ],
+      feed_page_no: 0,
+      current_user_followingList: [],
     };
+  },
+  methods: {
+    setFeedList() {
+      getprofileFeed(
+        this.profile_user,
+        this.feed_page_no,
+        (res) => {
+          console.log(res.data);
+          this.page = res.data.endNum;
+          let feeds = res.data.feedList;
+          if (feeds.length < 100) {
+            this.last = true;
+          }
+          for (let f of feeds) {
+            this.feed.push(f);
+          }
+          this.next = false;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    setScroll() {
+      window.addEventListener("scroll", () => {
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+
+        if (
+          !this.next &&
+          !this.last &&
+          scrollLocation + windowHeight >= fullHeight
+        ) {
+          this.next = true;
+          setTimeout(() => {
+            this.setFeedList();
+          }, 1000);
+        }
+      });
+    },
+    usercheck() {
+      if (
+        this.$route.query.name === undefined ||
+        this.$route.query.name === this.$store.state.userId
+      ) {
+        this.current_user = this.$store.state.userId;
+        this.profile_user = this.$store.state.userId;
+        this.mypage = true;
+        // this.current_user = 뷰엑스나 세션에서 아이디 가지고 오기
+      } else {
+        this.profile_user = this.$route.query.name;
+        this.mypage = false;
+        console.log(this.profileinfo);
+      }
+    },
+    getprofileInfo() {
+      getprofileInfo(
+        this.profile_user,
+        (res) => {
+          console.log(res);
+          this.profileinfo = res.data;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
+      // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
+    },
+    followToggle() {
+      followToggle(
+        this.profile_user,
+        (res) => {
+          console.log("팔로우 되는지", res.data);
+          if (this.subscribed === false) {
+            (this.subscribed = true),
+              (this.profileinfo.toMeFromOthersCnt =
+                this.profileinfo.toMeFromOthersCnt + 1);
+          } else {
+            this.subscribed = false;
+            this.profileinfo.toMeFromOthersCnt =
+              this.profileinfo.toMeFromOthersCnt - 1;
+          }
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    getfollowingList() {
+      followingList(
+        this.current_user,
+        (res) => {
+          console.log("내가팔로우하는 사람", res.data);
+          this.current_user_followingList = res.data;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    getUserHistory() {
+      if (this.mypage === true) {
+        history(
+          this.current_user,
+          (res) => {
+            console.log("최근활동", res);
+            this.activities = res.data;
+          },
+          (err) => {
+            console.error(err);
+          }
+        );
+      }
+    },
+  },
+  created() {
+    console.log(this.$store.state.userId);
+    this.usercheck();
+    this.getprofileInfo();
+    this.setFeedList();
+  },
+  mounted() {
+    this.setScroll();
+    this.getfollowingList();
+    this.getUserHistory();
   },
 };
 </script>
-
-<style scoped>
-* {
-  box-sizing: border-box;
-}
-.myPageHeader {
-  width: 100%;
-  height: auto;
-  padding: 25px 0;
-  background-color: #ffffff;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.profileInfo1 {
-  width: 940px;
-  margin: auto;
-  padding: 15px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-.profileInfo2 {
-  width: 940px;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.profileDetailInfo {
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  margin: 30px;
-}
-
-.myPageHeaderhr {
-  width: 940px;
-  height: 1px;
-  border: none;
-  background-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.2);
-}
-
-.settings {
-  width: 150px;
-}
-.myPagearticle {
-  width: 100%;
-  height: auto;
-  padding: 15px 0;
-  background-color: #f0f2f5;
-}
-.myPagemainSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-.profileImgFrame {
-  width: 150px;
-  height: 150px;
-  border: solid 1px rgba(0, 0, 0, 0.2);
-  border-radius: 70%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-}
-
-.pofileImg {
-  width: 200px;
-  height: 150px;
-  object-fit: cover;
-}
-</style>

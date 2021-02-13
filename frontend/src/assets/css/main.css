@@ -1,0 +1,310 @@
+@font-face {
+  font-family: "Jal_Onuel";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* App.vue */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Jal_Onuel";
+  font-size: 17px;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+button a {
+  text-decoration: none;
+}
+button a:visited {
+  color: black;
+}
+button {
+  margin: 2px;
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585858;
+}
+button.active {
+  background: #585858;
+  color: white;
+}
+
+/* Home.vue */
+.home {
+  height: 750vh;
+  width: 100%;
+  position: absolute;
+}
+.home-section {
+  width: 100%;
+  height: 100vh;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: fixed;
+  top: 0px;
+  transition: all 1s;
+}
+.home-section-reverse {
+  width: 100%;
+  height: 100vh;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: fixed;
+  top: 0px;
+  transition: all 1s;
+}
+.home-section-text {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.home-section-title {
+  font-size: 24px;
+  font-weight: bolder;
+}
+.home-section-content {
+  font-size: 18px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.home-section-img {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-section-img img {
+  max-width: 500px;
+  /* max-height: 40vh; */
+}
+.home-section-before {
+  opacity: 0;
+  top: 100vh;
+}
+.home-section-after {
+  top: -100vh;
+  opacity: 0;
+}
+.login-btn {
+  z-index: 1000;
+  width: 120px;
+  position: fixed;
+  top: 5vh;
+  right: 5%;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: all 0.8s ease-in-out;
+  padding: 0.25rem 1rem;
+  background: none;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585858;
+}
+.login-btn.active {
+  background: #585858;
+  color: white;
+}
+/* .login-btn-moved {
+  width: 50%;
+  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  font-weight: bold;
+  color: #2c3e50;
+  transition: all 1s ease-in-out;
+  top: 95vh;
+} */
+.clock-container {
+  min-height: 200vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.clock-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 30vh;
+  position: fixed;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  border-radius: 50%;
+  transition: all 0.8s;
+}
+.clock-box-after {
+  opacity: 0;
+}
+.clock {
+  width: 240px;
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 8px solid #fff;
+  border-radius: 50%;
+}
+
+.clock-dot {
+  content: "";
+  position: fixed;
+  width: 15px;
+  height: 15px;
+  background-color: #fff;
+  z-index: 100l;
+  transition: all 0.8s;
+}
+
+.hour,
+.min,
+.sec {
+  position: fixed;
+}
+.hour,
+.hr {
+  width: 120px;
+  height: 120px;
+}
+.min,
+.mn {
+  width: 145px;
+  height: 145px;
+}
+.sec,
+.sc {
+  width: 180px;
+  height: 180px;
+}
+.hr,
+.mn,
+.sc {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+}
+
+.hr::before {
+  content: "";
+  position: fixed;
+  width: 8px;
+  height: 60px;
+  background-color: #fff;
+}
+
+.mn::before {
+  content: "";
+  position: fixed;
+  width: 4px;
+  height: 70px;
+  background-color: #fff;
+}
+
+.sc::before {
+  content: "";
+  position: fixed;
+  width: 2px;
+  height: 80px;
+  background-color: #fff;
+}
+/* Sidebar.vue */
+.side-bar {
+  /* background-color: gray; */
+  box-sizing: border-box;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  width: 300px;
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  z-index: 1000;
+}
+.nav-toggle-switch {
+  display: none;
+  height: 100%;
+  /* font-size: 20px; */
+}
+.nav-toggle-switch div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  /* padding-left: 15px; */
+}
+
+.nav-toggle-bar-before {
+  overflow: hidden;
+  z-index: 200000;
+  white-space: nowrap;
+  position: fixed;
+  height: 100%;
+  top: 10;
+  left: -250px;
+  background-color: white;
+  width: 250px;
+  transition: all 0.5s ease-in-out;
+}
+.nav-toggle-bar-before div {
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+.overlay {
+  display: none;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+/* Nav.vue */
+
+.nav-logo {
+  padding-top: 15px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-content {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  font-size: 20px;
+}
+.nav-content > div {
+  cursor: pointer;
+  padding: 10px;
+}
+.nav-content > div:hover {
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}

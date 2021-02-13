@@ -6,10 +6,7 @@ import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
-import com.ssafy.sns.repository.FeedClapRepositoryImpl;
-import com.ssafy.sns.repository.HashtagRepositoryImpl;
-import com.ssafy.sns.repository.FeedRepositoryImpl;
-import com.ssafy.sns.repository.UserRepository;
+import com.ssafy.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,46 +26,59 @@ public class IndoorServiceImpl implements FeedService {
     private final FeedRepositoryImpl feedRepository;
     private final HashtagRepositoryImpl hashtagRepository;
     private final FeedClapRepositoryImpl feedClapRepository;
+    private final CommentRepositoryImpl commentRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
 
     @Override
-    public FeedListResponseDto findMyList(Long id, int num) {
-        List<Feed> indoorList = feedRepository.findMyList(id, num);
+    public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        List<Feed> indoorList = feedRepository.findMyList(targetId, num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+                    (int) commentRepository.findListById(feed).count(),
+                    feedClapRepository.findClapAll(feed).size(),
+                    feedClapRepository.checkClap(feed, user).isPresent()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
 
     @Override
-    public FeedListResponseDto readList(int num) {
+    public FeedListResponseDto readList(Long userId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Feed> indoorList = feedRepository.findList(num);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed, feedClapRepository.findClapAll(feed).size()));
+            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+                    (int) commentRepository.findListById(feed).count(),
+                    feedClapRepository.findClapAll(feed).size(),
+                    feedClapRepository.checkClap(feed, user).isPresent()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
 
     @Override
-    public FeedResponseDto read(Long id) {
-        Indoor indoor = (Indoor) feedRepository.findById(id);
-        return new IndoorResponseDto(indoor, feedClapRepository.findClapAll(indoor).size());
+    public FeedResponseDto read(Long userId, Long feedId) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        Feed feed = feedRepository.findById(feedId);
+        if (!(feed instanceof Indoor)) throw new NoSuchElementException();
+        return new IndoorResponseDto((Indoor) feed,
+                (int) commentRepository.findListById(feed).count(),
+                feedClapRepository.findClapAll(feed).size(),
+                feedClapRepository.checkClap(feed, user).isPresent());
     }
 
     @Override
-    public Long write(Long userId, FeedRequestDto feedRequestDto) {
+    public void write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Indoor indoor = feedRepository.save(Indoor.builder()
+        Indoor indoor = (Indoor) feedRepository.save(Indoor.builder()
                 .content(feedRequestDto.getContent())
                 .user(user)
-                .test(((IndoorRequestDto) feedRequestDto).getTest())
                 .build());
 
         // 태그 등록
@@ -85,9 +95,6 @@ public class IndoorServiceImpl implements FeedService {
             indoor.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
-
-        return indoor.getId();
-
     }
 
     @Override
@@ -103,7 +110,7 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public Long modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
+    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Indoor indoor = (Indoor) feedRepository.findById(feedId);
@@ -139,14 +146,6 @@ public class IndoorServiceImpl implements FeedService {
 
         // 파일 찾기
         List<String> filePaths = feedRequestDto.getFilePaths();
-
-        return indoor.getId();
-
-    }
-
-    @Override
-    public Long addClap(Long uid, Long fid) {
-        return null;
     }
 
     @Override

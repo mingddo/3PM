@@ -5,8 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <!-- <link rel="stylesheet" href="@/assets/css/style.scss"> -->
     <title><%= htmlWebpackPlugin.options.title %></title>
     <script src="https://kit.fontawesome.com/82060ad290.js" crossorigin="anonymous"></script>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>Kakao.init('466fa429c4ae3db0819f75ebf5e3f512');</script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4eefdb70288a52331d930637bf0a9161&libraries=services,clusterer,drawing"></script>
   </head>
   <body>
     <noscript>

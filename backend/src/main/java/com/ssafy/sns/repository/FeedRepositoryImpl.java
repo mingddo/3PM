@@ -2,9 +2,6 @@ package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -40,13 +37,13 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public Feed findById(Long id) {
-        return em.find(Indoor.class, id);
+        return em.find(Feed.class, id);
     }
 
     @Override
-    public Indoor save(Indoor indoor) {
-        em.persist(indoor);
-        return indoor;
+    public Feed save(Feed feed) {
+        em.persist(feed);
+        return feed;
     }
 
     @Override

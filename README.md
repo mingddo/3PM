@@ -17,49 +17,31 @@
 ```mermaid
 gantt
     dateFormat  YYYY-MM-DD
-    title       8팀 sub PJT 2
+    title       8팀 sub PJT 3 0201 ~ 0219
 
     section 통합
-    주제 선정 :done,    2021-01-18, 1d
-    화면 기획 :done,    2021-01-18, 5d
-    기능 목록 상세 도출 :done,  2021-01-19, 4d
-    Test :after, 2021-01-25, 4d
-    유지보수 :after, 2021-01-25, 4d
-    PPT 제작 :crit, after, 2021-01-28, 1d
-    발표 :crit, after, 2021-01-29, 1d
+    Test & 버그수정 :after, 2021-02-08, 11d
+    UCC 제작 :crit, after, 2021-02-15, 4d
+    발표 :crit, after, 2021-02-19, 1d
     
     section Frontend
-    기술학습 (Vue) :active, 2021-01-18, 12d
-    웹 디자인 :active, 2021-01-21, 9d
-    개발 환경 세팅 :done, 2021-01-21, 1d
-    소개 페이지 :active, 2021-01-21, 1d
-    회원가입 페이지 :active, 2021-01-21, 2d
-    로그인 페이지 :active, 2021-01-21, 2d
-    뉴스피드 페이지 :active, 2021-01-22, 4d
-    게시글 페이지 :after, 2021-01-25, 2d
-    댓글 기능 :after, 2021-01-25, 2d
-    대댓글 기능 :after, 2021-01-26, 1d
-    좋아요 기능 :after, 2021-01-26, 1d
-    마이페이지 :after, 2021-01-26, 1d
-    팔로우, 팔로잉 기능 :after, 2021-01-27, 1d
-    검색 기능 :after, 2021-01-27, 1d
-    알림 기능 :after, 2021-01-27, 1d
+    디자인 UI/UX :active, 2021-02-01, 14d
+    소개 페이지 :active, 2021-02-01, 2d
+    마이페이지 :after, 2021-02-01, 2d
 
     section Backend
-    기술학습 (JPA, Spring Security) :active, 2021-01-18, 12d
-    개발 환경 세팅 :done, 2021-01-21, 1d
-    데이터베이스 설계 :done, 2021-01-21, 2d
-    회원가입 기능 :active, 2021-01-22, 4d
-    로그인 기능 :active, 2021-01-22, 4d
-    뉴스피드 기능 :after, 2021-01-25, 2d
-    게시글 기능 :after, 2021-01-25, 2d
-    댓글 기능 :after, 2021-01-25, 2d
-    대댓글 기능 :after, 2021-01-25, 1d
-    좋아요 기능 :after, 2021-01-26, 1d
-    마이페이지 :after, 2021-01-26, 1d
-    팔로우, 팔로이 가능 :after, 2021-01-27, 1d
-    검색 기능 :after, 2021-01-27, 1d
-    알림 기능 :after, 2021-01-27, 1d
+    Refactoring & Swagger 작성 :active, 2021-02-01, 14d
+    검색 기능 :after, 2021-02-01, 2d
+    로그인(jwt) :after, 2021-02-01, 3d
+    파일 업로드 기능 :after, 2021-02-02, 1d
+    팔로우, 팔로잉 기능 :after, 2021-02-03, 2d
+    댓글 기능 :after, 2021-02-03, 2d
+    대댓글 기능 :after, 2021-02-04, 1d
+    좋아요 기능 :after, 2021-02-04, 1d
+    알림 기능 :after, 2021-02-08, 3d
+    그룹 기능 :after, 2021-02-08, 3d
+    게시물 추천 기능 :after, 2021-02-10, 3d
+
 ```
 
 ## 주제
@@ -136,11 +118,17 @@ gantt
 
     - 그룹 내 게시물 작성
 
+
+## Database 구조
+
+![image](/uploads/0ac6bb35610bfb2974017dff58236668/image.png)
+
+
 ## Git 규칙
 
 #### Branch
 ```
-master -> develop -> feature/(branch name)
+master -> develop -> feature/(branch name)_(FE/BE)
 ```
 
 #### Merge

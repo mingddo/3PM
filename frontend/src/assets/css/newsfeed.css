@@ -1,0 +1,422 @@
+/* NewsfeedDetail */
+.feed-detail {
+  height: auto  ;
+}
+.feed-detail-userprofile {
+  display: flex;
+  justify-content: space-between;
+}
+.feed-detail-userprofile-box {
+  display: flex;
+}
+.feed-detail-userprofile-img {
+  cursor: pointer;
+  width: 10%;
+  margin: 10px;
+}
+.feed-detail-userprofile-content {
+  margin: 10px;
+  text-align: left;
+  align-items: bottom;
+}
+.feed-detail-userprofile-name {
+  cursor: pointer;
+}
+.feed-detail-userprofile-dropBtn {
+  margin: 20px;
+  cursor: pointer;
+  position: relative;
+}
+.feed-detail-tag {
+  text-align : left;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 10px;
+}
+.feed-detail-content-box {
+  width: 100%;
+}
+.feed-detail-img {
+  width: 100%;
+}
+.feed-detail-content {
+  text-align: left;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 10px;
+}
+.feed-detail-modi-delete {
+  margin: 10px;
+  text-align: right;
+}
+.feed-detail-like-comment {
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.feed-detail-like-comment-share-btn-box {
+  display: flex;
+  justify-content: space-evenly;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+.feed-detail-like-comment-share-btn {
+  display: flex;
+  width: 100%;
+  height:50px;
+  margin: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+.feed-detail-like-comment-share-btn:hover{
+  background-color: rgb(233, 232, 232);
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+}
+.feed-detail-comment-input-box {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 10vh;
+  }
+.feed-detail-comment-img {
+  width: 35px;
+}
+.feed-detail-comment-input {
+  width: 80%;
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  border-style: none;
+  height: 50%;
+}
+.feed-detail-comment-btn {
+  width: 5%;
+}
+
+/* NewsfeedPersonal */
+
+.newsfeed {
+  /* width: 80%; */
+  position: absolute;
+  top: 300px;
+  left : 350px;
+  right : 50px;
+  border-radius: 50px;
+  background-color: white;
+}
+.newsfeed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  left: 350px;
+  right: 50px;
+  background-image: linear-gradient(bisque, white);
+  height: 120vh;
+}
+.loading {
+  display: flex;
+  width: 100%;
+  padding: auto;
+}
+.spinner {
+  margin: auto;
+  animation: spin 1000ms infinite linear;
+}
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* NewsfeedList */
+
+.feed-box {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 50px;
+}
+.feed-create-btn-place {
+  position: fixed;
+  bottom: 25px;
+  right: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+  background-color: rgba(255,255,255,0.5);
+}
+.feed-create-btn {
+  cursor: pointer;
+  padding: 10px;
+}
+.feed-last {
+  text-align: center;
+  margin: auto;
+}
+.loading {
+  display: none;
+}
+
+.newsfeed-form {
+  
+}
+.newsfeed-form-profile {
+  padding: 10px;
+  display: flex;
+}
+.newsfeed-form-profile-img-space {
+  width: 70px;
+  height: 70px;
+  text-align: left;
+  border: solid 1px rgba(0, 0, 0, 0.2);
+  border-radius: 70%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.newsfeed-form-profile-img {
+  width:70px;
+  object-fit: cover;
+}
+.newsfeed-form-profile-name {
+  font-size: 20pt;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.newsfeed-form-tag-input-container {
+  background-color: #e4e4e4;
+  border-radius: 10px;
+  margin: 10px;
+}
+.newsfeed-form-tag-input {
+  margin : 10px;
+  width: 80%;
+  padding: 10px;
+  border: 0;
+}
+.newsfeed-form-tag-container {
+  margin: 10px;
+  min-height: 30px;
+}
+.newsfeed-form-content-input-container {
+  margin: 10px;
+}
+.newsfeed-form-content-input {
+  width: 100%;
+  padding: 10px;  
+  border: none;
+  background-color:#f9e7e7;
+  border-radius: 10px;
+}
+.newsfeed-form-file-box {
+  display: flex;
+  justify-content: space-around;
+}
+.newsfeed-form-img-box label {
+  display: inline-block; 
+  padding: .5em .75em; 
+  font-size: inherit; 
+  line-height: normal; 
+  vertical-align: middle; 
+  cursor: pointer; 
+  border: 1px solid #ebebeb; 
+  border-bottom-color: #e2e2e2; 
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+.newsfeed-form-img-box input[type="file"] {
+  position: absolute; 
+  width: 1px; 
+  height: 1px; 
+  padding: 0; 
+  margin: -1px; 
+  overflow: hidden; 
+  clip:rect(0,0,0,0); 
+  border: 0;
+}
+.newsfeed-form-submit-btn {
+  display: flex;
+  justify-content: center;
+}
+.newsfeed-form-input-map {
+  display: inline-block; 
+  padding: .5em .75em; 
+  font-size: inherit; 
+  line-height: normal; 
+  vertical-align: middle; 
+  cursor: pointer; 
+  border: 1px solid #ebebeb; 
+  border-bottom-color: #e2e2e2; 
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+.newsfeed-form-group-container {
+  margin-left: auto;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.newsfeed-form-group {
+  position: fixed;
+  top : 0;
+  left: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.newsfeed-form-group-list-btn {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+/* .newsfeed-form-group-list {
+  position: fixed;
+} */
+/* NewsFeedList */
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+}
+.feed-list {
+  border: 1px solid;
+  padding: 20px;
+}
+.feed-create-btn:hover {
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+}
+
+/* feed */
+.feed-userprofile-box {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 5px;
+}
+.feed-userprofile-space {
+  cursor: pointer;
+  width: 60px;
+  text-align: left;
+  border: solid 1px rgba(0, 0, 0, 0.2);
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin : 5px;
+}
+.feed-userprofile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.feed-userprofile-content {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+}
+.feed-userprofile-name {
+  cursor: pointer;
+}
+.feed-userprofile-name:hover {
+  text-decoration: underline;
+}
+.feed-content-box {
+  cursor: pointer;
+  text-align: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.feed-content-box div {
+  display: flex;
+  justify-content: center;
+}
+.feed-content-box img {
+  max-width: 100%;
+  min-height: 300px;
+  max-height: 300px;
+}
+.feed-content-box p {
+  width: 100%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.feed-tag-box {
+  display: flex;
+
+}
+.feed-footer {
+}
+.feed-date {
+  font-size: 14px;
+}
+.feed-like-comment-box {
+  width: 100%;
+  cursor: pointer;
+  text-align: right;
+  align-items: center;
+}
+.feed-footer-box{
+  display: flex;
+  padding : 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  justify-content: space-between;
+}
+
+/* newsfeedheader */
+
+.newsfeed-header-img-container {
+  height: 60vh;
+  width: 100%;
+}
+.newsfeed-header-img {
+  position: absolute;
+  right: 0;
+  top: 14vh;
+  height: 200px;
+}
+
+/* newsfeedform */
+
+.newsfeed-form-img {
+  display: flex;
+  flex-direction : row;
+  flex-wrap : wrap;
+}
+.newsfeed-form-img-prevbox-delbtn {
+  margin: 5px;
+  top: 0;
+  right: 0;
+  position: absolute;
+  z-index: 2;
+  color: red;
+  cursor: pointer;
+}
+.newsfeed-form-img-prevbox-delbtn:hover {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0)
+}
+.newsfeed-form-img-prevbox {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed;
+  margin: 20px;
+  position: relative;
+}
+.newsfeed-form-img-prevbox img {
+  max-width: 100%;
+  max-height: 100%;
+}
