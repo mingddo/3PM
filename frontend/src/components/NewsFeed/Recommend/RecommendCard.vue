@@ -1,21 +1,22 @@
 <template>
-  <div class="recommend_card">
+  <div class="recommend_card" id="recoContent" :style="`background-image: url(${op.img ? op.img : defaultImg})`">
     <div class="recommend_contentFrame">
       <div class="recommend_preview">
         <div class="tag">
-          {{ hashtag }}
+          <span v-for="(tag,idx) in op.tag" :key="idx">
+            {{ tag }}
+          </span>
         </div>
         <div class="content_preview">
           <div class="imgFrame">
-            <!-- <img src="@/assets/loverduck.png" alt="" /> -->
+            <img v-if="op.user" :src="op.user.img" alt="" />
           </div>
-          <div class="preview_username">빵빵덕</div>
-          <div class="preview_content">
-            빵빵덕은 언제부터 귀여웠을까요? 빵빵덕❤ 빵빵덕은 언제부터
-            귀여웠을까요? 빵빵덕❤ 빵빵덕은 언제부터 귀여웠을까요? 빵빵덕❤
-            빵빵덕은 언제부터 귀여웠을까요? 빵빵덕❤ 빵빵덕은 언제부터
-            귀여웠을까요? 빵빵덕❤ 빵빵덕은 언제부터 귀여웠을까요?빵빵덕은
-            언제부터 귀여웠을까요?
+          <div class="preview_username">{{ op.user.nickname }}</div>
+          <div class="preview_content" v-html="contentBox">
+            <!-- {{ op.content }} -->
+          </div>
+          <div class="preview_link" @click="goToPage">
+            바로이동
           </div>
         </div>
       </div>
@@ -25,10 +26,43 @@
 
 <script>
 export default {
+  props: {
+    op: Object,
+    Category: Number,
+  },
   data() {
     return {
-      hashtag: "#빵빵덕 #오리 #볼빵빵 #빵빵덕",
+      defaultImg : `https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg`,
+      contentBox: null,
     };
+  },
+  mounted () {
+    this.setContentIndent();
+  },
+  methods : {
+    setContentIndent () {
+      this.contentBox = this.op.content
+      console.log(this.contentBox)
+      this.contentBox = this.contentBox.replace(/(\n|\r\n)/g, '<br>')
+      console.log(this.contentBox)
+    },
+    // setDefaultImg () {
+    //   console.log('뭐하냐,,', this.op)
+    //   let recoCard = document.getElementById('recoContent')
+    //   let defaultI = 'https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg'
+    //   if (this.op.img) {
+    //     recoCard.style.backgroundImage = `url(${this.op.img})`;
+    //   } else {
+    //     recoCard.style.backgroundImage = `url(${defaultI})`;
+    //   }
+    // },
+    goToPage () {
+      if (this.Category == 4) {
+        window.open(this.op.link)
+      } else {
+        // router push
+      }
+    },
   },
 };
 </script>
@@ -57,14 +91,24 @@ export default {
   word-break: break-word;
 }
 
+.preview_link {
+  cursor: pointer;
+}
+
+.preview_link:hover {
+  text-decoration: underline;
+}
+
 .recommend_card {
-  width: 400px;
+  width: 100%;
   height: 300px;
   margin: auto;
   z-index: 100;
-  /* background-image: url("https://lh3.googleusercontent.com/proxy/PcujSRRpYc-h3fyW1hqxWQmtApbNJ3dA2FQv85P125rLnMgARRzSzuRl4e5tXmSSIaQkjYHOW6xSGvQ0MyM1Zbcn_i2bTAXB7-UjnnYW_7WPNwJzX1T9nX-vLuOyudX2kYygjnelZ7YrZuTnEgY8NUQ0Qm_34_7oNT39jdsfuFhF_P_2gwrJXtG2UPQTz_gAFBrx005hvXGlC7LhTr8CjSVFfaH98_daLtZQJEss-w_7BcGL3lYnR08wQg0g3u4vLgbQNVcJUOIk8J5Y2OVMgpPVLer51sqNjw4WLTsRQpZCDwrBCNHckAFfP8V7OE3OYmUrNlJFg48tvnDEwJSZCc1lQUm-jJIeVsOlfq9WlVn_2gOl581806mivYgoLMZHzYXzE4WHAg"); */
+  /* background-image: url("https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg"); */
   background-color: azure;
   background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
   border-radius: 5px;
 }
 .recommend_contentFrame {

@@ -7,9 +7,7 @@
         <NewsFeedHeader :Category="Category" />
       </div>
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-        <WorkerHolicBanner v-if="Category == 4"/>
-        <MountainBanner v-else-if="Category == 3"/>
-        <!-- <NewsFeedRecommend :reco="reco" :Category="Category" /> -->
+        <NewsFeedRecommend v-if="Category == 4" :reco="reco" :Category="Category" />
         <!-- 임시로 자리차지하기 -->
         <div v-else> 
           <p style="padding-top : 40px; padding-bottom:40px; text-align :center;">박수를 가장 많이 받은 게시물</p>
@@ -23,21 +21,17 @@
 <script>
 import NewsFeedHeader from "../../components/NewsFeed/NewsFeedHeader.vue";
 import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
-// import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
+import NewsFeedRecommend from "../../components/NewsFeed/Recommend/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
-import WorkerHolicBanner from '../../components/NewsFeed/Recommend.vue/WorkerHolicBanner.vue';
-import MountainBanner from '../../components/NewsFeed/Recommend.vue/MountainBanner.vue';
 
 export default {
   name: "NewsfeedPersonal",
   components: {
     NewsFeedHeader,
-    // NewsFeedRecommend,
+    NewsFeedRecommend,
     NewsFeedList,
     Sidebar,
-    WorkerHolicBanner,
-    MountainBanner,
   },
   data() {
     return {
