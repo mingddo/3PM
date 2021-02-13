@@ -1,15 +1,14 @@
-package com.ssafy.sns.dto.user;
+package com.ssafy.sns.dto.group;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DuplDto {
+public class GroupCreateResDto {
 
-    private String username;
+    private Long id;
+
 }

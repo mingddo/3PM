@@ -1,4 +1,4 @@
-package com.ssafy.sns.dto.user;
+package com.ssafy.sns.dto.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoDto2 {
+public class CommentRequestDto {
 
-    private Long kakaoId;
-    private String username;
+    private String content;
 }
