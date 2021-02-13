@@ -13,7 +13,7 @@
           구독취소
         </span>
       </div>
-      <div v-else>
+      <div v-else @click="goToSetting">
         설정
       </div>
     </div>
@@ -62,6 +62,9 @@ export default {
     },
     foldDrop () {
       this.drop = !this.drop
+    },
+    goToSetting () {
+      this.$router.push({ name: 'MyPageEdit'})
     },
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.id}})
