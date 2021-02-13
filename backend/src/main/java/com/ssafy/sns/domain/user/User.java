@@ -2,6 +2,7 @@ package com.ssafy.sns.domain.user;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
 
+import com.ssafy.sns.domain.clap.CommentClap;
 import com.ssafy.sns.domain.group.GroupMember;
 
 import com.ssafy.sns.domain.clap.FeedClap;
@@ -69,6 +70,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentClap> commentClaps = new ArrayList<>();
+
     public void addFeedClap(FeedClap feedClap) {
         if (feedClapList == null) feedClapList = new ArrayList<>();
         feedClapList.add(feedClap);
@@ -90,5 +94,16 @@ public class User extends BaseTimeEntity {
     public void deleteComment(Comment comment) {
         commentList.remove(comment);
         comment.setUser(null);
+    }
+
+    public void addCommentClap(CommentClap commentClap) {
+        if (commentClaps == null) commentClaps = new ArrayList<>();
+        commentClaps.add(commentClap);
+        commentClap.setUser(this);
+    }
+
+    public void deleteCommentClap(CommentClap commentClap) {
+        commentClaps.remove(commentClap);
+        commentClap.setUser(null);
     }
 }

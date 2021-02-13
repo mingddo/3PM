@@ -17,7 +17,7 @@ public interface FeedService {
     // 피드 글 불러오기
     FeedResponseDto read(Long userId, Long feedId);
 
-    void write(Long userId, FeedRequestDto feedRequestDto);
+    Long write(Long userId, FeedRequestDto feedRequestDto);
 
     // 피드 파일 첨부
     void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException;

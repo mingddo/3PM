@@ -7,10 +7,7 @@ import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.comment.CommentDto;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.comment.CommentResponseDto;
-import com.ssafy.sns.repository.CommentRepositoryImpl;
-import com.ssafy.sns.repository.FeedRepositoryImpl;
-import com.ssafy.sns.repository.NoticeRepositoryImpl;
-import com.ssafy.sns.repository.UserRepository;
+import com.ssafy.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +25,7 @@ public class CommentServiceImpl implements CommentService {
     private final FeedRepositoryImpl feedRepository;
     private final UserRepository userRepository;
     private final NoticeRepositoryImpl noticeRepository;
+    private final CommentClapRepositoryImpl commentClapRepository;
 
     @Override
     public void write(CommentRequestDto commentRequestDto, Long userId, Long feedId) {
@@ -69,13 +67,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponseDto getList(Long feedId, int num) {
+    public CommentResponseDto getList(Long userId, Long feedId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Feed feed = feedRepository.findById(feedId);
         if (feed == null) throw new NoSuchElementException();
-
         return new CommentResponseDto(commentRepository.findListById(feed, num)
-                .map(CommentDto::new)
-                .collect(Collectors.toList()),
-                num);
+                .map(comment -> new CommentDto(comment,
+                        commentClapRepository.findClapAll(comment).size(),
+                        commentClapRepository.findClap(user, comment).isPresent()))
+                .collect(Collectors.toList()), num);
     }
 }

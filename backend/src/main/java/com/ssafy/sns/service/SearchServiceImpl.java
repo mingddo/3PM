@@ -45,13 +45,13 @@ public class SearchServiceImpl implements SearchService{
                 indoorResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
-                        feedClapRepository.checkClap(feed, user).isPresent(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
                         1));
             } else if(feed instanceof Insider) {
                 indoorResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
-                        feedClapRepository.checkClap(feed, user).isPresent(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
                         2));
             }
         }
@@ -67,5 +67,4 @@ public class SearchServiceImpl implements SearchService{
         }
         return userDtoList;
     }
-
 }

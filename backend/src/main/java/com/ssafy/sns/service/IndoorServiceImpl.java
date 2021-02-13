@@ -40,7 +40,7 @@ public class IndoorServiceImpl implements FeedService {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.checkClap(feed, user).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -54,7 +54,7 @@ public class IndoorServiceImpl implements FeedService {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.checkClap(feed, user).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent()));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -67,11 +67,11 @@ public class IndoorServiceImpl implements FeedService {
         return new IndoorResponseDto((Indoor) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
-                feedClapRepository.checkClap(feed, user).isPresent());
+                feedClapRepository.findClap(user, feed).isPresent());
     }
 
     @Override
-    public void write(Long userId, FeedRequestDto feedRequestDto) {
+    public Long write(Long userId, FeedRequestDto feedRequestDto) {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
@@ -95,6 +95,8 @@ public class IndoorServiceImpl implements FeedService {
             indoor.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
+
+        return indoor.getId();
     }
 
     @Override

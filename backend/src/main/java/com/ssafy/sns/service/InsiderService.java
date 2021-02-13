@@ -39,7 +39,8 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public void write(Long userId, FeedRequestDto feedRequestDto) {
+    public Long write(Long userId, FeedRequestDto feedRequestDto) {
+        return null;
     }
 
     @Override

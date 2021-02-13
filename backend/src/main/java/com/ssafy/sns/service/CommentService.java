@@ -11,5 +11,5 @@ public interface CommentService {
 
     void remove(Long userId, Long feedId, Long commentId);
 
-    CommentResponseDto getList(Long feedId, int num);
+    CommentResponseDto getList(Long userId, Long feedId, int num);
 }
