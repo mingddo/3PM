@@ -2,6 +2,8 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.repository.FeedClapRepositoryImpl;
@@ -33,7 +35,12 @@ public class SearchServiceImpl implements SearchService{
         List<Feed> feedList = searchRepository.searchFeeds(hash);
         List<FeedResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
-            indoorResponseDtoList.add(new FeedResponseDto(feed, feedClapRepository.findClapAll(feed).size()));
+            if(feed instanceof Indoor) {
+                indoorResponseDtoList.add(new FeedResponseDto(feed, feedClapRepository.findClapAll(feed).size(), 1));
+            } else if(feed instanceof Insider) {
+                indoorResponseDtoList.add(new FeedResponseDto(feed, feedClapRepository.findClapAll(feed).size(), 2));
+            }
+
         }
         return indoorResponseDtoList;
     }

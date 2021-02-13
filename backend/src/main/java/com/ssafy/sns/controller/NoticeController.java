@@ -1,42 +1,68 @@
 package com.ssafy.sns.controller;
 
 import com.google.api.Authentication;
-import com.ssafy.sns.service.FirebaseCloudMessageService;
+import com.ssafy.sns.domain.notice.Notice;
+import com.ssafy.sns.domain.notice.NoticeComment;
+import com.ssafy.sns.domain.notice.NoticeFeedClap;
+import com.ssafy.sns.domain.notice.NoticeFollow;
+import com.ssafy.sns.dto.notice.NoticeResponseDto;
+import com.ssafy.sns.dto.user.SimpleUserDto;
+import com.ssafy.sns.service.NoticeServiceImpl;
+import com.ssafy.sns.service.UserServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@RestController("/api/notice")
+@RequiredArgsConstructor
+@RestController("/notice")
+@RequestMapping("/notice")
 public class NoticeController {
 
     @Autowired
-    FirebaseCloudMessageService firebaseCloudMessageService;
+    private final NoticeServiceImpl noticeService;
 
-//    @GetMapping(value = "/send", produces = "application/json; charset=utf8")
-//    public ResponseEntity<String> send() throws IOException {
-//        HttpStatus status = HttpStatus.ACCEPTED;
-//        firebaseCloudMessageServicendMessageTo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBY2Nlc3NUb2tlbiIsImV4cCI6MTYxMjg0MTE3OCwiUmVmcmVzaFRva2VuIjoiZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SnpkV0lpT2lKU1pXWnlaWE5vVkc5clpXNGlMQ0psZUhBaU9qRTJNVE0zTURFMU56Z3NJblZ6WlhKSlpDSTZNbjAuS255TWVGYXFUaWdGU0JqLUhJWkNLLWNSOFQ1RUxLT0hid19TQUVsbEstTSJ9.TeDotWsD3PRJvYC6HVKWNEuKAVHxjWDDxGZ-RSP1ebk", "123", "456");
-//
-//        return new ResponseEntity<>("123", status);
-//    }
-//
-//    @ApiOperation(value = "알람 저장하기")
-//    @ApiImplicitParams({@ApiImplicitParam(name = "jwt", value = "JWT Token", required = true, dataType = "string", paramType = "header")})
-//    @PostMapping
-//    public ResponseEntity<Void> saveNotification(@RequestBody final NotificationReqDto requestDto) {
-//        notificationService.saveNoti(requestDto, userId);
-//        return ResponseEntity.ok().build();
-//    }
+    private final UserServiceImpl userService;
 
+    @ApiOperation(value = "알림 목록 불러오기")
+    @GetMapping(value = "/list/{userId}", produces = "application/json; charset=utf8")
+    public ResponseEntity<List<NoticeResponseDto>> listAll(@PathVariable("userId") Long userId) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        List<Notice> followList = noticeService.followList(userService.findUserById(userId));
+        List<Notice> feedClabList = noticeService.feedClabList(userService.findUserById(userId));
+        List<Notice> commentList = noticeService.commentList(userService.findUserById(userId));
+        List<Notice> joined1 = Stream.concat(followList.stream(), feedClabList.stream())
+                .collect(Collectors.toList());
+        List<Notice> joined2 = Stream.concat(joined1.stream(), commentList.stream())
+                .collect(Collectors.toList());
+        List<NoticeResponseDto> noticeResponseDto = new ArrayList<>();
+        for (Notice notice : joined2) {
+            Long fromId = null;
+            if(notice instanceof NoticeFollow) {
+                fromId = ((NoticeFollow) notice).getFollow().getFromUser().getId();
+                System.out.println("userId = " + userId);
+                System.out.println("fromId = " + fromId);
+                noticeResponseDto.add(new NoticeResponseDto(1, fromId, userId));
+            } else if(notice instanceof NoticeFeedClap) {
+                fromId = ((NoticeFeedClap)notice).getFeedClap().getUser().getId();
+                noticeResponseDto.add(new NoticeResponseDto(2, fromId, userId));
+            } else if(notice instanceof NoticeComment) {
+                fromId = ((NoticeComment) notice).getComment().getUser().getId();
+                noticeResponseDto.add(new NoticeResponseDto(3, fromId, userId));
+            }
+        }
+        return new ResponseEntity<>(noticeResponseDto, status);
+    }
 
 }

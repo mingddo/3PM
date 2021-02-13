@@ -23,6 +23,7 @@ public class FeedResponseDto {
     private List<String> tags = new ArrayList<>();
     private LocalDateTime date;
     private int likeCnt;
+    private int type;
 
     public FeedResponseDto(Feed feed, int likeCnt) {
         this.id = feed.getId();
@@ -39,5 +40,23 @@ public class FeedResponseDto {
             this.file = null;
         }
         this.likeCnt = likeCnt;
+    }
+
+    public FeedResponseDto(Feed feed, int likeCnt, int type) {
+        this.id = feed.getId();
+        this.user = new SimpleUserDto(feed.getUser());
+        this.content = feed.getContent();
+        this.date = feed.getCreatedDate();
+        if (tags == null) tags = new ArrayList<>();
+        for (FeedHashtag feedHashtag : feed.getFeedHashtagList()) {
+            tags.add(feedHashtag.getHashtag().getTagName());
+        }
+        if (feed.getFileList().size() != 0) {
+            this.file = feed.getFileList().get(0).getFileName();
+        } else {
+            this.file = null;
+        }
+        this.likeCnt = likeCnt;
+        this.type = type;
     }
 }
