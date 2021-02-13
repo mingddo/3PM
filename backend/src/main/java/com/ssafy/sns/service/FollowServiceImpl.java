@@ -32,7 +32,7 @@ public class FollowServiceImpl {
         return (int) followRepository.countByToUserId(id);
     }
 
-    public final NoticeRepositoryImpl noticeRepository;
+    private final NoticeRepositoryImpl noticeRepository;
 
 //    public List<Long> fromMeToOthersList(Long id) {
 //        List<Follow> follows = followRepository.findByFromId(id);
