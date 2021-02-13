@@ -1,9 +1,12 @@
 package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.follow.Follow;
+import com.ssafy.sns.domain.notice.Notice;
+import com.ssafy.sns.domain.notice.NoticeFollow;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.user.UserFollowDto;
 import com.ssafy.sns.repository.FollowRepository;
+import com.ssafy.sns.repository.NoticeRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,8 @@ public class FollowServiceImpl {
     public int toMeFromOthers(Long id) {
         return (int) followRepository.countByToUserId(id);
     }
+
+    private final NoticeRepositoryImpl noticeRepository;
 
 //    public List<Long> fromMeToOthersList(Long id) {
 //        List<Follow> follows = followRepository.findByFromId(id);
@@ -57,8 +62,10 @@ public class FollowServiceImpl {
             // 팔로윙 취소
             followRepository.deleteByUser(fromUser.getId(), toUser.getId());
         } else {
+            Follow follow = new Follow(fromUser, toUser);
             // 팔로잉
-            followRepository.save(new Follow(fromUser, toUser));
+            followRepository.save(follow);
+            noticeRepository.save(new NoticeFollow(follow));
         }
     }
 

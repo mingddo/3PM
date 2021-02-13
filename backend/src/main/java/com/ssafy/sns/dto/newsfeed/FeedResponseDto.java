@@ -24,6 +24,7 @@ public class FeedResponseDto {
     private LocalDateTime date;
     private int commentCnt;
     private int likeCnt;
+    private int type;
     private boolean isClap;
 
     public FeedResponseDto(Feed feed, int commentCnt, int likeCnt,boolean isClap) {
@@ -43,5 +44,25 @@ public class FeedResponseDto {
         this.commentCnt = commentCnt;
         this.likeCnt = likeCnt;
         this.isClap = isClap;
+    }
+
+    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int type) {
+        this.id = feed.getId();
+        this.user = new SimpleUserDto(feed.getUser());
+        this.content = feed.getContent();
+        this.date = feed.getCreatedDate();
+        if (tags == null) tags = new ArrayList<>();
+        for (FeedHashtag feedHashtag : feed.getFeedHashtagList()) {
+            tags.add(feedHashtag.getHashtag().getTagName());
+        }
+        if (feed.getFileList().size() != 0) {
+            this.file = feed.getFileList().get(0).getFileName();
+        } else {
+            this.file = null;
+        }
+        this.commentCnt = commentCnt;
+        this.likeCnt = likeCnt;
+        this.isClap = isClap;
+        this.type = type;
     }
 }

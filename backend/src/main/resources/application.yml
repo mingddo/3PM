@@ -6,6 +6,7 @@ spring:
     username: root
     password: ssafy208
 
+
   # jpa settings
   jpa:
     hibernate:

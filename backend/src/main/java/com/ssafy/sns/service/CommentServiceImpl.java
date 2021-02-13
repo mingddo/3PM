@@ -2,12 +2,14 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.notice.NoticeComment;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.comment.CommentDto;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.comment.CommentResponseDto;
 import com.ssafy.sns.repository.CommentRepositoryImpl;
 import com.ssafy.sns.repository.FeedRepositoryImpl;
+import com.ssafy.sns.repository.NoticeRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepositoryImpl commentRepository;
     private final FeedRepositoryImpl feedRepository;
     private final UserRepository userRepository;
+    private final NoticeRepositoryImpl noticeRepository;
 
     @Override
     public void write(CommentRequestDto commentRequestDto, Long userId, Long feedId) {
@@ -34,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.save(new Comment(commentRequestDto));
         user.addComment(comment);
         feed.addComment(comment);
+        noticeRepository.save(new NoticeComment(comment));
     }
 
     @Override
