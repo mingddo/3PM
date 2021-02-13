@@ -1,7 +1,8 @@
 package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
-import com.ssafy.sns.domain.clap.IndoorClap;
+import com.ssafy.sns.domain.clap.FeedClap;
+import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
@@ -38,10 +39,13 @@ public class Feed extends BaseTimeEntity {
     private List<FeedHashtag> feedHashtagList = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IndoorClap> indoorClapList = new ArrayList<>();
+    private List<File> fileList = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> fileList = new ArrayList<>();
+    private List<FeedClap> feedClapList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
 
     public Feed(String content, User user, List<FeedHashtag> feedHashtagList) {
         this.content = content;
@@ -66,17 +70,6 @@ public class Feed extends BaseTimeEntity {
         feedHashtag.setFeed(null);
     }
 
-    public void addIndoorClap(IndoorClap indoorClap) {
-        if (indoorClapList == null) indoorClapList = new ArrayList<>();
-        indoorClapList.add(indoorClap);
-        indoorClap.setFeed(this);
-    }
-
-    public void deleteIndoorClap(IndoorClap indoorClap) {
-        feedHashtagList.remove(indoorClap);
-        indoorClap.setFeed(null);
-    }
-
     public void addFile(File file) {
         if (fileList == null) fileList = new ArrayList<>();
         fileList.add(file);
@@ -88,4 +81,25 @@ public class Feed extends BaseTimeEntity {
         file.setFeed(null);
     }
 
+    public void addFeedClap(FeedClap feedClap) {
+        if (feedClapList == null) feedClapList = new ArrayList<>();
+        feedClapList.add(feedClap);
+        feedClap.setFeed(this);
+    }
+
+    public void deleteFeedClap(FeedClap feedClap) {
+        feedClapList.remove(feedClap);
+        feedClap.setFeed(null);
+    }
+
+    public void addComment(Comment comment) {
+        if (commentList == null) commentList = new ArrayList<>();
+        commentList.add(comment);
+        comment.setFeed(this);
+    }
+
+    public void deleteComment(Comment comment) {
+        commentList.remove(comment);
+        comment.setFeed(null);
+    }
 }

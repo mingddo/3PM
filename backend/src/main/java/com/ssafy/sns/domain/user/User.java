@@ -1,9 +1,16 @@
 package com.ssafy.sns.domain.user;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
+
+import com.ssafy.sns.domain.group.GroupMember;
+
+import com.ssafy.sns.domain.clap.FeedClap;
+import com.ssafy.sns.domain.comment.Comment;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter // 비추천 코드
@@ -39,4 +46,49 @@ public class User extends BaseTimeEntity {
     // 유저 설정 정보
     @Embedded
     private UserConfig userConfig;
+
+
+
+    // 유저가 속한 그룹 리스트
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<GroupMember> groupMembers = new ArrayList<>();
+
+    // 그룹 탈퇴
+    public void removeGroup(GroupMember groupMember) {
+        this.groupMembers.remove(groupMember);
+    }
+
+    //그룹 가입
+    public void addGroup(GroupMember groupMember) {
+        this.groupMembers.add(groupMember);
+    }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedClap> feedClapList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList = new ArrayList<>();
+
+    public void addFeedClap(FeedClap feedClap) {
+        if (feedClapList == null) feedClapList = new ArrayList<>();
+        feedClapList.add(feedClap);
+        feedClap.setUser(this);
+    }
+
+    public void deleteFeedClap(FeedClap feedClap) {
+        feedClapList.remove(feedClap);
+        feedClap.setUser(null);
+
+    }
+
+    public void addComment(Comment comment) {
+        if (commentList == null) commentList = new ArrayList<>();
+        commentList.add(comment);
+        comment.setUser(this);
+    }
+
+    public void deleteComment(Comment comment) {
+        commentList.remove(comment);
+        comment.setUser(null);
+    }
 }

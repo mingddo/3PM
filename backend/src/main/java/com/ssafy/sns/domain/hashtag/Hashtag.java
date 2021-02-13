@@ -34,4 +34,9 @@ public class Hashtag {
         this.feedHashtags.add(feedHashtag);
         feedHashtag.setHashtag(this);
     }
+
+    public void deleteFeedHashtag(FeedHashtag feedHashtag) {
+        this.feedHashtags.remove(feedHashtag);
+        feedHashtag.setHashtag(null);
+    }
 }

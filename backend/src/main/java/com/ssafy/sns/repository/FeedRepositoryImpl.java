@@ -1,12 +1,7 @@
 package com.ssafy.sns.repository;
 
-import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
-import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +10,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class IndoorRepositoryImpl implements FeedRepository {
+public class FeedRepositoryImpl implements FeedRepository {
 
     private final EntityManager em;
 
@@ -41,32 +36,18 @@ public class IndoorRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Feed findOne(Long id) {
-        return em.find(Indoor.class, id);
+    public Feed findById(Long id) {
+        return em.find(Feed.class, id);
     }
 
     @Override
-    public Feed save(FeedRequestDto indoorRequestDto, User user) {
-        Indoor indoor = Indoor.builder()
-                .content(indoorRequestDto.getContent())
-                .user(user)
-                .test(((IndoorRequestDto)indoorRequestDto).getTest())
-                .build();
-
-        em.persist(indoor);
-
-        return indoor;
+    public Feed save(Feed feed) {
+        em.persist(feed);
+        return feed;
     }
 
     @Override
-    public void remove(Long id) {
-        Indoor indoor = em.find(Indoor.class, id);
-        em.remove(indoor);
-    }
-
-    @Override
-    public void update(Long feedId, FeedRequestDto feedRequestDto) {
-        Indoor indoor = (Indoor) findOne(feedId);
-        indoor.update(feedRequestDto.getContent(), ((IndoorRequestDto)feedRequestDto).getTest());
+    public void remove(Feed feed) {
+        em.remove(feed);
     }
 }
