@@ -1,13 +1,16 @@
 <template>
   <div>
     <div class="banner-header">
-      취업정보
+      <h2>
+        취업정보
+      </h2>
+      
     </div>
     <div class="banner-body">
-      <div @click="goToPage1" v-if="age < 60">50세, 인생을 준비해볼까?</div>
-      <div @click="goToPage2" v-else>60세, 새로운 일에 도전해볼 나이</div>
-      <div @click="goToPage3">요즘 유튜브가 HOT 하다며~</div>
-      <div @click="goToPage4">중장년 고용정책 한눈에 보기</div>
+      <div class="banner-body-each-banner" @click="goToPage1" v-if="age < 60">50세, 인생을 준비해볼까?</div>
+      <div class="banner-body-each-banner" @click="goToPage2" v-else>60세, 새로운 일에 도전해볼 나이</div>
+      <div class="banner-body-each-banner" @click="goToPage3">요즘 유튜브가 HOT 하다며~</div>
+      <div class="banner-body-each-banner" @click="goToPage4">중장년 고용정책 한눈에 보기</div>
     </div>
   </div>
 </template>
@@ -22,6 +25,9 @@ export default {
     };
   },
   methods: {
+    // texting
+
+    //
     goToPage1 () {
       window.open("https://50plus.or.kr/")
     },
@@ -50,7 +56,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
 .banner-header {
   padding-top : 40px; 
   padding-bottom:40px; 
@@ -61,16 +67,16 @@ export default {
   justify-content:center;
   align-items:center;
   height:240px;
-  // background-color:rgba(0,0,0,0.5);
-  cursor: pointer;
+/* background-color:rgba(0,0,0,0.5); */
   flex-direction: column;
   align-content: space-between;
 }
 .banner-body:hover {
   box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 }
-.banner-body > div {
+.banner-body-each-banner  {
   width:100%;
+  cursor: pointer;
   justify-content: center;
   display: flex;
   height: 70px;

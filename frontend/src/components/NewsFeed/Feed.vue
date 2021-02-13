@@ -10,7 +10,8 @@
           <p v-if="fd.user.nickname" class="feed-userprofile-name" @click="goToProfile">{{fd.user.nickname}}</p>
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
           <div class="feed-date">
-          <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p>
+            <!-- <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p> -->
+            {{agoDate != '0일' ? agoDate : '오늘'}}
           </div>
         </div>
         <div class="feed-tag-box" v-if="fd.tags.length > 0">
@@ -75,17 +76,53 @@ export default {
       month: 0,
       day: 0,
       time: null,
-      placeName: '대전광역시 유성구 봉명동'
+      placeName: '대전광역시 유성구 봉명동',
+      agoDate: null,
     };
   },
   methods: {
+    // getDateStr(myDate){
+    //   let todayYear = myDate.getFullYear();
+    //   let todayMonth = ("0"+(myDate.getMonth()+1)).slice(-2);
+    //   let todayDay = ("0"+myDate.getDate()).slice(-2);
+    //   return ( todayYear + '-' + todayMonth + '-' + todayDay );
+    // },
     setDateTime () {
+      let d = new Date ();
+      let todayDate = d.getDate();
+      let todayMonth = d.getMonth() + 1;
+      console.log(todayMonth)
       if (this.fd) {
         let date = this.fd.date.split('T')[0]
         this.time = this.fd.date.split('T')[1]
         this.year = date.split('-')[0]
         this.month = date.split('-')[1]
-        this.day = date.split('-')[2] 
+        this.day = date.split('-')[2]
+        if (this.month == todayMonth) {
+          let prevDay = todayDate - this.day
+          if (prevDay < 7) {
+            this.agoDate = `${prevDay}일전`
+          } else if (prevDay < 14){
+            this.agoDate = `1주전`
+          } else if (prevDay < 21) {
+            this.agoDate = '2주전'
+          } else if (prevDay < 28) {
+            this.agoDate = '3주전'
+          } else {
+            this.agoDate = '4주전'
+          }
+        } else {
+          let prevMon  = todayMonth - this.month
+          if (todayMonth < this.month) {
+            prevMon = 12 - this.month + todayMonth
+          }
+          if (prevMon < 4) {
+            this.agoDate = `${prevMon}개월전`
+          } else {
+            this.agoDate = `수개월전`
+          }
+          
+        }
         // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
         // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
       }

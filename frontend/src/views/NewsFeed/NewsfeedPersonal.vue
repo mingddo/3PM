@@ -8,6 +8,7 @@
       </div>
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
         <WorkerHolicBanner v-if="Category == 4"/>
+        <MountainBanner v-else-if="Category == 3"/>
         <!-- <NewsFeedRecommend :reco="reco" :Category="Category" /> -->
         <!-- 임시로 자리차지하기 -->
         <div v-else> 
@@ -26,6 +27,7 @@ import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
 import WorkerHolicBanner from '../../components/NewsFeed/Recommend.vue/WorkerHolicBanner.vue';
+import MountainBanner from '../../components/NewsFeed/Recommend.vue/MountainBanner.vue';
 
 export default {
   name: "NewsfeedPersonal",
@@ -35,6 +37,7 @@ export default {
     NewsFeedList,
     Sidebar,
     WorkerHolicBanner,
+    MountainBanner,
   },
   data() {
     return {

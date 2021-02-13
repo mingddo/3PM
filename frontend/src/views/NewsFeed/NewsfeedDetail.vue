@@ -23,6 +23,7 @@
             class="feed-detail-userprofile-dropBtn"
             :id="fd.user.id"
             :follow="fd.follow"
+            :name="fd.user.nickname"
           />
 
 
