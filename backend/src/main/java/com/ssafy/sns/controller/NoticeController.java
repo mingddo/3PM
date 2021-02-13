@@ -1,6 +1,5 @@
 package com.ssafy.sns.controller;
 
-import com.google.api.Authentication;
 import com.ssafy.sns.domain.notice.Notice;
 import com.ssafy.sns.domain.notice.NoticeComment;
 import com.ssafy.sns.domain.notice.NoticeFeedClap;
