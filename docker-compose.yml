@@ -8,6 +8,9 @@ services:
       - /app/node_modules
       - ./frontend:/app
     stdin_open: true
+    networks:
+      broker-net:
+        ipv4_address: 172.18.0.22
 
   # nginx:
   #   restart: always
@@ -25,3 +28,6 @@ services:
     container_name: app_backend
     volumes:
       - ./backend:/app
+    networks:
+      broker-net:
+        ipv4_address: 172.18.0.11
