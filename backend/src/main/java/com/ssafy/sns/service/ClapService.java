@@ -1,14 +1,12 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.dto.user.SimpleUserDto;
-
-import java.util.List;
+import com.ssafy.sns.dto.clap.ClapResponseDto;
 
 public interface ClapService {
 
     // 박수 토글
-    public void changeClap(Long userId, Long feedId);
+    public void changeClap(Long userId, Long targetId);
 
     // 박수 리스트
-    public List<SimpleUserDto> clapUserList(Long feedId);
+    public ClapResponseDto clapUserList(Long targetId);
 }

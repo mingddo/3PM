@@ -1,6 +1,7 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.clap.ClapResponseDto;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.comment.CommentResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
@@ -8,10 +9,7 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
 import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
 import com.ssafy.sns.jwt.JwtService;
-import com.ssafy.sns.service.CommentService;
-import com.ssafy.sns.service.CommentServiceImpl;
-import com.ssafy.sns.service.FeedClapServiceImpl;
-import com.ssafy.sns.service.IndoorServiceImpl;
+import com.ssafy.sns.service.*;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +43,7 @@ public class IndoorController {
     private final FeedClapServiceImpl feedClapService;
     private final JwtService jwtService;
     private final CommentServiceImpl commentService;
+    private final CommentClapServiceImpl commentClapService;
 
 
     // 내가 쓴 게시글 불러오기
@@ -54,7 +53,7 @@ public class IndoorController {
             @ApiImplicitParam(name = "startNum", value = "시작 페이지 번호", required = true)
     })
     @GetMapping(value = "/user/{targetId}", produces = "application/json; charset=utf8")
-    public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("userId") Long targetId,
+    public ResponseEntity<FeedListResponseDto> getFeedMyList(@PathVariable("targetId") Long targetId,
                                                              @RequestParam("startNum") int startNum,
                                                              HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
@@ -123,8 +122,9 @@ public class IndoorController {
     @PostMapping
     public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
+        Long result = null;
         try {
-            indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto);
+            result = indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto);
             logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class IndoorController {
             status = HttpStatus.NOT_FOUND;
         }
 
-        return new ResponseEntity<>(status);
+        return new ResponseEntity<>(result, status);
     }
 
     @ApiOperation("꽃보다집 글 파일 첨부")
@@ -227,13 +227,13 @@ public class IndoorController {
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
     })
     @GetMapping(value = "/{feedId}/claps")
-    public ResponseEntity<Map<String, Object>> getClap(@PathVariable("feedId") Long feedId) {
+    public ResponseEntity<ClapResponseDto> getClap(@PathVariable("feedId") Long feedId) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Map<String, Object> resultMap = new HashMap<>();
-        List<User> users = null;
+        ClapResponseDto clapResponseDto = null;
         // 박수 불러오기
         try {
-            resultMap.put("users", feedClapService.clapUserList(feedId));
+            clapResponseDto = feedClapService.clapUserList(feedId);
             logger.info("getClap - 꽃보다집 박수 조회");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -241,7 +241,7 @@ public class IndoorController {
             status = HttpStatus.NOT_FOUND;
         }
 
-        return new ResponseEntity<>(resultMap, status);
+        return new ResponseEntity<>(clapResponseDto, status);
     }
 
     @ApiOperation("꽃보다집 댓글 작성")
@@ -323,12 +323,13 @@ public class IndoorController {
     })
     @GetMapping(value = "/{feedId}/comments")
     public ResponseEntity<CommentResponseDto> getComment(@PathVariable("feedId") Long feedId,
-                                                         @RequestParam("startNum") int startNum) {
+                                                         @RequestParam("startNum") int startNum,
+                                                         HttpServletRequest request) {
 
         HttpStatus status = HttpStatus.ACCEPTED;
         CommentResponseDto comments = null;
         try {
-            comments = commentService.getList(feedId, startNum);
+            comments = commentService.getList(jwtService.findId(request.getHeader("Authorization")), feedId, startNum);
             logger.info("getComment - 꽃보다집 댓글 리스트");
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -337,5 +338,48 @@ public class IndoorController {
         }
 
         return new ResponseEntity<>(comments, status);
+    }
+
+    @ApiOperation("꽃보다집 댓글 박수 토글")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "commentId", value = "댓글 번호", required = true)
+    })
+    @PostMapping(value = "/comments/{commentId}/claps")
+    public ResponseEntity<Void> postCommentClap(@PathVariable("commentId") Long commentId, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        // 박수 토글
+        try {
+            commentClapService.changeClap(jwtService.findId(request.getHeader("Authorization")), commentId);
+            logger.info("postClap - 꽃보다집 댓글 박수 토글");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("postClap - 꽃보다집 댓글 박수 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(status);
+    }
+
+    @ApiOperation("꽃보다집 댓글 박수 명단 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "commentId", value = "댓글 번호", required = true)
+    })
+    @GetMapping(value = "/comments/{commentId}/claps")
+    public ResponseEntity<ClapResponseDto> getCommentClap(@PathVariable("commentId") Long commentId) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        Map<String, Object> resultMap = new HashMap<>();
+        ClapResponseDto clapResponseDto = null;
+        // 박수 불러오기
+        try {
+            clapResponseDto = commentClapService.clapUserList(commentId);
+            logger.info("getClap - 꽃보다집 댓글 박수 조회");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getClap - 꽃보다집 댓글 박수 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(clapResponseDto, status);
     }
 }

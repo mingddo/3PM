@@ -43,12 +43,4 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
                 .setParameter("feedId", feed.getId())
                 .getResultList();
     }
-
-    public Optional<FeedClap> checkClap(Feed feed, User user) {
-        return em.createQuery("SELECT f FROM FeedClap f WHERE f.feed.id = :feedId AND f.user.id = :userId", FeedClap.class)
-                .setParameter("userId", user.getId())
-                .setParameter("feedId", feed.getId())
-                .getResultStream()
-                .findFirst();
-    }
 }
