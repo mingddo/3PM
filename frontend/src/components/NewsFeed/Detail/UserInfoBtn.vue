@@ -5,38 +5,75 @@
       <div @click="goToProfile">
         프로필로
       </div>
-      <div @click="subscribe" v-if="follow">
-        구독하기
+      <div v-if="userpk != id" @click="subscribe">
+        <span v-if="!followState">
+          구독하기
+        </span>
+        <span v-else>
+          구독취소
+        </span>
       </div>
-      <div v-else>
-        구독취소
+      <div v-else @click="goToSetting">
+        설정
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { followToggle } from '@/api/mypage.js'
 export default {
   name: 'UserInfoBtn',
   props: {
     id: Number,
-    follow: Boolean
+    follow: Boolean,
+    name: String
   },
   data() {
     return {
       drop: true,
+      followState: this.follow,
     };
   },
   mounted() {
     
   },
   methods: {
+    subscribe () {
+      followToggle(
+        this.id,
+        (res) => {
+          console.log(res)
+          if (this.followState) {
+            alert(`${this.name} 님의 소식을 받을 수 있어요!`)
+            this.followState = false;
+            this.drop = true;
+          } else {
+            alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`)
+            this.followState = true;
+            this.drop = true;
+          }
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     foldDrop () {
       this.drop = !this.drop
+    },
+    goToSetting () {
+      this.$router.push({ name: 'MyPageEdit'})
     },
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.id}})
     },
+  },
+  computed : {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
   },
 };
 </script>
