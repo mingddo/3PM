@@ -8,9 +8,8 @@ services:
       - /app/node_modules
       - ./frontend:/app
     stdin_open: true
-    networks:
-      broker-net:
-        ipv4_address: 172.18.0.22
+    ports:
+      - 3000:3000
 
   # nginx:
   #   restart: always
@@ -28,11 +27,5 @@ services:
     container_name: app_backend
     volumes:
       - ./backend:/app
-    networks:
-      broker-net:
-        ipv4_address: 172.18.0.11
-
-networks:
-  broker-net:
-    external:
-      name: broker
+    ports:
+      - 8081:8081
