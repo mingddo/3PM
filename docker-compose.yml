@@ -31,3 +31,8 @@ services:
     networks:
       broker-net:
         ipv4_address: 172.18.0.11
+
+networks:
+  broker-net:
+    external:
+      name: broker
