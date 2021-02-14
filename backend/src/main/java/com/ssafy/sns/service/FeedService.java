@@ -26,5 +26,5 @@ public interface FeedService {
     boolean delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
-    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto);
+    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException;
 }
