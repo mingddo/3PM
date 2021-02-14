@@ -76,4 +76,5 @@ public class SearchController {
 //    public ResponseEntity<List<SearchResponseDto>> searchGroup(@RequestParam("keyword") String keyword){
 //        return null;
 //    }
+
 }
