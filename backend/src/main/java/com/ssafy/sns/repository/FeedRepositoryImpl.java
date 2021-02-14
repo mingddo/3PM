@@ -15,7 +15,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     private final EntityManager em;
 
     @Override
-    public List<Feed> findMyList(Long id, int num) {
+    public List<Feed>  findMyList(Long id, int num) {
         int readPageCnt = 10;
         return em.createQuery("SELECT f " +
                 "FROM Feed f " +

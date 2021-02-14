@@ -3,7 +3,7 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
 import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
-import com.ssafy.sns.repository.UserRepository;
+import com.ssafy.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,46 +15,47 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class InsiderService implements FeedService {
+public class InsiderService {
 
 
+    private final FeedRepositoryImpl feedRepository;
+    private final HashtagRepositoryImpl hashtagRepository;
+    private final FeedClapRepositoryImpl feedClapRepository;
+    private final CommentRepositoryImpl commentRepository;
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
 
+    public FeedListResponseDto findAllByGroupId(Long groupId, Long userId, int num) {
 
-    @Override
+    }
+
+
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
         return null;
     }
 
-    @Override
     public FeedListResponseDto readList(Long userId, int num) {
         return null;
     }
 
-    @Override
     public FeedResponseDto read(Long userId, Long feedId) {
         return null;
     }
 
-    @Override
     public Long write(Long userId, FeedRequestDto feedRequestDto) {
         return null;
     }
 
-    @Override
     public void uploadFiles(Long feedId, MultipartFile file) throws IOException {
 
     }
 
-    @Override
     public boolean delete(Long userId, Long feedId) {
         return false;
 
     }
 
-    @Override
     public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
     }
 
