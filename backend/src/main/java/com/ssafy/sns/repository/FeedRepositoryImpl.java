@@ -19,7 +19,7 @@ public class FeedRepositoryImpl implements FeedRepository {
         int readPageCnt = 10;
         return em.createQuery("SELECT f " +
                 "FROM Feed f " +
-                "WHERE f.user.id = :id AND TYPE(f) = Indoor " +
+                "WHERE f.user.id = :id " +
                 "ORDER BY f.createdDate DESC", Feed.class)
                 .setParameter("id", id)
                 .setFirstResult(num)
