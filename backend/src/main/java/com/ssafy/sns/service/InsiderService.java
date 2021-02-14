@@ -44,7 +44,7 @@ public class InsiderService implements FeedService {
     }
 
     @Override
-    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
+    public void uploadFiles(Long feedId, MultipartFile file) throws IOException {
 
     }
 

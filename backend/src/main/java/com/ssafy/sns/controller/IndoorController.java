@@ -137,17 +137,15 @@ public class IndoorController {
 
     @ApiOperation("꽃보다집 글 파일 첨부")
     @PostMapping("/{feedId}")
-    public ResponseEntity<Void> postFiles(@PathVariable("feedId") Long feedId, @RequestPart(name = "files", required = false) List<MultipartFile> files,
+    public ResponseEntity<Void> postFiles(@PathVariable("feedId") Long feedId, @RequestPart(name = "file", required = false) MultipartFile file,
                                          HttpServletRequest request) throws IOException {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
-        System.out.println(files.size() + "=--=-=-=-=");
-
         String token = request.getHeader("Authorization");
         Long userId = jwtService.findId(token);
 
-        indoorService.uploadFiles(feedId, files);
+        indoorService.uploadFiles(feedId, file);
 
         return new ResponseEntity<>(status);
     }
