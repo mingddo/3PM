@@ -11,9 +11,6 @@ import MyPageEdit from '../views/MyPageEdit.vue'
 import Search from '../views/Search.vue'
 import GroupDetail from '../views/GroupFeed/GroupDetail.vue'
 import GroupPage from '../views/GroupFeed/GroupPage.vue'
-import GroupNewsFeed from '../views/GroupFeed/GroupNewsFeed.vue'
-import GroupNewsFeedDetail from '../views/GroupFeed/GroupNewsFeedDetail.vue'
-import GroupNewsFeedForm from '../views/GroupFeed/GroupNewsFeedForm.vue'
 import GroupForm from '../views/GroupFeed/GroupForm.vue'
 import NotFound from '../views/NotFound.vue'
 
@@ -76,21 +73,6 @@ const routes = [
     path: '/grouppage',
     name: 'grouppage',
     component: GroupPage
-  },
-  {
-    path: '/groupnewsfeed',
-    name: 'groupnewsfeed',
-    component: GroupNewsFeed
-  },
-  {
-    path: '/groupnewsfeeddetail',
-    name: 'groupnewsfeeddetail',
-    component: GroupNewsFeedDetail
-  },
-  {
-    path: '/groupnewsfeed-form',
-    name: 'groupnewsfeedform',
-    component: GroupNewsFeedForm
   },
   {
     path: '/groupform',

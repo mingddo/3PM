@@ -1,123 +1,125 @@
 <template>
   <div>
-    <Sidebar />
-    <section class="searchFrame">
-      <!-- mobile -->
-      <div class="searchResultFrame">
-        <div class="searchResultList">
-          <form @submit.prevent="Allsearch" class="search_input">
-            <div class="inputframe">
-              <label for="search"></label>
-              <input
-                required
-                type="text"
-                id="search"
-                placeholder="검색어를 입력해 주세요"
-                v-model.trim="keyword"
-              />
-            </div>
-            <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
-            <i @click="Allsearch" class="icon-search fas fa-search"></i>
-          </form>
-        </div>
-        <div class="searchResultList">
-          <div class="searchFilterList">
-            <header class="seartchFilgerHeader">
-              검색 결과
-            </header>
-            <div class="filters">
-              <div class="searchFilter">
-                <a
-                  @click="filterchange1"
-                  :class="[filter === 1 ? 'active' : '']"
-                  class="searchFilterTilte"
-                >
-                  모두
-                </a>
+    <div class="newsfeed-body">
+      <Sidebar />
+      <section class="searchFrame">
+        <!-- mobile -->
+        <div class="searchResultFrame">
+          <div class="searchResultList">
+            <form @submit.prevent="Allsearch" class="search_input">
+              <div class="inputframe">
+                <label for="search"></label>
+                <input
+                  required
+                  type="text"
+                  id="search"
+                  placeholder="검색어를 입력해 주세요"
+                  v-model.trim="keyword"
+                />
               </div>
-              <div class="searchFilter">
-                <a
-                  @click="filterchange2"
-                  :class="[filter === 2 ? 'active' : '']"
-                  class="searchFilterTilte"
-                >
-                  게시물
-                </a>
-              </div>
-              <div class="searchFilter">
-                <a
-                  @click="filterchange3"
-                  :class="[filter === 3 ? 'active' : '']"
-                  class="searchFilterTilte"
-                >
-                  사람
-                </a>
-              </div>
-              <div class="searchFilter">
-                <a
-                  @click="filterchange4"
-                  :class="[filter === 4 ? 'active' : '']"
-                  class="searchFilterTilte"
-                >
-                  그룹
-                </a>
+              <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
+              <i @click="Allsearch" class="icon-search fas fa-search"></i>
+            </form>
+          </div>
+          <div class="searchResultList">
+            <div class="searchFilterList">
+              <header class="seartchFilgerHeader">
+                검색 결과
+              </header>
+              <div class="filters">
+                <div class="searchFilter">
+                  <a
+                    @click="filterchange1"
+                    :class="[filter === 1 ? 'active' : '']"
+                    class="searchFilterTilte"
+                  >
+                    모두
+                  </a>
+                </div>
+                <div class="searchFilter">
+                  <a
+                    @click="filterchange2"
+                    :class="[filter === 2 ? 'active' : '']"
+                    class="searchFilterTilte"
+                  >
+                    게시물
+                  </a>
+                </div>
+                <div class="searchFilter">
+                  <a
+                    @click="filterchange3"
+                    :class="[filter === 3 ? 'active' : '']"
+                    class="searchFilterTilte"
+                  >
+                    사람
+                  </a>
+                </div>
+                <div class="searchFilter">
+                  <a
+                    @click="filterchange4"
+                    :class="[filter === 4 ? 'active' : '']"
+                    class="searchFilterTilte"
+                  >
+                    그룹
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- 컴포넌트 -->
-      <transition name="fade">
-        <div v-if="loaded" class="searchResultList">
-          <!-- <span v-show="filter === 1">
+        <!-- 컴포넌트 -->
+        <transition name="fade">
+          <div v-if="loaded" class="searchResultList">
+            <!-- <span v-show="filter === 1">
             <GroupResults :category="category_group" />
           </span> -->
-          <span v-if="filter === 1">
-            <GroupResults
-              :groupresults="search_result_all.userList.body"
-              :category="category_person"
+            <span v-if="filter === 1">
+              <GroupResults
+                :groupresults="search_result_all.userList.body"
+                :category="category_person"
+              />
+            </span>
+            <span v-if="filter === 1 || filter === 2">
+              <SerachResult
+                v-for="(result, idx) in search_result_feed"
+                :key="idx"
+                :result="result"
+              />
+            </span>
+            <span v-if="filter === 3">
+              <FilterGroup
+                v-for="(grouplist, idx) in search_result_user"
+                :key="idx"
+                :grouplist="grouplist"
+              />
+            </span>
+            <span v-if="filter === 4">
+              <GroupResult
+                v-for="(grouplist, idx) in search_result_group"
+                :key="idx"
+                :grouplist="grouplist"
+              />
+            </span>
+          </div>
+        </transition>
+        <article v-if="loading" class="spiner">
+          <div style="width:100%" class="loading-img-frame">
+            <img
+              src="@/assets/searching.svg"
+              alt=""
+              width="50%"
+              id="searching-img"
             />
-          </span>
-          <span v-if="filter === 1 || filter === 2">
-            <SerachResult
-              v-for="(result, idx) in search_result_feed"
-              :key="idx"
-              :result="result"
-            />
-          </span>
-          <span v-if="filter === 3">
-            <FilterGroup
-              v-for="(grouplist, idx) in search_result_user"
-              :key="idx"
-              :grouplist="grouplist"
-            />
-          </span>
-          <span v-if="filter === 4">
-            <GroupResult
-              v-for="(grouplist, idx) in search_result_group"
-              :key="idx"
-              :grouplist="grouplist"
-            />
-          </span>
-        </div>
-      </transition>
-      <article v-if="loading" class="spiner">
-        <div style="width:100%" class="loading-img-frame">
-          <img
-            src="@/assets/searching.svg"
-            alt=""
-            width="50%"
-            id="searching-img"
-          />
-        </div>
-      </article>
+          </div>
+        </article>
 
-      <div v-if="empty_search" class="empty-result">
-        <div class="empty-result-title">검색 결과가 없습니다</div>
-        <img src="@/assets/img/emptysearch.svg" alt="" />
-      </div>
-      <!-- web 검색 결과 list -->
-    </section>
+        <div v-if="empty_search" class="empty-result">
+          <div class="empty-result-title">검색 결과가 없습니다</div>
+          <img src="@/assets/img/emptysearch.svg" alt="" />
+        </div>
+        <!-- web 검색 결과 list -->
+      </section>
+    </div>
   </div>
 </template>
 
@@ -196,6 +198,14 @@ export default {
       if (this.keyword === "") {
         alert("검색어를 입력해주세요");
         return;
+      }
+      if (this.$route.query.query === "") {
+        console.log("쿼리가 없고 검색어가 있을 때");
+        this.$router.push({
+          name: "Search",
+          params: { filter: "all" },
+          query: { query: this.keyword },
+        });
       }
       this.loading = true;
       this.loaded = false;
