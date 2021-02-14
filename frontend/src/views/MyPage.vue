@@ -137,10 +137,10 @@
               <NewsFeedList :feed="feed" :last="last" />
             </section>
             <section v-if="activetab === 2" class="myPageActivity">
-              <Activity :activities="activities" />
+              <Activity :activities="current_user_activityList" />
             </section>
             <section v-if="activetab === 3" class="myPageActivity">
-              <SubscribedList :subscribedlist="current_user_followingList" />
+              <SubscribedList :subscribedlist="current_user_followingList" @decrement="onDeleteSubscriber" />
             </section>
             <section v-if="activetab === 4" class="myPageActivity">
               <GroupList :grouplist="grouplist" />
@@ -165,7 +165,7 @@ import {
   followingList,
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
-
+import {getNotice} from "@/api/notice.js"
 export default {
   components: {
     Sidebar,
@@ -234,6 +234,7 @@ export default {
       ],
       feed_page_no: 0,
       current_user_followingList: [],
+      current_user_activityList : [],
     };
   },
   methods: {
@@ -343,6 +344,26 @@ export default {
         }
       );
     },
+    getActiviy() {
+      getNotice(
+        this.current_user,
+        (res) => {
+          const resArray = []
+          console.log(res.data)
+          for (let i=res.data.length-1;i>-1;i--) {
+            resArray.push(res.data[i])
+          }
+          this.current_user_activityList = res.data
+        },
+        (err) => {
+          console.log('err',err)
+        }
+      )
+    },
+    onDeleteSubscriber() {
+      this.getfollowingList();
+      this.getprofileInfo();
+    } 
   },
   created() {
     console.log(this.$store.state.userId);
@@ -353,6 +374,7 @@ export default {
   mounted() {
     this.setScroll();
     this.getfollowingList();
+    this.getActiviy();
   },
 };
 </script>

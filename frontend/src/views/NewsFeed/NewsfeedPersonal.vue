@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="newsfeed-header"
+      class="newsfeed-header animate__animated animate__fadeIn"
       :style="{
         background:
           `linear-gradient(to right, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(` +
@@ -14,8 +14,12 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-        <NewsFeedRecommend v-if="Category == 4 || Category == 2" :reco="reco" :Category="Category" />
-        <mountain-banner v-else-if="Category == 3"/>
+        <NewsFeedRecommend
+          v-if="Category == 4 || Category == 2"
+          :reco="reco"
+          :Category="Category"
+        />
+        <mountain-banner v-else-if="Category == 3" />
         <!-- 임시로 자리차지하기 -->
         <div class="newsfeed-recommend-place" v-else>
           <p
@@ -46,7 +50,7 @@ import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 import NewsFeedRecommend from "../../components/NewsFeed/Recommend/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
-import MountainBanner from '../../components/NewsFeed/Recommend/MountainBanner.vue';
+import MountainBanner from "../../components/NewsFeed/Recommend/MountainBanner.vue";
 
 export default {
   name: "NewsfeedPersonal",

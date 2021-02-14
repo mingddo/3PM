@@ -58,4 +58,17 @@ public class HashtagRepositoryImpl implements HashtagRepository {
             em.remove(feedHashtag);
         }
     }
+
+    @Override
+    public List search(String text) {
+        return em.createQuery("SELECT f.hashtag, COUNT(f.hashtag) " +
+                "FROM FeedHashtag f " +
+                "WHERE f.hashtag.splitName LIKE CONCAT(:text, '%') " +
+                "GROUP BY f.hashtag " +
+                "ORDER BY COUNT(f.hashtag) DESC")
+                .setParameter("text", text)
+                .setFirstResult(0)
+                .setMaxResults(5)
+                .getResultList();
+    }
 }
