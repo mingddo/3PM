@@ -1,5 +1,6 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -112,7 +114,7 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) {
+    public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Indoor indoor = (Indoor) feedRepository.findById(feedId);
@@ -146,8 +148,12 @@ public class IndoorServiceImpl implements FeedService {
             hashtag.addFeedHashtag(feedHashtag);
         }
 
-        // 파일 찾기
-        List<String> filePaths = feedRequestDto.getFilePaths();
+        // 파일 변경 사항 삭제
+        List<String> prevFileNames =  indoor.getFileList().stream()
+                .map(file -> file.getFileName())
+                .collect(Collectors.toList());
+        List<String> curFileNames = feedRequestDto.getFilePaths();
+        fileService.modifyFiles(prevFileNames, curFileNames);
     }
 
     @Override
