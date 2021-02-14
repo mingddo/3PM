@@ -66,15 +66,16 @@ input:focus {
 
 .searchFrame {
   /* width: 80%; */
-  position: absolute;
+  /* position: absolute;
   left : 350px;
-  right : 50px;
+  right : 50px; */
+  width: 70%;
+  margin-top: 80px;
   height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: whitesmoke;
 }
 .filters {
   width: 100%;
@@ -98,13 +99,13 @@ input:focus {
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
 }
 .seartchFilgerHeader {
-  width: 328px;
+  width: 100%;
   margin: 12px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
   /* background-color: rebeccapurple; */
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 900;
 }
 
@@ -147,7 +148,7 @@ input:focus {
 .searchResultFrame {
   width: 100%;
   /* margin-left: 300px; */
-  padding-top: 80px;
+  /* padding-top: 80px; */
 }
 .searchResultList {
   width: 100%;
@@ -389,7 +390,6 @@ input:focus {
 
 .filterGroupFrame {
   width: 100%;
-  min-height: 115px;
   margin-bottom: 16px;
   border-radius: 10px;
   background-color: #ffffff;
@@ -404,19 +404,21 @@ input:focus {
   padding: 16px;
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .filterGroupImgFrame {
   width: 60px;
-  height: 83px;
+  height: auto;
+  display: flex;
   margin-right: 15px;
+  justify-content: center;
+  align-items: center;
 }
 
 .filterGroupImg {
   width: 60px;
   height: 60px;
-  margin-right: 15px;
   overflow: hidden;
   border-radius: 70%;
   display: flex;
@@ -430,7 +432,7 @@ input:focus {
 
 .filterGroupDetail {
   width: 80%;
-  height: 83px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

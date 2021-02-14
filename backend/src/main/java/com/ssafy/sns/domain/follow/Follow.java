@@ -1,6 +1,7 @@
 package com.ssafy.sns.domain.follow;
 
 import com.ssafy.sns.domain.BaseTimeEntity;
+import com.ssafy.sns.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,9 +17,18 @@ public class Follow extends BaseTimeEntity {
     @Column(name = "follow_id")
     private Long id;
 
-    @Column(name = "from_id")
-    private Long fromId; // 내가 구독하는 사람들
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fromUserId")
+    private User fromUser;
 
-    @Column(name = "to_id")
-    private Long toId; // 나를 구독하는 사람들
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "toUserId")
+    private User toUser;
+
+    @Builder
+    public Follow(User fromUser, User toUser) {
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+    }
+
 }

@@ -1,66 +1,81 @@
 <template>
   <div>
-    <Sidebar />
-    <div class="newsfeed">
-      <section v-if="fd" v-cloak class="feed-detail">
-        <div class="feed-detail-userprofile">
-          <div class="feed-detail-userprofile-box">
-            <NewsFeedProfile
-              :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
-              :userId="fd.user.id"
-            />
-            <div class="feed-detail-userprofile-content">
-              <div>
-                <h3 class="feed-detail-userprofile-name" @click="goToProfile">{{ fd.user.nickname !== null ? fd.user.nickname : '회원정보 없음'}}</h3>
-              </div>
-              <div>
-                <p>{{ date }} {{ time }} </p>
+    <div class="newsfeed-body">
+      <Sidebar />
+      <div class="newsfeed">
+        <section v-if="fd" v-cloak class="feed-detail">
+          <div class="feed-detail-userprofile">
+            <div class="feed-detail-userprofile-box">
+              <NewsFeedProfile
+                :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+                :userId="fd.user.id"
+              />
+              <div class="feed-detail-userprofile-content">
+                <div>
+                  <h3 class="feed-detail-userprofile-name" @click="goToProfile">
+                    {{
+                      fd.user.nickname !== null
+                        ? fd.user.nickname
+                        : "회원정보 없음"
+                    }}
+                  </h3>
+                </div>
+                <div>
+                  <p>{{ date }} {{ time }}</p>
+                </div>
               </div>
             </div>
+
+            <UserInfoBtn
+              class="feed-detail-userprofile-dropBtn"
+              :id="fd.user.id"
+              :follow="fd.follow"
+              :name="fd.user.nickname"
+            />
           </div>
 
-          <UserInfoBtn 
-            class="feed-detail-userprofile-dropBtn"
-            :id="fd.user.id"
-            :follow="fd.follow"
-            :name="fd.user.nickname"
+          <article class="feed-detail-content-box">
+            <div v-if="fd.file">
+              <img
+                :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`"
+                alt="업로드 파일"
+                class="feed-detail-img"
+              />
+            </div>
+            <div v-if="Category == 2 || Category == 3">
+              위치정보!
+            </div>
+            <div class="feed-detail-tag">
+              <button
+                v-for="(tag, idx) in fd.tags"
+                :key="idx"
+                @click="goToSearchTag(tag)"
+              >
+                {{ tag }}
+              </button>
+            </div>
+            <div class="feed-detail-content">
+              <p v-html="fd.content">
+                <!-- {{fd.content}} -->
+              </p>
+            </div>
+            <!-- <div v-if="Category == 2 || Category == 3"> -->
+            <Location
+              :latitude="latitude"
+              :longitude="longitude"
+              :placeName="placeName"
+            />
+          </article>
+
+          <ModiAndDelete
+            class="feed-detail-modi-delete"
+            v-if="userpk == fd.user.id"
+            :fd="fd"
+            :Category="Number(Category)"
           />
 
-
-        </div>
-
-        <article class="feed-detail-content-box">
-          <div v-if="fd.file">
-            <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일" class="feed-detail-img">
-          </div>
-          <div v-if="Category == 2 || Category == 3">
-            위치정보!
-          </div>
-          <div class="feed-detail-tag">
-            <button v-for="(tag, idx) in fd.tags" :key="idx" @click="goToSearchTag(tag)"> {{ tag }}  </button>
-          </div>
-          <div class="feed-detail-content">
-            <p v-html="fd.content">
-              <!-- {{fd.content}} -->
-            </p>
-          </div>
-          <!-- <div v-if="Category == 2 || Category == 3"> -->
-          <Location
-            :latitude="latitude"
-            :longitude="longitude"
-            :placeName="placeName"
-          />
-        </article>
-        
-        <ModiAndDelete
-          class="feed-detail-modi-delete"
-          v-if="userpk == fd.user.id"
-          :fd="fd"
-          :Category="Number(Category)"
-        />
-
-        <div class="feed-detail-like-comment">
-          <span @click="clapedList">
+          <div class="feed-detail-like-comment">
+            <span @click="clapedList">
               <i class="far fa-thumbs-up"></i>
               <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span>
           </span>
@@ -83,9 +98,27 @@
             <i class="far fa-comment"></i>
             댓글달기
           </div>
-          <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
-            <i class="fas fa-share"></i>
-            공유하기
+          <NewsFeedClapUser
+            v-if="clapListOpen"
+            :clapedUsers="clapedUsers"
+            @closeClapList="closeClapList"
+          />
+          <div class="feed-detail-like-comment-share-btn-box">
+            <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
+              <i class="far fa-thumbs-up"></i>
+              좋아요
+            </div>
+            <div
+              class="feed-detail-like-comment-share-btn"
+              @click="focusComment"
+            >
+              <i class="far fa-comment"></i>
+              댓글달기
+            </div>
+            <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
+              <i class="fas fa-share"></i>
+              공유하기
+            </div>
           </div>
         </div>
         <Comment :id="fd.id" :Category="Number(Category)"/>
@@ -108,7 +141,7 @@ import Location from '../../components/NewsFeed/Detail/Location.vue';
 import Comment from '../../components/NewsFeed/Detail/Comment.vue'
 
 export default {
-  name: 'NewsfeedDetail',
+  name: "NewsfeedDetail",
   components: {
     Sidebar,
     NewsFeedProfile,
@@ -126,32 +159,32 @@ export default {
       date: null,
       time: null,
       mention: [],
-      auto:false,
+      auto: false,
       items: [],
       comments: [],
       clapedUsers: [],
       clapListOpen: false,
       latitude: 36.353793856820566,
-      longitude:127.33999670291793,
-      placeName: '대전광역시 유성구 봉명동 레자미3차',
+      longitude: 127.33999670291793,
+      placeName: "대전광역시 유성구 봉명동 레자미3차",
     };
   },
   methods: {
-    closeClapList () {
+    closeClapList() {
       this.clapListOpen = false;
     },
-    clapedList () {
+    clapedList() {
       this.clapListOpen = true;
       clapFeedList(
         this.fd.id,
         (res) => {
-          this.clapedUsers = res.data.users
-          console.log(this.clapedUsers)
+          this.clapedUsers = res.data.users;
+          console.log(this.clapedUsers);
         },
         (err) => {
-          console.log(err)
+          console.log(err);
         }
-      )
+      );
     },
     likeFeed () {
       clapFeed(
@@ -170,19 +203,26 @@ export default {
           console.log(res)
         },
         (err) => {
-          console.log(err)
+          console.log(err);
         }
-      )
-      
+      );
     },
-    shareFeed () {
-      const answer = window.confirm('내 피드에 공유하시겠습니까?')
+    shareFeed() {
+      const answer = window.confirm("내 피드에 공유하시겠습니까?");
       if (answer) {
-        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: {type: 'SHARE', feed: this.fd, link: document.location.href, }})
+        this.$router.push({
+          name: "NewsfeedForm",
+          query: { Category: this.Category },
+          params: {
+            type: "SHARE",
+            feed: this.fd,
+            link: document.location.href,
+          },
+        });
       }
     },
-    focusComment () {
-      let input = document.getElementById('comment')
+    focusComment() {
+      let input = document.getElementById("comment");
       input.focus();
     },
     goToProfile () {
@@ -191,12 +231,19 @@ export default {
     goToSearchTag (tag) {
       this.$router.push({ name: 'Search', query: { query: tag}, params: { filter: "feed" }})
     },
-    setFeedDetail () {
+    goToSearchTag(tag) {
+      this.$router.push({
+        name: "Search",
+        query: { query: tag },
+        params: { filter: "feed" },
+      });
+    },
+    setFeedDetail() {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
-      this.Category = this.$route.query.Category
+      this.Category = this.$route.query.Category;
       if (this.Category == 1) {
-        readFeed (
+        readFeed(
           this.$route.query.id,
           (res) => {
             this.fd = res.data
@@ -206,7 +253,7 @@ export default {
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, '<br>') // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
           },
           (err) => {
-            console.log(err)
+            console.log(err);
           }
         );
       } else if (this.Category == 2) {
@@ -220,23 +267,19 @@ export default {
       }
     },
   },
-  created () {
+  created() {
     this.setFeedDetail();
   },
   computed: {
     ...mapState({
-      userpk : (state) => state.userId,
+      userpk: (state) => state.userId,
       defaultImg: (state) => state.defaultImg,
-    })
+    }),
   },
 };
 </script>
 
 <style>
-.newsfeed {
-  position: absolute;
-  top : 80px;
-}
 .feed-comment-input {
   width: 100%;
   height: 50px;
