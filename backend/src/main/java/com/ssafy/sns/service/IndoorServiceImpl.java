@@ -34,7 +34,7 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<Feed> indoorList = feedRepository.findMyList(targetId, num);
+        List<Feed> indoorList = feedRepository.findMyList(targetId, num, Indoor.class);
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorList) {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,

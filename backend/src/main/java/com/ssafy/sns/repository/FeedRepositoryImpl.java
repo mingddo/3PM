@@ -15,13 +15,14 @@ public class FeedRepositoryImpl implements FeedRepository {
     private final EntityManager em;
 
     @Override
-    public List<Feed> findMyList(Long id, int num) {
+    public List<Feed> findMyList(Long id, int num, Object category) {
         int readPageCnt = 10;
         return em.createQuery("SELECT f " +
                 "FROM Feed f " +
-                "WHERE f.user.id = :id AND TYPE(f) = Indoor " +
+                "WHERE f.user.id = :id AND TYPE(f) = :category " +
                 "ORDER BY f.createdDate DESC", Feed.class)
                 .setParameter("id", id)
+                .setParameter("category", category)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
                 .getResultList();
