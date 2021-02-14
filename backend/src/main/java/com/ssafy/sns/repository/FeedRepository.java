@@ -20,4 +20,6 @@ public interface FeedRepository {
 
     // 피드 글삭제
     void remove(Feed feed);
+
+    Object findCategory(Long feedId);
 }
