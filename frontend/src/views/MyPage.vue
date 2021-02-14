@@ -277,9 +277,15 @@ export default {
       });
     },
     usercheck() {
+      console.log(
+        "같은 유저인지?",
+        this.$store.state.userId,
+        this.$route.query.name
+      );
       if (
         this.$route.query.name === undefined ||
-        this.$route.query.name === this.$store.state.userId
+        this.$route.query.name === this.$store.state.userId ||
+        Number(this.$route.query.name) === this.$store.state.userId
       ) {
         this.current_user = this.$store.state.userId;
         this.profile_user = this.$store.state.userId;
@@ -288,7 +294,7 @@ export default {
       } else {
         this.profile_user = this.$route.query.name;
         this.mypage = false;
-        console.log(this.profileinfo);
+        console.log("내 프로필이 아니다", this.profileinfo);
       }
     },
     getprofileInfo() {
