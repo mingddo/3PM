@@ -41,6 +41,9 @@ export default new Vuex.Store({
     setAuthToken : function(context,payload) {
       context.commit('setAuthToken',payload)
     },
+    setRefToken : function(context,payload) {
+      context.commit('setRefToken',payload)
+    },
     setKakaoId : function(context,payload) {
       context.commit('setKakaoId',payload)
     },
