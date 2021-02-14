@@ -130,10 +130,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(["userStatus", "kakaoId", "userId", "authToken", "userInfo"]),
+    ...mapState(["userStatus", "kakaoId", "userId", "authToken", "userInfo","refToken"]),
   },
   methods: {
-    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId", "setUserInfo"]),
+    ...mapActions(["setUserStatus", "setAuthToken","setRefToken", "setKakaoId", "setUserId", "setUserInfo"]),
     scrollStatus() {
       // let viewportHeight = window.innerHeight;
       let scrollPos = window.scrollY/this.windowInnerHeight
@@ -148,7 +148,7 @@ export default {
         window.Kakao.Auth.login({
           scope: "account_email, gender, age_range",
           success: (authObj) => {
-            console.log(authObj);
+            console.log('kakaoLogin',authObj);
             this.kakaoAccoutInfo();
             resolve();
           },
@@ -165,7 +165,7 @@ export default {
       })
         .then((res) => {
           const kakaoId = res.id;
-          console.log(res);
+          console.log('kakaoAccoutInfo 함수',res);
           const user_age = res.kakao_account.age_range
           getUser(
             {
@@ -176,11 +176,13 @@ export default {
               // true -> user 정보가 있으면  Home
               if (res.data) {
                 // 세션에 토큰 설정
-                console.log("정보", res.data);
+                console.log("getUser 정보", res.data);
                 const responseUserId = res.data.id;
                 const authToken = res.data["accToken"];
+                const refToken = res.data["refToken"];
                 this.setUserId(responseUserId);
                 this.setAuthToken(authToken);
+                this.setRefToken(refToken);
                 this.setUserStatus(true);
                 this.setUserInfo(user_age)
               }

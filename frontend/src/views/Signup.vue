@@ -41,7 +41,7 @@ export default {
     },
   },
   methods : {
-    ...mapActions(['setUserStatus','setAuthToken','setUserId']),
+    ...mapActions(['setUserStatus','setAuthToken','setRefToken','setUserId']),
     onClickSignup() {
       const kakaoId = this.kakaoId;
       createUser(
@@ -52,10 +52,12 @@ export default {
         (res) => {
           const responseUserId = res.data.id;
           const authToken = res.data['accToken'];
-          // const refreshToken = res.data['refToken']
+          const refToken = res.data["refToken"];
+
           console.log(res.data)
           this.setUserId(responseUserId);
           this.setAuthToken(authToken);
+          this.setRefToken(refToken);
           this.setUserStatus(true);
           this.$router.push({name : "Home"});
         },
