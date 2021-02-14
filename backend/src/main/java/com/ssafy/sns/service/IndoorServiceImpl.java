@@ -102,15 +102,13 @@ public class IndoorServiceImpl implements FeedService {
     }
 
     @Override
-    public void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException {
+    public void uploadFiles(Long feedId, MultipartFile file) throws IOException {
         Feed feed = feedRepository.findById(feedId);
 
         // 파일 업로드
-        for (MultipartFile file : files) {
-            String fileName = s3Service.uploadFile(file);
-            // 파일 등록
-            fileService.addFile(fileName, feed);
-        }
+        String fileName = s3Service.uploadFile(file);
+        // 파일 등록
+        fileService.addFile(fileName, feed);
     }
 
     @Override
