@@ -3,7 +3,7 @@
     <div class="banner-header">
       {{ title }}
     </div>
-    <RecoSplide :Category="Category"/>
+    <RecoSplide :Category="Category" :placeName="placeName" @setPlace="setPlace"/>
   </div>
 </template>
 
@@ -20,15 +20,21 @@ export default {
   data() {
     return {
       title: null,
+      placeName: null,
     };
   },
   mounted () {
     this.setRecoTitle ();
   },
   methods: {
+    setPlace (place) {
+      this.placeName = place
+    },
     setRecoTitle () {
       if (this.Category == 4) {
         this.title = '취업 정보, 한눈👁‍🗨에 보기'
+      } else if (this.Category == 2) {
+        this.title = `살어리 살어리랏다 ${this.placeName}에 살어리랏다`
       }
     },
   },

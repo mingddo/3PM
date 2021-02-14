@@ -21,6 +21,9 @@
 
 <script>
 export default {
+  props: {
+    op: Object,
+  },
   data() {
     return {
       hashtag: "#빵빵덕 #오리 #볼빵빵 #빵빵덕 #두마리 #모자쓴빵빵덕",

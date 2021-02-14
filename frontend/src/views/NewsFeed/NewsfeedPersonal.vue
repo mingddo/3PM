@@ -14,7 +14,8 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-        <NewsFeedRecommend v-if="Category == 4" :reco="reco" :Category="Category" />
+        <NewsFeedRecommend v-if="Category == 4 || Category == 2" :reco="reco" :Category="Category" />
+        <mountain-banner v-else-if="Category == 3"/>
         <!-- 임시로 자리차지하기 -->
         <div class="newsfeed-recommend-place" v-else>
           <p
@@ -45,6 +46,7 @@ import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 import NewsFeedRecommend from "../../components/NewsFeed/Recommend/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
+import MountainBanner from '../../components/NewsFeed/Recommend/MountainBanner.vue';
 
 export default {
   name: "NewsfeedPersonal",
@@ -53,6 +55,7 @@ export default {
     NewsFeedRecommend,
     NewsFeedList,
     Sidebar,
+    MountainBanner,
   },
   data() {
     return {

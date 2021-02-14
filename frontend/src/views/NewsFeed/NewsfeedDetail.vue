@@ -77,14 +77,26 @@
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
               <i class="far fa-thumbs-up"></i>
-              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span>
-              <span v-else> 0</span>
-            </span>
-            <span>
-              <i class="far fa-comment"></i>
-              <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
-              <span v-else> 0</span>
-            </span>
+              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span>
+          </span>
+          <span>
+            <i class="far fa-comment"></i>
+            <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
+          </span>
+        </div>  
+        <NewsFeedClapUser
+          v-if="clapListOpen"
+          :clapedUsers="clapedUsers"
+          @closeClapList="closeClapList"
+        />
+        <div class="feed-detail-like-comment-share-btn-box">
+          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
+            <i class="far fa-thumbs-up"></i>
+            {{ fd.clap ? '좋아요취소' : '좋아요'}}
+          </div>
+          <div class="feed-detail-like-comment-share-btn" @click="focusComment">
+            <i class="far fa-comment"></i>
+            댓글달기
           </div>
           <NewsFeedClapUser
             v-if="clapListOpen"
@@ -108,71 +120,36 @@
               공유하기
             </div>
           </div>
-
-          <div class="feed-detail-comment-input-box">
-            <img
-              src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-              alt="유저프로필이미지"
-              class="feed-detail-comment-img"
-            />
-            <Mentionable :keys="['@']" :items="items" offset="6">
-              <textarea
-                class="feed-comment-input"
-                placeholder="댓글을 입력해주세요"
-                name="comment"
-                id="comment"
-                cols="30"
-                rows="10"
-                :value="commentInput"
-                @keyup="commentKeyup"
-              ></textarea>
-            </Mentionable>
-            <button class="feed-detail-comment-btn" @click="createComment">
-              <i class="fas fa-plus"></i>
-            </button>
-          </div>
-
-          <section>
-            <div v-for="(comment, idx) in comments" :key="idx">
-              <NewsFeedCommentItem
-                :comment="comment"
-                @pushUserToComment="pushUserToComment"
-              />
-            </div>
-          </section>
-        </section>
-      </div>
+        </div>
+        <Comment :id="fd.id" :Category="Number(Category)"/>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import { Mentionable } from "vue-mention";
-import "@/assets/css/mention.css";
-import NewsFeedCommentItem from "../../components/NewsFeed/NewsFeedCommentItem.vue";
-import { mapState } from "vuex";
-import { readFeed } from "@/api/feed.js";
-import { clapFeed } from "@/api/feed.js";
-import { clapFeedList } from "@/api/feed.js";
-import Sidebar from "../../components/Common/Sidebar.vue";
-import NewsFeedProfile from "../../components/NewsFeed/Common/NewsFeedProfile.vue";
-import NewsFeedClapUser from "../../components/NewsFeed/NewsFeedClapUser.vue";
-import ModiAndDelete from "../../components/NewsFeed/Detail/ModiAndDelete.vue";
-import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
-import Location from "../../components/NewsFeed/Detail/Location.vue";
+import { mapState } from 'vuex'
+import { readFeed } from '@/api/feed.js'
+import { clapFeed } from '@/api/feed.js'
+import { clapFeedList } from '@/api/feed.js'
+import Sidebar from '../../components/Common/Sidebar.vue';
+import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue';
+import NewsFeedClapUser from '../../components/NewsFeed/NewsFeedClapUser.vue';
+import ModiAndDelete from '../../components/NewsFeed/Detail/ModiAndDelete.vue';
+import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
+import Location from '../../components/NewsFeed/Detail/Location.vue';
+import Comment from '../../components/NewsFeed/Detail/Comment.vue'
 
 export default {
   name: "NewsfeedDetail",
   components: {
     Sidebar,
-    Mentionable,
-    NewsFeedCommentItem,
     NewsFeedProfile,
     NewsFeedClapUser,
-
     ModiAndDelete,
     UserInfoBtn,
     Location,
+    Comment
   },
   data() {
     return {
@@ -209,78 +186,21 @@ export default {
         }
       );
     },
-    pushUserToComment(user) {
-      this.commentInput += `@${user} `;
-      let input = document.getElementById("comment");
-      input.focus();
-    },
-    commentKeyup(e) {
-      this.commentInput = e.target.value;
-      let lastChar = this.commentInput.charAt(this.commentInput.length - 1);
-      if (lastChar == "@") {
-        this.auto = true;
-      }
-
-      if (!this.auto && lastChar == "@") {
-        this.auto = true;
-      } else if (this.auto && lastChar == " ") {
-        this.auto = false;
-      }
-      if (this.auto) {
-        let results = this.commentInput.match(/@/g);
-        let cnt = 0;
-        if (results) {
-          cnt = results.length;
-        }
-        let mentionedUser = this.commentInput.split("@")[cnt];
-        let saveMention = mentionedUser.split(" ");
-        if (saveMention.length > 1 || e.code == "Space" || e.code == "Enter") {
-          this.auto = false;
-        } else if (
-          e.key !== "ArrowDown" &&
-          e.key !== "ArrowUp" &&
-          e.key !== "ArrowLeft" &&
-          e.key !== "ArrowRight"
-        ) {
-          console.log("api요청 단어", mentionedUser);
-          // mentionedUser 을 db에 요청하여, 관련된 문자로 시작되는 단어 리스트를 받아 this.itmes 에 저장한다.
-          // 현재는 백 api가 설정되어있지 않으므로 items를 직접 설정한다.
-          this.items = [
-            {
-              value: "1",
-              label: "장수민",
-            },
-            {
-              value: "2",
-              label: "잔수민",
-            },
-            {
-              value: "3",
-              label: "자스민",
-            },
-            {
-              value: "4",
-              label: "장슈민",
-            },
-            {
-              value: "5",
-              label: "장수밍",
-            },
-          ];
-        }
-      }
-    },
-    likeFeed() {
+    likeFeed () {
       clapFeed(
         this.fd.id,
         (res) => {
-          alert(`${this.fd.id} 번째 글을 좋아합니다.`);
-          if (this.fd.like) {
-            this.fd.likeCnt = this.fd.likeCnt - 1;
+          if (!this.fd.clap) {
+            alert(`좋아요!`)
+            this.fd.likeCnt = this.fd.likeCnt + 1
+            this.fd.clap = true;
           } else {
-            this.fd.likeCnt = this.fd.likeCnt + 1;
+            alert('좋아요 취소!')
+            this.fd.likeCnt = this.fd.likeCnt - 1
+            this.fd.clap = false;
           }
-          console.log(res);
+          
+          console.log(res)
         },
         (err) => {
           console.log(err);
@@ -305,36 +225,11 @@ export default {
       let input = document.getElementById("comment");
       input.focus();
     },
-    createComment() {
-      if (!this.commentInput) {
-        alert("내용을 입력해주세요");
-      } else {
-        let results = this.commentInput.match(/@/g);
-        if (results == null) {
-          console.log("새 댓글 작성", this.commentInput);
-        } else {
-          let cnt = results.length;
-          // console.log(cnt)
-          for (let i = 1; i <= cnt; i++) {
-            console.log(i);
-            let slice = this.commentInput.split("@")[i];
-            let mentioned = slice.split(" ")[0];
-            if (mentioned) {
-              this.mention.push(mentioned);
-            }
-          }
-          console.log(this.mention);
-        }
-
-        // let mentioned = slice.split(' ')[0]
-        // console.log(mentioned)
-        // alert(`${this.commentInput} 내용의 댓글을 작성할게요`)
-        // axios 댓글 create  요청 보내기
-        this.commentInput = "";
-      }
-    },
-    goToProfile() {
-      this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } });
+    goToProfile () {
+      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
+    },  
+    goToSearchTag (tag) {
+      this.$router.push({ name: 'Search', query: { query: tag}, params: { filter: "feed" }})
     },
     goToSearchTag(tag) {
       this.$router.push({
@@ -351,29 +246,16 @@ export default {
         readFeed(
           this.$route.query.id,
           (res) => {
-            this.fd = res.data;
-            console.log(res.data);
-            this.date = this.fd.date.split("T")[0];
-            this.time = this.fd.date.split("T")[1];
-            this.fd.content = this.fd.content.replace("\n", "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+            this.fd = res.data
+            console.log(res.data)
+            this.date = this.fd.date.split('T')[0];
+            this.time = this.fd.date.split('T')[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, '<br>') // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
           },
           (err) => {
             console.log(err);
           }
         );
-        this.comments = [
-          {
-            user: {
-              nickname: "잔수",
-              img: null,
-              id: 3,
-            },
-            date: "2021-02-12",
-            content: "댓글 내용입니다 ^^",
-            likeCnt: 10,
-            nested_commentCnt: 20,
-          },
-        ];
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
         // latitude / longitude / placeName 설정해주기~
@@ -407,5 +289,17 @@ export default {
 }
 .feed-detail-map-name {
   text-align: right;
+}
+.feed-detail-comment-plus {
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 30px;
+}
+.feed-detail-comment-plus:hover {
+  box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);  
+}
+.feed-detail-comment-empty {
+  text-align: center;
 }
 </style>

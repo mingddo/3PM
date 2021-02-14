@@ -16,6 +16,7 @@ export default {
   components: { RecommendCard },
   props: {
     Category: Number,
+    placeName: String,
   },
   data() {
     return {
@@ -54,9 +55,11 @@ export default {
       if (this.Category == 1) {
         // 꽃보다 집 추천
       } else if (this.Category == 2) {
-        // 핵인싸 ^^
-      } else if (this.Category == 3) {
         // 청산별곡
+        this.placeName = '대전'
+        this.$emit('setPlace', this.placeName)
+      } else if (this.Category == 3) {
+        // 핵인싸
       } else if (this.Category == 4) {
         // 워커홀릭
         this.c = [
