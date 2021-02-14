@@ -65,7 +65,7 @@ public class HashtagRepositoryImpl implements HashtagRepository {
                 "FROM FeedHashtag f " +
                 "WHERE f.hashtag.splitName LIKE CONCAT(:text, '%') " +
                 "GROUP BY f.hashtag " +
-                "ORDER BY COUNT(f.hashtag) DESC")
+                "ORDER BY COUNT(f.hashtag) DESC, f.hashtag.tagName ASC")
                 .setParameter("text", text)
                 .setFirstResult(0)
                 .setMaxResults(5)

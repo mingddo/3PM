@@ -3,6 +3,7 @@ package com.ssafy.sns.repository;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,9 +11,10 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class SearchRepositoryImpl implements SearchRepository{
-    @PersistenceContext
-    private EntityManager em;
+
+    private final EntityManager em;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
