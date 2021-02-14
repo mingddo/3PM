@@ -39,16 +39,16 @@ function createGroupFeed(group_id, group_feed, success, fail) {
   .catch(fail)
 }
 
-function createGroupImg(group_id, goup_img, success, fail) {
+function createGroupImg(group_id, group_img, success, fail) {
   instance
-  .post(`groups/${group_id}/image`, goup_img)
+  .post(`groups/${group_id}/image`, group_img)
   .then(success)
   .catch(fail)
 }
 
 function joinGroup(group_id, success, fail) {
   instance
-  .post(`groups/${group_id}/join`, goup_img)
+  .post(`groups/${group_id}/join`)
   .then(success)
   .catch(fail)
 }

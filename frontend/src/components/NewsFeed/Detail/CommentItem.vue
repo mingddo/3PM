@@ -4,24 +4,13 @@
       <div class="feed-comment-userprofile-box">
         <div class="feed-comment-userprofile">
           <NewsFeedProfile
-            v-if="comment.user.img"
-            :proImg="comment.user.img"
+            :proImg="comment.user.img ? comment.user.img : defaultImg"
             :userId="comment.user.id"
           />
-          <NewsFeedProfile
-            v-else
-            :proImg="'20210205132713974_img1.jpg'"
-            :userId="comment.user.id"
-          />
-          <!-- <img
-            src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-            alt="유저프로필이미지"
-            class="feed-comment-userprofile-img"
-            @click="goToProfile"
-          > -->
+
           <div class="feed-comment-userprofile-content">
-            <h3 class="feed-comment-userprofile-name" @click="goToProfile">{{ comment.user.nickname }}</h3>
-            <p class="feed-comment-userprofile-date">{{ comment.date }} </p>
+            <h3 class="feed-comment-userprofile-name" @click="goToProfile">{{ comment_info.user.nickname }}</h3>
+            <p class="feed-comment-userprofile-date">{{ agoDate != '0일전' ? agoDate : '오늘' }} </p>
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
@@ -50,92 +39,133 @@
       </div>
 
       <div class="feed-comment-like-nested">
-        <!-- <div class="feed-comment-like-btn">
-          <i class="far fa-comment">
-            {{ comment.nested_commentCnt }}
-          </i>
-        </div> -->
         <div class="feed-comment-like-btn">
-          <i class="far fa-thumbs-up" @click="likeComment">
-            {{ comment.likeCnt }}
-          </i>
+          <img :src="comment.clap ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'" @click="likeComment"/>
+            <span>{{ comment_info.clapCnt }}</span>
+          <!-- </i> -->
         </div>
-        <div>
-          <i class="fas fa-quote-left" @click="mentionUSer">
-            소환
-          </i>
+        <div @click="mentionUSer">
+          <span>{{ comment_info.user.nickname }} 님을 언급</span>
+          <img src="https://img.icons8.com/metro/14/000000/very-popular-topic.png"/>
         </div>
       </div>
     </div>
-
-    <!-- <div v-if="!foldNested">
-      <div class="feed-comment-nested-box">
-        <img
-          src="https://blog.cpanel.com/wp-content/uploads/2019/08/user-01.png"
-          alt="유저프로필이미지"
-          class="feed-comment-nested-img"
-        >
-        <input class="feed-comment-nested-input" type="text" v-model.trim="nestedCommentInput" @keyup.enter="createNestedComment" placeholder="답글을 입력해주세요">
-        <button class="feed-comment-nested-btn" @click="createNestedComment"><i class="fas fa-plus"></i></button>
-      </div>
-
-      <div v-for="(nestedComment, idx) in comment.nested_comment" :key="idx" class="feed-comment-nested-box">
-        <NewsFeedCommentNested
-          :comment="nestedComment"
-        />
-      </div>
-      <div @click="changeNested" class="feed-comment-nested-close-btn">
-        답글 접기
-      </div>
-    </div> -->
   </article>
 </template>
 
 <script>
-// import NewsFeedCommentNested from './NewsFeedCommentNested.vue';
-import NewsFeedProfile from './Common/NewsFeedProfile.vue';
+import NewsFeedProfile from '../Common/NewsFeedProfile.vue';
+import { updateComment } from '@/api/comment.js'
+import { deleteComment } from '@/api/comment.js'
+import { clapComment } from '@/api/comment.js'
 import { mapState } from 'vuex'
 export default {
   name: 'NewsFeedCommentItem',
   components: { NewsFeedProfile },
   props: {
+    Category: Number,
     comment: Object,
+    id: Number,
   },
   data() {
     return {
-      // foldNested: true,
-      nestedCommentInput: "",
       modiForm: false,
       commentForFeed: this.comment.content,
       foldModiDrop: true,
+      comment_info: this.comment,
+      agoDate: null,
+      time: null,
+      year: null,
+      month: null,
+      day: null,
     };
   },
+  mounted () {
+    this.setDateTime();
+  },
   methods: {
+    setDateTime () {
+      let d = new Date ();
+      let todayDate = d.getDate();
+      let todayMonth = d.getMonth() + 1;
+      console.log(todayMonth)
+      if (this.comment) {
+        let date = this.comment.date.split('T')[0]
+        this.time = this.comment.date.split('T')[1]
+        this.year = date.split('-')[0]
+        this.month = date.split('-')[1]
+        this.day = date.split('-')[2]
+        if (this.month == todayMonth) {
+          let prevDay = todayDate - this.day
+          if (prevDay < 7) {
+            this.agoDate = `${prevDay}일전`
+          } else if (prevDay < 14){
+            this.agoDate = `1주전`
+          } else if (prevDay < 21) {
+            this.agoDate = '2주전'
+          } else if (prevDay < 28) {
+            this.agoDate = '3주전'
+          } else {
+            this.agoDate = '4주전'
+          }
+        } else {
+          let prevMon  = todayMonth - this.month
+          if (todayMonth < this.month) {
+            prevMon = 12 - this.month + todayMonth
+          }
+          if (prevMon < 4) {
+            this.agoDate = `${prevMon}개월전`
+          } else {
+            this.agoDate = `수개월전`
+          }
+          
+        }
+      }
+    },
     mentionUSer () {
       this.$emit('pushUserToComment', this.comment.user.nickname)
     },
-    createNestedComment () {
-      if (!this.nestedCommentInput) {
-        alert('내용을 입력해주세요')
-      } else {
-        alert(`${this.nestedCommentInput} 내용의 댓글을 작성할게요`)
-        // axios 대댓글 create  요청 보내기 
-        this.nestedCommentInput = ''
-      }
-    },
-    changeNested () {
-      this.foldNested = !this.foldNested;
-    },
     likeComment () {
       // 댓글 좋아요 axios 요청
-      alert(`${this.comment.content}를 좋아합니다!`)
+      clapComment(
+        this.comment.id,
+        () => {
+          if (this.comment_info.clap) {
+            alert(`박수 끝~`)
+            this.comment_info.clap = false;
+            this.comment_info.clapCnt -= 1
+          } else {
+            alert(`일동 박수~👏`)
+            this.comment_info.clap = true;
+            this.comment_info.clapCnt += 1
+          }
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+      
     },
     deleteComment () {
-      // 유저 본인 맞는 지 확인 한 번 하고
+      if (this.userpk !== this.comment.user.id) {
+        return alert('접근이 불가합니다!')
+      }
       this.foldModiDrop = true;
       const answer = window.confirm('댓글을 삭제하시겠습니까?')
       if (answer) {
         // axios DELETE 요청으로 삭제하기
+        if (this.Category == 1) {
+          deleteComment(
+            this.id,
+            this.comment.id,
+            (res) => {
+              console.log('삭제', res)
+            },
+            (err) => {
+              console.log('삭제불가', err)
+            }
+          )
+        }
       }
     },
     changeCommentModiForm () {
@@ -143,8 +173,20 @@ export default {
       this.foldModiDrop = true;
     },
     modiComment () {
+      if (this.Category == 1) {
+        updateComment(
+          this.id,
+          this.comment.id,
+          {"content":this.commentForFeed},
+          (res)=> {
+            console.log(res)
+          },
+          (err)=>{
+            console.log(err)
+          }
+        )
+      }
       this.modiForm = false;
-      // axios put 요청으로 수정하기
     },
     openModiDeleteBtn () {
       this.foldModiDrop = !this.foldModiDrop
@@ -173,6 +215,7 @@ export default {
 .feed-comment-userprofile {
   display: flex;
   justify-content: left;
+  align-items: center;
 }
 .feed-comment-userprofile-img {
   width: 5%;
@@ -241,6 +284,7 @@ export default {
 }
 .feed-comment-like-nested {
   display: flex;
+  justify-content: space-between;
 }
 .feed-comment-like-nested > div {
   cursor: pointer;

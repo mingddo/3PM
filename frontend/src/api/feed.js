@@ -1,7 +1,12 @@
 import { AuthorizationInstance } from './index.js'
 
 const instance = AuthorizationInstance();
-
+let token = null
+if (localStorage.getItem('vuex') != null ) {
+  let vuex_data = localStorage.getItem('vuex')
+  vuex_data = JSON.parse(vuex_data);
+  token = vuex_data["authToken"]
+}
 function createFeed(feed, success, fail) {
   instance
     .post('indoors', feed)
@@ -25,9 +30,9 @@ function updateFeed(feed_pk, feed, success, fail) {
 
 function deleteFeed(feed_pk, success, fail) {
   instance
-  .delete(`indoors/${feed_pk}`)
-  .then(success)
-  .catch(fail);
+    .delete(`indoors/${feed_pk}`)
+    .then(success)
+    .catch(fail);
 }
 
 function feedList(pk, success, fail) {
@@ -35,6 +40,9 @@ function feedList(pk, success, fail) {
   .get(`indoors`, {
     params: {
       startNum: pk
+    },
+    headers: {
+      "Authorization" : token
     }
   })
   .then(success)
@@ -43,14 +51,14 @@ function feedList(pk, success, fail) {
 
 function clapFeed(pk, success, fail) {
   instance
-    .post(`indoors/${pk}/likes`)
+    .post(`indoors/${pk}/claps`)
     .then(success)
     .catch(fail);
 }
 
 function clapFeedList(pk, success, fail) {
   instance
-    .get(`indoors/${pk}/likes`)
+    .get(`indoors/${pk}/claps`)
     .then(success)
     .catch(fail);
 }

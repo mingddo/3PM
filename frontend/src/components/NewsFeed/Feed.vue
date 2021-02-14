@@ -11,7 +11,7 @@
           <h3 v-else class="feed-userprofile-name" @click="goToProfile">anonymous</h3>
           <div class="feed-date">
             <!-- <p>{{ year }}년 {{ month }}월 {{ day}}일 {{ time }} </p> -->
-            {{agoDate != '0일' ? agoDate : '오늘'}}
+            {{agoDate != '0일전' ? agoDate : '오늘'}}
           </div>
         </div>
         <div class="feed-tag-box" v-if="fd.tags.length > 0">
@@ -35,7 +35,7 @@
         <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`" alt="업로드 파일">
       </div>
       <div v-else  @click="goToDetail">
-        <p v-html="fd.content">
+        <p v-html="content">
           <!-- {{ fd.content }} -->
         </p>
       </div>
@@ -78,15 +78,14 @@ export default {
       time: null,
       placeName: '대전광역시 유성구 봉명동',
       agoDate: null,
+      content: null,
     };
   },
   methods: {
-    // getDateStr(myDate){
-    //   let todayYear = myDate.getFullYear();
-    //   let todayMonth = ("0"+(myDate.getMonth()+1)).slice(-2);
-    //   let todayDay = ("0"+myDate.getDate()).slice(-2);
-    //   return ( todayYear + '-' + todayMonth + '-' + todayDay );
-    // },
+    setComment () {
+      this.content = this.fd.content
+      this.content = this.content.replace(/(\n|\r\n)/g, '<br>')
+    },
     setDateTime () {
       let d = new Date ();
       let todayDate = d.getDate();
@@ -123,8 +122,6 @@ export default {
           }
           
         }
-        // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
-        // this.fd.file = "http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
       }
     },
     goToProfile () {
@@ -139,6 +136,7 @@ export default {
   },
   mounted () {
     this.setDateTime();
+    this.setComment();
   },
   computed: {
     ...mapState({

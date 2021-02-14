@@ -1,17 +1,21 @@
 <template>
-  <splide :options="options">
-    <splide-slide v-for="(op, idx) in c" :key="idx">
-      <GroupRecommendCard />
-    </splide-slide>
-  </splide>
+  <div>
+    <div class="group-reco-header">
+      이런 그룹은 어떠신가요?
+    </div>
+    <GroupRecoSplide />
+  </div>
+
 </template>
 
 <script>
-import "@/assets/css/group_splide.css";
-import GroupRecommendCard from "./GroupRecommendCard.vue";
+import GroupRecoSplide from './GroupRecoSplide.vue';
+
 
 export default {
-  components: { GroupRecommendCard },
+  components : {
+    GroupRecoSplide
+  },
   data() {
     return {
       c: [{}, {}, {}, {}, {}, {}, {}],
@@ -32,4 +36,11 @@ export default {
 };
 </script>
 
-<style scoped lang="css" src="@/assets/css/group_splide.css"></style>
+<style>
+.group-reco-header {
+  padding-top : 40px; 
+  padding-bottom:40px; 
+  text-align:center;
+  font-size: 24px;
+}
+</style>

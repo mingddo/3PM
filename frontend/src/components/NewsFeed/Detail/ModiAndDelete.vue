@@ -36,7 +36,7 @@ export default {
         const answer = window.confirm('정말로 삭제하시겠습니까?')
         if (answer) {
           if (this.Category == 1) {
-            console.log(this.fd.id)
+            console.log('삭제할 id', this.fd.id)
             deleteFeed(
               this.fd.id,
               () => {

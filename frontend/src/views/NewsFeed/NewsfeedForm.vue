@@ -133,7 +133,6 @@ export default {
   },
   methods: {
     sendLocation (place) {
-      // this.showMap = false
       this.location = place
     },
     revealMap () {
@@ -146,22 +145,6 @@ export default {
     chooseGroup () {
       this.select = !this.select
     },
-    // getLocation () {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition (function(position) {
-    //       // this.x = position.coords.latitude
-    //       alert(`위도는${ position.coords.latitude } 경도는 ${ position.coords.longitude } `);
-    //     }, function(error) {
-    //       console.log(error);
-    //     }, {
-    //       enableHighAccuracy: false,
-    //       maximumAge: 0,
-    //       timeout: Infinity
-    //     });
-    //   } else {
-    //     alert('GPS를 지원하지 않습니다.')
-    //   }
-    // },
     deleteTag (tag) {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
@@ -269,7 +252,7 @@ export default {
               this.$route.params.feed.id,
               this.form,
               (res) => {
-                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+                console.log('수정', res)
               },
               (err) => {
                 console.log(err)
@@ -286,6 +269,7 @@ export default {
             // 404 페이지 이동
             alert('잘못된 접근입니다.')
           }
+          this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
         } else {
           alert('본인만 수정할 수 있습니다!!!')
         }

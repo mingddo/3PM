@@ -42,20 +42,8 @@ export default {
   methods : {
     setContentIndent () {
       this.contentBox = this.op.content
-      console.log(this.contentBox)
       this.contentBox = this.contentBox.replace(/(\n|\r\n)/g, '<br>')
-      console.log(this.contentBox)
     },
-    // setDefaultImg () {
-    //   console.log('뭐하냐,,', this.op)
-    //   let recoCard = document.getElementById('recoContent')
-    //   let defaultI = 'https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg'
-    //   if (this.op.img) {
-    //     recoCard.style.backgroundImage = `url(${this.op.img})`;
-    //   } else {
-    //     recoCard.style.backgroundImage = `url(${defaultI})`;
-    //   }
-    // },
     goToPage () {
       if (this.Category == 4) {
         window.open(this.op.link)
