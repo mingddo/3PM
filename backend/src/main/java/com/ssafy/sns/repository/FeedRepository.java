@@ -10,7 +10,7 @@ public interface FeedRepository {
     List<Feed> findMyList(Long id, int num);
 
     // 한페이지 불러오기
-    List<Feed> findList(int num);
+    List<Feed> findList(int num, Object category);
 
     // 피드 글 불러오기
     Feed findById(Long feedId);

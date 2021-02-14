@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "CATEGORY")
+@DiscriminatorColumn
 public class Feed extends BaseTimeEntity {
 
     @Id

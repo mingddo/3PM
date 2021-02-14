@@ -38,7 +38,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         return em.createQuery("SELECT c " +
                 "FROM Comment c " +
                 "WHERE c.feed.id = :feedId " +
-                "ORDER BY c.createdDate ASC", Comment.class)
+                "ORDER BY c.createdDate DESC", Comment.class)
                 .setParameter("feedId", feed.getId())
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
