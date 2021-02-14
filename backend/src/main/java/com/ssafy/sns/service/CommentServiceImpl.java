@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.save(new Comment(commentRequestDto));
         user.addComment(comment);
         feed.addComment(comment);
-        noticeRepository.save(new NoticeComment(comment));
+        noticeRepository.save(new NoticeComment(comment.getId()));
     }
 
     @Override

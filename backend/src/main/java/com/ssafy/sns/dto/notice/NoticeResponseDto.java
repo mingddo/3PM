@@ -1,6 +1,8 @@
 package com.ssafy.sns.dto.notice;
 
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.user.SimpleUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,19 +16,19 @@ import java.util.Optional;
 public class NoticeResponseDto {
 
     private int type;
-    private Long other;
-    private Long me;
+    private SimpleUserDto other;
+    private Feed feed;
 
-
-    public NoticeResponseDto(int type, Long other, Long me) {
+    @Builder
+    public NoticeResponseDto(int type, SimpleUserDto other) {
         this.type = type;
         this.other = other;
-        this.me = me;
     }
 
-//    @Builder
-//    public NoticeResponseDto(int type, User me) {
-//        this.type = type;
-//        this.me = me;
-//    }
+    @Builder
+    public NoticeResponseDto(int type, SimpleUserDto other, Feed feed) {
+        this.type = type;
+        this.other = other;
+        this.feed = feed;
+    }
 }

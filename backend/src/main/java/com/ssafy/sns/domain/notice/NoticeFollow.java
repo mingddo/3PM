@@ -12,12 +12,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class NoticeFollow extends Notice{
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "follow_id")
-    private Follow follow;
+    @Column(name = "follow_id")
+    private Long follow_id;
 
     @Builder
-    public NoticeFollow(Follow follow) {
-        this.follow = follow;
+    public NoticeFollow(Long follow_id) {
+        this.follow_id = follow_id;
     }
 }

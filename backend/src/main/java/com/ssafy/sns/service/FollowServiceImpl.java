@@ -64,8 +64,8 @@ public class FollowServiceImpl {
         } else {
             Follow follow = new Follow(fromUser, toUser);
             // 팔로잉
-            followRepository.save(follow);
-            noticeRepository.save(new NoticeFollow(follow));
+            Follow save = followRepository.save(follow);
+            noticeRepository.save(new NoticeFollow(save.getId()));
         }
     }
 
