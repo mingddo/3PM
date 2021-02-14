@@ -286,12 +286,21 @@ export default {
     width: 100%;
     left: 0;
     right: 0;
-    margin-top: 30px;
+    margin-top: 50px;
+  }
+  .newsfeed-D {
+    width: 100%;
+    margin-top: 80px;
   }
   .myPagemainSection {
     width: 100%;
     left: 0;
     right: 0;
+    margin-top: 50px;
+  }
+  .profileImgFrame {
+    width: 90px;
+    height: 90px;
   }
   .searchFrame {
     width: 100%;
@@ -347,6 +356,28 @@ export default {
   }
   .upper-navbar {
     height: 50px;
+  }
+  .upper-navbar.active {
+    top: 0;
+  }
+  .create-feed-btn {
+    height: 40px;
+    background-color: #f0d3c1;
+    width: 150px;
+    border-radius: 5px;
+  }
+  .newsfeed-form-profile-img-space {
+    width: 45px;
+    height: 45px;
+  }
+  .newsfeed-form-profile-img {
+    width: 50px;
+  }
+  .newsfeed-form-profile-name {
+    font-size: 16px;
+  }
+  .newsfeed-form-tag-input {
+    font-size: 15px;
   }
 }
 </style>
