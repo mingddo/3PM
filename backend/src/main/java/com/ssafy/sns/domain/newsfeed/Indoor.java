@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Indoor extends Feed {
 
-    @Builder
+
     public Indoor(String content, User user, List<FeedHashtag> feedHashtags) {
         super(content, user, feedHashtags);
     }
