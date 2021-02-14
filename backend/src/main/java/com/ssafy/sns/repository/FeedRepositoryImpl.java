@@ -17,8 +17,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public List<Feed> findMyList(Long id, int num) {
         int readPageCnt = 10;
-
-        return em.createQuery("SELECT f FROM Feed f WHERE f.user.id = :id ORDER BY f.createdDate DESC", Feed.class)
+        return em.createQuery("SELECT f " +
+                "FROM Feed f " +
+                "WHERE f.user.id = :id AND TYPE(f) = Indoor " +
+                "ORDER BY f.createdDate DESC", Feed.class)
                 .setParameter("id", id)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
@@ -26,10 +28,13 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public List<Feed> findList(int num) {
+    public List<Feed> findList(int num, Object category) {
         int readPageCnt = 10;
-
-        return em.createQuery("SELECT f FROM Feed f ORDER BY f.createdDate DESC", Feed.class)
+        return em.createQuery("SELECT f " +
+                "FROM Feed f " +
+                "WHERE TYPE(f) = :category " +
+                "ORDER BY f.createdDate DESC", Feed.class)
+                .setParameter("category", category)
                 .setFirstResult(num)
                 .setMaxResults(readPageCnt)
                 .getResultList();
