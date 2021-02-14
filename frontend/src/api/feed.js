@@ -1,12 +1,7 @@
 import { AuthorizationInstance } from './index.js'
 
 const instance = AuthorizationInstance();
-let token = null
-if (localStorage.getItem('vuex') != null ) {
-  let vuex_data = localStorage.getItem('vuex')
-  vuex_data = JSON.parse(vuex_data);
-  token = vuex_data["authToken"]
-}
+
 function createFeed(feed, success, fail) {
   instance
     .post('indoors', feed)
@@ -40,9 +35,6 @@ function feedList(pk, success, fail) {
   .get(`indoors`, {
     params: {
       startNum: pk
-    },
-    headers: {
-      "Authorization" : token
     }
   })
   .then(success)
