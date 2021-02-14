@@ -98,27 +98,9 @@
             <i class="far fa-comment"></i>
             댓글달기
           </div>
-          <NewsFeedClapUser
-            v-if="clapListOpen"
-            :clapedUsers="clapedUsers"
-            @closeClapList="closeClapList"
-          />
-          <div class="feed-detail-like-comment-share-btn-box">
-            <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-              <i class="far fa-thumbs-up"></i>
-              좋아요
-            </div>
-            <div
-              class="feed-detail-like-comment-share-btn"
-              @click="focusComment"
-            >
-              <i class="far fa-comment"></i>
-              댓글달기
-            </div>
-            <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
-              <i class="fas fa-share"></i>
-              공유하기
-            </div>
+          <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
+            <i class="fas fa-share"></i>
+            공유하기
           </div>
         </div>
         <Comment :id="fd.id" :Category="Number(Category)"/>
