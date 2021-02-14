@@ -4,6 +4,7 @@ import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
 import com.ssafy.sns.repository.UserRepository;
+import com.ssafy.sns.util.UnicodeHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final S3Service s3Service;
+    private final UnicodeHandler unicodeHandler;
 
 
     public User findUserById(Long id) {
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).get();
         user.setIntroduce(dto.getIntroduce());
         user.setNickname(dto.getNickname());
+        user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getNickname()));
 
         // file 업로드는 exception 날 수 있다.
         if (file == null) {
@@ -77,6 +79,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setKakaoId(dto.getKakaoId());
         user.setNickname(dto.getUsername());
+        user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getUsername()));
 
         return userRepository.save(user);
     }

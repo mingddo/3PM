@@ -9,6 +9,7 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.repository.*;
 import com.ssafy.sns.dto.user.SimpleUserDto;
+import com.ssafy.sns.util.UnicodeHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -29,6 +29,8 @@ public class SearchServiceImpl implements SearchService{
     private final UserRepository userRepository;
     private final CommentRepositoryImpl commentRepository;
     private final HashtagRepositoryImpl hashtagRepository;
+    private final UserRepositoryImpl userRepositoryImpl;
+    private final UnicodeHandler unicodeHandler;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
@@ -70,13 +72,24 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<SearchHashtagDto> hashtagautoComplete(String text) {
-        List search = hashtagRepository.search(text);
+    public List<SearchHashtagDto> hashtagAutocomplete(String text) {
+        List search = hashtagRepository.search(unicodeHandler.splitHangeulToConsonant(text));
         List<SearchHashtagDto> list = new ArrayList<>();
         for (Object o : search) {
             Object[] result = (Object[]) o;
             list.add(new SearchHashtagDto(((Hashtag)result[0]).getTagName(), ((Long)result[1]).intValue()));
         }
         return list;
+    }
+
+    @Override
+    public List<SimpleUserDto> userAutocomplete(Long userId, String text) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!");
+        return userRepositoryImpl.search(user, unicodeHandler.splitHangeulToConsonant(text))
+                .stream()
+                .map(SimpleUserDto::new)
+                .collect(Collectors.toList());
     }
 }

@@ -18,5 +18,7 @@ public interface SearchService {
 
     public List<SimpleUserDto> searchUsers(String keyword);
 
-    List<SearchHashtagDto> hashtagautoComplete(String text);
+    List<SearchHashtagDto> hashtagAutocomplete(String text);
+
+    List<SimpleUserDto> userAutocomplete(Long userId, String text);
 }

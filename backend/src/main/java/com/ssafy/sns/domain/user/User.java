@@ -36,6 +36,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_nickname", nullable = false, unique = true)
     private String nickname;
 
+    @Column(name = "nickname_split", nullable = false, unique = true)
+    private String nicknameSplit;
+
     // 유저 소개
     @Column(name = "user_introduce")
     private String introduce;
@@ -47,7 +50,6 @@ public class User extends BaseTimeEntity {
     // 유저 설정 정보
     @Embedded
     private UserConfig userConfig;
-
 
 
     // 유저가 속한 그룹 리스트
