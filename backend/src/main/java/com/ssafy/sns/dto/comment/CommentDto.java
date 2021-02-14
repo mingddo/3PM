@@ -10,22 +10,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentDto {
 
+    private Long id;
     private String content;
     private SimpleUserDto user;
     private LocalDateTime date;
     private int clapCnt;
     private boolean isClap;
 
-    @Builder
-    public CommentDto(String content, SimpleUserDto user, LocalDateTime date, int clapCnt, boolean isClap) {
-        this.content = content;
-        this.user = user;
-        this.date = date;
-        this.clapCnt = clapCnt;
-        this.isClap =isClap;
-    }
-
     public CommentDto(Comment comment, int clapCnt, boolean isClap) {
+        this.id = comment.getId();
         this.content = comment.getContent();
         this.user = new SimpleUserDto(comment.getUser());
         this.date = comment.getCreatedDate();
