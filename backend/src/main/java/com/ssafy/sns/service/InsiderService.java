@@ -26,7 +26,8 @@ public class InsiderService {
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
 
-    public FeedListResponseDto findAllByGroupId(Long groupId, Long userId, int num) {
+    // 그룹아이디에 속하는 모든 게시물 출력
+    public FeedListResponseDto findAllByGroupId(Long groupId, int num) {
 
     }
 
