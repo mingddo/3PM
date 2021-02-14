@@ -118,7 +118,7 @@
                     <a
                       @click.prevent="activetab = 2"
                       :class="[activetab === 2 ? 'active' : '']"
-                      >최근 활동</a
+                      >알림</a
                     >
                     <div
                       :class="[activetab === 2 ? 'active' : '']"
@@ -163,7 +163,6 @@ import {
   getprofileFeed,
   followToggle,
   followingList,
-  history,
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
@@ -338,20 +337,6 @@ export default {
         }
       );
     },
-    getUserHistory() {
-      if (this.mypage === true) {
-        history(
-          this.current_user,
-          (res) => {
-            console.log("최근활동", res);
-            this.activities = res.data;
-          },
-          (err) => {
-            console.error(err);
-          }
-        );
-      }
-    },
   },
   created() {
     console.log(this.$store.state.userId);
@@ -362,7 +347,6 @@ export default {
   mounted() {
     this.setScroll();
     this.getfollowingList();
-    this.getUserHistory();
   },
 };
 </script>

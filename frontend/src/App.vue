@@ -1,11 +1,114 @@
 <template>
   <div>
     <!-- <Nav /> -->
-    <div :class="[scrolled ? 'upper-navbar active' : 'upper-navbar']">
-      <i class="fas fa-bars"></i>
-      <span>오후세시</span>
-      <img src="@/assets/searching.svg" alt="" width="10%" height="60%" />
+    <div
+      :class="[navslider ? 'sliderbar active' : 'sliderbar']"
+      @click="navslider = false"
+    >
+      <div :class="[navslider ? 'sliderFrame active' : 'sliderFrame']">
+        <div class="sliderTitle">
+          오후 세시
+        </div>
+        <div class="slider-nav-content">
+          <div class="slider-nav-categoryFrame" @click="goToPersonal">
+            <div>
+              <img
+                src="@/assets/img/indoor.svg"
+                alt=""
+                width="30%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                꽃보다 집
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToHack">
+            <div>
+              <img
+                src="@/assets/img/hackinsider.svg"
+                alt=""
+                width="30%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                핵인싸
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToChungSan">
+            <div>
+              <img
+                src="@/assets/img/chungsan2.svg"
+                alt=""
+                width="30%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                청산별곡
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToWH">
+            <div>
+              <img
+                src="@/assets/img/workerholic2.svg"
+                alt=""
+                width="30%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                워커홀릭
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToSearch">
+            <div>
+              <img
+                src="@/assets/searching.svg"
+                alt=""
+                width="20%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                검색
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToProfile">
+            <div>
+              <img
+                src="@/assets/img/profileM.svg"
+                alt=""
+                width="20%"
+                height="100%"
+                style="margin-right: 10px"
+              />
+              <span>
+                프로필
+              </span>
+            </div>
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToSetting">
+            설정 변경
+          </div>
+          <div class="slider-nav-categoryFrame" @click="goToLogout">
+            로그아웃
+          </div>
+        </div>
+      </div>
     </div>
+    <div :class="[scrolled ? 'upper-navbar active' : 'upper-navbar']">
+      <i @click="toggleslidernavbar" class="fas fa-bars sliderToggle"></i>
+      <span>오후세시</span>
+      <img src="@/assets/searching.svg" alt="" width="10%" height="80%" />
+    </div>
+
     <router-view :key="$route.fullPath" />
   </div>
 </template>
@@ -27,17 +130,97 @@ export default {
       lastScrollTop: 0,
       delta: 5,
       navbarHeight: 70,
+      navslider: false,
     };
   },
   methods: {
-    goToPersonal() {
-      this.$router.push({
-        name: "NewsfeedPersonal",
-        query: { Category: "꽃보다 집" },
+    toggleslidernavbar() {
+      console.log("토글된다");
+      this.navslider = !this.navslider;
+    },
+    goToHome() {
+      this.navslider = false;
+      this.$router.push({ name: "Home" }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
       });
     },
+    goToSearch() {
+      this.navslider = false;
+      this.$router
+        .push({
+          name: "Search",
+          params: { filter: "all" },
+          query: { query: "" },
+        })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToPersonal() {
+      this.navslider = false;
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "1" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToHack() {
+      this.navslider = false;
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "2" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToChungSan() {
+      this.navslider = false;
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "3" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToWH() {
+      this.navslider = false;
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "4" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
     goToProfile() {
-      this.$router.push({ name: "MyPage" });
+      this.navslider = false;
+      this.$router.push({ name: "MyPage" }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
+    },
+    goToSetting() {
+      this.navslider = false;
+      this.$router.push({ name: "MyPageEdit" }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
+    },
+    goToLogout() {
+      this.navslider = false;
+      this.kakaoLogout().then(() => {
+        this.$router.push({ name: "Home" });
+      });
     },
     setScroll() {
       window.addEventListener("scroll", () => {
@@ -114,7 +297,7 @@ export default {
     width: 100%;
     left: 0;
     right: 0;
-    margin-top: 30px;
+    margin-top: 70px;
   }
   .search_input {
     height: 40px;
@@ -156,6 +339,14 @@ export default {
     margin-top: 0px;
 
     padding-top: 0;
+  }
+  .sliderToggle {
+    display: block;
+    cursor: pointer;
+    z-index: 17005;
+  }
+  .upper-navbar {
+    height: 50px;
   }
 }
 </style>

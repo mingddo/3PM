@@ -1,7 +1,7 @@
 <template>
   <div class="ActivityComponent">
     <header class="myPageActivityHeader">
-      <h2>최근 활동</h2>
+      <h2>알림</h2>
     </header>
 
     <div v-if="activities" class="myPageActivityContentFrame">
