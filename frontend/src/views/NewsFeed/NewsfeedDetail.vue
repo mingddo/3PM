@@ -124,6 +124,7 @@
         <Comment :id="fd.id" :Category="Number(Category)"/>
       </section>
     </div>
+    </div>
   </div>
 </template>
 
@@ -228,9 +229,6 @@ export default {
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
     },  
-    goToSearchTag (tag) {
-      this.$router.push({ name: 'Search', query: { query: tag}, params: { filter: "feed" }})
-    },
     goToSearchTag(tag) {
       this.$router.push({
         name: "Search",
