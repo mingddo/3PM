@@ -1,10 +1,10 @@
 <template>
-  <div class="subscribedComponentFrame">
+  <div class="subscribedComponentFrame" @click="goToProfile">
     <div class="subscribeImgFrame">
-      <img class="pofileImg" src="@/assets/loverduck.png" alt="프로필사진" />
+      <img class="pofileImg" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${subscriber.profileImg}`" alt="프로필사진" />
     </div>
     <div class="subscriberName">
-      <div>{{ subscriber.username }}</div>
+      <div>{{ subscriber.nickname }}</div>
     </div>
   </div>
 </template>
@@ -14,6 +14,11 @@ export default {
   props: {
     subscriber: Object,
   },
+  methods : {
+    goToProfile () {
+      this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
+    },
+  }
 };
 </script>
 

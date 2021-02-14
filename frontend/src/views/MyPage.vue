@@ -62,10 +62,10 @@
                 <div class="profileDetailInfo">
                   <h3 :class="{ profile_none: mypage }">
                     <!-- {{ profileinfo.username }}님을 구독한 사람 -->
-                    팔로잉
+                    팔로워
                   </h3>
                   <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
-                  <h3 :class="{ profile_none: !mypage }">팔로잉</h3>
+                  <h3 :class="{ profile_none: !mypage }">팔로워</h3>
                   <div>{{ profileinfo.toMeFromOthersCnt }}</div>
                 </div>
                 <div class="profileDetailInfo">
@@ -140,7 +140,7 @@
               <Activity :activities="activities" />
             </section>
             <section v-if="activetab === 3" class="myPageActivity">
-              <SubscribedList :subscribedlist="subscribedlist" />
+              <SubscribedList :subscribedlist="current_user_followingList" />
             </section>
             <section v-if="activetab === 4" class="myPageActivity">
               <GroupList :grouplist="grouplist" />
