@@ -1,12 +1,12 @@
 <template>
   <div class="side-bar">
-    <div class="nav-toggle-switch" @click="sideBarToggle">
+    <div class="nav-toggle-switch">
       <div style="padding-left : 15px;">
         <i class="fas fa-bars"></i>
       </div>
     </div>
     <div class="nav-logo">
-      카테고리이름
+      카테고리
     </div>
     <div class="nav-toggle-switch">
       <div style="padding-right : 15px;">
@@ -14,87 +14,99 @@
       </div>
     </div>
     <div class="nav-content" v-if="userStatus">
-      <div @click="goToPersonal">
-        <img
-          src="@/assets/img/indoor.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          꽃보다 집
-        </span>
+      <div class="nav-categoryFrame" @click="goToPersonal">
+        <div>
+          <img
+            src="@/assets/img/indoor.svg"
+            alt=""
+            width="30%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            꽃보다 집
+          </span>
+        </div>
       </div>
-      <div @click="goToHack">
-        <img
-          src="@/assets/img/hackinsider.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          핵인싸
-        </span>
+      <div class="nav-categoryFrame" @click="goToHack">
+        <div>
+          <img
+            src="@/assets/img/hackinsider.svg"
+            alt=""
+            width="30%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            핵인싸
+          </span>
+        </div>
       </div>
-      <div @click="goToChungSan">
-        <img
-          src="@/assets/img/chungsan2.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          청산별곡
-        </span>
+      <div class="nav-categoryFrame" @click="goToChungSan">
+        <div>
+          <img
+            src="@/assets/img/chungsan2.svg"
+            alt=""
+            width="30%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            청산별곡
+          </span>
+        </div>
       </div>
-      <div @click="goToWH">
-        <img
-          src="@/assets/img/workerholic2.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          워커홀릭
-        </span>
+      <div class="nav-categoryFrame" @click="goToWH">
+        <div>
+          <img
+            src="@/assets/img/workerholic2.svg"
+            alt=""
+            width="30%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            워커홀릭
+          </span>
+        </div>
       </div>
-      <div @click="goToSearch">
-        <img
-          src="@/assets/searching.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          검색
-        </span>
+      <div class="nav-categoryFrame" @click="goToSearch">
+        <div>
+          <img
+            src="@/assets/searching.svg"
+            alt=""
+            width="20%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            검색
+          </span>
+        </div>
       </div>
-      <div @click="goToProfile">
-        <img
-          src="@/assets/img/profileM.svg"
-          alt=""
-          width="20%"
-          height="100%"
-          style="margin:0 10px"
-        />
-        <span>
-          프로필
-        </span>
+      <div class="nav-categoryFrame" @click="goToProfile">
+        <div>
+          <img
+            src="@/assets/img/profileM.svg"
+            alt=""
+            width="20%"
+            height="100%"
+            style="margin-right: 10px"
+          />
+          <span>
+            프로필
+          </span>
+        </div>
       </div>
-      <div @click="goToSetting">
+      <div class="nav-categoryFrame" @click="goToSetting">
         설정 변경
       </div>
-      <div @click="goToLogout">
+      <div class="nav-categoryFrame" @click="goToLogout">
         로그아웃
       </div>
     </div>
 
-    <div class="overlay" @click="sideBarToggle">
+    <div class="overlay">
       <div class="nav-toggle-bar-before">
         <div class="nav-logo">
           <i class="far fa-clock"></i>
@@ -124,7 +136,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "Nav",
   data() {
@@ -134,34 +146,34 @@ export default {
   },
   created() {},
   methods: {
-    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
-    sideBarToggle(e) {
-      const toggleBar = document.querySelector(".nav-toggle-bar-before");
-      const overlay = document.querySelector(".overlay");
-      if (overlay.classList.contains("disappear")) {
-        // 사이드바 사라지기
-        if (
-          e.target.classList.value.split(" ").includes("sidebar-fas") ||
-          e.target === overlay
-        ) {
-          overlay.classList.remove("disappear");
-          overlay.style.cssText =
-            "display: block;background-color: rgba(0,0,0,0);";
-          toggleBar.style = "transform :translateX(0px);";
-          setTimeout(() => {
-            overlay.style = "display: none;";
-          }, 500);
-        }
-      } else {
-        // 사이드바 나타나기
-        overlay.classList.add("disappear");
-        overlay.style.cssText =
-          "display: block;background-color: rgba(0,0,0,0.5);";
-        setTimeout(() => {
-          toggleBar.style = "transform : translateX(250px);";
-        }, 10);
-      }
-    },
+    // ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
+    // sideBarToggle(e) {
+    //   const toggleBar = document.querySelector(".nav-toggle-bar-before");
+    //   const overlay = document.querySelector(".overlay");
+    //   if (overlay.classList.contains("disappear")) {
+    //     // 사이드바 사라지기
+    //     if (
+    //       e.target.classList.value.split(" ").includes("sidebar-fas") ||
+    //       e.target === overlay
+    //     ) {
+    //       overlay.classList.remove("disappear");
+    //       overlay.style.cssText =
+    //         "display: block;background-color: rgba(0,0,0,0);";
+    //       toggleBar.style = "transform :translateX(0px);";
+    //       setTimeout(() => {
+    //         overlay.style = "display: none;";
+    //       }, 500);
+    //     }
+    //   } else {
+    //     // 사이드바 나타나기
+    //     overlay.classList.add("disappear");
+    //     overlay.style.cssText =
+    //       "display: block;background-color: rgba(0,0,0,0.5);";
+    //     setTimeout(() => {
+    //       toggleBar.style = "transform : translateX(250px);";
+    //     }, 10);
+    //   }
+    // },
     goToHome() {
       this.$router.push({ name: "Home" }).catch((err) => {
         if (err.name === "NavigationDuplicated") {

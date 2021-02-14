@@ -169,10 +169,10 @@
 
 .myPagemainSection {
   width: 70%;
-  margin-top: 20px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
 }
 .profileImgFrame {
@@ -245,4 +245,9 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
+}
+
+.mypageEdit {
+  width: 70%;
+  margin-top: 80px;
 }

@@ -62,10 +62,10 @@
                 <div class="profileDetailInfo">
                   <h3 :class="{ profile_none: mypage }">
                     <!-- {{ profileinfo.username }}님을 구독한 사람 -->
-                    팔로잉
+                    팔로워
                   </h3>
                   <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
-                  <h3 :class="{ profile_none: !mypage }">팔로잉</h3>
+                  <h3 :class="{ profile_none: !mypage }">팔로워</h3>
                   <div>{{ profileinfo.toMeFromOthersCnt }}</div>
                 </div>
                 <div class="profileDetailInfo">
@@ -118,7 +118,7 @@
                     <a
                       @click.prevent="activetab = 2"
                       :class="[activetab === 2 ? 'active' : '']"
-                      >최근 활동</a
+                      >알림</a
                     >
                     <div
                       :class="[activetab === 2 ? 'active' : '']"
@@ -140,7 +140,7 @@
               <Activity :activities="activities" />
             </section>
             <section v-if="activetab === 3" class="myPageActivity">
-              <SubscribedList :subscribedlist="subscribedlist" />
+              <SubscribedList :subscribedlist="current_user_followingList" />
             </section>
             <section v-if="activetab === 4" class="myPageActivity">
               <GroupList :grouplist="grouplist" />
@@ -163,7 +163,6 @@ import {
   getprofileFeed,
   followToggle,
   followingList,
-  history,
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
@@ -278,9 +277,15 @@ export default {
       });
     },
     usercheck() {
+      console.log(
+        "같은 유저인지?",
+        this.$store.state.userId,
+        this.$route.query.name
+      );
       if (
         this.$route.query.name === undefined ||
-        this.$route.query.name === this.$store.state.userId
+        this.$route.query.name === this.$store.state.userId ||
+        Number(this.$route.query.name) === this.$store.state.userId
       ) {
         this.current_user = this.$store.state.userId;
         this.profile_user = this.$store.state.userId;
@@ -289,7 +294,7 @@ export default {
       } else {
         this.profile_user = this.$route.query.name;
         this.mypage = false;
-        console.log(this.profileinfo);
+        console.log("내 프로필이 아니다", this.profileinfo);
       }
     },
     getprofileInfo() {
@@ -338,20 +343,6 @@ export default {
         }
       );
     },
-    getUserHistory() {
-      if (this.mypage === true) {
-        history(
-          this.current_user,
-          (res) => {
-            console.log("최근활동", res);
-            this.activities = res.data;
-          },
-          (err) => {
-            console.error(err);
-          }
-        );
-      }
-    },
   },
   created() {
     console.log(this.$store.state.userId);
@@ -362,7 +353,6 @@ export default {
   mounted() {
     this.setScroll();
     this.getfollowingList();
-    this.getUserHistory();
   },
 };
 </script>
