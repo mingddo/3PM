@@ -55,4 +55,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     public void remove(Feed feed) {
         em.remove(feed);
     }
+
+    @Override
+    public Object findCategory(Long feedId) {
+        return em.createQuery("select type(f) from Feed f where f.id = :feed")
+                .setParameter("feed", feedId)
+                .getSingleResult();
+    }
 }

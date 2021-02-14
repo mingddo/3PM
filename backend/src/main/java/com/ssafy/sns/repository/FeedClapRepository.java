@@ -16,4 +16,6 @@ public interface FeedClapRepository {
     void delete(FeedClap feedClap);
 
     List<FeedClap> findClapAll(Feed feed);
+
+    FeedClap findById(Long feedClapId);
 }

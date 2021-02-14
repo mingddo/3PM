@@ -18,16 +18,9 @@ public interface NoticeRepository {
 
     void delete(Notice notice);
 
-    NoticeFeedClap findFeedClap(FeedClap feedClap);
-
-    NoticeComment findComment(Comment comment);
-
-    NoticeFollow findFollow(Follow follow);
-
     List<Notice> followList(User user);
 
     List<Notice> commentList(User user);
 
     List<Notice> feedClabList(User user);
-
 }
