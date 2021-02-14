@@ -9,6 +9,17 @@ function createFeed(feed, success, fail) {
     .catch(fail);
 }
 
+function uploadFile(id, file, success, fail) {
+  instance
+    .post(`indoors/${id}`, {}, {
+      params: {
+        files: file,
+      }
+    })
+    .then(success)
+    .catch(fail);
+}
+
 function readFeed(feed_pk, success, fail) {
   instance
     .get(`indoors/${feed_pk}`)
@@ -57,6 +68,7 @@ function clapFeedList(pk, success, fail) {
 
 export {
   createFeed,
+  uploadFile,
   readFeed,
   updateFeed,
   deleteFeed,

@@ -17,7 +17,7 @@
       <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
     </div>
     <section>
-      <div v-if="comments" class="feed-detail-comment-empty">
+      <div v-if="comments.length == 0" class="feed-detail-comment-empty">
         댓글이 없습니다. 댓글을 작성해주세요.
       </div>
       <div v-for="(comment, idx) in comments" :key="idx">
