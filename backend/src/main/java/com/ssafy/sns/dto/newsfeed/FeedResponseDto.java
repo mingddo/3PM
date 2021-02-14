@@ -6,6 +6,7 @@ import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,6 +46,7 @@ public class FeedResponseDto {
         this.isClap = isClap;
     }
 
+    @Builder
     public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());

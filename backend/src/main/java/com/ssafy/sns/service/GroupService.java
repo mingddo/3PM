@@ -79,9 +79,13 @@ public class GroupService {
         group.setProfile(fileName);
     }
 
-    public void exitGroup(Long groupId, User user) {
+    public void exitGroup(Long groupId, User user) throws Exception {
         Group group = getGroup(groupId);
         GroupMember groupMember = groupMemberRepository.findByUserAndGroup(user, group).orElseThrow();
+        if (groupMember.isLeader()) {
+            throw new Exception("그룹장은 탈퇴할 수 없습니다.");
+        }
+
         // 유저 엔티티에서 삭제
         user.removeGroup(groupMember);
         // 그룹 엔티티에서 삭제
@@ -100,7 +104,10 @@ public class GroupService {
         GroupMember leader = getGroupMember(user, group);
         if (!leader.isLeader()) {
             throw new Exception("권한이 없습니다.");
+        } else if (group.getGroupMembers().size() > 1) {
+            throw new Exception("그룹원이 남아 있습니다.");
         }
+
         List<GroupMember> members = group.getGroupMembers();
         for (GroupMember groupMember : members) {
             groupMember.removeUser();
