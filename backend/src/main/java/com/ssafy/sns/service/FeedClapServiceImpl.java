@@ -43,7 +43,7 @@ public class FeedClapServiceImpl implements ClapService {
             FeedClap feedClap = feedClapRepository.save(new FeedClap());
             user.addFeedClap(feedClap);
             feed.addFeedClap(feedClap);
-            noticeRepository.save(new NoticeFeedClap(feedClap));
+            noticeRepository.save(new NoticeFeedClap(feedClap.getId()));
         }
     }
 

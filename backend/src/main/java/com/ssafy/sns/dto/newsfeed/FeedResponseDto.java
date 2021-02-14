@@ -24,7 +24,7 @@ public class FeedResponseDto {
     private LocalDateTime date;
     private int commentCnt;
     private int likeCnt;
-    private int type;
+    private int category;
     private boolean isClap;
 
     public FeedResponseDto(Feed feed, int commentCnt, int likeCnt,boolean isClap) {
@@ -46,7 +46,7 @@ public class FeedResponseDto {
         this.isClap = isClap;
     }
 
-    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int type) {
+    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
@@ -63,6 +63,6 @@ public class FeedResponseDto {
         this.commentCnt = commentCnt;
         this.likeCnt = likeCnt;
         this.isClap = isClap;
-        this.type = type;
+        this.category = category;
     }
 }
