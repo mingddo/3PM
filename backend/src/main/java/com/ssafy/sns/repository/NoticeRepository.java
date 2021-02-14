@@ -23,5 +23,4 @@ public interface NoticeRepository {
     List<Notice> commentList(User user);
 
     List<Notice> feedClabList(User user);
-
 }
