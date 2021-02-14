@@ -19,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NoticeServiceImpl implements NoticeService{
 
-
     private final NoticeRepositoryImpl noticeRepository;
     private final FollowRepository followRepository;
     private final CommentRepositoryImpl commentRepository;
@@ -60,6 +59,5 @@ public class NoticeServiceImpl implements NoticeService{
     public Object findCategory(Long feedId) {
         return feedRepository.findCategory(feedId);
     }
-
 
 }

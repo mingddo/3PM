@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
@@ -44,12 +45,20 @@ public class NoticeController {
                 .collect(Collectors.toList());
         List<Notice> joined2 = Stream.concat(joined1.stream(), commentList.stream())
                 .collect(Collectors.toList());
+        joined2.sort(new Comparator<Notice>() {
+            @Override
+            public int compare(Notice o1, Notice o2) {
+                return o1.getCreatedDate().compareTo(o2.getCreatedDate());
+            }
+        });
         List<NoticeResponseDto> noticeResponseDto = new ArrayList<>();
         for (Notice notice : joined2) {
+            System.out.println("notice.getCreatedDate() = " + notice.getCreatedDate());
             Long fromId = null;
             SimpleUserDto simpleOther = null;
             Long feedId = null;
             String category = null;
+            String commentContent = null;
             StringTokenizer st = null;
             if(notice instanceof NoticeFollow) {
                 Follow follow = noticeService.findFollow(((NoticeFollow) notice).getFollow_id());
@@ -73,11 +82,12 @@ public class NoticeController {
                 fromId = comment.getUser().getId();
                 simpleOther = new SimpleUserDto(userService.findUserById(fromId));
                 feedId = comment.getFeed().getId();
+                commentContent = comment.getContent();
                 st = new StringTokenizer(noticeService.findCategory(feedId).toString(),".");
                 while (st.hasMoreTokens()) {
                     category = st.nextToken();
                 }
-                noticeResponseDto.add(new NoticeResponseDto(3, simpleOther, feedId, category));
+                noticeResponseDto.add(new NoticeResponseDto(3, simpleOther, feedId, category, commentContent));
             }
         }
         return new ResponseEntity<>(noticeResponseDto, status);
