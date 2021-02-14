@@ -48,7 +48,7 @@ public class NoticeController {
         joined2.sort(new Comparator<Notice>() {
             @Override
             public int compare(Notice o1, Notice o2) {
-                return o1.getCreatedDate().compareTo(o2.getCreatedDate());
+                return o2.getCreatedDate().compareTo(o1.getCreatedDate());
             }
         });
         List<NoticeResponseDto> noticeResponseDto = new ArrayList<>();
