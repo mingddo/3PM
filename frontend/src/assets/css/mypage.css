@@ -163,8 +163,6 @@
 .myPageActivity {
   width: 100%;
   border-radius: 10px;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .myPagemainSection {
@@ -234,17 +232,18 @@
 .activityComponentFrame {
   display: flex;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
   margin: 10px 0;
 }
 
 .activityContent {
-  width: 60%;
+  width: 80%;
   height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
+  margin-left: 10px;
 }
 
 .mypageEdit {
