@@ -3,7 +3,7 @@ package com.ssafy.sns.jwt;
 import java.util.Date;
 import java.util.Map;
 
-import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.user.JwtResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,23 +19,23 @@ public class JwtService {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
-    private String signature = "VUETOKEN";
-    private Long expireMin = 5L;
+    private String signature = "TOKEN";
+    private final Long REF_EXPIRE = 60L * 24 * 10;
+    private final Long ACC_EXPIRE = 60L;
 
     //	로그인 성공시 사용자 정보를 기반으로 JWTToken을 생성하여 반환.
-    public String create(User user) {
+    public String createRefreshToken(Long id) {
         JwtBuilder jwtBuilder = Jwts.builder();
 //		JWT Token = Header + Payload + Signature
 
 //		Header 설정
         jwtBuilder.setHeaderParam("typ", "JWT"); // 토큰의 타입으로 고정 값.
 
-
 //		Payload 설정
         jwtBuilder
-                .setSubject("로그인토큰") // 토큰의 제목 설정
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * expireMin)) // 유효기간 설정
-                .claim("user", user).claim("greeting", "환영합니다. " + user.getKakaoId()); // 담고 싶은 정보 설정.
+                .setSubject("RefreshToken") // 토큰의 제목 설정
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * REF_EXPIRE)) // 유효기간 설정
+                .claim("userId", id);//.claim("greeting", "환영합니다. " + user.getKakaoId()); // 담고 싶은 정보 설정.
 
 //		signature 설정
         jwtBuilder.signWith(SignatureAlgorithm.HS256, signature.getBytes());
@@ -46,6 +46,31 @@ public class JwtService {
         return jwt;
     }
 
+    //	로그인 성공시 사용자 정보를 기반으로 JWTToken을 생성하여 반환.
+    public String createAccessToken(String refToken) {
+        JwtBuilder jwtBuilder = Jwts.builder();
+//		JWT Token = Header + Payload + Signature
+
+//		Header 설정
+        jwtBuilder.setHeaderParam("typ", "JWT"); // 토큰의 타입으로 고정 값.
+
+
+//		Payload 설정
+        jwtBuilder
+                .setSubject("AccessToken") // 토큰의 제목 설정
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * ACC_EXPIRE)) // 유효기간 설정
+                .claim("RefreshToken", refToken);//.claim("greeting", "환영합니다. " + user.getKakaoId()); // 담고 싶은 정보 설정.
+
+//		signature 설정
+        jwtBuilder.signWith(SignatureAlgorithm.HS256, signature.getBytes());
+
+//		마지막 직렬화 처리
+        String jwt = jwtBuilder.compact();
+        logger.info("jwt : {}", jwt);
+        return jwt;
+    }
+
+
     //	전달 받은 토큰이 제대로 생성된것이니 확인 하고 문제가 있다면 RuntimeException을 발생.
     public void checkValid(String jwt) {
 //		예외가 발생하지 않으면 OK
@@ -53,7 +78,7 @@ public class JwtService {
     }
 
     //	JWT Token을 분석해서 필요한 정보를 반환.
-    public Map<String, Object> get(String jwt) {
+    public Map<String, Object> getToken(String jwt) {
         Jws<Claims> claims = null;
         try {
             claims = Jwts.parser().setSigningKey(signature.getBytes()).parseClaimsJws(jwt);
@@ -64,5 +89,17 @@ public class JwtService {
         logger.info("claims : {}", claims);
         // Claims는 Map의 구현체이다.
         return claims.getBody();
+    }
+
+    public JwtResponseDto login(Long id) {
+        String refreshToken = createRefreshToken(id);
+        String accessToken = createAccessToken(refreshToken);
+
+        return new JwtResponseDto(accessToken, refreshToken, id);
+    }
+
+    public Long findId(String token) {
+        String refToken = (String) getToken(token).get("RefreshToken");
+        return Long.parseLong(String.valueOf(getToken(refToken).get("userId")));
     }
 }

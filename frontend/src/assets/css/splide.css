@@ -41,6 +41,7 @@
 .splide__slide {
   position: relative;
   outline: none;
+  margin: auto;
 }
 .splide__slide {
   box-sizing: border-box;
