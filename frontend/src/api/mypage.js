@@ -41,13 +41,7 @@ function followingList(userid,success,fail){
     .catch(fail)
 }
 
-function history(userid,success,fail){
-  instance
-    .get(`users/${userid}/history`)
-    .then(success)
-    .catch(fail)
-}
 
 export {
-  getprofileInfo,getprofileFeed, followToggle, followerList, followingList ,history
+  getprofileInfo,getprofileFeed, followToggle, followerList, followingList 
 }

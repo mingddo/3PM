@@ -103,8 +103,8 @@
   width: 100%;
   padding: 0 48px;
   height: 70px;
-  background-color: #ffffff;
-  z-index: 100000;
+  background-color: #fceee5;
+  z-index: 17000;
   transition: all 0.3s ease-in-out;
   padding: 12px;
   display: flex;
@@ -130,14 +130,14 @@
   border-radius: 50px;
   /* background-color: var(--bg-color); */
   width: 70%;
-  margin-top: 80px;
+  /* margin-top: 80px; */
 }
 .newsfeed-body {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   /* margin-top: 10px; */
   background-color: #fff9f0;
-  padding-top: 48px;
+  padding-top: 80px;
 }
 .newsfeed-header {
   display: flex;
