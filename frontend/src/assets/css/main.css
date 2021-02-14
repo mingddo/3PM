@@ -6,7 +6,7 @@
   font-style: normal;
 }
 :root {
-  --bg-color: #fff9f0;
+  --bg-color: #f4eee5;
   --white-color: #ffffff;
   --point-color: #f8f8f6;
 }
@@ -117,21 +117,22 @@ button.active {
 }
 .login-btn {
   z-index: 1000;
-  width: 120px;
+  width: auto;
+  height: 50px;
   position: fixed;
-  top: 5vh;
-  right: 5%;
+  bottom: 5vh;
+  right: 45%;
   font-weight: bold;
-  color: #2c3e50;
   transition: all 0.8s ease-in-out;
   padding: 0.25rem 1rem;
   background: none;
   border: none;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  border-radius: 15px;
   cursor: pointer;
   font-weight: bold;
-  color: #585858;
+  color: #391b1b;
+  background-color: #f7e432;
 }
 .login-btn.active {
   background: #585858;
@@ -252,7 +253,7 @@ button.active {
   height: 100vh;
   padding-top: 80px;
   display: flex;
-  background-color: var(--white-color);
+  background-color: #fff9f3;
   flex-direction: column;
   border-radius: 5px;
   justify-content: flex-start;
@@ -342,7 +343,7 @@ button.active {
   align-items: center;
 }
 .nav-categoryFrame > div {
-  width: 50%;
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;

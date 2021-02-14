@@ -34,20 +34,20 @@
           </div>
 
           <div class="newsfeed-form-tag-input-container">
-            <input
-              class="newsfeed-form-tag-input"
-              id="tags"
-              type="text"
-              placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
-              v-model.trim="inputTag"
-              @keyup.enter="addTag"
-            />
-            <div
-              style="font-size : 14px; padding-left : 10px; padding-right : 10px;"
-            >
-              <i class="far fa-question-circle"></i>태그가 무엇인가요? :
-              게시물을 표현할 수 있는 짧은 단어를 뜻합니다. 태그를 입력하시면
-              검색시 회원님의 게시물이 나타납니다.
+            <div class="tag-input-frame">
+              <input
+                class="newsfeed-form-tag-input"
+                id="tags"
+                type="text"
+                placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
+                v-model.trim="inputTag"
+                @keyup.enter="addTag"
+              />
+              <i class="far fa-question-circle" @click="qtToggle"></i>
+            </div>
+            <div :class="[!tagToggle ? 'tag-describe' : 'tag-describe active']">
+              태그가 무엇인가요? : 게시물을 표현할 수 있는 짧은 단어를 뜻합니다.
+              태그를 입력하시면 검색시 회원님의 게시물이 나타납니다.
             </div>
           </div>
 
@@ -137,7 +137,9 @@
             </div>
           </div>
           <div class="newsfeed-form-submit-btn">
-            <button @click="createFeed">작성하기</button>
+            <button class="create-feed-btn" @click="createFeed">
+              작성하기
+            </button>
           </div>
         </section>
       </div>
@@ -162,6 +164,7 @@ export default {
   },
   data() {
     return {
+      tagToggle:false,
       Category: 0,
       type: 'NEW',
       completed: false,
@@ -196,6 +199,10 @@ export default {
     chooseGroup () {
       this.select = !this.select
     },
+    qtToggle(){
+      this.tagToggle = !this.tagToggle
+    },
+
     deleteTag (tag) {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
@@ -355,8 +362,4 @@ export default {
 };
 </script>
 
-<style scoped>
-button {
-  background-color: #f9e7e7;
-}
-</style>
+<style></style>

@@ -23,7 +23,6 @@
       <h1>새로 작성해주세요!</h1>
     </div>
     <div v-if="last" class="feed-last">
-      <img src="https://img.icons8.com/ios/100/000000/sad-sun.png" />
       <h3>
         모든 피드를 확인했습니다. 새로운 피드를 작성해주세요.
       </h3>

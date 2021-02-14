@@ -238,8 +238,12 @@ export default {
       });
     },
     goToSetting() {
-      alert("setting 창으로 가기");
-      location.reload();
+      this.navslider = false;
+      this.$router.push({ name: "MyPageEdit" }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     goToLogout() {
       this.kakaoLogout().then(() => {
