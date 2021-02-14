@@ -10,6 +10,8 @@
           v-for="(subscriber, idx) in subscribedlist"
           :key="idx"
           :subscriber="subscriber"
+          @decrement="deleteSubscribe"
+          
         />
       </div>
     </div>
@@ -23,6 +25,11 @@ export default {
   props: {
     subscribedlist: Array,
   },
+  methods : {
+    deleteSubscribe() {
+      this.$emit('decrement')
+    }
+  }
 };
 </script>
 
