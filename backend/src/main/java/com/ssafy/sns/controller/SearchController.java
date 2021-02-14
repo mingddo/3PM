@@ -1,6 +1,7 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
+import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchResponseDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.jwt.JwtService;
@@ -76,4 +77,24 @@ public class SearchController {
 //    public ResponseEntity<List<SearchResponseDto>> searchGroup(@RequestParam("keyword") String keyword){
 //        return null;
 //    }
+
+    @ApiOperation("태그 자동 완성")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "hashtag", value = "해시태그 명", required = true),
+    })
+    @GetMapping("/auto/tag")
+    public ResponseEntity<List<SearchHashtagDto>> getAutoTag(@RequestParam("hashtag") String hashtag) {
+        HttpStatus status = HttpStatus.ACCEPTED;
+        List<SearchHashtagDto> result = null;
+        try {
+            result = searchService.hashtagautoComplete(hashtag);
+            logger.info("getAutoTag - 태그 자동완성 : {}", hashtag);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getAutoTag - 태그 자동완성 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(result, status);
+    }
 }
