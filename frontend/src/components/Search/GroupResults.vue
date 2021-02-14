@@ -75,11 +75,7 @@ export default {
 };
 </script>
 
-<style scoped>
-* {
-  box-sizing: border-box;
-}
-
+<style>
 .full-width {
   width: 100%;
 }
@@ -100,7 +96,7 @@ export default {
   width: 100%;
   height: 36px;
   padding: 0 16px;
-  margin-top: 20px;
+  margin-top: 10px;
   padding-bottom: 4px;
   font-size: 20px;
   font-weight: 700;

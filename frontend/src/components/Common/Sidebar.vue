@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="nav-logo">
-      <i class="far fa-clock">카테고리이름</i>
+      카테고리이름
     </div>
     <div class="nav-toggle-switch">
       <div style="padding-right : 15px;">
@@ -15,22 +15,82 @@
     </div>
     <div class="nav-content" v-if="userStatus">
       <div @click="goToPersonal">
-        <i class="fas fa-house-user">꽃보다 집</i>
+        <img
+          src="@/assets/img/indoor.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          꽃보다 집
+        </span>
+      </div>
+      <div @click="goToHack">
+        <img
+          src="@/assets/img/hackinsider.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          핵인싸
+        </span>
       </div>
       <div @click="goToChungSan">
-        <i class="fas fa-route">청산별곡</i>
+        <img
+          src="@/assets/img/chungsan2.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          청산별곡
+        </span>
+      </div>
+      <div @click="goToWH">
+        <img
+          src="@/assets/img/workerholic2.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          워커홀릭
+        </span>
       </div>
       <div @click="goToSearch">
-        <i class="fas fa-search">검색</i>
+        <img
+          src="@/assets/searching.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          검색
+        </span>
       </div>
       <div @click="goToProfile">
-        <i class="fas fa-user">프로필</i>
+        <img
+          src="@/assets/img/profileM.svg"
+          alt=""
+          width="20%"
+          height="100%"
+          style="margin:0 10px"
+        />
+        <span>
+          프로필
+        </span>
       </div>
       <div @click="goToSetting">
-        <i class="fas fa-cog">설정 변경</i>
+        설정 변경
       </div>
       <div @click="goToLogout">
-        <i class="fas fa-sign-out-alt">로그아웃</i>
+        로그아웃
       </div>
     </div>
 
@@ -41,22 +101,22 @@
           카테고리이름
         </div>
         <div @click="onClickSidebarPersonal">
-          <i class="sidebar-fas fas fa-house-user">꽃보다 집</i>
+          꽃보다 집
         </div>
         <div @click="onClickSidebarChungSan">
-          <i class="sidebar-fas fas fa-route">청산별곡</i>
+          청산별곡
         </div>
         <div @click="onClickSidebarSearch">
-          <i class="sidebar-fas fas fa-search">검색</i>
+          검색
         </div>
         <div @click="onClickSidebarProfile">
-          <i class="sidebar-fas fas fa-user">프로필</i>
+          프로필
         </div>
         <div @click="onClickSidebarSetting">
-          <i class="sidebar-fas fas fa-cog">설정 변경</i>
+          설정 변경
         </div>
         <div @click="onClickSidebarLogout">
-          <i class="sidebar-fas fas fa-sign-out-alt">로그아웃</i>
+          로그아웃
         </div>
       </div>
     </div>
@@ -72,9 +132,7 @@ export default {
       toggleStatus: false,
     };
   },
-  created () {
-
-  },
+  created() {},
   methods: {
     ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
     sideBarToggle(e) {
@@ -133,9 +191,27 @@ export default {
           }
         });
     },
-    goToChungSan() {
+    goToHack() {
       this.$router
         .push({ name: "NewsfeedPersonal", query: { Category: "2" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToChungSan() {
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "3" } })
+        .catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
+    },
+    goToWH() {
+      this.$router
+        .push({ name: "NewsfeedPersonal", query: { Category: "4" } })
         .catch((err) => {
           if (err.name === "NavigationDuplicated") {
             location.reload();
@@ -150,14 +226,13 @@ export default {
       });
     },
     goToSetting() {
-      alert('setting 창으로 가기')
+      alert("setting 창으로 가기");
       location.reload();
     },
     goToLogout() {
-      this.kakaoLogout()
-      .then(()=> {
-        this.$router.push({ name: "Home" })
-      })
+      this.kakaoLogout().then(() => {
+        this.$router.push({ name: "Home" });
+      });
     },
     onClickSidebarPersonal(e) {
       this.sideBarToggle(e);
@@ -182,7 +257,6 @@ export default {
             }
           });
       }, 10);
-
     },
     onClickSidebarHome(e) {
       this.sideBarToggle(e);
@@ -223,15 +297,14 @@ export default {
     onClickSidebarSetting(e) {
       this.sideBarToggle(e);
       setTimeout(() => {
-        alert('setting 창으로 가기')
+        alert("setting 창으로 가기");
         location.reload();
       }, 10);
     },
     onClickSidebarLogout() {
-      this.kakaoLogout()
-      .then(()=> {
-        this.$router.push({ name: "Home" })
-      })
+      this.kakaoLogout().then(() => {
+        this.$router.push({ name: "Home" });
+      });
     },
     kakaoLogout() {
       return new Promise((resolve) => {
@@ -240,10 +313,10 @@ export default {
           this.setAuthToken(null);
           this.setKakaoId(null);
           this.setUserStatus(null);
-          alert('logout')
-          resolve()
+          alert("logout");
+          resolve();
         });
-      })
+      });
     },
   },
   computed: {

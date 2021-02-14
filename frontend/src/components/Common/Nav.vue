@@ -32,32 +32,37 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  name: 'Nav',
+  name: "Nav",
   data() {
-    return {
-      
-    };
+    return {};
   },
   methods: {
-    goToHome () {
-      this.$router.push({name: 'Home'})
+    goToHome() {
+      this.$router.push({ name: "Home" });
     },
-    goToSearch () {
-      this.$router.push({name: 'Search'})
+    goToSearch() {
+      this.$router.push({
+        name: "Search",
+        params: { filter: "all" },
+        query: { query: "" },
+      });
     },
-    goToPersonal () {
-      this.$router.push({name: 'NewsfeedPersonal', query: { Category: '꽃보다 집'}})
+    goToPersonal() {
+      this.$router.push({
+        name: "NewsfeedPersonal",
+        query: { Category: "꽃보다 집" },
+      });
     },
-    goToProfile () {
-      this.$router.push({name: 'MyPage'})
+    goToProfile() {
+      this.$router.push({ name: "MyPage" });
     },
   },
-  computed : {
+  computed: {
     ...mapState({
-      userStatus : (state) => state.userStatus,
-    })
+      userStatus: (state) => state.userStatus,
+    }),
   },
 };
 </script>
@@ -90,7 +95,6 @@ export default {
 }
 .nav-content > div:hover {
   border-radius: 5px;
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
-
 </style>

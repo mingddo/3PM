@@ -1,22 +1,43 @@
 <template>
   <div>
-    <div>
-      <Sidebar/>
+    <div
+      class="newsfeed-header"
+      :style="{
+        background:
+          `linear-gradient(to right, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(` +
+          headerImg +
+          `)`,
+      }"
+    >
+      <NewsFeedHeader :Category="Category" />
     </div>
-      <div class="newsfeed-header" >
-        <NewsFeedHeader :Category="Category" />
-      </div>
+    <div class="newsfeed-body">
+      <Sidebar />
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-        <WorkerHolicBanner v-if="Category == 4"/>
-        <MountainBanner v-else-if="Category == 3"/>
+        <WorkerHolicBanner v-if="Category == 4" />
+        <MountainBanner v-else-if="Category == 3" />
         <!-- <NewsFeedRecommend :reco="reco" :Category="Category" /> -->
         <!-- 임시로 자리차지하기 -->
-        <div v-else> 
-          <p style="padding-top : 40px; padding-bottom:40px; text-align :center;">박수를 가장 많이 받은 게시물</p>
-          <p style="display:flex;justify-content:center;align-items:center;height:240px;background-color:rgba(0,0,0,0.5)">캐러셀이 있는 장소</p>
+        <div class="newsfeed-recommend-place" v-else>
+          <p
+            style="padding-top : 40px; padding-bottom:40px; text-align :center;"
+          >
+            박수를 가장 많이 받은 게시물
+          </p>
+          <p
+            style="display:flex;justify-content:center;align-items:center;height:240px;background-color:rgba(0,0,0,0.5);border-radius:5px;"
+          >
+            캐러셀이 있는 장소
+          </p>
         </div>
-        <NewsFeedList :feed="feed" :Category="Category" :last="last" :next="next" />
+        <NewsFeedList
+          :feed="feed"
+          :Category="Category"
+          :last="last"
+          :next="next"
+        />
       </div>
+    </div>
   </div>
 </template>
 
@@ -26,8 +47,8 @@ import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 // import NewsFeedRecommend from "../../components/NewsFeed/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
 import { feedList } from "@/api/feed.js";
-import WorkerHolicBanner from '../../components/NewsFeed/Recommend.vue/WorkerHolicBanner.vue';
-import MountainBanner from '../../components/NewsFeed/Recommend.vue/MountainBanner.vue';
+import WorkerHolicBanner from "../../components/NewsFeed/Recommend.vue/WorkerHolicBanner.vue";
+import MountainBanner from "../../components/NewsFeed/Recommend.vue/MountainBanner.vue";
 
 export default {
   name: "NewsfeedPersonal",
@@ -48,12 +69,26 @@ export default {
       page: 0,
       last: false,
       next: false,
+      scrolled: false,
+      didScroll: false,
+      lastScrollTop: 0,
+      delta: 5,
+      navbarHeight: 70,
+      headerImg:
+        "https://cdn.pixabay.com/photo/2017/08/02/01/29/lifestyle-2569543_960_720.jpg",
+
+      headerImgs: [
+        "https://cdn.pixabay.com/photo/2017/08/02/01/29/lifestyle-2569543_960_720.jpg",
+        "",
+        "https://cdn.pixabay.com/photo/2020/03/03/20/31/boat-4899802_1280.jpg",
+        "https://cdn.pixabay.com/photo/2014/07/06/13/55/calculator-385506_1280.jpg",
+      ],
     };
   },
   methods: {
     setFeedList() {
       if (this.$route.query.Category == 1) {
-        this.Category = 1
+        this.Category = 1;
         feedList(
           this.page,
           (res) => {
@@ -72,13 +107,13 @@ export default {
           }
         );
       } else if (this.$route.query.Category == 2) {
-        this.Category = 2
+        this.Category = 2;
         // 핵인싸 axios Get 무한스크롤 요청보내기
       } else if (this.$route.query.Category == 3) {
-        this.Category = 3
+        this.Category = 3;
         // 청산별곡 axios Get 무한스크롤 요청보내기
       } else if (this.$route.query.Category == 4) {
-        this.Category = 4
+        this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
       }
     },
@@ -87,7 +122,7 @@ export default {
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
         let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
-
+        this.Interval();
         if (
           !this.next &&
           !this.last &&
@@ -100,17 +135,49 @@ export default {
         }
       });
     },
+    Interval() {
+      this.didScroll = true;
+      setInterval(() => {
+        if (this.didScroll) {
+          this.hasScrolled();
+          this.didScroll = false;
+        }
+      }, 250);
+    },
+    hasScrolled() {
+      let st = window.scrollY;
+      if (Math.abs(this.lastScrollTop - st) <= this.delta) {
+        return;
+      }
+      if (st > this.lastScrollTop && st > this.navbarHeight) {
+        this.scrolled = true;
+      } else {
+        if (st + window.innerHeight < document.body.scrollHeight) {
+          this.scrolled = false;
+        }
+      }
+      this.lastScrollTop = st;
+    },
+    checkImageNum() {
+      if (this.Category === 1) {
+        this.headerImg = this.headerImgs[0];
+      } else if (this.Category === 2) {
+        this.headerImg = this.headerImgs[1];
+      } else if (this.Category === 3) {
+        this.headerImg = this.headerImgs[2];
+      } else if (this.Category === 4) {
+        this.headerImg = this.headerImgs[3];
+      }
+    },
   },
   created() {
     this.setFeedList();
   },
   mounted() {
     this.setScroll();
+    this.checkImageNum();
   },
 };
 </script>
 
-<style>
-
-
-</style>
+<style></style>

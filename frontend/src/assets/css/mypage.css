@@ -1,4 +1,3 @@
-
 /* mypage */
 .myPageHeaderFrame {
   width: 100%;
@@ -24,7 +23,7 @@
 .profileInfo1 h1 {
   width: 100%;
   text-align: center;
-  margin : 5px;
+  margin: 5px;
 }
 .myPageInroduce {
 }
@@ -38,7 +37,7 @@
   background-color: #e4e6e9;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  margin : 15px;
+  margin: 15px;
 }
 
 .myPageSubscribed {
@@ -156,7 +155,6 @@
   width: 100%;
   height: auto;
   padding: 15px 0;
-  background-color: #f0f2f5;
 }
 
 .myPagearticle {
@@ -170,14 +168,12 @@
 }
 
 .myPagemainSection {
-  position: absolute;
-  top: 80px;
+  width: 70%;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  left : 350px;
-  right : 50px;
 }
 .profileImgFrame {
   margin: 5px;
@@ -195,7 +191,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  
 }
 
 /* activity */

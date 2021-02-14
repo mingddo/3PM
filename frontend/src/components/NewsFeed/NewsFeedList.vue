@@ -1,9 +1,13 @@
 <template>
   <section class="feed-list-frame">
     <div class="feed-create-btn-place">
-      <i class="fas fa-plus feed-create-btn" @click="goToCreateForm"
-        >글쓰기</i
-      >
+      <!-- <i class="fas fa-plus feed-create-btn" @click="goToCreateForm">글쓰기</i> -->
+      <img
+        class="feed-create-btn"
+        src="@/assets/img/write.svg"
+        alt=""
+        @click="goToCreateForm"
+      />
     </div>
     <div v-if="feed">
       <Feed
@@ -64,5 +68,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

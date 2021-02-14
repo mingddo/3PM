@@ -1,154 +1,155 @@
 <template>
   <div>
-    <Sidebar />
-
-    <section class="myPagemainSection">
-      <header class="myPageHeaderFrame">
-        <div class="myPageHeader">
-          <!-- 프로필 정보들 -->
-          <div class="profileInfo1">
-            <!-- 커버사진 및 본인 프로필 사진, 이름 -->
-            <div class="profileImgFrame">
-              <img
-                v-if="profileinfo.user_img"
-                class="pofileImg"
-                :src="
-                  `https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`
-                "
-                alt="프로필사진"
-              />
-              <img
-                v-else
-                class="pofileImg"
-                src="http://www.topstarnews.net/news/photo/201903/598316_280802_2053.jpg"
-                alt="프로필사진"
-              />
-            </div>
-            <h1>{{ profileinfo.username }}</h1>
-            <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
-            <div
-              :class="[!mypage ? '' : 'profile_none']"
-              class="myPageSubscribe"
-            >
-              <div
-                :class="{ profielSubscribedNone: subscribed }"
-                class="myPageSubscribed"
-                @click="followToggle"
-              >
-                {{ profileinfo.username }}님의 소식 받기
+    <div class="newsfeed-body">
+      <Sidebar />
+      <section class="myPagemainSection">
+        <header class="myPageHeaderFrame">
+          <div class="myPageHeader">
+            <!-- 프로필 정보들 -->
+            <div class="profileInfo1">
+              <!-- 커버사진 및 본인 프로필 사진, 이름 -->
+              <div class="profileImgFrame">
+                <img
+                  v-if="profileinfo.user_img"
+                  class="pofileImg"
+                  :src="
+                    `https://dtbqjjy7vxgz8.cloudfront.net/${profileinfo.user_img}`
+                  "
+                  alt="프로필사진"
+                />
+                <img
+                  v-else
+                  class="pofileImg"
+                  src="http://www.topstarnews.net/news/photo/201903/598316_280802_2053.jpg"
+                  alt="프로필사진"
+                />
               </div>
+              <h1>{{ profileinfo.username }}</h1>
+              <div class="myPageInroduce">{{ profileinfo.introduce }}</div>
               <div
-                :class="{ profielSubscribedNone: !subscribed }"
-                class="myPageSubscribed"
-                @click="followToggle"
+                :class="[!mypage ? '' : 'profile_none']"
+                class="myPageSubscribe"
               >
-                {{ profileinfo.username }}님의 소식 끊기
+                <div
+                  :class="{ profielSubscribedNone: subscribed }"
+                  class="myPageSubscribed"
+                  @click="followToggle"
+                >
+                  {{ profileinfo.username }}님의 소식 받기
+                </div>
+                <div
+                  :class="{ profielSubscribedNone: !subscribed }"
+                  class="myPageSubscribed"
+                  @click="followToggle"
+                >
+                  {{ profileinfo.username }}님의 소식 끊기
+                </div>
+              </div>
+            </div>
+
+            <div class="profileInfoDetailFrame">
+              <div class="profileInfoDetail">
+                <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
+                <div class="profileDetailInfo">
+                  <h3 :class="{ profile_none: mypage }">
+                    <!-- {{ profileinfo.username }}님이 구독한 사람 -->
+                    팔로우
+                  </h3>
+                  <!-- <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3> -->
+                  <h3 :class="{ profile_none: !mypage }">팔로우</h3>
+                  <div>{{ profileinfo.fromMeToOthersCnt }}</div>
+                </div>
+                <div class="profileDetailInfo">
+                  <h3 :class="{ profile_none: mypage }">
+                    <!-- {{ profileinfo.username }}님을 구독한 사람 -->
+                    팔로잉
+                  </h3>
+                  <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
+                  <h3 :class="{ profile_none: !mypage }">팔로잉</h3>
+                  <div>{{ profileinfo.toMeFromOthersCnt }}</div>
+                </div>
+                <div class="profileDetailInfo">
+                  <h3 :class="{ profile_none: mypage }">
+                    <!-- {{ profileinfo.username }}님이 가입한 그룹 -->
+                    가입한 그룹
+                  </h3>
+                  <!-- <h3 :class="{ profile_none: !mypage }">내가 가입한 그룹</h3> -->
+                  <h3 :class="{ profile_none: !mypage }">가입한 그룹</h3>
+                  <div>{{ profileinfo.groupCnt }}</div>
+                </div>
+              </div>
+              <hr class="myPageHeaderhr" />
+              <div class="myPageBottom">
+                <div class="myPageTabLink">
+                  <div class="myPageTabLinkContent">
+                    <a
+                      @click.prevent="activetab = 1"
+                      :class="[activetab === 1 ? 'active' : '']"
+                      >게시물</a
+                    >
+                    <div
+                      :class="[activetab === 1 ? 'active' : '']"
+                      class="activeBar"
+                    ></div>
+                  </div>
+                  <div class="myPageTabLinkContent">
+                    <a
+                      @click.prevent="activetab = 3"
+                      :class="[activetab === 3 ? 'active' : '']"
+                      >구독자</a
+                    >
+                    <div
+                      :class="[activetab === 3 ? 'active' : '']"
+                      class="activeBar"
+                    ></div>
+                  </div>
+                  <div class="myPageTabLinkContent">
+                    <a
+                      @click.prevent="activetab = 4"
+                      :class="[activetab === 4 ? 'active' : '']"
+                      >그룹</a
+                    >
+                    <div
+                      :class="[activetab === 4 ? 'active' : '']"
+                      class="activeBar"
+                    ></div>
+                  </div>
+                  <div v-if="mypage" class="myPageTabLinkContent">
+                    <a
+                      @click.prevent="activetab = 2"
+                      :class="[activetab === 2 ? 'active' : '']"
+                      >최근 활동</a
+                    >
+                    <div
+                      :class="[activetab === 2 ? 'active' : '']"
+                      class="activeBar"
+                    ></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="profileInfoDetailFrame">
-            <div class="profileInfoDetail">
-              <!-- 팔로우, 팔로윙, 그룹, ... 프로필 수정하기 버튼 -->
-              <div class="profileDetailInfo">
-                <h3 :class="{ profile_none: mypage }">
-                  <!-- {{ profileinfo.username }}님이 구독한 사람 -->
-                  팔로우
-                </h3>
-                <!-- <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3> -->
-                <h3 :class="{ profile_none: !mypage }">팔로우</h3>
-                <div>{{ profileinfo.fromMeToOthersCnt }}</div>
-              </div>
-              <div class="profileDetailInfo">
-                <h3 :class="{ profile_none: mypage }">
-                  <!-- {{ profileinfo.username }}님을 구독한 사람 -->
-                  팔로잉
-                </h3>
-                <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
-                <h3 :class="{ profile_none: !mypage }">팔로잉</h3>
-                <div>{{ profileinfo.toMeFromOthersCnt }}</div>
-              </div>
-              <div class="profileDetailInfo">
-                <h3 :class="{ profile_none: mypage }">
-                  <!-- {{ profileinfo.username }}님이 가입한 그룹 -->
-                  가입한 그룹
-                </h3>
-                <!-- <h3 :class="{ profile_none: !mypage }">내가 가입한 그룹</h3> -->
-                <h3 :class="{ profile_none: !mypage }">가입한 그룹</h3>
-                <div>{{ profileinfo.groupCnt }}</div>
-              </div>
-            </div>
-            <hr class="myPageHeaderhr" />
-            <div class="myPageBottom">
-              <div class="myPageTabLink">
-                <div class="myPageTabLinkContent">
-                  <a
-                    @click.prevent="activetab = 1"
-                    :class="[activetab === 1 ? 'active' : '']"
-                    >게시물</a
-                  >
-                  <div
-                    :class="[activetab === 1 ? 'active' : '']"
-                    class="activeBar"
-                  ></div>
-                </div>
-                <div class="myPageTabLinkContent">
-                  <a
-                    @click.prevent="activetab = 3"
-                    :class="[activetab === 3 ? 'active' : '']"
-                    >구독자</a
-                  >
-                  <div
-                    :class="[activetab === 3 ? 'active' : '']"
-                    class="activeBar"
-                  ></div>
-                </div>
-                <div class="myPageTabLinkContent">
-                  <a
-                    @click.prevent="activetab = 4"
-                    :class="[activetab === 4 ? 'active' : '']"
-                    >그룹</a
-                  >
-                  <div
-                    :class="[activetab === 4 ? 'active' : '']"
-                    class="activeBar"
-                  ></div>
-                </div>
-                <div v-if="mypage" class="myPageTabLinkContent">
-                  <a
-                    @click.prevent="activetab = 2"
-                    :class="[activetab === 2 ? 'active' : '']"
-                    >최근 활동</a
-                  >
-                  <div
-                    :class="[activetab === 2 ? 'active' : '']"
-                    class="activeBar"
-                  ></div>
-                </div>
-              </div>
-            </div>
+        </header>
+        <article class="myPagearticleFrame">
+          <div class="myPagearticle">
+            <!-- 최근활동 -->
+            <section v-if="activetab === 1" class="myPageActivity">
+              <NewsFeedList :feed="feed" :last="last" />
+            </section>
+            <section v-if="activetab === 2" class="myPageActivity">
+              <Activity :activities="activities" />
+            </section>
+            <section v-if="activetab === 3" class="myPageActivity">
+              <SubscribedList :subscribedlist="subscribedlist" />
+            </section>
+            <section v-if="activetab === 4" class="myPageActivity">
+              <GroupList :grouplist="grouplist" />
+            </section>
+            <!-- 피드 -->
           </div>
-        </div>
-      </header>
-      <article class="myPagearticleFrame">
-        <div class="myPagearticle">
-          <!-- 최근활동 -->
-          <section v-if="activetab === 1" class="myPageActivity">
-            <NewsFeedList :feed="feed" :last="last" />
-          </section>
-          <section v-if="activetab === 2" class="myPageActivity">
-            <Activity :activities="activities" />
-          </section>
-          <section v-if="activetab === 3" class="myPageActivity">
-            <SubscribedList :subscribedlist="subscribedlist" />
-          </section>
-          <section v-if="activetab === 4" class="myPageActivity">
-            <GroupList :grouplist="grouplist" />
-          </section>
-          <!-- 피드 -->
-        </div>
-      </article>
-    </section>
+        </article>
+      </section>
+    </div>
   </div>
 </template>
 
