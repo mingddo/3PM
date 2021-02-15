@@ -34,7 +34,11 @@ export default {
       if (this.Category == 4) {
         this.title = '취업 정보, 한눈👁‍🗨에 보기'
       } else if (this.Category == 2) {
-        this.title = `살어리 살어리랏다 ${this.placeName}에 살어리랏다`
+        this.title = `핵인싸`
+      } else if (this.Category == 3) {
+        this.title = `청산별곡`
+      } else if (this.Categpry == 1) {
+        this.title = `베스트`
       }
     },
   },

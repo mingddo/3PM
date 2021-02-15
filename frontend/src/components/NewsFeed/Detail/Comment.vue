@@ -26,6 +26,7 @@
           :id="id"
           :Category="Category"
           @pushUserToComment="pushUserToComment"
+          @unshiftComment="unshiftComment"
         />
         <hr>
       </div>
@@ -38,10 +39,11 @@
 
 <script>
 import '@/assets/css/mention.css'
-import { mapState } from 'vuex'
 import { Mentionable } from 'vue-mention'
+import { mapState } from 'vuex'
 import { commentList } from '@/api/comment.js'
 import { createComment } from '@/api/comment.js'
+import { searchAutoUser } from '@/api/comment.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
 export default {
@@ -64,6 +66,7 @@ export default {
       comments: [],
       page: 0,
       last: false,
+      delIdx: null,
     };
   },
   mounted() {
@@ -73,6 +76,28 @@ export default {
     this.setComment(0);
   },
   methods: {
+    unshiftComment (commentId) {
+      this.delIdx = this.comments.findIndex((item) => {
+        return item.id == commentId
+      })
+      console.log('삭제', this.delIdx)
+      this.comments = this.comments.splice(this.delIdx, 1)
+    },
+    iSound(a) {
+      let r = ((a.charCodeAt(0) - parseInt('0xac00', 16)) / 28 / 21);
+      let t = String.fromCharCode(r + parseInt('0x1100',16));
+      return t
+    },
+    mSound(a) {
+      let r = ((a.charCodeAt(0) - parseInt('0xac00',16)) / 28) % 21;
+      let t = String.fromCharCode(r + parseInt('0x1161',16));
+      return t;
+    },
+    tSound(a) {
+      let r = (a.charCodeAt(0) - parseInt('0xac00',16)) % 28;
+      let t = String.fromCharCode(r + parseInt('0x11A8') - 1);
+      return t;
+    },
     createComment () {
       if (!this.commentInput) {
         alert('내용을 입력해주세요')
@@ -163,10 +188,20 @@ export default {
         let saveMention = mentionedUser.split(' ')
         if (saveMention.length > 1 || e.code == 'Space' || e.code == 'Enter') {
           this.auto = false;
-        } else if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+        } else if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "ArrowLeft" && e.key !== "ArrowRight" && mentionedUser) {
+          // console.log('api요청 단어', this.iSound(mentionedUser), this.mSound(mentionedUser), this.tSound(mentionedUser))
           console.log('api요청 단어', mentionedUser)
           // mentionedUser 을 db에 요청하여, 관련된 문자로 시작되는 단어 리스트를 받아 this.itmes 에 저장한다.
           // 현재는 백 api가 설정되어있지 않으므로 items를 직접 설정한다.
+          searchAutoUser(
+            mentionedUser,
+            (res) => {
+              console.log(res)
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
           this.items = [
             {
               value: '1',

@@ -3,6 +3,7 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div class="newsfeed">
+        <GroupNav v-if="Category == 2" :isHome="true"/>
         <section v-if="fd" v-cloak class="feed-detail">
           <div class="feed-detail-userprofile">
             <div class="feed-detail-userprofile-box">
@@ -35,12 +36,10 @@
           </div>
 
           <article class="feed-detail-content-box">
-            <div v-if="fd.file">
-              <img
-                :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`"
-                alt="업로드 파일"
-                class="feed-detail-img"
-              />
+            <div v-if="fd.files.length != 0">
+              <div v-for="(file, idx) in fd.files" :key="idx">
+                <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" class="feed-detail-img" alt="업로드 파일">
+              </div>
             </div>
             <div v-if="Category == 2 || Category == 3">
               위치정보!
@@ -76,8 +75,8 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
-              <i class="far fa-thumbs-up"></i>
-              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span> <span v-else> 0</span>
+              <img :src="fd.clap ? 'https://img.icons8.com/fluent-systems-filled/17/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/17/000000/applause.png'"/>
+              <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
           </span>
           <span>
             <i class="far fa-comment"></i>
@@ -122,6 +121,7 @@ import ModiAndDelete from '../../components/NewsFeed/Detail/ModiAndDelete.vue';
 import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
 import Location from '../../components/NewsFeed/Detail/Location.vue';
 import Comment from '../../components/NewsFeed/Detail/Comment.vue'
+import GroupNav from '../../components/GroupFeed/GroupNav.vue'
 
 export default {
   name: "NewsfeedDetail",
@@ -132,7 +132,8 @@ export default {
     ModiAndDelete,
     UserInfoBtn,
     Location,
-    Comment
+    Comment,
+    GroupNav
   },
   data() {
     return {
@@ -161,7 +162,7 @@ export default {
       clapFeedList(
         this.fd.id,
         (res) => {
-          this.clapedUsers = res.data.users;
+          this.clapedUsers = res.data.user;
           console.log(this.clapedUsers);
         },
         (err) => {

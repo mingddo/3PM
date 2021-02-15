@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Sidebar />
-    <div class="newsfeed-header" >
-      <NewsFeedHeader :Category="3"/>
-    </div>
-    <div class="group-detail">
-      <GroupRecommend />
-      <div class="group-create-btn" @click="goto_create_group">그룹 만들기</div>
-      <!-- <GroupCard v-for="(group, idx) in groupList" :key="idx" :group="group"/> -->
-      <hr>
-      <section class="group-page-content">
-        <div class="group-page-content-header">내 그룹</div>
-        <GroupJoined v-if="groupList.length != 0" :groupList="groupList"/>
-        <GroupNotFound v-else/>
-      </section>
+    <div class="newsfeed-body">
+      <Sidebar />
+      <div class="group-detail">
+        <GroupNav :isHome="false"/>
+        <GroupRecommend />
+        <div class="group-create-btn" @click="goto_create_group">그룹 만들기</div>
+        <!-- <GroupCard v-for="(group, idx) in groupList" :key="idx" :group="group"/> -->
+        <hr>
+        <section class="group-page-content">
+          <div class="group-page-content-header">내 그룹</div>
+          <GroupJoined v-if="groupList.length != 0" :groupList="groupList"/>
+          <GroupNotFound v-else/>
+        </section>
+      </div>
     </div>
   </div>
 </template>
@@ -24,9 +24,9 @@ import GroupRecommend from "@/components/GroupFeed/GroupRecommend.vue";
 import GroupJoined from '../../components/GroupFeed/GroupJoined.vue';
 import GroupNotFound from '../../components/GroupFeed/GroupNotFound.vue';
 import Sidebar from '../../components/Common/Sidebar.vue';
-import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
+import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 export default {
-  components: { GroupRecommend, GroupJoined, GroupNotFound, Sidebar, NewsFeedHeader },
+  components: { GroupRecommend, GroupJoined, GroupNotFound, Sidebar, GroupNav },
   data() {
     return {
       // groups: [{}, {}, {}, {}],

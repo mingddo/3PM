@@ -2,6 +2,10 @@ import { AuthorizationInstance } from './index.js'
 
 const instance = AuthorizationInstance();
 
+
+// 댓글 crud
+
+// r
 function commentList(id, num, success, fail) {
   instance
     .get(`indoors/${id}/comments`, {
@@ -13,6 +17,7 @@ function commentList(id, num, success, fail) {
     .catch(fail);
 }
 
+// c
 function createComment(id, comment, success, fail) {
   instance
     .post(`indoors/${id}/comments`, comment)
@@ -20,6 +25,19 @@ function createComment(id, comment, success, fail) {
     .catch(fail);
 }
 
+// 멘션
+function searchAutoUser(key, success, fail) {
+  instance
+    .get(`search/auto/tag`, {
+      params: {
+        nickname: key,
+      }
+    })
+    .then(success)
+    .catch(fail)
+}
+
+// u
 function updateComment(id, commentId, comment, success, fail) {
   instance
     .put(`indoors/${id}/comments/${commentId}`, comment)
@@ -27,6 +45,7 @@ function updateComment(id, commentId, comment, success, fail) {
     .catch(fail);
 }
 
+// d
 function deleteComment(id, commentId, success, fail) {
   instance
     .delete(`indoors/${id}/comments/${commentId}`)
@@ -34,9 +53,17 @@ function deleteComment(id, commentId, success, fail) {
     .catch(fail);
 }
 
+// 박수
 function clapComment(commentId, success, fail) {
   instance
     .post(`indoors/comments/${commentId}/claps`)
+    .then(success)
+    .catch(fail);
+}
+
+function clapList(commentId, success, fail) {
+  instance
+    .get(`indoors/comments/${commentId}/claps`)
     .then(success)
     .catch(fail);
 }
@@ -46,5 +73,7 @@ export {
   createComment,
   updateComment,
   deleteComment,
-  clapComment
+  clapComment,
+  clapList,
+  searchAutoUser
 }

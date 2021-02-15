@@ -19,9 +19,16 @@ function getGroupDetail(group_id, success, fail) {
 
 function getGroupfeeds(group_id, success, fail) {
   instance
-  .get(`groups/${group_id}`)
+  .get(`groups/${group_id}/feeds`)
   .then(success)
   .catch(fail)
+}
+
+function getGroupfeedsDetail(group_id, feed_id, success, fail) {
+  instance
+    .get(`groups/${group_id}/feeds/${feed_id}`)
+    .then(success)
+    .catch(fail)
 }
 
 // post 요청
@@ -39,18 +46,25 @@ function createGroupFeed(group_id, group_feed, success, fail) {
   .catch(fail)
 }
 
+function uploadGroupFile(group_id, feed_id, file, success, fail) {
+  instance
+    .post(`groups/${group_id}/feeds/${feed_id}`, file)
+    .then(success)
+    .catch(fail)
+}
+
 function createGroupImg(group_id, group_img, success, fail) {
   instance
-  .post(`groups/${group_id}/image`, group_img)
-  .then(success)
-  .catch(fail)
+    .post(`groups/${group_id}/image`, group_img)
+    .then(success)
+    .catch(fail)
 }
 
 function joinGroup(group_id, success, fail) {
   instance
-  .post(`groups/${group_id}/join`)
-  .then(success)
-  .catch(fail)
+    .post(`groups/${group_id}/join`)
+    .then(success)
+    .catch(fail)
 }
 
 // PUT 요청
@@ -71,28 +85,38 @@ function updateGroupFeed(group_id, group_feed_id, group_feed, success, fail) {
 // Delete요청
 function deleteGroup(group_id, success, fail) {
   instance
-  .delete(`groups/${group_id}`)
-  .then(success)
-  .catch(fail);
+    .delete(`groups/${group_id}`)
+    .then(success)
+    .catch(fail);
 }
 
-function secedeGroup(group_id, success, fail) {
+function deleteGroupFeed(group_id, feed_id, success, fail) {
   instance
-  .delete(`groups/${group_id}/members`)
-  .then(success)
-  .catch(fail);
+    .put(`groups/${group_id}/feeds/${feed_id}`)
+    .then(success)
+    .catch(fail);
+}
+
+function secedeGroup(group_id, feed_id, success, fail) {
+  instance
+    .delete(`groups/${group_id}/members`)
+    .then(success)
+    .catch(fail);
 }
 
 export{
   getAllGroup, 
   getGroupDetail, 
   getGroupfeeds, 
+  getGroupfeedsDetail,
   createGroup, 
   createGroupFeed, 
+  uploadGroupFile,
   createGroupImg, 
   joinGroup,
   updateGroupInfo,
   updateGroupFeed,
   deleteGroup,
+  deleteGroupFeed,
   secedeGroup,
 }
