@@ -6,6 +6,7 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div class="newsfeed newsfeed-form">
+        <GroupNav v-if="Category == 2" :isHome="true"/>
         <section class="newsfeed-form-content">
           <div class="newsfeed-form-profile">
             <div class="newsfeed-form-profile-img-space">
@@ -35,15 +36,21 @@
 
           <div class="newsfeed-form-tag-input-container">
             <div class="tag-input-frame">
-              <input
-                class="newsfeed-form-tag-input"
-                id="tags"
-                type="text"
-                placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
-                v-model.trim="inputTag"
-                @keyup.enter="addTag"
-              />
-              <i class="far fa-question-circle" @click="qtToggle"></i>
+                <Mentionable
+                  :keys="['#']"
+                  :items="items"
+                  offset="6"
+                >
+                  <input
+                    class="newsfeed-form-tag-input"
+                    id="tags"
+                    type="text"
+                    placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
+                    :value="inputTag"
+                    @keyup="autoTag"
+                  />
+                </Mentionable>
+                <i class="far fa-question-circle" @click="qtToggle"></i>
             </div>
             <div :class="[!tagToggle ? 'tag-describe' : 'tag-describe active']">
               태그가 무엇인가요? : 게시물을 표현할 수 있는 짧은 단어를 뜻합니다.
@@ -127,6 +134,7 @@
                 <img
                   class="newsfeed-form-img-prevbox-delbtn"
                   src="https://img.icons8.com/fluent/20/000000/close-window.png"
+                  @click="deleteImg(view)"
                 />
                 <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
                 <img :src="view" alt="미리보기 이미지" />
@@ -137,9 +145,7 @@
             </div>
           </div>
           <div class="newsfeed-form-submit-btn">
-            <button class="create-feed-btn" @click="createFeed">
-              작성하기
-            </button>
+            <button class="create-feed-btn" @click="createFeedNew">작성하기</button>
           </div>
         </section>
       </div>
@@ -149,11 +155,16 @@
 
 <script>
 // import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
+import '@/assets/css/mention.css'
+import { Mentionable } from 'vue-mention'
 import { createFeed } from '@/api/feed.js'
 import { updateFeed } from '@/api/feed.js'
+import { uploadFile } from '@/api/feed.js'
+import { searchAutoTag } from '@/api/feed.js'
 import { mapState } from 'vuex'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
+import GroupNav from '../../components/GroupFeed/GroupNav.vue'
 
 export default {
   name: 'NewsfeedForm',
@@ -161,6 +172,8 @@ export default {
     // NewsFeedHeader,
     Sidebar,
     Inputmap,
+    Mentionable,
+    GroupNav
   },
   data() {
     return {
@@ -169,7 +182,7 @@ export default {
       type: 'NEW',
       completed: false,
       select: false,
-      inputTag: "",
+      inputTag: "#",
       form: {
         tags: [],
         filePaths: [],
@@ -183,6 +196,8 @@ export default {
       groupList: [],
       location: null,
       showMap: false,
+      fileSelect : false,
+      items : []
     };
   },
   methods: {
@@ -207,21 +222,69 @@ export default {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
     },
-    addTag () {
-      if (!this.inputTag) {
+    deleteImg (view) {
+      console.log(view)
+      let check = this.previewUrl.findIndex(element => element === view)
+      this.previewUrl.splice(check, 1)
+      this.fileList.splice(check, 1)
+      console.log(this.fileList)
+    },
+    autoTag (e) {
+      this.inputTag = e.target.value;
+      let tmpTag = this.inputTag.split('#')[1]
+        tmpTag = tmpTag.replace(/ /g , '')
+      if (e.key == 'Enter' || e.code == 'Space') {
+        if (tmpTag) {this.addTag(tmpTag);}
+      } else if (e.code !== "ArrowDown" && e.code !== "ArrowUp" && e.code !== "ArrowLeft" && e.code !== "ArrowRight" && tmpTag) {
+        console.log('api요청', tmpTag)
+        // console.log('정상', e)
+        searchAutoTag(
+          tmpTag,
+          (res) => {
+            console.log(res)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+        this.items = [
+            {
+              value: '태그1',
+              label: '태그1 - 257명',
+            },
+            {
+              value: '택그2',
+              label: '택그2 - 237명',
+            },
+            {
+              value: '택으3',
+              label: '택으3 - 27명',
+            },
+            {
+              value: '태끄4',
+              label: '태끄4 - 217명',
+            },
+            {
+              value: '테그5',
+              label: '테그5 - 2명',
+            },
+          ]
+        }
+    },
+    addTag (t) {
+      if (!t) {
         alert('태그를 입력해주세요!')
       } else {
         if (this.form.tags) {
-
-          let check = this.form.tags.findIndex(element => element === this.inputTag)
+          let check = this.form.tags.findIndex(element => element === t)
           if (check !== -1) {
             alert('이미 존재하는 태그입니다')
           } else {
-            this.form.tags.push(this.inputTag);
+            this.form.tags.push(t);
           }
         }
       }
-      this.inputTag = '';
+      this.inputTag = '#';
     },
     setDefault () {
       this.Category = this.$route.query.Category
@@ -248,25 +311,35 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
-      this.form.filePaths.push(files.[0])
-      // this.fileList.push(files.[0])
-      // console.log(this.fileList)
       if (files.length) {
+        this.fileList.push(files[0])
+        this.fileSelect = true;
         this.selectedFile = files[0]
         console.log(this.selectedFile)
-        // this.imageUrl = URL.createObjectURL(this.form.file);
-        // console.log(this.imageUrl)
         let reader = new FileReader();
         reader.onload = (e) => {
-          // console.log(e.target.result)
           this.imageUrl = e.target.result;
           this.previewUrl.push(this.imageUrl)
         }
         reader.readAsDataURL(this.selectedFile);
       }
     },
-    async createFeed () {
-
+    imgUpload (id) {
+      for (let i of this.fileList) {
+        // console.log(i)
+        const formData = new FormData ();
+        formData.append('file', i)
+        uploadFile(
+          id,
+          formData,
+          {},
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
+    },
+    createFeedNew () {
       // const formData = new FormData ();
       // formData.append('content', this.form.content)
       // formData.append('file', this.fileList)
@@ -276,10 +349,18 @@ export default {
       if (this.type == 'NEW' || this.type == 'SHARE') {
         // axios create 요청
         if (this.Category == 1) {
-          await createFeed (
+          createFeed (
             this.form,
             (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              if (this.fileSelect) {
+                this.imgUpload(res.data);
+                alert('이미지 업로드 중입니다!')
+                setTimeout(() => {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+                }, 500);
+              } else {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              }
             },
             (err) => {
               console.log(err)
@@ -301,12 +382,13 @@ export default {
           // 404 페이지 이동
           alert('잘못된 접근입니다.')
         }
+
       } else {
         // axios put 요청
         if (this.userpk == this.$route.params.feed.user.id) {
           if (this.Category == 1) {
             console.log(this.$route.params.feed.id)
-            await updateFeed (
+            updateFeed (
               this.$route.params.feed.id,
               this.form,
               (res) => {
@@ -337,9 +419,6 @@ export default {
   created () {
     this.setDefault();
     // this.getLocation();
-  },
-  mounted () {
-    console.log(this)
   },
   beforeRouteLeave (to, from, next) {
     if (this.completed) {

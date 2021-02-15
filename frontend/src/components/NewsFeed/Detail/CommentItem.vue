@@ -44,7 +44,7 @@
             <span>{{ comment_info.clapCnt }}</span>
           <!-- </i> -->
         </div>
-        <div @click="mentionUSer">
+        <div v-if="comment.user.id != userpk" @click="mentionUSer">
           <span>{{ comment_info.user.nickname }} 님을 언급</span>
           <img src="https://img.icons8.com/metro/14/000000/very-popular-topic.png"/>
         </div>
@@ -131,11 +131,9 @@ export default {
         this.comment.id,
         () => {
           if (this.comment_info.clap) {
-            alert(`박수 끝~`)
             this.comment_info.clap = false;
             this.comment_info.clapCnt -= 1
           } else {
-            alert(`일동 박수~👏`)
             this.comment_info.clap = true;
             this.comment_info.clapCnt += 1
           }
@@ -160,6 +158,7 @@ export default {
             this.comment.id,
             (res) => {
               console.log('삭제', res)
+              this.$emit('unshiftComment', this.comment.id)
             },
             (err) => {
               console.log('삭제불가', err)

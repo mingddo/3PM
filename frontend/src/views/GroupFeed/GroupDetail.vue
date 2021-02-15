@@ -1,11 +1,9 @@
 <template>
   <div>
-    <Sidebar />
-      <div class="newsfeed-header" >
-        <NewsFeedHeader :Category="3"/>
-        
-      </div>
+    <div class="newsfeed-body" >
+        <Sidebar />
       <div class="group-detail">
+        <GroupNav :isHome="false"/>
         <div class="group-detail-header">
           <div class="group-detail-img-space">
             <img class="group-detail-img" src="https://picsum.photos/200" alt="">
@@ -44,6 +42,7 @@
           <NewsFeedList />
         </section>
       </div>
+    </div>
   </div>
 </template>
 
@@ -54,12 +53,12 @@ import { joinGroup } from '@/api/group.js'
 import { secedeGroup } from '@/api/group.js'
 import { getGroupDetail } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
-import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import GroupRecommend from '../../components/GroupFeed/GroupRecommend.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
+import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 
 export default {
-  components: { Sidebar, NewsFeedHeader, GroupRecommend, NewsFeedList },
+  components: { Sidebar, GroupRecommend, NewsFeedList, GroupNav },
   data() {
     return {
       isjoined: "false",
@@ -139,12 +138,9 @@ export default {
 
 <style>
 .group-detail {
-  position: absolute;
-  top: 80px;
-  left : 350px;
-  right : 50px;
+  width: 70%;
+  margin-top: 80px;
   border-radius: 50px;
-  background-color: white;
 }
 .group-detail-header {
   width: 90%;
@@ -205,8 +201,8 @@ export default {
 }
 @media screen and (max-width: 1050px) {
   .group-detail {
-    left: 0;
-    right: 0;
+    margin-top: 100px;
+    width: 100%;
   }
   .group-detail-join-btn {
     margin-left: 0;

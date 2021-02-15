@@ -37,11 +37,10 @@
     </div>
 
     <div class="feed-content-box">
-      <div v-if="fd.file" @click="goToDetail">
-        <img
-          :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.file}`"
-          alt="업로드 파일"
-        />
+      <div v-if="fd.files.length != 0" @click="goToDetail">
+        <div v-for="(file, idx) in fd.files" :key="idx">
+          <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" alt="업로드 파일">
+        </div>
       </div>
       <div v-else @click="goToDetail">
         <p v-html="content">

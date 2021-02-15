@@ -61,18 +61,24 @@ export default {
 
 <style>
 .newsfeed-like-list {
+  position: fixed;
   top: 0;
-  background-color: white;
-  padding: 5px;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
+  left: 0;
+  z-index: 10000;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .newsfeed-like-list-header {
   text-align: center;
   padding: 10px;
-  border-bottom: 5px double;
+  /* border-bottom: 5px double; */
+  background-color: white;
+  border-radius: 20px;
   /* box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); */
   /* background-color: rgba(0,0,0,0.2); */
 }
@@ -81,9 +87,11 @@ export default {
   font-size: 30px;
 }
 .newsfeed-like-list-body {
+  background-color: white;
   margin-top: 10px;
   overflow: scroll;
-  height: 80vh;
+  height: 60vh;
+  width: 80vh;
 }
 .newsfeed-like-list-user {
   padding: 10px;
@@ -96,10 +104,11 @@ export default {
   align-items: center;
 }
 .newsfeed-like-list-footer {
-  width: 100%;
+  width: 30vh;
   text-align: center;
-  position: sticky;
-  bottom: 0;
+  margin-top:10px;
+  /* position: sticky;
+  bottom: 0; */
 }
 .newsfeed-like-list-btn {
   margin: auto;
@@ -109,5 +118,11 @@ export default {
   width: 100%;
   z-index: 102;
   background-color: white;
+}
+@media screen and (max-width: 1050px) {
+  .newsfeed-like-list-body {
+    width: 100%;
+    height: 60vh;
+  }
 }
 </style>

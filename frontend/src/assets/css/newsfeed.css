@@ -37,14 +37,17 @@
   width: 100%;
 }
 .feed-detail-img {
+  padding: 20px;
   width: 100%;
 }
 .feed-detail-content {
+  background-color: #ffffff;
   text-align: left;
   width: 100%;
-  padding-left: 15px;
-  padding-right: 15px;
-  margin-top: 10px;
+  padding : 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 30px;
 }
 .feed-detail-modi-delete {
   margin: 10px;
