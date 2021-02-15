@@ -35,8 +35,20 @@ function searchuser(keyword,success,fail){
     .catch(fail)
 }
 
+function searchgroup(keyword,success,fail){
+  instance
+    .get(`search/group`, {
+      params: {
+        keyword: keyword
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+
 export {
   searchall,
   searchfeed,
-  searchuser
+  searchuser,
+  searchgroup
 }
