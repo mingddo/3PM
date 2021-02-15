@@ -1,5 +1,6 @@
 package com.ssafy.sns.repository;
 
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
@@ -21,6 +22,6 @@ public interface SearchRepository {
     public List<User> searchUsers(String keyword);
 
     // 검색 키워드를 통해 전체 유저 찾기
-//    public List<User> searchGroups(String keyword);
+    public List<Group> searchGroups(String keyword);
 
 }

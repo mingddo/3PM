@@ -1,14 +1,259 @@
 <template>
   <div class="mypageEdit">
-    <Practice />
+    <div v-if="editing">
+      <Practice
+        @edit_url="edit_url"
+        @endUrlEdit="endUrlEdit"
+        @previewURL="previewURL"
+      />
+    </div>
+    <div v-else>
+      <div>
+        내 정보 수정
+      </div>
+      <div class="profile-edit-img-frame">
+        <div v-if="!preview">
+          <img
+            v-if="userInfo.user_img"
+            :src="`https://dtbqjjy7vxgz8.cloudfront.net/${userInfo.user_img}`"
+            alt=""
+          />
+          <img v-else src="@/assets/img/profileM.svg" alt="" width="80px" />
+        </div>
+        <div v-else>
+          <img :src="preview_URL" alt="" />
+        </div>
+      </div>
+
+      <button @click="editing = true">프로필 이미지 수정</button>
+
+      <div v-if="!nicknameedit">
+        닉네임 : {{ userInfo.nickname }}
+        <button @click="nicknameedit = !nicknameedit">수정</button>
+      </div>
+
+      <div v-else>
+        <div>닉네임은 영어/한글/숫자 4자 이상 10자 이내로 입력 가능합니다.</div>
+        <input
+          v-model="nickname"
+          type="text"
+          placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력"
+        />
+        <button
+          @click="checkOverlap"
+          :disabled="!isPossibleName"
+          :class="{ disabledBtn: !isPossibleName }"
+        >
+          중복확인
+        </button>
+        <div class="signup-input">
+          <button
+            @click="changenickname"
+            :disabled="isOverlapped"
+            :class="{ disabledBtn: isOverlapped }"
+          >
+            닉네임 수정하기
+          </button>
+          <button @click="backtoEdit">돌아가기</button>
+        </div>
+      </div>
+      <hr />
+      <div>프로필 소개</div>
+      <div v-if="!introduceedit">
+        <div v-if="userInfo.introduce">{{ userInfo.introduce }}</div>
+        <div v-else>
+          프로필 소개가 아직 없습니다.
+        </div>
+        <button @click="introduceedit = !introduceedit">작성하기</button>
+      </div>
+      <div v-else>
+        <input type="text" v-model="introduce" />
+        <button @click="introgoback">돌아가기</button>
+        <button @click="saveintroduce">저장하기</button>
+      </div>
+      <button @click="EditProfile">저장하기</button>
+    </div>
   </div>
 </template>
 
 <script>
 import Practice from "../components/Practice.vue";
+import { userInfoDetail, editUserInfo } from "@/api/mypage.js";
+import { checkOverlapped } from "@/api/signup.js";
+
 export default {
   components: { Practice },
+  data() {
+    return {
+      editing: false,
+      nicknameedit: false,
+      introduceedit: false,
+      userInfo: {},
+      writeIntroduce: false,
+      changeURL: null,
+      preview_URL: null,
+      preview: false,
+      nickname: "",
+      isPossibleName: false,
+      isOverlapped: true,
+      introduce: "",
+    };
+  },
+  methods: {
+    introgoback() {
+      this.introduceedit = false;
+      this.introduce = this.userInfo.introduce;
+    },
+    saveintroduce() {
+      this.userInfo.introduce = this.introduce;
+      this.introduceedit = false;
+    },
+    changenickname() {
+      this.userInfo.nickname = this.nickname;
+      this.nicknameedit = false;
+    },
+    previewURL(a) {
+      this.preview_URL = a;
+      this.preview = true;
+    },
+    getUserProfileInfo() {
+      userInfoDetail(
+        this.$store.state.userId,
+        (res) => {
+          console.log("여기", res.data);
+          this.userInfo = res.data;
+          this.nickname = res.data.nickname;
+          this.introduce = res.data.introduce;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    backtoEdit() {
+      this.nicknameedit = false;
+      this.nickname = this.userInfo.nickname;
+    },
+    EditProfile() {
+      console.log("고고", this.changeURL);
+      const formData = new FormData();
+      formData.append("file", this.changeURL);
+      formData.append("nickname", this.userInfo.nickname);
+      formData.append("introduce", this.userInfo.introduce);
+      console.log(formData);
+      editUserInfo(
+        this.$store.state.userId,
+        formData,
+        (res) => {
+          console.log(res);
+          this.$router.push({
+            name: "MyPage",
+            query: { name: this.$store.state.userId },
+          });
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    edit_url(change_url) {
+      this.changeURL = change_url;
+    },
+    endUrlEdit(e) {
+      this.editing = e;
+    },
+    nicknameValidate() {
+      const nickname = this.nickname;
+      const nicknamePattern = /^[a-zA-Z0-9가-힣]{4,10}$/;
+      const patternCheck = nicknamePattern.test(nickname);
+      if (nickname.length >= 10 || !patternCheck) {
+        this.isPossibleName = false;
+      } else {
+        this.isPossibleName = true;
+      }
+    },
+    checkOverlap() {
+      console.log("중복 확인 들어온다");
+      // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
+      console.log(this.nickname);
+      if (this.userInfo.nickname === this.nickname) {
+        alert("현재 닉네임과 같습니다.");
+      } else {
+        checkOverlapped(
+          {
+            username: this.nickname,
+          },
+          (res) => {
+            console.log(res);
+            this.isOverlapped = res.data;
+            if (this.isOverlapped) {
+              alert("사용 불가능한 ❌❌ 아이디입니다");
+            } else {
+              alert("사용 가능한 ⭕⭕ 아이디입니다");
+            }
+          },
+          (err) => {
+            alert("err", err);
+          }
+        );
+      }
+    },
+  },
+  created() {
+    this.getUserProfileInfo();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.completed) {
+      next();
+    } else {
+      const answer = window.confirm(
+        "수정 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?"
+      );
+      if (answer) {
+        next();
+      } else {
+        next(false);
+      }
+    }
+  },
+  watch: {
+    nickname: function() {
+      this.nicknameValidate();
+    },
+  },
 };
 </script>
 
-<style></style>
+<style scoped>
+::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+.signup-input {
+  margin-bottom: 1rem;
+  width: 80%;
+}
+.signup-input input {
+  padding-left: 10px;
+  width: 100%;
+  height: 50px;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+.signup-input button {
+  width: 100%;
+  height: 50px;
+  padding: 0.25rem 1rem;
+  background: none;
+  border: none;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #585858;
+}
+.disabledBtn {
+  opacity: 0.2;
+}
+</style>

@@ -48,7 +48,14 @@ function userInfoDetail(userid,success,fail){
     .catch(fail)
 }
 
+function editUserInfo(userid, userinfo, success,fail){
+  instance
+    .put(`users/${userid}`, userinfo)
+    .then(success)
+    .catch(fail)
+}
+
 
 export {
-  getprofileInfo,getprofileFeed, followToggle, followerList, followingList, userInfoDetail 
+  getprofileInfo,getprofileFeed, followToggle, followerList, followingList, userInfoDetail, editUserInfo
 }
