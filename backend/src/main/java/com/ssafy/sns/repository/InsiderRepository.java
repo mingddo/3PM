@@ -1,6 +1,7 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.newsfeed.Insider;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +15,5 @@ public interface InsiderRepository extends JpaRepository<Insider, Long> {
     List<Insider> findAllByUserIdAndGroupId(Long userId, Long groupId, Pageable pageable);
 
     Optional<Insider> findByGroupIdAndId(Long groupId, Long id);
+
 }

@@ -8,7 +8,9 @@ import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -37,11 +39,12 @@ public class InsiderService {
     private final InsiderRepository insiderRepository;
     private final GroupRepository groupRepository;
 
-    // 그룹아이디에 속하는 모든 게시물 출력 (10개씩)
-    public FeedListResponseDto findAllByGroupId(Long userId, Long groupId, int num) {
+
+    // 그룹 카데고리의 모든 게시물 출력 (10개씩)
+    public FeedListResponseDto findAll(Long userId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
-        List<Insider> insiders = insiderRepository.findAllByGroupId(groupId, pageRequest);
+        Page<Insider> insiders = insiderRepository.findAll(pageRequest);
         List<InsiderResDto> insiderResDtos = new ArrayList<>();
         for (Insider insider : insiders) {
             insiderResDtos.add(new InsiderResDto(insider,
@@ -49,7 +52,27 @@ public class InsiderService {
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
                     3,
-                    groupId));
+                    insider.getGroup().getId(),
+                    insider.getGroup().getName()));
+        }
+        return new FeedListResponseDto(insiderResDtos, num + insiders.getTotalPages());
+    }
+
+    // 그룹아이디에 속하는 모든 게시물 출력 (10개씩)
+    public FeedListResponseDto findAllByGroupId(Long userId, Long groupId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
+        List<Insider> insiders = insiderRepository.findAllByGroupId(groupId, pageRequest);
+        List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        Group group = groupRepository.findById(groupId).orElseThrow();
+        for (Insider insider : insiders) {
+            insiderResDtos.add(new InsiderResDto(insider,
+                    (int) commentRepository.findListById(insider).count(),
+                    feedClapRepository.findClapAll(insider).size(),
+                    feedClapRepository.findClap(user, insider).isPresent(),
+                    3,
+                    groupId,
+                    group.getName()));
         }
         return new FeedListResponseDto(insiderResDtos, num + insiders.size());
     }
@@ -61,13 +84,15 @@ public class InsiderService {
         PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
         List<Insider> insiders = insiderRepository.findAllByUserIdAndGroupId(userId, groupId, pageRequest);
         List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        Group group = groupRepository.findById(groupId).orElseThrow();
         for (Insider insider : insiders) {
             insiderResDtos.add(new InsiderResDto(insider,
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(viewer, insider).isPresent(),
                     3,
-                    groupId));
+                    groupId,
+                    group.getName()));
         }
         return new FeedListResponseDto(insiderResDtos, num + insiders.size());
     }
