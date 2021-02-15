@@ -51,11 +51,11 @@ public class InsiderService {
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
-                    3,
+                    2,
                     insider.getGroup().getId(),
                     insider.getGroup().getName()));
         }
-        return new FeedListResponseDto(insiderResDtos, num + insiders.getTotalPages());
+        return new FeedListResponseDto(insiderResDtos, num + 1);
     }
 
     // 그룹아이디에 속하는 모든 게시물 출력 (10개씩)
@@ -70,11 +70,11 @@ public class InsiderService {
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
-                    3,
+                    2,
                     groupId,
                     group.getName()));
         }
-        return new FeedListResponseDto(insiderResDtos, num + insiders.size());
+        return new FeedListResponseDto(insiderResDtos, num + 1);
     }
 
     // 해당 유저가 작성한 모든 그룹 게시물
@@ -90,22 +90,25 @@ public class InsiderService {
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(viewer, insider).isPresent(),
-                    3,
+                    2,
                     groupId,
                     group.getName()));
         }
-        return new FeedListResponseDto(insiderResDtos, num + insiders.size());
+        return new FeedListResponseDto(insiderResDtos, num + 1);
     }
 
     // 피드 하나의 detail
-    public FeedResponseDto findByGroupIdAndFeedId(Long userId, Long feedId, Long groupId) {
+    public InsiderResDto findByGroupIdAndFeedId(Long userId, Long feedId, Long groupId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Insider insider = insiderRepository.findByGroupIdAndId(groupId, feedId).orElseThrow();
-        return new FeedResponseDto(insider,
+        Group group = groupRepository.findById(groupId).orElseThrow();
+        return new InsiderResDto(insider,
                 (int) commentRepository.findListById(insider).count(),
                 feedClapRepository.findClapAll(insider).size(),
                 feedClapRepository.findClap(user, insider).isPresent(),
-                3);
+                2,
+                groupId,
+                group.getName());
     }
 
     // 피드 저장
