@@ -173,14 +173,14 @@ public class GroupController {
 
     @ApiOperation(value = "그룹 중 피드 디테일 조회", response = InsiderResDto.class)
     @GetMapping("/{groupId}/feeds/{feedId}")
-    public ResponseEntity<FeedResponseDto> getGroupFeedOne(@PathVariable("groupId") Long groupId,
+    public ResponseEntity<InsiderResDto> getGroupFeedOne(@PathVariable("groupId") Long groupId,
                                                            @PathVariable("feedId") Long feedId,
                                                            HttpServletRequest request) {
         User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
 
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        FeedResponseDto insiderResDto = null;
+        InsiderResDto insiderResDto = null;
         try {
             insiderResDto = insiderService.findByGroupIdAndFeedId(user.getId(), feedId, groupId);
             logger.info("getGroupFeeds = 핵인싸 그룹 게시글 리스트 가져오기 : {}", insiderResDto);
