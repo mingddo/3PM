@@ -152,19 +152,17 @@ export default {
       const answer = window.confirm('댓글을 삭제하시겠습니까?')
       if (answer) {
         // axios DELETE 요청으로 삭제하기
-        if (this.Category == 1) {
-          deleteComment(
-            this.id,
-            this.comment.id,
-            (res) => {
-              console.log('삭제', res)
-              this.$emit('unshiftComment', this.comment.id)
-            },
-            (err) => {
-              console.log('삭제불가', err)
-            }
-          )
-        }
+        deleteComment(
+          this.id,
+          this.comment.id,
+          (res) => {
+            console.log('삭제', res)
+            this.$emit('setComment')
+          },
+          (err) => {
+            console.log('삭제불가', err)
+          }
+        )
       }
     },
     changeCommentModiForm () {
@@ -172,19 +170,17 @@ export default {
       this.foldModiDrop = true;
     },
     modiComment () {
-      if (this.Category == 1) {
-        updateComment(
-          this.id,
-          this.comment.id,
-          {"content":this.commentForFeed},
-          (res)=> {
-            console.log(res)
-          },
-          (err)=>{
-            console.log(err)
-          }
-        )
-      }
+      updateComment(
+        this.id,
+        this.comment.id,
+        {"content":this.commentForFeed},
+        (res)=> {
+          console.log(res)
+        },
+        (err)=>{
+          console.log(err)
+        }
+      )
       this.modiForm = false;
     },
     openModiDeleteBtn () {

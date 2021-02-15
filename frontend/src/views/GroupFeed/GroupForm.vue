@@ -21,6 +21,16 @@
             class="group-form-descript"
           ></textarea>
         </div>
+        <div class="newsfeed-form-img-box">
+          <label for="image"> <i class="far fa-images"></i> 사진 </label>
+          <input
+            class="newsfeed-form-img-input"
+            id="image"
+            type="file"
+            @change="selectFile"
+            accept="image/*"
+          />
+        </div>
         <div class="group-form-submit-btn">
           <button class="create-group-btn" @click="create">그룹만들기</button>
         </div>
@@ -32,6 +42,7 @@
 <script>
 import { mapState } from 'vuex'
 import { createGroup } from '@/api/group.js'
+import { createGroupImg } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 
@@ -44,15 +55,46 @@ export default {
         description: "",
       },
       completed: false,
+      fileSelect: false,
+      selectedFile: null,
     }
   },
   methods:{
+    selectFile (e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (files.length) {
+        this.fileSelect = true;
+        this.selectedFile = files[0]
+      }
+    },
+    imgUpload (id) {
+      const formData = new FormData ();
+      formData.append('file', this.selectedFile)
+      createGroupImg(
+        id,
+        formData,
+        (res) => {
+          console.log(res)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     create () {
+      this.completed = true;
       createGroup(
         this.form,
         (res) => {
+          if (this.selectFile) {
+            this.imgUpload(res.data.id)
+            setTimeout(() => {
+              this.$router.push({ name: 'groupdetail', query: { groupId : res.data.id } })
+            }, 500);
+          } else {
+            this.$router.push({ name: 'groupdetail', query: { groupId: res.data.id }})
+          }
           console.log(res)
-          this.$router.push({ name: 'groupdetail', query: { groupId: res.data}})
         },
         (err) => {
           console.log(err)
