@@ -20,11 +20,11 @@ public interface FeedService {
     Long write(Long userId, FeedRequestDto feedRequestDto);
 
     // 피드 파일 첨부
-    void uploadFiles(Long feedId, List<MultipartFile> files) throws IOException;
+    void uploadFiles(Long feedId, MultipartFile file) throws IOException;
 
     // 피드 글삭제
     boolean delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
-    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto);
+    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException;
 }

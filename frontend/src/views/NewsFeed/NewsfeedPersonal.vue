@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="newsfeed-header"
+      class="newsfeed-header animate__animated animate__fadeIn"
       :style="{
         background:
           `linear-gradient(to right, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(` +

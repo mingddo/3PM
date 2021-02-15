@@ -6,6 +6,8 @@ import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.file.File;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.user.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
@@ -51,6 +55,11 @@ public class Feed extends BaseTimeEntity {
         this.content = content;
         this.user = user;
         this.feedHashtagList = feedHashtagList;
+    }
+
+    public Feed(String content, User user) {
+        this.content = content;
+        this.user = user;
     }
 
     public void update(String content) {

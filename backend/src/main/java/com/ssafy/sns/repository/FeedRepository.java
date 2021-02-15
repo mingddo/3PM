@@ -7,7 +7,7 @@ import java.util.List;
 public interface FeedRepository {
 
     // 내가 쓴글 불러오기
-    List<Feed> findMyList(Long id, int num);
+    List<Feed> findMyList(Long id, int num, Object category);
 
     // 한페이지 불러오기
     List<Feed> findList(int num, Object category);
@@ -20,4 +20,6 @@ public interface FeedRepository {
 
     // 피드 글삭제
     void remove(Feed feed);
+
+    Object findCategory(Long feedId);
 }

@@ -156,24 +156,24 @@ public class UserController {
         return null;
     }
 
-    @ApiOperation("내 프로필 수정")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true),
-    })
-    @PutMapping("{userId}")
-    public ResponseEntity updateUser(@PathVariable("userId") Long userId, @RequestBody KakaoRequestDto dto, HttpServletRequest request) {
-
-        String token = request.getHeader("Authorization");
-        Long tokenId = jwtService.findId(token);
-        User user = userService.findUserById(tokenId);
-
-        if (user.getId() != userId) {
-            return new ResponseEntity("사용자 접근 에러", HttpStatus.UNAUTHORIZED);
-        }
-
-        user.setNickname(dto.getUsername());
-        return new ResponseEntity("성공", HttpStatus.OK);
-    }
+//    @ApiOperation("내 프로필 수정")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true),
+//    })
+//    @PutMapping("{userId}")
+//    public ResponseEntity updateUser(@PathVariable("userId") Long userId, @RequestBody KakaoRequestDto dto, HttpServletRequest request) {
+//
+//        String token = request.getHeader("Authorization");
+//        Long tokenId = jwtService.findId(token);
+//        User user = userService.findUserById(tokenId);
+//
+//        if (user.getId() != userId) {
+//            return new ResponseEntity("사용자 접근 에러", HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        user.setNickname(dto.getUsername());
+//        return new ResponseEntity("성공", HttpStatus.OK);
+//    }
 
     @ApiOperation("내 프로필 삭제")
     @ApiImplicitParams({
@@ -223,7 +223,7 @@ public class UserController {
      * username, user_id => X, 프로필 사진, 프로필 소개, 알림 설정 목록 => 미구현
      */
     @ApiOperation("사용자의 프로필 정보를 수정한다.")
-    @PutMapping("/{id}")
+    @PutMapping("/{userId}")
     public ResponseEntity updateProfile(@PathVariable("id") Long id,
                                         @RequestPart("file") MultipartFile file,
                                         ProfileRequestDto dto,

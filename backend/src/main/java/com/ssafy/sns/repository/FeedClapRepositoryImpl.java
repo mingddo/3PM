@@ -43,4 +43,9 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
                 .setParameter("feedId", feed.getId())
                 .getResultList();
     }
+
+    @Override
+    public FeedClap findById(Long feedClapId) {
+        return em.find(FeedClap.class, feedClapId);
+    }
 }

@@ -6,7 +6,7 @@
   font-style: normal;
 }
 :root {
-  --bg-color: #fff9f0;
+  --bg-color: #f4eee5;
   --white-color: #ffffff;
   --point-color: #f8f8f6;
 }
@@ -28,6 +28,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  overflow: hidden;
 }
 button a {
   text-decoration: none;
@@ -116,21 +117,22 @@ button.active {
 }
 .login-btn {
   z-index: 1000;
-  width: 120px;
+  width: auto;
+  height: 50px;
   position: fixed;
-  top: 5vh;
-  right: 5%;
+  bottom: 5vh;
+  right: 45%;
   font-weight: bold;
-  color: #2c3e50;
   transition: all 0.8s ease-in-out;
   padding: 0.25rem 1rem;
   background: none;
   border: none;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  border-radius: 15px;
   cursor: pointer;
   font-weight: bold;
-  color: #585858;
+  color: #391b1b;
+  background-color: #f7e432;
 }
 .login-btn.active {
   background: #585858;
@@ -246,11 +248,12 @@ button.active {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   position: sticky;
   top: 0;
-  width: 25%;
+  width: 20%;
+  margin-right: 48px;
   height: 100vh;
   padding-top: 80px;
   display: flex;
-  background-color: var(--white-color);
+  background-color: #fff9f3;
   flex-direction: column;
   border-radius: 5px;
   justify-content: flex-start;
@@ -329,7 +332,100 @@ button.active {
   justify-content: center;
   align-items: center;
 }
+.nav-categoryFrame {
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  height: 11%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-categoryFrame > div {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .nav-content > div:hover {
   border-radius: 5px;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+.sliderbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 20000;
+}
+.sliderbar.active {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  z-index: 20000;
+}
+.sliderToggle {
+  display: none;
+}
+.sliderFrame {
+  position: absolute;
+  top: 0;
+  left: -70%;
+  bottom: 0;
+  width: 70%;
+  z-index: 20001;
+  padding: 24px 0;
+  background-color: var(--bg-color);
+  transition: all 1s ease-in-out;
+}
+.sliderFrame.active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 70%;
+  z-index: 20001;
+  padding: 24px 0;
+  background-color: var(--bg-color);
+  transition: all 1.5s ease-in-out;
+}
+
+.slider-nav-content {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  padding: 24px 0;
+  height: 80%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.slider-nav-categoryFrame {
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  height: 11%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.slider-nav-categoryFrame > div {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sliderTitle {
+  font-size: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

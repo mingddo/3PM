@@ -2,7 +2,7 @@
   <div>
     <div class="newsfeed-body">
       <Sidebar />
-      <div class="newsfeed">
+      <div class="newsfeed-D">
         <GroupNav v-if="Category == 2" :isHome="true"/>
         <section v-if="fd" v-cloak class="feed-detail">
           <div class="feed-detail-userprofile">
@@ -75,6 +75,7 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
+<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
               <img :src="fd.clap ? 'https://img.icons8.com/fluent-systems-filled/17/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/17/000000/applause.png'"/>
               <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
           </span>
@@ -92,24 +93,49 @@
           <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
             <i class="far fa-thumbs-up"></i>
             {{ fd.clap ? '좋아요취소' : '좋아요'}}
+=======
+              <i class="far fa-thumbs-up"></i>
+              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span>
+              <span v-else> 0</span>
+            </span>
+            <span>
+              <i class="far fa-comment"></i>
+              <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
+              <span v-else> 0</span>
+            </span>
+>>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
           </div>
-          <div class="feed-detail-like-comment-share-btn" @click="focusComment">
-            <i class="far fa-comment"></i>
-            댓글달기
+          <NewsFeedClapUser
+            v-if="clapListOpen"
+            :clapedUsers="clapedUsers"
+            @closeClapList="closeClapList"
+          />
+          <div class="feed-detail-like-comment-share-btn-box">
+            <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
+              <i class="far fa-thumbs-up"></i>
+              {{ fd.clap ? "좋아요취소" : "좋아요" }}
+            </div>
+            <div
+              class="feed-detail-like-comment-share-btn"
+              @click="focusComment"
+            >
+              <i class="far fa-comment"></i>
+              댓글달기
+            </div>
+            <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
+              <i class="fas fa-share"></i>
+              공유하기
+            </div>
           </div>
-          <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
-            <i class="fas fa-share"></i>
-            공유하기
-          </div>
-        </div>
-        <Comment :id="fd.id" :Category="Number(Category)"/>
-      </section>
-    </div>
+          <Comment :id="fd.id" :Category="Number(Category)" />
+        </section>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { clapFeed } from '@/api/feed.js'
@@ -122,6 +148,19 @@ import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
 import Location from '../../components/NewsFeed/Detail/Location.vue';
 import Comment from '../../components/NewsFeed/Detail/Comment.vue'
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
+=======
+import { mapState } from "vuex";
+import { readFeed } from "@/api/feed.js";
+import { clapFeed } from "@/api/feed.js";
+import { clapFeedList } from "@/api/feed.js";
+import Sidebar from "../../components/Common/Sidebar.vue";
+import NewsFeedProfile from "../../components/NewsFeed/Common/NewsFeedProfile.vue";
+import NewsFeedClapUser from "../../components/NewsFeed/NewsFeedClapUser.vue";
+import ModiAndDelete from "../../components/NewsFeed/Detail/ModiAndDelete.vue";
+import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
+import Location from "../../components/NewsFeed/Detail/Location.vue";
+import Comment from "../../components/NewsFeed/Detail/Comment.vue";
+>>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
 
 export default {
   name: "NewsfeedDetail",
@@ -133,7 +172,10 @@ export default {
     UserInfoBtn,
     Location,
     Comment,
+<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
     GroupNav
+=======
+>>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
   },
   data() {
     return {
@@ -170,21 +212,21 @@ export default {
         }
       );
     },
-    likeFeed () {
+    likeFeed() {
       clapFeed(
         this.fd.id,
         (res) => {
           if (!this.fd.clap) {
-            alert(`좋아요!`)
-            this.fd.likeCnt = this.fd.likeCnt + 1
+            alert(`좋아요!`);
+            this.fd.likeCnt = this.fd.likeCnt + 1;
             this.fd.clap = true;
           } else {
-            alert('좋아요 취소!')
-            this.fd.likeCnt = this.fd.likeCnt - 1
+            alert("좋아요 취소!");
+            this.fd.likeCnt = this.fd.likeCnt - 1;
             this.fd.clap = false;
           }
-          
-          console.log(res)
+
+          console.log(res);
         },
         (err) => {
           console.log(err);
@@ -209,9 +251,9 @@ export default {
       let input = document.getElementById("comment");
       input.focus();
     },
-    goToProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.fd.user.id}})
-    },  
+    goToProfile() {
+      this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } });
+    },
     goToSearchTag(tag) {
       this.$router.push({
         name: "Search",
@@ -227,11 +269,11 @@ export default {
         readFeed(
           this.$route.query.id,
           (res) => {
-            this.fd = res.data
-            console.log(res.data)
-            this.date = this.fd.date.split('T')[0];
-            this.time = this.fd.date.split('T')[1];
-            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, '<br>') // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+            this.fd = res.data;
+            console.log(res.data);
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
           },
           (err) => {
             console.log(err);
@@ -278,7 +320,7 @@ export default {
   border-radius: 30px;
 }
 .feed-detail-comment-plus:hover {
-  box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);  
+  box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
 }
 .feed-detail-comment-empty {
   text-align: center;

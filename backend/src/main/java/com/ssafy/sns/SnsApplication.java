@@ -2,6 +2,7 @@ package com.ssafy.sns;
 
 import com.ssafy.sns.jwt.JwtInterceptor;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableJpaAuditing
 @SpringBootApplication
 public class SnsApplication implements WebMvcConfigurer {
@@ -23,7 +24,7 @@ public class SnsApplication implements WebMvcConfigurer {
 	}
 
 	@Autowired
-	private JwtInterceptor jwtInterceptor;
+	private final JwtInterceptor jwtInterceptor;
 
 	// JWTInterceptor를 설치한다.
 	@Override

@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class FileServiceImpl implements FileService{
 
     private final FileRepository fileRepository;
+    private final S3Service s3Service;
 
     @Override
     public List<String> findFileNameList(Long id) {
@@ -36,7 +37,7 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public void modifyFiles(List<String> prevFileNames, List<String> curFileNames) {
+    public void modifyFiles(List<String> prevFileNames, List<String> curFileNames) throws IOException {
         // 삭제해야 할 리스트만 뽑는다.
         Map<String, Boolean> map = new HashMap<>();
         for (String fileName : prevFileNames) {
@@ -47,8 +48,17 @@ public class FileServiceImpl implements FileService{
             map.put(fileName, true);
         }
 
-
+        for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+            String key = entry.getKey();
+            boolean value = entry.getValue();
+            // 삭제된 파일 이름
+            if (!value) {
+                s3Service.deleteFile(key);
+                File file = fileRepository.findByFileName(key).get();
+                Feed feed = file.getFeed();
+                feed.deleteFile(file);
+            }
+        }
     }
-
 
 }

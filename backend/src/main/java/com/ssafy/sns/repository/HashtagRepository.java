@@ -19,4 +19,5 @@ public interface HashtagRepository {
 
     void change(List<String> tags, Feed feed);
 
+    List search(String text);
 }

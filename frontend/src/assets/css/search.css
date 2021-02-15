@@ -70,7 +70,6 @@ input:focus {
   left : 350px;
   right : 50px; */
   width: 70%;
-  margin-top: 80px;
   height: auto;
   display: flex;
   flex-direction: column;

@@ -17,7 +17,9 @@ public class NoticeResponseDto {
 
     private int type;
     private SimpleUserDto other;
-    private Feed feed;
+    private Long feedId;
+    private String category;
+    private String commentContent;
 
     @Builder
     public NoticeResponseDto(int type, SimpleUserDto other) {
@@ -26,9 +28,19 @@ public class NoticeResponseDto {
     }
 
     @Builder
-    public NoticeResponseDto(int type, SimpleUserDto other, Feed feed) {
+    public NoticeResponseDto(int type, SimpleUserDto other, Long feedId, String category) {
         this.type = type;
         this.other = other;
-        this.feed = feed;
+        this.feedId = feedId;
+        this.category = category;
+    }
+
+    @Builder
+    public NoticeResponseDto(int type, SimpleUserDto other, Long feedId, String category, String commentContent) {
+        this.type = type;
+        this.other = other;
+        this.feedId = feedId;
+        this.category = category;
+        this.commentContent = commentContent;
     }
 }

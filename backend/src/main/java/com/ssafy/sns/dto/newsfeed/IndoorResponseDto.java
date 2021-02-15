@@ -14,7 +14,6 @@ public class IndoorResponseDto extends FeedResponseDto {
 
     private int category;
 
-    @Builder
     public IndoorResponseDto(Indoor indoor, int commentCnt, int likeCnt, boolean isClap) {
         super(indoor, commentCnt, likeCnt, isClap);
         this.category = 1;
