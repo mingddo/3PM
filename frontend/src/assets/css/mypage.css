@@ -250,3 +250,24 @@
   width: 70%;
   margin-top: 80px;
 }
+
+.write-introduce {
+  display: none;
+}
+.write-introduce.active {
+  display: block;
+}
+
+.profile-edit-img-frame {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 70%;
+  overflow: hidden;
+  background-color: white;
+}
+.profile-edit-img-frame > img {
+  background-color: transparent;
+}
