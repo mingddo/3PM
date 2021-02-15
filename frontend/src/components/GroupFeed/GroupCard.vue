@@ -1,8 +1,8 @@
 <template>
-  <div @click="goToGroupDetail">
+  <div>
     <img src="https://picsum.photos/200" alt="" />
     <div>
-      <div>그룹 이름 : {{ group.name }}</div>
+      <div @click="goToGroupDetail">그룹 이름 : {{ group.name }}</div>
       <div>회원수 : {{ group.memberCnt}}</div>
     </div>
     <div>그룹 소개: {{ group.description }}</div>

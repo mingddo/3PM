@@ -6,11 +6,20 @@
         <GroupNav :isHome="false"/>
         <div class="group-detail-header">
           <div class="group-detail-img-space">
-            <img class="group-detail-img" src="https://picsum.photos/200" alt="">
+            <img class="group-detail-img" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${group_info.groupImg}`" alt="">
           </div>
-          <div class="group-detail-title">{{ group_info.name }}</div>
-          <div class="group-detail-introduce">
-            {{ group_info.description }}
+          <div @click="changeModiForm">
+            {{ modiForm ? '수정' : '그룹 수정하기'}}
+          </div>
+          <div class="group-detail-title" v-if="!modiForm">{{ group.name }}</div>
+          <div v-else>
+            <input type="text" v-model="group.name">
+          </div>
+          <div class="group-detail-introduce" v-if="!modiForm">
+            {{ group.description }}
+          </div>
+          <div v-else>
+            <input type="text" v-model="group.description">
           </div>
           <div class="group-detail-join-btn">
             <span v-if="!isjoined" @click="join">
@@ -19,6 +28,9 @@
             <span v-else @click="secede">
               그룹 탈퇴하기
             </span>
+          </div>
+          <div @click="groupDelete">
+            그룹 삭제하기
           </div>
           <div class="group-detail-info">
             <div>
@@ -39,7 +51,12 @@
           <GroupRecommend />
         </section>
         <section>
-          <NewsFeedList />
+          <NewsFeedList
+            :Category="2"
+            :feed="feed"
+            :last="last"
+            :next="next"
+          />
         </section>
       </div>
     </div>
@@ -52,6 +69,9 @@
 import { joinGroup } from '@/api/group.js'
 import { secedeGroup } from '@/api/group.js'
 import { getGroupDetail } from '@/api/group.js'
+import { updateGroupInfo } from '@/api/group.js'
+import { getGroupfeeds } from '@/api/group.js'
+import { deleteGroup } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupRecommend from '../../components/GroupFeed/GroupRecommend.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
@@ -61,7 +81,18 @@ export default {
   components: { Sidebar, GroupRecommend, NewsFeedList, GroupNav },
   data() {
     return {
+      modiForm: false,
+      feed: [],
+      page: 0,
+      last: false,
+      next: false,
+      didScroll: false,
+      scrolled: false,
+      lastScrollTop: 0,
+      delta: 5,
+      navbarHeight: 70,
       isjoined: "false",
+      group: {},
       group_info: {
         // id: 1,
         // group_img: "",
@@ -79,6 +110,33 @@ export default {
     };
   },
   methods: {
+    groupDelete () {
+      deleteGroup(
+        this.group_info.id,
+        (res) => {
+          console.log(res)
+          this.$router.push({ name: 'grouppage' })
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
+    changeModiForm () {
+      if (this.modiForm == true) {
+        updateGroupInfo(
+          this.group_info.id,
+          this.group,
+          (res) => {
+            console.log(res)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
+      this.modiForm = !this.modiForm;
+    },
     secede () {
       secedeGroup(
         this.group_info.id,
@@ -104,6 +162,27 @@ export default {
         }
       )
     },
+    setFeedList() {
+      getGroupfeeds(
+        this.$route.query.groupId,
+        this.page,
+        (res) => {
+          console.log(res)
+          this.page = this.page + 1;
+          let feeds = res.data.feedList;
+          if (feeds && feeds.length < 10) {
+            this.last = true;
+          }
+          for (let f of feeds) {
+            this.feed.push(f);
+          }
+          this.next = false;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    },
     getgroupInfo() {
       // axios작성 부분
       getGroupDetail(
@@ -111,6 +190,9 @@ export default {
         (res) => {
           console.log(res)
           this.group_info = res.data
+          this.group.name = this.group_info.name
+          this.group.description = this.group_info.description
+
           this.validjoin();
         },
         (err) => {
@@ -128,10 +210,31 @@ export default {
       });
       console.log(this.isjoined);
     },
+    setScroll() {
+      window.addEventListener("scroll", () => {
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+        if (
+          !this.next &&
+          !this.last &&
+          scrollLocation + windowHeight >= fullHeight
+        ) {
+          this.next = true;
+          setTimeout(() => {
+            this.setFeedList();
+          }, 1000);
+        }
+      });
+    },
   },
   created() {
-    // this.getgroupInfo();
+    this.getgroupInfo();
+    this.setFeedList();
     // this.validjoin();
+  },
+  mounted () {
+    this.setScroll();
   },
 };
 </script>

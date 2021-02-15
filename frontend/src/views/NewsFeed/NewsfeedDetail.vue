@@ -5,6 +5,10 @@
       <div class="newsfeed-D">
         <GroupNav v-if="Category == 2" :isHome="true"/>
         <section v-if="fd" v-cloak class="feed-detail">
+          <div v-if="Category == 2">
+            
+            {{ fd.groupName }}
+          </div>
           <div class="feed-detail-userprofile">
             <div class="feed-detail-userprofile-box">
               <NewsFeedProfile
@@ -41,9 +45,6 @@
                 <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" class="feed-detail-img" alt="업로드 파일">
               </div>
             </div>
-            <div v-if="Category == 2 || Category == 3">
-              위치정보!
-            </div>
             <div class="feed-detail-tag">
               <button
                 v-for="(tag, idx) in fd.tags"
@@ -60,6 +61,7 @@
             </div>
             <!-- <div v-if="Category == 2 || Category == 3"> -->
             <Location
+              v-if="Category == 3 && latitude && longitude"
               :latitude="latitude"
               :longitude="longitude"
               :placeName="placeName"
@@ -114,7 +116,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import { readFeed } from '@/api/feed.js'
+import { readIndoors } from '@/api/indoors.js'
+import { getGroupfeedsDetail } from '@/api/group.js'
+import { readOutdoors } from '@/api/outdoors.js'
+import { reedWorker } from '@/api/worker.js'
 import { clapFeed } from '@/api/feed.js'
 import { clapFeedList } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
@@ -151,9 +156,10 @@ export default {
       comments: [],
       clapedUsers: [],
       clapListOpen: false,
-      latitude: 36.353793856820566,
-      longitude: 127.33999670291793,
-      placeName: "대전광역시 유성구 봉명동 레자미3차",
+      latitude: null,
+      longitude: null,
+      placeName: null,
+      address: null,
     };
   },
   methods: {
@@ -226,8 +232,9 @@ export default {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
       this.Category = this.$route.query.Category;
+      console.log('카테고리', this.Category)
       if (this.Category == 1) {
-        readFeed(
+        readIndoors(
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
@@ -242,12 +249,53 @@ export default {
         );
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
+        getGroupfeedsDetail(
+          this.$route.query.group,
+          this.$route.query.id,
+          (res) => {
+            this.fd = res.data;
+            console.log(res.data);
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 3) {
         // 청산별곡 get 요청
+        readOutdoors(
+          this.$route.query.id,
+          (res) => {
+            this.fd = res.data;
+            console.log(this.fd)
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); 
+            this.placeName = this.fd.placeName;
+            this.address = this.fd.address;
+            this.longitude = this.fd.lng;
+            this.latitude = this.fd.lat
+          }
+        )
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
         // 워커홀릭 get 요청
+        reedWorker(
+          this.$route.query.id,
+          (res) => {
+            this.fd = res.data;
+            console.log(res.data);
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       }
     },
   },
