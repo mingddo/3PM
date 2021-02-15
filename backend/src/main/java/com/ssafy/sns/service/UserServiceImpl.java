@@ -48,9 +48,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserProfile(Long id, ProfileRequestDto dto, MultipartFile file) throws IOException { // id 가 유효할 경우 이 메소드가 실행된다
         User user = userRepository.findById(id).get();
-        user.setIntroduce(dto.getIntroduce());
-        user.setNickname(dto.getNickname());
-        user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getNickname()));
+
+        if (dto.getIntroduce() != null) {
+            user.setIntroduce(dto.getIntroduce());
+        }
+        if (dto.getNickname() != null) {
+            user.setNickname(dto.getNickname());
+            user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getNickname()));
+        }
 
         // file 업로드는 exception 날 수 있다.
         if (file == null) {
