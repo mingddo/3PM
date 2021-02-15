@@ -3,6 +3,7 @@ package com.ssafy.sns.controller;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchResponseDto;
+import com.ssafy.sns.dto.search.SearchUserDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.SearchServiceImpl;
@@ -103,10 +104,10 @@ public class SearchController {
             @ApiImplicitParam(name = "nickname", value = "유저 닉네임", required = true),
     })
     @GetMapping("/auto/user")
-    public ResponseEntity<List<SimpleUserDto>> getAutoUser(@RequestParam("nickname") String nickname,
+    public ResponseEntity<List<SearchUserDto>> getAutoUser(@RequestParam("nickname") String nickname,
                                                            HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
-        List<SimpleUserDto> result = null;
+        List<SearchUserDto> result = null;
         try {
             result = searchService.userAutocomplete(jwtService.findId(request.getHeader("Authorization")), nickname);
             logger.info("getAutoUser - 유저 자동완성 : {}", nickname);

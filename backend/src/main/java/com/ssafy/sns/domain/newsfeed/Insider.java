@@ -2,6 +2,7 @@ package com.ssafy.sns.domain.newsfeed;
 
 import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.newsfeed.FeedRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,8 @@ public class Insider extends Feed {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    public Insider(String content, User user, Group group) {
-        super(content, user);
+    public Insider(FeedRequestDto feedRequestDto, User user, Group group) {
+        super(feedRequestDto.getContent(), user);
         this.group = group;
     }
 }
