@@ -420,10 +420,16 @@
   display: flex;
   justify-content: center;
 }
+.feed-content-box-img-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 .feed-content-box img {
   max-width: 100%;
   min-height: 300px;
   max-height: 300px;
+  object-fit: scale-down;
 }
 .feed-content-box p {
   width: 100%;
