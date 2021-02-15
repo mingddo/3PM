@@ -77,8 +77,9 @@ public class IndoorServiceImpl implements FeedService {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Indoor indoor = ((Indoor) feedRepository.save(new Indoor(
-                feedRequestDto.getContent(), user)));
+        Indoor indoor = ((Indoor) feedRepository.save(new Indoor(feedRequestDto, user)));
+
+        user.addFeed(indoor);
 
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
@@ -123,6 +124,7 @@ public class IndoorServiceImpl implements FeedService {
             s3Service.deleteFile(fileName);
         }
 
+        user.deleteFeed(indoor);
         feedRepository.remove(indoor);
     }
 

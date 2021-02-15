@@ -92,7 +92,7 @@ public class InsiderService {
         Group group = groupRepository.findById(groupId).orElseThrow();
 
         // 글 등록
-        Insider insider = new Insider(insiderReqDto.getContent(), user, group);
+        Insider insider = new Insider(insiderReqDto, user, group);
         feedRepository.save(insider); // insiderRepository 인지 뭔지 헷갈리네,,,
 
         // 태그 등록

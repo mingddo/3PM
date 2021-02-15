@@ -8,6 +8,7 @@ import com.ssafy.sns.domain.newsfeed.Worker;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
+import com.ssafy.sns.dto.search.SearchUserDto;
 import com.ssafy.sns.repository.*;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.util.UnicodeHandler;
@@ -90,11 +91,11 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<SimpleUserDto> userAutocomplete(Long userId, String text) {
+    public List<SearchUserDto> userAutocomplete(Long userId, String text) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         return userRepositoryImpl.search(user, unicodeHandler.splitHangeulToConsonant(text))
                 .stream()
-                .map(SimpleUserDto::new)
+                .map(u -> new SearchUserDto(u.getNickname()))
                 .collect(Collectors.toList());
     }
 }
