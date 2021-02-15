@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "Nav",
   data() {
@@ -146,34 +146,34 @@ export default {
   },
   created() {},
   methods: {
-    // ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
-    // sideBarToggle(e) {
-    //   const toggleBar = document.querySelector(".nav-toggle-bar-before");
-    //   const overlay = document.querySelector(".overlay");
-    //   if (overlay.classList.contains("disappear")) {
-    //     // 사이드바 사라지기
-    //     if (
-    //       e.target.classList.value.split(" ").includes("sidebar-fas") ||
-    //       e.target === overlay
-    //     ) {
-    //       overlay.classList.remove("disappear");
-    //       overlay.style.cssText =
-    //         "display: block;background-color: rgba(0,0,0,0);";
-    //       toggleBar.style = "transform :translateX(0px);";
-    //       setTimeout(() => {
-    //         overlay.style = "display: none;";
-    //       }, 500);
-    //     }
-    //   } else {
-    //     // 사이드바 나타나기
-    //     overlay.classList.add("disappear");
-    //     overlay.style.cssText =
-    //       "display: block;background-color: rgba(0,0,0,0.5);";
-    //     setTimeout(() => {
-    //       toggleBar.style = "transform : translateX(250px);";
-    //     }, 10);
-    //   }
-    // },
+    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
+    sideBarToggle(e) {
+      const toggleBar = document.querySelector(".nav-toggle-bar-before");
+      const overlay = document.querySelector(".overlay");
+      if (overlay.classList.contains("disappear")) {
+        // 사이드바 사라지기
+        if (
+          e.target.classList.value.split(" ").includes("sidebar-fas") ||
+          e.target === overlay
+        ) {
+          overlay.classList.remove("disappear");
+          overlay.style.cssText =
+            "display: block;background-color: rgba(0,0,0,0);";
+          toggleBar.style = "transform :translateX(0px);";
+          setTimeout(() => {
+            overlay.style = "display: none;";
+          }, 500);
+        }
+      } else {
+        // 사이드바 나타나기
+        overlay.classList.add("disappear");
+        overlay.style.cssText =
+          "display: block;background-color: rgba(0,0,0,0.5);";
+        setTimeout(() => {
+          toggleBar.style = "transform : translateX(250px);";
+        }, 10);
+      }
+    },
     goToHome() {
       this.$router.push({ name: "Home" }).catch((err) => {
         if (err.name === "NavigationDuplicated") {
@@ -246,6 +246,7 @@ export default {
       });
     },
     goToLogout() {
+      console.log("사이드바 로그아웃");
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
       });

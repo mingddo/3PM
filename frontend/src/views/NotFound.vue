@@ -2,7 +2,6 @@
   <div>
     <div class="notfound_alert_title">
       <div>페이지를 찾을 수 없어요, 뒤로 가거나 홈으로 이동해주세요</div>
-      <button @click="gotoHome">홈으로 돌아가기</button>
     </div>
     <div class="container">
       <div class="row">
