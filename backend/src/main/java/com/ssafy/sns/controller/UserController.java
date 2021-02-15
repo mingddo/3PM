@@ -1,6 +1,7 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
@@ -275,8 +276,8 @@ public class UserController {
 
     @ApiOperation("유저가 가입한 그룹 정보 보여주기")
     @GetMapping("/{userId}/groups")
-    public ResponseEntity<List<UserGroupsDto>> getGroupsByUser(@PathVariable("userId") Long userId) {
-        List<UserGroupsDto> userGroupsDtos = userService.findUserGroups(userId);
+    public ResponseEntity<List<GroupResDto>> getGroupsByUser(@PathVariable("userId") Long userId) {
+        List<GroupResDto> userGroupsDtos = userService.findUserGroups(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userGroupsDtos);
     }
 }

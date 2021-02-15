@@ -2,6 +2,7 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
@@ -121,13 +122,10 @@ public class UserServiceImpl implements UserService {
                  .collect(Collectors.toList());
     }
 
-    public List<UserGroupsDto> findUserGroups(Long userId) {
+    public List<GroupResDto> findUserGroups(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         return user.getGroupMembers().stream()
-                .map(groupMember -> {
-                    Group group = groupMember.getGroup();
-                    return new UserGroupsDto(group.getId(), group.getName());
-                })
+                .map(groupMember -> new GroupResDto(groupMember.getGroup()))
                 .collect(Collectors.toList());
     }
 }
