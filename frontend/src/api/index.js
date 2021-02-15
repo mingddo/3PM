@@ -45,11 +45,9 @@ function AuthorizationInstance () {
       return axios(errorAPI)
     }
     else if (error.response.data.result === 'expire' && !errorAPI.retry) {
-      console.log('error.response.data.result === expire')
       errorAPI.retry = true;
       await updateAccToken()
       .then((res)=> {
-        console.log('updateAccToken')
         const authToken = res.data.result
         const vuex_data =  JSON.parse(localStorage.getItem('vuex'));
         vuex_data['authToken'] = authToken

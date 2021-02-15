@@ -134,7 +134,13 @@
           <div class="myPagearticle">
             <!-- 최근활동 -->
             <section v-if="activetab === 1" class="myPageActivity">
-              <NewsFeedList :feed="feed" :last="last" />
+              <div class="myPageActivity-feed-filter-btn">
+                <button @click="onClickFeedIndoor">꽃보다집</button>
+                <button @click="onClickFeedOutdoor">청산별곡</button>
+                <button @click="onClickFeedGroup">핵인싸</button>
+                <button @click="onClickFeedWorker">워커홀릭</button>
+              </div>
+              <NewsFeedList :feed="feedObj[currentFeedName].feed" :last="feedObj[currentFeedName].last" />
             </section>
             <section v-if="activetab === 2" class="myPageActivity">
               <Activity :activities="current_user_activityList" />
@@ -143,7 +149,7 @@
               <SubscribedList :subscribedlist="current_user_followingList" @decrement="onDeleteSubscriber" />
             </section>
             <section v-if="activetab === 4" class="myPageActivity">
-              <GroupList :grouplist="grouplist" />
+              <GroupList :grouplist="groups" />
             </section>
             <!-- 피드 -->
           </div>
@@ -159,8 +165,12 @@ import SubscribedList from "@/components/MyPage/SubscribedList.vue";
 import GroupList from "@/components/MyPage/GroupList.vue";
 import NewsFeedList from "../components/NewsFeed/NewsFeedList.vue";
 import {
-  getprofileInfo,
-  getprofileFeed,
+  getprofileInfo,  
+  getprofileFeedIndoor, 
+  getprofileFeedOutdoor,
+  // getprofileFeedGroup,
+  getprofileGroups,
+  getprofileFeedWorker,
   followToggle,
   followingList,
 } from "@/api/mypage.js";
@@ -182,21 +192,7 @@ export default {
       // 해당 페이지 유저를 구독했는지 여부
       subscribed: false,
       // 내 홈페이지 여부
-      grouplist: [
-        {
-          groupname: "윈터솔져",
-          group_id: 100,
-          signupDate: "2020년 12월 1일",
-        },
-      ],
-      activities: [
-        {
-          username: "명도균",
-          dayInfo: "2021년 1월 1일",
-          content: "박성호님이 회원님의 게시물에 좋아요를 눌렀습니다.",
-          article_id: 30,
-        },
-      ],
+      groups: [],
       mypage: false,
       activetab: 1,
       profileinfo: {
@@ -206,73 +202,191 @@ export default {
         follow: 1000,
         group: 4,
       },
-      feed: [],
-      page: 0,
-      last: false,
-      next: false,
-      subscribedlist: [
-        {
-          username: "장수민",
-          user_id: 4,
-          profilesrc: "@/assets/loverduck.png",
+      feedObj: {
+        indoor : {
+          feed_page_no : 0,
+          last : false,
+          next : false,
+          feed : [],
         },
-        {
-          username: "이병훈",
-          user_id: 5,
-          profilesrc: "@/assets/loverduck.png",
+        outdoor : {
+          feed_page_no : 0,
+          last : false,
+          next : false,
+          feed : [],
         },
-        {
-          username: "박성호",
-          user_id: 8,
-          profilesrc: "@/assets/loverduck.png",
+        worker : {
+          feed_page_no : 0,
+          last : false,
+          next : false,
+          feed : [],
         },
-        {
-          username: "김상원",
-          user_id: 31,
-          profilesrc: "@/assets/loverduck.png",
-        },
-      ],
-      feed_page_no: 0,
+        group : {
+          feed_page_no : 0,
+          last : false,
+          next : false,
+          feed : [],
+        }
+      },
+      extra : 100,
+      currentFeedName : 'indoor',
       current_user_followingList: [],
       current_user_activityList : [],
     };
   },
   methods: {
-    setFeedList() {
-      getprofileFeed(
+    onClickFeedIndoor() {
+      this.currentFeedName = 'indoor'
+      this.resetFeedObj('indoor')
+      .then(()=>{
+        this.setFeedList('indoor')
+      })
+    },
+    onClickFeedOutdoor() {
+      this.currentFeedName = 'outdoor'
+      this.resetFeedObj('outdoor')
+      .then(()=>{
+        this.setFeedList('outdoor')
+      })
+    },
+    onClickFeedGroup() {
+      this.currentFeedName = 'group'
+      this.resetFeedObj('group')
+      .then(()=>{
+        this.setFeedList('group')
+      })
+    },
+    onClickFeedWorker() {
+      this.currentFeedName = 'worker'
+      this.resetFeedObj('worker')
+      .then(()=>{
+        this.setFeedList('worker')
+      })
+    },
+    resetFeedObj(clickedFeedName) {
+      return new Promise((resolve) => {
+        const Objkeys= Object.keys(this.feedObj)
+        for (let i=0;i<Objkeys.length;i++) {
+          const keyName = Objkeys[i]
+          if (clickedFeedName !== keyName) {
+            this.feedObj[keyName].last = false
+            this.feedObj[keyName].next = false
+            this.feedObj[keyName].feed = []
+            this.feedObj[keyName].feed_page_no = 0
+            console.log(this.feedObj[keyName])
+          }
+        }
+        this.extra = 100
+        resolve()
+      })  
+    },
+    setFeedList(curFeedName) {
+      switch(curFeedName) {
+        case 'indoor':
+          this.getIndoorFeed();
+          break;
+        case 'outdoor':
+          this.getOutdoorFeed();
+          break;
+        case 'worker':
+          this.getWorkerFeed();
+          break;
+        case 'group':
+          this.getGroupFeed();
+      }
+    },
+    getIndoorFeed() {
+      getprofileFeedIndoor(
         this.profile_user,
-        this.feed_page_no,
+        this.feedObj.indoor.feed_page_no,
         (res) => {
           console.log(res.data);
-          this.page = res.data.endNum;
+          this.feedObj.indoor.feed_page_no = res.data.endNum;
           let feeds = res.data.feedList;
-          if (feeds.length < 100) {
-            this.last = true;
+          if (feeds.length < 10) {
+            this.feedObj.indoor.last = true;
           }
           for (let f of feeds) {
-            this.feed.push(f);
+            this.feedObj.indoor.feed.push(f);
           }
-          this.next = false;
+          this.feedObj.indoor.next = false;
         },
         (err) => {
           console.error(err);
         }
       );
     },
+    getOutdoorFeed() {
+      getprofileFeedOutdoor(
+        this.profile_user,
+        this.feedObj.outdoor.feed_page_no,
+        (res) => {
+          console.log(res.data);
+          this.feedObj.outdoor.feed_page_no = res.data.endNum;
+          let feeds = res.data.feedList;
+          if (feeds.length < 10) {
+            this.feedObj.outdoor.last = true;
+          }
+          for (let f of feeds) {
+            this.feedObj.outdoor.feed.push(f);
+          }
+          this.feedObj.outdoor.next = false;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    getWorkerFeed() {
+      getprofileFeedWorker(
+        this.profile_user,
+        this.feedObj.worker.feed_page_no,
+        (res) => {
+          console.log(res.data);
+          this.feedObj.worker.feed_page_no = res.data.endNum;
+          let feeds = res.data.feedList;
+          if (feeds.length < 10) {
+            this.feedObj.worker.last = true;
+          }
+          for (let f of feeds) {
+            this.feedObj.worker.feed.push(f);
+          }
+          this.feedObj.worker.next = false;
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
+    getGroupFeed() {
+
+    },
+    getGroups() {
+      getprofileGroups(
+        this.profile_user,
+        (res) => {
+          console.log('getprofileGroups',res.data)
+          this.groups = res.data
+        },
+        (err) => {
+          console.log('getprofileGroups',err)
+        }
+      )
+    },
     setScroll() {
       window.addEventListener("scroll", () => {
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
         let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
-
         if (
-          !this.next &&
-          !this.last &&
-          scrollLocation + windowHeight >= fullHeight
+          !this.feedObj[this.currentFeedName].next &&
+          !this.feedObj[this.currentFeedName].last &&
+          scrollLocation + windowHeight + this.extra >= fullHeight
         ) {
-          this.next = true;
+          this.feedObj[this.currentFeedName].next = true;
           setTimeout(() => {
-            this.setFeedList();
+            this.extra += 100
+            this.setFeedList(this.currentFeedName);
           }, 1000);
         }
       });
@@ -369,12 +483,13 @@ export default {
     console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
-    this.setFeedList();
+    this.setFeedList(this.currentFeedName);
   },
   mounted() {
     this.setScroll();
     this.getfollowingList();
     this.getActiviy();
+    this.getGroups();
   },
 };
 </script>
