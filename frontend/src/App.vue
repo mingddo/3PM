@@ -11,7 +11,7 @@
         </div>
         <div class="slider-nav-content">
           <div class="slider-nav-categoryFrame" @click="goToPersonal">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/img/indoor.svg"
                 alt=""
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="slider-nav-categoryFrame" @click="goToHack">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/img/hackinsider.svg"
                 alt=""
@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="slider-nav-categoryFrame" @click="goToChungSan">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/img/chungsan2.svg"
                 alt=""
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="slider-nav-categoryFrame" @click="goToWH">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/img/workerholic2.svg"
                 alt=""
@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="slider-nav-categoryFrame" @click="goToSearch">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/searching.svg"
                 alt=""
@@ -81,7 +81,7 @@
             </div>
           </div>
           <div class="slider-nav-categoryFrame" @click="goToProfile">
-            <div>
+            <div class="slider-nav-categoryFrame-d">
               <img
                 src="@/assets/img/profileM.svg"
                 alt=""
@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 // import Nav from './components/Common/Nav.vue'
 import "@/assets/css/main.css";
 import "@/assets/css/newsfeed.css";
@@ -134,6 +134,34 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["setUserStatus", "setAuthToken", "setKakaoId", "setUserId"]),
+    sideBarToggle(e) {
+      const toggleBar = document.querySelector(".nav-toggle-bar-before");
+      const overlay = document.querySelector(".overlay");
+      if (overlay.classList.contains("disappear")) {
+        // 사이드바 사라지기
+        if (
+          e.target.classList.value.split(" ").includes("sidebar-fas") ||
+          e.target === overlay
+        ) {
+          overlay.classList.remove("disappear");
+          overlay.style.cssText =
+            "display: block;background-color: rgba(0,0,0,0);";
+          toggleBar.style = "transform :translateX(0px);";
+          setTimeout(() => {
+            overlay.style = "display: none;";
+          }, 500);
+        }
+      } else {
+        // 사이드바 나타나기
+        overlay.classList.add("disappear");
+        overlay.style.cssText =
+          "display: block;background-color: rgba(0,0,0,0.5);";
+        setTimeout(() => {
+          toggleBar.style = "transform : translateX(250px);";
+        }, 10);
+      }
+    },
     toggleslidernavbar() {
       console.log("토글된다");
       this.navslider = !this.navslider;
@@ -217,9 +245,22 @@ export default {
       });
     },
     goToLogout() {
+      console.log("로그아웃");
       this.navslider = false;
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
+      });
+    },
+    kakaoLogout() {
+      return new Promise((resolve) => {
+        window.Kakao.Auth.logout(() => {
+          this.setUserId(null);
+          this.setAuthToken(null);
+          this.setKakaoId(null);
+          this.setUserStatus(null);
+          alert("logout");
+          resolve();
+        });
       });
     },
     setScroll() {
@@ -251,8 +292,19 @@ export default {
       this.lastScrollTop = st;
     },
   },
+  watch: {
+    $route() {
+      this.scrolled = false;
+    },
+  },
   computed: {
-    ...mapState(["isLoginUser"]),
+    ...mapState([
+      "isLoginUser",
+      "userStatus",
+      "kakaoId",
+      "userId",
+      "authToken",
+    ]),
   },
   mounted() {
     this.setScroll();
@@ -378,6 +430,14 @@ export default {
   }
   .newsfeed-form-tag-input {
     font-size: 15px;
+  }
+  .splide__arrow {
+    width: 2em;
+    height: 2em;
+  }
+  .splide__arrow svg {
+    width: 1.5em;
+    height: 1.5em;
   }
 }
 </style>

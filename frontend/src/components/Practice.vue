@@ -28,10 +28,7 @@ export default {
   },
   data() {
     return {
-      src: [
-        "https://timtnleeproject.github.io/vuejs-clipper/dawn.jpg",
-        "https://timtnleeproject.github.io/vuejs-clipper/ex2.jpg",
-      ],
+      src: ["@/assets/img/00.jpg"],
       rotation: 0,
       resultURL: null,
     };
