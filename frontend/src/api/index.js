@@ -23,8 +23,6 @@ function AuthorizationInstance () {
     let vuex_data = localStorage.getItem('vuex')
     vuex_data = JSON.parse(vuex_data);
     token = vuex_data["authToken"]
-    console.log('localStorage.getItem(vuex) !== null ')
-    console.log('token = vuex_data["authToken"]',token)
   }
 
   const instance = axios.create({
