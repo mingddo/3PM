@@ -75,7 +75,6 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
-<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
               <img :src="fd.clap ? 'https://img.icons8.com/fluent-systems-filled/17/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/17/000000/applause.png'"/>
               <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
           </span>
@@ -84,27 +83,6 @@
             <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
           </span>
         </div>  
-        <NewsFeedClapUser
-          v-if="clapListOpen"
-          :clapedUsers="clapedUsers"
-          @closeClapList="closeClapList"
-        />
-        <div class="feed-detail-like-comment-share-btn-box">
-          <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-            <i class="far fa-thumbs-up"></i>
-            {{ fd.clap ? '좋아요취소' : '좋아요'}}
-=======
-              <i class="far fa-thumbs-up"></i>
-              <span v-if="this.fd.likeCnt">{{ this.fd.likeCnt }}</span>
-              <span v-else> 0</span>
-            </span>
-            <span>
-              <i class="far fa-comment"></i>
-              <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
-              <span v-else> 0</span>
-            </span>
->>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
-          </div>
           <NewsFeedClapUser
             v-if="clapListOpen"
             :clapedUsers="clapedUsers"
@@ -135,7 +113,6 @@
 </template>
 
 <script>
-<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
 import { mapState } from 'vuex'
 import { readFeed } from '@/api/feed.js'
 import { clapFeed } from '@/api/feed.js'
@@ -148,19 +125,6 @@ import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
 import Location from '../../components/NewsFeed/Detail/Location.vue';
 import Comment from '../../components/NewsFeed/Detail/Comment.vue'
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
-=======
-import { mapState } from "vuex";
-import { readFeed } from "@/api/feed.js";
-import { clapFeed } from "@/api/feed.js";
-import { clapFeedList } from "@/api/feed.js";
-import Sidebar from "../../components/Common/Sidebar.vue";
-import NewsFeedProfile from "../../components/NewsFeed/Common/NewsFeedProfile.vue";
-import NewsFeedClapUser from "../../components/NewsFeed/NewsFeedClapUser.vue";
-import ModiAndDelete from "../../components/NewsFeed/Detail/ModiAndDelete.vue";
-import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
-import Location from "../../components/NewsFeed/Detail/Location.vue";
-import Comment from "../../components/NewsFeed/Detail/Comment.vue";
->>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
 
 export default {
   name: "NewsfeedDetail",
@@ -172,10 +136,7 @@ export default {
     UserInfoBtn,
     Location,
     Comment,
-<<<<<<< frontend/src/views/NewsFeed/NewsfeedDetail.vue
     GroupNav
-=======
->>>>>>> frontend/src/views/NewsFeed/NewsfeedDetail.vue
   },
   data() {
     return {
