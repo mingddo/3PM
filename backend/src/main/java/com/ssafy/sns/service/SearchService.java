@@ -1,9 +1,6 @@
 package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;

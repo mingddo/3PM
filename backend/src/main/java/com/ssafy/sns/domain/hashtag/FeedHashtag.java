@@ -1,7 +1,6 @@
 package com.ssafy.sns.domain.hashtag;
 
 import com.ssafy.sns.domain.newsfeed.Feed;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
