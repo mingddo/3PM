@@ -1,7 +1,6 @@
 package com.ssafy.sns.domain.clap;
 
 import com.ssafy.sns.domain.comment.Comment;
-import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,6 @@
 package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

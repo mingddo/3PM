@@ -1,6 +1,5 @@
 package com.ssafy.sns.domain.notice;
 
-import com.ssafy.sns.domain.follow.Follow;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

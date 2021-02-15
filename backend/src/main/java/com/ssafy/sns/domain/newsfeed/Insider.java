@@ -3,7 +3,6 @@ package com.ssafy.sns.domain.newsfeed;
 import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.user.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

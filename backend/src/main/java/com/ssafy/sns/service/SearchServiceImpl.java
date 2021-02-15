@@ -4,6 +4,7 @@ import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.newsfeed.Insider;
+import com.ssafy.sns.domain.newsfeed.Worker;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
@@ -42,23 +43,29 @@ public class SearchServiceImpl implements SearchService{
     public List<FeedResponseDto> searchFeeds(Long userId, Hashtag hash) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Feed> feedList = searchRepository.searchFeeds(hash);
-        List<FeedResponseDto> indoorResponseDtoList = new ArrayList<>();
+        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
             if(feed instanceof Indoor) {
-                indoorResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
                         1));
             } else if(feed instanceof Insider) {
-                indoorResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
                         2));
+            } else if(feed instanceof Worker) {
+                feedResponseDtoList.add(new FeedResponseDto(feed,
+                        (int) commentRepository.findListById(feed).count(),
+                        feedClapRepository.findClapAll(feed).size(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
+                        4));
             }
         }
-        return indoorResponseDtoList;
+        return feedResponseDtoList;
     }
 
     @Override
@@ -84,9 +91,7 @@ public class SearchServiceImpl implements SearchService{
 
     @Override
     public List<SimpleUserDto> userAutocomplete(Long userId, String text) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!");
         return userRepositoryImpl.search(user, unicodeHandler.splitHangeulToConsonant(text))
                 .stream()
                 .map(SimpleUserDto::new)

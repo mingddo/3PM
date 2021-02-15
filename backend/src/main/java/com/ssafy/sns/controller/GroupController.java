@@ -9,7 +9,6 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.InsiderReqDto;
 import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.jwt.JwtService;
-import com.ssafy.sns.service.FeedService;
 import com.ssafy.sns.service.GroupService;
 import com.ssafy.sns.service.InsiderService;
 import com.ssafy.sns.service.UserServiceImpl;

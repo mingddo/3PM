@@ -4,7 +4,6 @@ import com.ssafy.sns.dto.newsfeed.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface FeedService {
 
@@ -23,7 +22,7 @@ public interface FeedService {
     void uploadFiles(Long feedId, MultipartFile file) throws IOException;
 
     // 피드 글삭제
-    boolean delete(Long userId, Long feedId) throws IOException;
+    void delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
     void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException;

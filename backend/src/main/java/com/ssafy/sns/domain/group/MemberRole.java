@@ -1,7 +1,5 @@
 package com.ssafy.sns.domain.group;
 
-import java.util.Locale;
-
 public enum MemberRole {
 
     LEADER("leader"), MEMBER("member");

@@ -1,7 +1,6 @@
 package com.ssafy.sns.dto.newsfeed;
 
 import com.ssafy.sns.domain.newsfeed.Indoor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,11 +11,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class IndoorResponseDto extends FeedResponseDto {
 
-    private int category;
-
     public IndoorResponseDto(Indoor indoor, int commentCnt, int likeCnt, boolean isClap) {
-        super(indoor, commentCnt, likeCnt, isClap);
-        this.category = 1;
+        super(indoor, commentCnt, likeCnt, isClap, 1);
     }
 
 //    @Builder
