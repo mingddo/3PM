@@ -416,8 +416,9 @@ button.active {
   justify-content: center;
   align-items: center;
 }
-.slider-nav-categoryFrame > div {
+.slider-nav-categoryFrame-d {
   width: 50%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

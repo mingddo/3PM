@@ -1,6 +1,5 @@
 package com.ssafy.sns.dto.mypage;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import lombok.*;
 
 import java.util.List;
@@ -20,5 +19,6 @@ public class UserProfileDto {
     private int toMeFromOthersCnt;
     private int groupCnt;
     private String introduce;
+    private List<String> groups;
 
 }

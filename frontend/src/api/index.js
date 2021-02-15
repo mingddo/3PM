@@ -18,26 +18,35 @@ function createInstance() {
 }
 
 function AuthorizationInstance () {
+
   if (localStorage.getItem('vuex') !== null ) {
     let vuex_data = localStorage.getItem('vuex')
     vuex_data = JSON.parse(vuex_data);
     token = vuex_data["authToken"]
   }
+
   const instance = axios.create({
     baseURL: API_BASE_URL,
     headers: {
       "Authorization" : token
     }
   });
+
   instance.interceptors.response.use((response) => {
     return response
   }, async function (error) {
     const errorAPI = error.config;
-    if (error.response.data.result === 'expire' && !errorAPI.retry) {
+
+    if (error.response.data.result === 'fail' && !errorAPI.retry) {
+      errorAPI.retry = true;
+      if (localStorage.getItem('vuex') !== null ) {
+        errorAPI.headers["Authorization"] = JSON.parse(localStorage.getItem('vuex'))["authToken"]
+      }
+      return axios(errorAPI)
+    }
+    else if (error.response.data.result === 'expire' && !errorAPI.retry) {
       console.log('error.response.data.result === expire')
       errorAPI.retry = true;
-     // updateAccToken 함수에서 refToken을 헤더로 서버에 요청보내고
-     // 응답으로 새로 갱신한 accToken을 받아 headers에 업데이트한다
       await updateAccToken()
       .then((res)=> {
         console.log('updateAccToken')

@@ -1,12 +1,16 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.newsfeed.Insider;
+import com.ssafy.sns.domain.newsfeed.Worker;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
+import com.ssafy.sns.dto.search.SearchUserDto;
 import com.ssafy.sns.repository.*;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import com.ssafy.sns.util.UnicodeHandler;
@@ -31,6 +35,7 @@ public class SearchServiceImpl implements SearchService{
     private final HashtagRepositoryImpl hashtagRepository;
     private final UserRepositoryImpl userRepositoryImpl;
     private final UnicodeHandler unicodeHandler;
+    private final FollowServiceImpl followService;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
@@ -42,23 +47,32 @@ public class SearchServiceImpl implements SearchService{
     public List<FeedResponseDto> searchFeeds(Long userId, Hashtag hash) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Feed> feedList = searchRepository.searchFeeds(hash);
-        List<FeedResponseDto> indoorResponseDtoList = new ArrayList<>();
+        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
             if(feed instanceof Indoor) {
-                indoorResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        1));
+                        1,
+                        followService.isFollow(userId, feed)));
             } else if(feed instanceof Insider) {
-                indoorResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        2));
+                        2,
+                        followService.isFollow(userId, feed)));
+            } else if(feed instanceof Worker) {
+                feedResponseDtoList.add(new FeedResponseDto(feed,
+                        (int) commentRepository.findListById(feed).count(),
+                        feedClapRepository.findClapAll(feed).size(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
+                        4,
+                        followService.isFollow(userId, feed)));
             }
         }
-        return indoorResponseDtoList;
+        return feedResponseDtoList;
     }
 
     @Override
@@ -83,13 +97,21 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<SimpleUserDto> userAutocomplete(Long userId, String text) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
+    public List<SearchUserDto> userAutocomplete(Long userId, String text) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        System.out.println("!!!!!!!!!!!!!!!!!!!!");
         return userRepositoryImpl.search(user, unicodeHandler.splitHangeulToConsonant(text))
                 .stream()
-                .map(SimpleUserDto::new)
+                .map(u -> new SearchUserDto(u.getNickname()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupResDto> searchGroup(String keyword) {
+        List<Group> groupList = searchRepository.searchGroups(keyword);
+        List<GroupResDto> groupResDtoList = new ArrayList<>();
+        for (Group g : groupList) {
+            groupResDtoList.add(new GroupResDto(g));
+        }
+        return groupResDtoList;
     }
 }

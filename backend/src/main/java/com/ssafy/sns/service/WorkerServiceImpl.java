@@ -1,10 +1,9 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.domain.follow.Follow;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Worker;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
@@ -17,14 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class IndoorServiceImpl implements FeedService {
+public class WorkerServiceImpl implements FeedService {
 
     private final FeedRepositoryImpl feedRepository;
     private final HashtagRepositoryImpl hashtagRepository;
@@ -38,40 +35,39 @@ public class IndoorServiceImpl implements FeedService {
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<Feed> indoorList = feedRepository.findMyList(targetId, num, Indoor.class);
-        List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
-        for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
-                    (int) commentRepository.findListById(feed).count(),
-                    feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent(),
-                    followService.isFollow(userId, feed)
-                    ));
-        }
-        return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
-    }
-
-    @Override
-    public FeedListResponseDto readList(Long userId, int num) {
-        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<Feed> indoorList = feedRepository.findList(num, Indoor.class);
-        List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
-        for (Feed feed : indoorList) {
-            indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+        List<Feed> workerList = feedRepository.findMyList(targetId, num, Worker.class);
+        List<WorkerResponseDto> workerResponseDtoList = new ArrayList<>();
+        for (Feed feed : workerList) {
+            workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
                     feedClapRepository.findClap(user, feed).isPresent(),
                     followService.isFollow(userId, feed)));
         }
-        return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
+        return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
+    }
+
+    @Override
+    public FeedListResponseDto readList(Long userId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        List<Feed> workerList = feedRepository.findList(num, Worker.class);
+        List<WorkerResponseDto> workerResponseDtoList = new ArrayList<>();
+        for (Feed feed : workerList) {
+            workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
+                    (int) commentRepository.findListById(feed).count(),
+                    feedClapRepository.findClapAll(feed).size(),
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
+        }
+        return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
     }
 
     @Override
     public FeedResponseDto read(Long userId, Long feedId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Feed feed = feedRepository.findById(feedId);
-        if (!(feed instanceof Indoor)) throw new NoSuchElementException();
-        return new IndoorResponseDto((Indoor) feed,
+        if (!(feed instanceof Worker)) throw new NoSuchElementException();
+        return new WorkerResponseDto((Worker) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
                 feedClapRepository.findClap(user, feed).isPresent(),
@@ -84,9 +80,9 @@ public class IndoorServiceImpl implements FeedService {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Indoor indoor = ((Indoor) feedRepository.save(new Indoor(feedRequestDto, user)));
+        Worker worker = ((Worker) feedRepository.save(new Worker(feedRequestDto, user)));
 
-        user.addFeed(indoor);
+        user.addFeed(worker);
 
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
@@ -99,11 +95,11 @@ public class IndoorServiceImpl implements FeedService {
 
         for (Hashtag hashtag : hashtags) {
             FeedHashtag feedHashtag = new FeedHashtag();
-            indoor.addFeedHashtag(feedHashtag);
+            worker.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
 
-        return indoor.getId();
+        return worker.getId();
     }
 
     @Override
@@ -120,8 +116,8 @@ public class IndoorServiceImpl implements FeedService {
     public void delete(Long userId, Long feedId) throws IOException {
 
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        Indoor indoor = (Indoor) feedRepository.findById(feedId);
-        if (!indoor.getUser().getId().equals(user.getId())) {
+        Worker worker = (Worker) feedRepository.findById(feedId);
+        if (!worker.getUser().getId().equals(user.getId())) {
             throw new NoSuchElementException();
         }
 
@@ -131,27 +127,27 @@ public class IndoorServiceImpl implements FeedService {
             s3Service.deleteFile(fileName);
         }
 
-        user.deleteFeed(indoor);
-        feedRepository.remove(indoor);
+        user.deleteFeed(worker);
+        feedRepository.remove(worker);
     }
 
     @Override
     public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        Indoor indoor = (Indoor) feedRepository.findById(feedId);
+        Worker worker = (Worker) feedRepository.findById(feedId);
 
-        if (!indoor.getUser().getId().equals(user.getId())) {
+        if (!worker.getUser().getId().equals(user.getId())) {
             throw new NoSuchElementException();
         }
 
         // 글 수정
-        indoor.update((IndoorRequestDto) feedRequestDto);
+        worker.update((WorkerRequestDto) feedRequestDto);
 
         // 태그 찾고 삭제
-        List<FeedHashtag> feedHashtags = hashtagRepository.findFeedHashTag(indoor);
+        List<FeedHashtag> feedHashtags = hashtagRepository.findFeedHashTag(worker);
         for (FeedHashtag feedHashtag : feedHashtags) {
-            indoor.deleteFeedHashtag(feedHashtag);
+            worker.deleteFeedHashtag(feedHashtag);
             feedHashtag.getHashtag().deleteFeedHashtag(feedHashtag);
             hashtagRepository.remove(feedHashtag);
         }
@@ -166,12 +162,12 @@ public class IndoorServiceImpl implements FeedService {
 
         for (Hashtag hashtag : hashtags) {
             FeedHashtag feedHashtag = new FeedHashtag();
-            indoor.addFeedHashtag(feedHashtag);
+            worker.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
 
         // 파일 변경 사항 삭제
-        List<String> prevFileNames =  indoor.getFileList().stream()
+        List<String> prevFileNames =  worker.getFileList().stream()
                 .map(file -> file.getFileName())
                 .collect(Collectors.toList());
         List<String> curFileNames = feedRequestDto.getFilePaths();

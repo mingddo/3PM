@@ -1,9 +1,6 @@
 package com.ssafy.sns.controller;
 
-import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
-import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
+import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.*;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,23 +15,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
-
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
 @RestController
-@RequestMapping("/indoors")
-public class IndoorController {
+@RequestMapping("/worker")
+public class WorkerController {
 
-    public static final Logger logger = LoggerFactory.getLogger(IndoorController.class);
-    private final IndoorServiceImpl indoorService;
+    public static final Logger logger = LoggerFactory.getLogger(WorkerController.class);
+    private final WorkerServiceImpl workerService;
     private final JwtService jwtService;
 
     // 내가 쓴 게시글 불러오기
-    @ApiOperation("해당 유저 작성한 꽃보다집 전체 조회")
+    @ApiOperation("해당 유저 작성한 워커홀릭 전체 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "targetId", value = "사용자 ID", required = true),
             @ApiImplicitParam(name = "startNum", value = "시작 페이지 번호", required = true)
@@ -47,20 +42,20 @@ public class IndoorController {
 
         FeedListResponseDto feedListResponseDto = null;
         try {
-            feedListResponseDto = indoorService.findMyList(
+            feedListResponseDto = workerService.findMyList(
                     jwtService.findId(request.getHeader("Authorization")), targetId, startNum);
-            logger.info("getFeedMyList = 꽃보다집 내 글 리스트 가져오기 : {}", startNum);
+            logger.info("getFeedMyList = 워커홀릭 내 글 리스트 가져오기 : {}", startNum);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            logger.warn("getFeedMyList - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("getFeedMyList - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(feedListResponseDto, status);
     }
 
-    // 꽃보다집 게시글 불러오기
-    @ApiOperation("꽃보다집 전체 조회")
+    // 워커홀릭 게시글 불러오기
+    @ApiOperation("워커홀릭 전체 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startNum", value = "시작 페이지 번호", required = true)
     })
@@ -71,19 +66,19 @@ public class IndoorController {
 
         FeedListResponseDto feedListResponseDto = null;
         try {
-            feedListResponseDto = indoorService.readList(
+            feedListResponseDto = workerService.readList(
                     jwtService.findId(request.getHeader("Authorization")), startNum);
-            logger.info("getFeedList = 꽃보다집 글 리스트 가져오기 : {}", startNum);
+            logger.info("getFeedList = 워커홀릭 글 리스트 가져오기 : {}", startNum);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            logger.warn("getFeedList - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("getFeedList - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(feedListResponseDto, status);
     }
 
-    @ApiOperation("꽃보다집 상세 조회")
+    @ApiOperation("워커홀릭 상세 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
     })
@@ -91,81 +86,81 @@ public class IndoorController {
     public ResponseEntity<FeedResponseDto> getFeed(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        IndoorResponseDto indoorResponseDto = null;
+        WorkerResponseDto workerResponseDto = null;
         try {
-            indoorResponseDto = (IndoorResponseDto) indoorService.read(
+            workerResponseDto = (WorkerResponseDto) workerService.read(
                     jwtService.findId(request.getHeader("Authorization")), feedId);
-            logger.info("getFeed = 꽃보다집 글 가져오기 : {}", indoorResponseDto);
+            logger.info("getFeed = 워커홀릭 글 가져오기 : {}", workerResponseDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            logger.warn("getFeed - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("getFeed - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
-        return new ResponseEntity<>(indoorResponseDto, status);
+        return new ResponseEntity<>(workerResponseDto, status);
     }
 
-    @ApiOperation("꽃보다집 글 작성 (파일 첨부 제외)")
+    @ApiOperation("워커홀릭 글 작성 (파일 첨부 제외)")
     @PostMapping
-    public ResponseEntity<Long> postFeed(@RequestBody IndoorRequestDto indoorRequestDto, HttpServletRequest request) {
+    public ResponseEntity<Long> postFeed(@RequestBody WorkerRequestDto workerRequestDto, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
         try {
-            result = indoorService.write(jwtService.findId(request.getHeader("Authorization")), indoorRequestDto);
-            logger.info("postFeed - 꽃보다집 글 작성 : {}", indoorRequestDto);
+            result = workerService.write(jwtService.findId(request.getHeader("Authorization")), workerRequestDto);
+            logger.info("postFeed - 워커홀릭 글 작성 : {}", workerRequestDto);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            logger.warn("postFeed - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("postFeed - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(result, status);
     }
 
-    @ApiOperation("꽃보다집 글 파일 첨부")
+    @ApiOperation("워커홀릭 글 파일 첨부")
     @PostMapping("/{feedId}")
     public ResponseEntity<Void> postFiles(@PathVariable("feedId") Long feedId, @RequestPart(name = "file", required = false) MultipartFile file,
-                                         HttpServletRequest request) throws IOException {
+                                          HttpServletRequest request) throws IOException {
         HttpStatus status = HttpStatus.ACCEPTED;
         Long result = null;
 
         String token = request.getHeader("Authorization");
         Long userId = jwtService.findId(token);
 
-        indoorService.uploadFiles(feedId, file);
+        workerService.uploadFiles(feedId, file);
 
         return new ResponseEntity<>(status);
     }
 
-    @ApiOperation("꽃보다집 글 수정")
+    @ApiOperation("워커홀릭 글 수정")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true),
             @ApiImplicitParam(name = "file", value = "첨부파일")
     })
     @PutMapping(value = "/{feedId}")
     public ResponseEntity<Long> putFeed(@PathVariable("feedId") Long feedId,
-                                        @RequestBody IndoorRequestDto indoorRequestDto,
+                                        @RequestBody WorkerRequestDto workerRequestDto,
                                         HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
 
         Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
-            indoorService.modify(userId, feedId, indoorRequestDto);
-            logger.info("putFeed - 꽃보다집 글 수정 : {}", indoorRequestDto);
+            workerService.modify(userId, feedId, workerRequestDto);
+            logger.info("putFeed - 워커홀릭 글 수정 : {}", workerRequestDto);
             status = HttpStatus.OK;
         } catch(NoSuchElementException e) {
-            logger.warn("putFeed - 꽃보다집 권한없는 사용자 : {}", userId);
+            logger.warn("putFeed - 워커홀릭 권한없는 사용자 : {}", userId);
             status = HttpStatus.UNAUTHORIZED;
         } catch (Exception e) {
-            logger.warn("putFeed - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("putFeed - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(status);
     }
 
-    @ApiOperation("꽃보다집 글 삭제")
+    @ApiOperation("워커홀릭 글 삭제")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "feedId", value = "피드 번호", required = true)
     })
@@ -176,11 +171,11 @@ public class IndoorController {
         Long userId = jwtService.findId(request.getHeader("Authorization"));
 
         try {
-            indoorService.delete(userId, feedId);
+            workerService.delete(userId, feedId);
             status = HttpStatus.OK;
-            logger.info("putFeed - 꽃보다집 글 수정 : {}", feedId);
+            logger.info("putFeed - 워커홀릭 글 수정 : {}", feedId);
         } catch (Exception e) {
-            logger.warn("deleteFeed - 꽃보다집 에러 : {}", e.getMessage());
+            logger.warn("deleteFeed - 워커홀릭 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
 

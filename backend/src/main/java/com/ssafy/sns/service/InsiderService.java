@@ -4,14 +4,14 @@ import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +38,27 @@ public class InsiderService {
     private final FileServiceImpl fileService;
     private final InsiderRepository insiderRepository;
     private final GroupRepository groupRepository;
+    private final FollowServiceImpl followService;
+
+
+    // 그룹 카데고리의 모든 게시물 출력 (10개씩)
+    public FeedListResponseDto findAll(Long userId, int num) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
+        Page<Insider> insiders = insiderRepository.findAll(pageRequest);
+        List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        for (Insider insider : insiders) {
+            insiderResDtos.add(new InsiderResDto(insider,
+                    (int) commentRepository.findListById(insider).count(),
+                    feedClapRepository.findClapAll(insider).size(),
+                    feedClapRepository.findClap(user, insider).isPresent(),
+                    2,
+                    followService.isFollow(userId, insider),
+                    insider.getGroup().getId(),
+                    insider.getGroup().getName()));
+        }
+        return new FeedListResponseDto(insiderResDtos, num + 1);
+    }
 
     // 그룹아이디에 속하는 모든 게시물 출력 (10개씩)
     public FeedListResponseDto findAllByGroupId(Long userId, Long groupId, int num) {
@@ -45,15 +66,18 @@ public class InsiderService {
         PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
         List<Insider> insiders = insiderRepository.findAllByGroupId(groupId, pageRequest);
         List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        Group group = groupRepository.findById(groupId).orElseThrow();
         for (Insider insider : insiders) {
             insiderResDtos.add(new InsiderResDto(insider,
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
-                    3,
-                    groupId));
+                    2,
+                    followService.isFollow(userId, insider),
+                    groupId,
+                    group.getName()));
         }
-        return new FeedListResponseDto(insiderResDtos, num + insiders.size());
+        return new FeedListResponseDto(insiderResDtos, num + 1);
     }
 
     // 해당 유저가 작성한 모든 그룹 게시물
@@ -63,26 +87,33 @@ public class InsiderService {
         PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
         List<Insider> insiders = insiderRepository.findAllByUserIdAndGroupId(userId, groupId, pageRequest);
         List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        Group group = groupRepository.findById(groupId).orElseThrow();
         for (Insider insider : insiders) {
             insiderResDtos.add(new InsiderResDto(insider,
                     (int) commentRepository.findListById(insider).count(),
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(viewer, insider).isPresent(),
-                    3,
-                    groupId));
+                    2,
+                    followService.isFollow(userId, insider),
+                    groupId,
+                    group.getName()));
         }
-        return new FeedListResponseDto(insiderResDtos, num + insiders.size());
+        return new FeedListResponseDto(insiderResDtos, num + 1);
     }
 
     // 피드 하나의 detail
-    public FeedResponseDto findByGroupIdAndFeedId(Long userId, Long feedId, Long groupId) {
+    public InsiderResDto findByGroupIdAndFeedId(Long userId, Long feedId, Long groupId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Insider insider = insiderRepository.findByGroupIdAndId(groupId, feedId).orElseThrow();
-        return new FeedResponseDto(insider,
+        Group group = groupRepository.findById(groupId).orElseThrow();
+        return new InsiderResDto(insider,
                 (int) commentRepository.findListById(insider).count(),
                 feedClapRepository.findClapAll(insider).size(),
                 feedClapRepository.findClap(user, insider).isPresent(),
-                3);
+                2,
+                followService.isFollow(userId, insider),
+                groupId,
+                group.getName());
     }
 
     // 피드 저장
@@ -94,7 +125,7 @@ public class InsiderService {
         Group group = groupRepository.findById(groupId).orElseThrow();
 
         // 글 등록
-        Insider insider = new Insider(insiderReqDto.getContent(), user, group);
+        Insider insider = new Insider(insiderReqDto, user, group);
         feedRepository.save(insider); // insiderRepository 인지 뭔지 헷갈리네,,,
 
         // 태그 등록

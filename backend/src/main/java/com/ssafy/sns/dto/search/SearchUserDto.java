@@ -11,14 +11,14 @@ import java.util.Map;
 @Getter
 @ToString
 @NoArgsConstructor
-public class SearchHashtagDto {
+public class SearchUserDto {
 
     private String value;
-    private String label;;
+    private String label;
 
     @Builder
-    public SearchHashtagDto(String tagName, int cnt) {
+    public SearchUserDto(String tagName) {
         this.value = tagName;
-        this.label = tagName + " " + Integer.toString(cnt);
+        this.label = tagName;
     }
 }

@@ -9,7 +9,6 @@ import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.InsiderReqDto;
 import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.jwt.JwtService;
-import com.ssafy.sns.service.FeedService;
 import com.ssafy.sns.service.GroupService;
 import com.ssafy.sns.service.InsiderService;
 import com.ssafy.sns.service.UserServiceImpl;
@@ -105,6 +104,28 @@ public class GroupController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "그룹 카테고리 내 모든 피드 조회")
+    @GetMapping("/feeds")
+    public ResponseEntity<List<InsiderResDto>> getGroupFeeds(@RequestParam("startNum") int startNum,
+                                                             HttpServletRequest request) {
+        User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        FeedListResponseDto feedListResponseDto = null;
+        try {
+            feedListResponseDto = insiderService.findAll(user.getId(), startNum);
+            logger.info("getGroupFeedsByUser = 핵인싸 그룹 해당 유저 게시글 리스트 가져오기 : {}", startNum);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getGroupFeedsByUser - 핵인싸 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity(feedListResponseDto, status);
+    }
+
+
     @ApiOperation(value = "해당 유저가 작성한 그룹 게시글 조회")
     @GetMapping("/{groupId}/feeds/users/{userId}")
     public ResponseEntity<List<InsiderResDto>> getGroupFeedsByUser(@PathVariable("groupId") Long groupId,
@@ -152,14 +173,14 @@ public class GroupController {
 
     @ApiOperation(value = "그룹 중 피드 디테일 조회", response = InsiderResDto.class)
     @GetMapping("/{groupId}/feeds/{feedId}")
-    public ResponseEntity<FeedResponseDto> getGroupFeedOne(@PathVariable("groupId") Long groupId,
+    public ResponseEntity<InsiderResDto> getGroupFeedOne(@PathVariable("groupId") Long groupId,
                                                            @PathVariable("feedId") Long feedId,
                                                            HttpServletRequest request) {
         User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
 
         HttpStatus status = HttpStatus.ACCEPTED;
 
-        FeedResponseDto insiderResDto = null;
+        InsiderResDto insiderResDto = null;
         try {
             insiderResDto = insiderService.findByGroupIdAndFeedId(user.getId(), feedId, groupId);
             logger.info("getGroupFeeds = 핵인싸 그룹 게시글 리스트 가져오기 : {}", insiderResDto);

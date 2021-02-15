@@ -3,7 +3,7 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div class="newsfeed-D">
-        <GroupNav v-if="Category == 2" :isHome="true"/>
+        <GroupNav v-if="Category == 2" :isHome="true" />
         <section v-if="fd" v-cloak class="feed-detail">
           <div v-if="Category == 2">
             
@@ -42,7 +42,11 @@
           <article class="feed-detail-content-box">
             <div v-if="fd.files.length != 0">
               <div v-for="(file, idx) in fd.files" :key="idx">
-                <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" class="feed-detail-img" alt="업로드 파일">
+                <img
+                  :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`"
+                  class="feed-detail-img"
+                  alt="업로드 파일"
+                />
               </div>
             </div>
             <div class="feed-detail-tag">
@@ -54,7 +58,7 @@
                 {{ tag }}
               </button>
             </div>
-            <div class="feed-detail-content">
+            <div v-if="fd.content" class="feed-detail-content">
               <p v-html="fd.content">
                 <!-- {{fd.content}} -->
               </p>
@@ -77,14 +81,19 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
-              <img :src="fd.clap ? 'https://img.icons8.com/fluent-systems-filled/17/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/17/000000/applause.png'"/>
+              <span v-if="fd.clap">👏🏻</span>
+              <img
+                v-if="!fd.clap"
+                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
+              />
               <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
-          </span>
-          <span>
-            <i class="far fa-comment"></i>
-            <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span> <span v-else> 0</span>
-          </span>
-        </div>  
+            </span>
+            <span>
+              <i class="far fa-comment"></i>
+              <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
+              <span v-else> 0</span>
+            </span>
+          </div>
           <NewsFeedClapUser
             v-if="clapListOpen"
             :clapedUsers="clapedUsers"
@@ -92,8 +101,12 @@
           />
           <div class="feed-detail-like-comment-share-btn-box">
             <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-              <i class="far fa-thumbs-up"></i>
-              {{ fd.clap ? "좋아요취소" : "좋아요" }}
+              <img
+                v-if="!fd.clap"
+                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
+              />
+              <span v-if="fd.clap">👏🏻</span>
+              {{ fd.clap ? "조금 더 고민해볼래요" : "굉장해요!" }}
             </div>
             <div
               class="feed-detail-like-comment-share-btn"
@@ -141,7 +154,7 @@ export default {
     UserInfoBtn,
     Location,
     Comment,
-    GroupNav
+    GroupNav,
   },
   data() {
     return {

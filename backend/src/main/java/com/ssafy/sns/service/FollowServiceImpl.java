@@ -1,10 +1,12 @@
 package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.follow.Follow;
+import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.notice.Notice;
 import com.ssafy.sns.domain.notice.NoticeFollow;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.user.UserFollowDto;
+import com.ssafy.sns.repository.FeedRepository;
 import com.ssafy.sns.repository.FollowRepository;
 import com.ssafy.sns.repository.NoticeRepositoryImpl;
 import com.ssafy.sns.repository.UserRepository;
@@ -23,6 +25,8 @@ public class FollowServiceImpl {
     private final UserRepository userRepository;
 
     private final FollowRepository followRepository;
+
+    private final FeedRepository feedRepository;
 
     public int fromMeToOthers(Long id) {
         return (int) followRepository.countByFromUserId(id);
@@ -49,6 +53,12 @@ public class FollowServiceImpl {
 //        follows.stream().forEach(follow -> result.add(follow.getToId()));
 //        return result;
 //    }
+
+    // 피드를 보고 팔로우 여부를 알아내기
+    public boolean isFollow(Long fromUserId, Feed feed) {
+        Long toUserId = feed.getUser().getId();
+        return followRepository.findByToUserAndFromUser(fromUserId, toUserId).isPresent();
+    }
 
     // 팔로윙 토글
     public void addFollow(Long fromUserId, Long toUserId) {

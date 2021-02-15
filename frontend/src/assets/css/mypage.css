@@ -248,5 +248,36 @@
 
 .mypageEdit {
   width: 70%;
-  margin-top: 80px;
+  margin: 80px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.write-introduce {
+  display: none;
+}
+.write-introduce.active {
+  display: block;
+}
+
+.profile-edit-img-frame {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 70%;
+  overflow: hidden;
+  background-color: white;
+}
+
+.profile-edit-img-frame > div {
+  width: 100%;
+}
+.profile-edit-img-frame > div > img {
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
 }

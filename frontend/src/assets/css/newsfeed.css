@@ -38,13 +38,13 @@
 }
 .feed-detail-img {
   padding: 20px;
-  width: 100%;
+  width: 50%;
 }
 .feed-detail-content {
   background-color: #ffffff;
   text-align: left;
   width: 100%;
-  padding : 30px;
+  padding: 30px;
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 30px;
@@ -431,10 +431,16 @@
   display: flex;
   justify-content: center;
 }
+.feed-content-box-img-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 .feed-content-box img {
   max-width: 100%;
   min-height: 300px;
   max-height: 300px;
+  object-fit: scale-down;
 }
 .feed-content-box p {
   width: 100%;

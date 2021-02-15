@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileRequestDto {
 
     private String nickname;
-    private Long user_id;
     private String introduce;
 
 }
