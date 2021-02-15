@@ -11,8 +11,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class IndoorResponseDto extends FeedResponseDto {
 
-    public IndoorResponseDto(Indoor indoor, int commentCnt, int likeCnt, boolean isClap) {
-        super(indoor, commentCnt, likeCnt, isClap, 1);
+    public IndoorResponseDto(Indoor indoor, int commentCnt, int likeCnt, boolean isClap, boolean isFollow) {
+        super(indoor, commentCnt, likeCnt, isClap, 1, isFollow);
     }
 
 //    @Builder

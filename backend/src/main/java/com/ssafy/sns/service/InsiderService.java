@@ -38,6 +38,7 @@ public class InsiderService {
     private final FileServiceImpl fileService;
     private final InsiderRepository insiderRepository;
     private final GroupRepository groupRepository;
+    private final FollowServiceImpl followService;
 
 
     // 그룹 카데고리의 모든 게시물 출력 (10개씩)
@@ -52,6 +53,7 @@ public class InsiderService {
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
                     2,
+                    followService.isFollow(userId, insider),
                     insider.getGroup().getId(),
                     insider.getGroup().getName()));
         }
@@ -71,6 +73,7 @@ public class InsiderService {
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(user, insider).isPresent(),
                     2,
+                    followService.isFollow(userId, insider),
                     groupId,
                     group.getName()));
         }
@@ -91,6 +94,7 @@ public class InsiderService {
                     feedClapRepository.findClapAll(insider).size(),
                     feedClapRepository.findClap(viewer, insider).isPresent(),
                     2,
+                    followService.isFollow(userId, insider),
                     groupId,
                     group.getName()));
         }
@@ -107,6 +111,7 @@ public class InsiderService {
                 feedClapRepository.findClapAll(insider).size(),
                 feedClapRepository.findClap(user, insider).isPresent(),
                 2,
+                followService.isFollow(userId, insider),
                 groupId,
                 group.getName());
     }

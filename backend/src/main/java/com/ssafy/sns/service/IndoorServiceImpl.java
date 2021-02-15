@@ -1,5 +1,6 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.follow.Follow;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -31,6 +33,7 @@ public class IndoorServiceImpl implements FeedService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
+    private final FollowServiceImpl followService;
 
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
@@ -41,7 +44,9 @@ public class IndoorServiceImpl implements FeedService {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)
+                    ));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -55,7 +60,8 @@ public class IndoorServiceImpl implements FeedService {
             indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
         }
         return new FeedListResponseDto<>(indoorResponseDtoList, num + indoorList.size());
     }
@@ -68,7 +74,8 @@ public class IndoorServiceImpl implements FeedService {
         return new IndoorResponseDto((Indoor) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
-                feedClapRepository.findClap(user, feed).isPresent());
+                feedClapRepository.findClap(user, feed).isPresent(),
+                followService.isFollow(userId, feed));
     }
 
     @Override

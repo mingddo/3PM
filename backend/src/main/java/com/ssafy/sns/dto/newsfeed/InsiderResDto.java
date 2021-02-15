@@ -15,8 +15,8 @@ public class InsiderResDto extends FeedResponseDto {
     private String groupName;
 
 
-    public InsiderResDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category, Long groupId, String groupName) {
-        super(feed, commentCnt, likeCnt, isClap, category);
+    public InsiderResDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category, boolean isFollow, Long groupId, String groupName) {
+        super(feed, commentCnt, likeCnt, isClap, category, isFollow);
         this.groupId = groupId;
         this.groupName = groupName;
     }
