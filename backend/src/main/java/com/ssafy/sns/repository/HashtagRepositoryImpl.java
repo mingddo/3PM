@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +44,6 @@ public class HashtagRepositoryImpl implements HashtagRepository {
 
     @Override
     public void change(List<String> tags, Feed feed) {
-        List<Hashtag> result = new ArrayList<>();
 
         // 삭제할 태그
         List<FeedHashtag> feedHashtags =

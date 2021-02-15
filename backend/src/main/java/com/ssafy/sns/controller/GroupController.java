@@ -5,7 +5,6 @@ import com.ssafy.sns.dto.group.GroupReqDto;
 import com.ssafy.sns.dto.group.GroupCreateResDto;
 import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
-import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.newsfeed.InsiderReqDto;
 import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.jwt.JwtService;
