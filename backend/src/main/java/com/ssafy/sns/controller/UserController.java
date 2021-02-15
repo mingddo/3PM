@@ -224,13 +224,13 @@ public class UserController {
      */
     @ApiOperation("사용자의 프로필 정보를 수정한다.")
     @PutMapping("/{userId}")
-    public ResponseEntity updateProfile(@PathVariable("id") Long id,
+    public ResponseEntity updateProfile(@PathVariable("userId") Long userId,
                                         @RequestPart("file") MultipartFile file,
                                         ProfileRequestDto dto,
                                         HttpServletRequest request) throws IOException {
         User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
 
-        if (id != user.getId()) {
+        if (userId != user.getId()) {
             return new ResponseEntity("잘못된 접근입니다", HttpStatus.UNAUTHORIZED);
         }
         userService.updateUserProfile(user.getId(), dto, file);
