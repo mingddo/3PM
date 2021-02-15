@@ -3,7 +3,7 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Worker;
+import com.ssafy.sns.domain.newsfeed.Outdoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class WorkerServiceImpl implements FeedService {
+public class OutdoorServiceImpl implements FeedService {
 
     private final FeedRepositoryImpl feedRepository;
     private final HashtagRepositoryImpl hashtagRepository;
@@ -34,37 +34,37 @@ public class WorkerServiceImpl implements FeedService {
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<Feed> workerList = feedRepository.findMyList(targetId, num, Worker.class);
-        List<WorkerResponseDto> workerResponseDtoList = new ArrayList<>();
-        for (Feed feed : workerList) {
-            workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
+        List<Feed> outdoorList = feedRepository.findMyList(targetId, num, Outdoor.class);
+        List<OutdoorResponseDto> outdoorResponseDtoList = new ArrayList<>();
+        for (Feed feed : outdoorList) {
+            outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
                     feedClapRepository.findClap(user, feed).isPresent()));
         }
-        return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
+        return new FeedListResponseDto<>(outdoorResponseDtoList, num + outdoorList.size());
     }
 
     @Override
     public FeedListResponseDto readList(Long userId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        List<Feed> workerList = feedRepository.findList(num, Worker.class);
-        List<WorkerResponseDto> workerResponseDtoList = new ArrayList<>();
-        for (Feed feed : workerList) {
-            workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
+        List<Feed> outdoorList = feedRepository.findList(num, Outdoor.class);
+        List<OutdoorResponseDto> outdoorResponseDtoList = new ArrayList<>();
+        for (Feed feed : outdoorList) {
+            outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
                     feedClapRepository.findClap(user, feed).isPresent()));
         }
-        return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
+        return new FeedListResponseDto<>(outdoorResponseDtoList, num + outdoorList.size());
     }
 
     @Override
     public FeedResponseDto read(Long userId, Long feedId) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         Feed feed = feedRepository.findById(feedId);
-        if (!(feed instanceof Worker)) throw new NoSuchElementException();
-        return new WorkerResponseDto((Worker) feed,
+        if (!(feed instanceof Outdoor)) throw new NoSuchElementException();
+        return new OutdoorResponseDto((Outdoor) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
                 feedClapRepository.findClap(user, feed).isPresent());
@@ -76,9 +76,8 @@ public class WorkerServiceImpl implements FeedService {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
 
         // 글 등록
-        Worker worker = ((Worker) feedRepository.save(new Worker(feedRequestDto, user)));
-
-        user.addFeed(worker);
+        Outdoor outdoor = ((Outdoor) feedRepository.save(new Outdoor(feedRequestDto, user)));
+        user.addFeed(outdoor);
 
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
@@ -91,11 +90,11 @@ public class WorkerServiceImpl implements FeedService {
 
         for (Hashtag hashtag : hashtags) {
             FeedHashtag feedHashtag = new FeedHashtag();
-            worker.addFeedHashtag(feedHashtag);
+            outdoor.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
 
-        return worker.getId();
+        return outdoor.getId();
     }
 
     @Override
@@ -110,10 +109,9 @@ public class WorkerServiceImpl implements FeedService {
 
     @Override
     public void delete(Long userId, Long feedId) throws IOException {
-
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        Worker worker = (Worker) feedRepository.findById(feedId);
-        if (!worker.getUser().getId().equals(user.getId())) {
+        Outdoor outdoor = (Outdoor) feedRepository.findById(feedId);
+        if (!outdoor.getUser().getId().equals(user.getId())) {
             throw new NoSuchElementException();
         }
 
@@ -123,27 +121,27 @@ public class WorkerServiceImpl implements FeedService {
             s3Service.deleteFile(fileName);
         }
 
-        user.deleteFeed(worker);
-        feedRepository.remove(worker);
+        user.deleteFeed(outdoor);
+        feedRepository.remove(outdoor);
     }
 
     @Override
     public void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
-        Worker worker = (Worker) feedRepository.findById(feedId);
+        Outdoor outdoor = (Outdoor) feedRepository.findById(feedId);
 
-        if (!worker.getUser().getId().equals(user.getId())) {
+        if (!outdoor.getUser().getId().equals(user.getId())) {
             throw new NoSuchElementException();
         }
 
         // 글 수정
-        worker.update((WorkerRequestDto) feedRequestDto);
+        outdoor.update((OutdoorRequestDto) feedRequestDto);
 
         // 태그 찾고 삭제
-        List<FeedHashtag> feedHashtags = hashtagRepository.findFeedHashTag(worker);
+        List<FeedHashtag> feedHashtags = hashtagRepository.findFeedHashTag(outdoor);
         for (FeedHashtag feedHashtag : feedHashtags) {
-            worker.deleteFeedHashtag(feedHashtag);
+            outdoor.deleteFeedHashtag(feedHashtag);
             feedHashtag.getHashtag().deleteFeedHashtag(feedHashtag);
             hashtagRepository.remove(feedHashtag);
         }
@@ -158,12 +156,12 @@ public class WorkerServiceImpl implements FeedService {
 
         for (Hashtag hashtag : hashtags) {
             FeedHashtag feedHashtag = new FeedHashtag();
-            worker.addFeedHashtag(feedHashtag);
+            outdoor.addFeedHashtag(feedHashtag);
             hashtag.addFeedHashtag(feedHashtag);
         }
 
         // 파일 변경 사항 삭제
-        List<String> prevFileNames =  worker.getFileList().stream()
+        List<String> prevFileNames =  outdoor.getFileList().stream()
                 .map(file -> file.getFileName())
                 .collect(Collectors.toList());
         List<String> curFileNames = feedRequestDto.getFilePaths();
