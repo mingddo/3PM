@@ -104,7 +104,11 @@
       </div>
     </div>
     <div :class="[scrolled ? 'upper-navbar active' : 'upper-navbar']">
-      <i @click="toggleslidernavbar" class="fas fa-bars sliderToggle"></i>
+      <i
+        @click="toggleslidernavbar"
+        class="fas fa-bars"
+        :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
+      ></i>
       <span>오후세시</span>
       <img src="@/assets/searching.svg" alt="" width="10%" height="80%" />
     </div>
@@ -296,6 +300,9 @@ export default {
     $route() {
       this.scrolled = false;
     },
+    userStatus: function() {
+      console.log(this.userStatus);
+    },
   },
   computed: {
     ...mapState([
@@ -405,6 +412,9 @@ export default {
     display: block;
     cursor: pointer;
     z-index: 17005;
+  }
+  .sliderToggle.active {
+    display: none;
   }
   .upper-navbar {
     height: 50px;
