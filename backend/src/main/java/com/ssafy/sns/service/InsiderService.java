@@ -41,7 +41,7 @@ public class InsiderService {
     private final FollowServiceImpl followService;
 
 
-    // 그룹 카데고리의 모든 게시물 출력 (10개씩)
+    // 그룹 카테고리의 모든 게시물 출력 (10개씩)
     public FeedListResponseDto findAll(Long userId, int num) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
@@ -224,4 +224,23 @@ public class InsiderService {
         return true;
     }
 
+    // 한 유저가 작성한 그룹 카테고리 내 모든 게시물 (10개 단위)
+    public FeedListResponseDto findAllByUser(Long viewerId, Long userId, int num) {
+//        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        User viewer = userRepository.findById(viewerId).orElseThrow(NoSuchElementException::new);
+        PageRequest pageRequest = PageRequest.of(num, 10, Sort.by("createdDate").descending());
+        List<Insider> insiders = insiderRepository.findAllByUserId(userId, pageRequest);
+        List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        for (Insider insider : insiders) {
+            insiderResDtos.add(new InsiderResDto(insider,
+                    (int) commentRepository.findListById(insider).count(),
+                    feedClapRepository.findClapAll(insider).size(),
+                    feedClapRepository.findClap(viewer, insider).isPresent(),
+                    2,
+                    followService.isFollow(viewerId, insider),
+                    insider.getGroup().getId(),
+                    insider.getGroup().getName()));
+        }
+        return new FeedListResponseDto(insiderResDtos, num + 1);
+    }
 }

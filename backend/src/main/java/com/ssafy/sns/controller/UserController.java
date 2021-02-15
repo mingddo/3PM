@@ -5,9 +5,12 @@ import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
+import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
+import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.dto.user.*;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
+import com.ssafy.sns.service.InsiderService;
 import com.ssafy.sns.service.UserServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,10 +39,9 @@ import java.util.Map;
 public class UserController {
 
     private final UserServiceImpl userService;
-
     private final FollowServiceImpl followService;
-
     private final JwtService jwtService;
+    private final InsiderService insiderService;
 
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -279,5 +281,15 @@ public class UserController {
     public ResponseEntity<List<GroupResDto>> getGroupsByUser(@PathVariable("userId") Long userId) {
         List<GroupResDto> userGroupsDtos = userService.findUserGroups(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userGroupsDtos);
+    }
+
+    @ApiOperation("유저가 그룹 카테고리에서 작성한 피드 리스트 가져오기")
+    @GetMapping("/{userId}/groups/feeds")
+    public ResponseEntity<InsiderResDto> getGroupFeedsByUser(@PathVariable("userId") Long userId,
+                                                             @RequestParam("startNum") int startNum,
+                                                             HttpServletRequest request) {
+        User viewer = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+        FeedListResponseDto feedListResponseDto =  insiderService.findAllByUser(viewer.getId(), userId, startNum);
+        return new ResponseEntity(feedListResponseDto, HttpStatus.OK);
     }
 }
