@@ -22,7 +22,7 @@ function getprofileFeedIndoor(userid, pk,success,fail){
 // 해당 유저가 작성한 그룹 게시글 조회
 function getprofileFeedGroup(userid, groupid, pk,success,fail){
   instance
-    .get(`groups/${groupid}/feed/users/${userid}`, {
+    .get(`groups/${groupid}/feeds/users/${userid}`, {
       params: {
         startNum: pk
       }
