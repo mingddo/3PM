@@ -30,6 +30,7 @@ public class WorkerServiceImpl implements FeedService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
+    private final FollowServiceImpl followService;
 
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
@@ -40,7 +41,8 @@ public class WorkerServiceImpl implements FeedService {
             workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
         }
         return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
     }
@@ -54,7 +56,8 @@ public class WorkerServiceImpl implements FeedService {
             workerResponseDtoList.add(new WorkerResponseDto((Worker) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
         }
         return new FeedListResponseDto<>(workerResponseDtoList, num + workerList.size());
     }
@@ -67,7 +70,8 @@ public class WorkerServiceImpl implements FeedService {
         return new WorkerResponseDto((Worker) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
-                feedClapRepository.findClap(user, feed).isPresent());
+                feedClapRepository.findClap(user, feed).isPresent(),
+                followService.isFollow(userId, feed));
     }
 
     @Override

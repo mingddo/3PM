@@ -2,6 +2,7 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
+import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
 import com.ssafy.sns.repository.UserRepository;
 import com.ssafy.sns.util.UnicodeHandler;
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final UnicodeHandler unicodeHandler;
+    private final FollowServiceImpl followService;
 
 
     public User findUserById(Long id) {
@@ -87,5 +90,25 @@ public class UserServiceImpl implements UserService {
         user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getUsername()));
 
         return userRepository.save(user);
+    }
+
+    public List<UserProfileDto> findAllUser() {
+         return userRepository.findAll().stream()
+                 .map(user -> {
+                     Long userId = user.getId();
+                     int fromMeToOthersCnt = followService.fromMeToOthers(userId);
+                     int toMeFromOthersCnt = followService.toMeFromOthers(userId);
+                     int groupCnt = user.getGroupMembers().size(); // 나중에 Group Entity 생기면 추가 예정
+
+                     return UserProfileDto.builder()
+                             .username(user.getNickname())
+                             .user_id(user.getId())
+                             .user_img(user.getImg())
+                             .fromMeToOthersCnt(fromMeToOthersCnt)
+                             .toMeFromOthersCnt(toMeFromOthersCnt)
+                             .groupCnt(groupCnt)
+                             .introduce(user.getIntroduce())
+                             .build();
+                 }).collect(Collectors.toList());
     }
 }

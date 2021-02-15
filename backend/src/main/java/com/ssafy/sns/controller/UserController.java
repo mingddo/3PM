@@ -101,6 +101,13 @@ public class UserController {
         return new ResponseEntity(isDuplicated, HttpStatus.OK);
     }
 
+    @ApiOperation("유저 전체 조회")
+    @GetMapping
+    public ResponseEntity findAllUsers() {
+        List<UserProfileDto> allUser = userService.findAllUser();
+        return new ResponseEntity(allUser, HttpStatus.OK);
+    }
+
 
     /**
      * [마이페이지 유저 정보] [프로필 정보]
