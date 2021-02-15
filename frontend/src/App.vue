@@ -299,6 +299,8 @@ export default {
   watch: {
     $route() {
       this.scrolled = false;
+      console.log("스크롤 탑 함수");
+      window.scrollTo({ top: 0, behavior: "auto" });
     },
     userStatus: function() {
       console.log(this.userStatus);
