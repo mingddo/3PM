@@ -24,7 +24,7 @@ public class SwaggerConfig {
     @Bean
     public Docket apiV1() {
         return new Docket(DocumentationType.SWAGGER_2)
-//                .host("i4b208.p.ssafy.io")
+                .host("i4b208.p.ssafy.io")
                 .useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.any())
