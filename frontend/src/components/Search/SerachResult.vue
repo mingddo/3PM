@@ -6,7 +6,9 @@
           <img
             v-if="result.indoorResponseDtoList[0].user.img"
             class="resultImgFrame-img"
-            :src="result.indoorResponseDtoList[0].user.img"
+            :src="
+              `https://dtbqjjy7vxgz8.cloudfront.net/${result.indoorResponseDtoList[0].user.img}`
+            "
             alt="유저프로필이미지"
           />
           <img
