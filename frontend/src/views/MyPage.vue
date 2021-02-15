@@ -140,7 +140,7 @@
                 <button @click="onClickFeedGroup">핵인싸</button>
                 <button @click="onClickFeedWorker">워커홀릭</button>
               </div>
-              <NewsFeedList :feed="feedObj[currentFeedName].feed" :last="feedObj[currentFeedName].last" />
+              <NewsFeedList :feed="feedObj[currentFeedName].feed" :last="feedObj[currentFeedName].last" :Category="feedObj[currentFeedName].category" />
             </section>
             <section v-if="activetab === 2" class="myPageActivity">
               <Activity :activities="current_user_activityList" />
@@ -168,7 +168,7 @@ import {
   getprofileInfo,  
   getprofileFeedIndoor, 
   getprofileFeedOutdoor,
-  // getprofileFeedGroup,
+  getprofileFeedGroup,
   getprofileGroups,
   getprofileFeedWorker,
   followToggle,
@@ -193,6 +193,7 @@ export default {
       subscribed: false,
       // 내 홈페이지 여부
       groups: [],
+      groupIds : [],
       mypage: false,
       activetab: 1,
       profileinfo: {
@@ -208,24 +209,28 @@ export default {
           last : false,
           next : false,
           feed : [],
+          category : 1,
         },
         outdoor : {
           feed_page_no : 0,
           last : false,
           next : false,
           feed : [],
+          category : 3,
         },
         worker : {
           feed_page_no : 0,
           last : false,
           next : false,
           feed : [],
+          category : 4,
         },
         group : {
           feed_page_no : 0,
           last : false,
           next : false,
           feed : [],
+          category : 2,
         }
       },
       extra : 100,
@@ -273,7 +278,6 @@ export default {
             this.feedObj[keyName].next = false
             this.feedObj[keyName].feed = []
             this.feedObj[keyName].feed_page_no = 0
-            console.log(this.feedObj[keyName])
           }
         }
         this.extra = 100
@@ -292,7 +296,7 @@ export default {
           this.getWorkerFeed();
           break;
         case 'group':
-          this.getGroupFeed();
+          this.getGroupFeed(this.groupIds);
       }
     },
     getIndoorFeed() {
@@ -300,7 +304,6 @@ export default {
         this.profile_user,
         this.feedObj.indoor.feed_page_no,
         (res) => {
-          console.log(res.data);
           this.feedObj.indoor.feed_page_no = res.data.endNum;
           let feeds = res.data.feedList;
           if (feeds.length < 10) {
@@ -321,7 +324,6 @@ export default {
         this.profile_user,
         this.feedObj.outdoor.feed_page_no,
         (res) => {
-          console.log(res.data);
           this.feedObj.outdoor.feed_page_no = res.data.endNum;
           let feeds = res.data.feedList;
           if (feeds.length < 10) {
@@ -342,7 +344,6 @@ export default {
         this.profile_user,
         this.feedObj.worker.feed_page_no,
         (res) => {
-          console.log(res.data);
           this.feedObj.worker.feed_page_no = res.data.endNum;
           let feeds = res.data.feedList;
           if (feeds.length < 10) {
@@ -358,20 +359,44 @@ export default {
         }
       );
     },
-    getGroupFeed() {
-
+    getGroupFeed(groupIds) {
+      for (let i=0;i<groupIds.length;i++) {
+        const groupId = groupIds[i]
+        getprofileFeedGroup(
+          this.profile_user,
+          groupId,
+          0,
+          (res) => {
+            console.log('getprofileFeedGroup',res.data)
+            let feeds = res.data.feedList;
+            for (let f of feeds) {
+              this.feedObj.group.feed.push(f);
+            }
+          },
+          (err) => {
+            console.log('getprofileFeedGroup',err)
+          }
+        )
+      }
     },
     getGroups() {
-      getprofileGroups(
-        this.profile_user,
-        (res) => {
-          console.log('getprofileGroups',res.data)
-          this.groups = res.data
-        },
-        (err) => {
-          console.log('getprofileGroups',err)
-        }
-      )
+      return new Promise((resolve,reject) => {
+        getprofileGroups(
+          this.profile_user,
+          (res) => {
+            this.groups = res.data
+            for (let i=0;i<this.groups.length;i++) {
+              const groupId =this.groups[i].id
+              this.groupIds.push(groupId)
+            }
+            resolve(this.groupIds)
+          },
+          (err) => {
+            console.log('getprofileGroups',err)
+            reject()
+          }
+        )
+      })
     },
     setScroll() {
       window.addEventListener("scroll", () => {
@@ -392,11 +417,11 @@ export default {
       });
     },
     usercheck() {
-      console.log(
-        "같은 유저인지?",
-        this.$store.state.userId,
-        this.$route.query.name
-      );
+      // console.log(
+      //   "같은 유저인지?",
+      //   this.$store.state.userId,
+      //   this.$route.query.name
+      // );
       if (
         this.$route.query.name === undefined ||
         this.$route.query.name === this.$store.state.userId ||
@@ -409,14 +434,14 @@ export default {
       } else {
         this.profile_user = this.$route.query.name;
         this.mypage = false;
-        console.log("내 프로필이 아니다", this.profileinfo);
+        // console.log("내 프로필이 아니다", this.profileinfo);
       }
     },
     getprofileInfo() {
       getprofileInfo(
         this.profile_user,
         (res) => {
-          console.log(res);
+          // console.log(res);
           this.profileinfo = res.data;
         },
         (err) => {
@@ -429,8 +454,8 @@ export default {
     followToggle() {
       followToggle(
         this.profile_user,
-        (res) => {
-          console.log("팔로우 되는지", res.data);
+        () => {
+          // console.log("팔로우 되는지", res.data);
           if (this.subscribed === false) {
             (this.subscribed = true),
               (this.profileinfo.toMeFromOthersCnt =
@@ -450,7 +475,7 @@ export default {
       followingList(
         this.current_user,
         (res) => {
-          console.log("내가팔로우하는 사람", res.data);
+          // console.log("내가팔로우하는 사람", res.data);
           this.current_user_followingList = res.data;
         },
         (err) => {
@@ -463,7 +488,7 @@ export default {
         this.current_user,
         (res) => {
           const resArray = []
-          console.log(res.data)
+          // console.log(res.data)
           for (let i=res.data.length-1;i>-1;i--) {
             resArray.push(res.data[i])
           }
@@ -480,7 +505,7 @@ export default {
     } 
   },
   created() {
-    console.log(this.$store.state.userId);
+    // console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
     this.setFeedList(this.currentFeedName);
@@ -489,7 +514,10 @@ export default {
     this.setScroll();
     this.getfollowingList();
     this.getActiviy();
-    this.getGroups();
+    this.getGroups()
+    .then((res) => {
+      this.getGroupFeed(res)
+    })
   },
 };
 </script>
