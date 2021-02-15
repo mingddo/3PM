@@ -231,7 +231,7 @@ public class UserController {
     @ApiOperation("사용자의 프로필 정보를 수정한다.")
     @PutMapping("/{userId}")
     public ResponseEntity updateProfile(@PathVariable("userId") Long userId,
-                                        @RequestPart("file") MultipartFile file,
+                                        @RequestPart(value = "file", required = false) MultipartFile file,
                                         ProfileRequestDto dto,
                                         HttpServletRequest request) throws IOException {
         User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
