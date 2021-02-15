@@ -1,6 +1,8 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.hashtag.Hashtag;
+import com.ssafy.sns.dto.group.GroupResDto;
+import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchResponseDto;
 import com.ssafy.sns.dto.search.SearchUserDto;
@@ -32,7 +34,6 @@ public class SearchController {
     private final SearchServiceImpl searchService;
     private final JwtService jwtService;
 
-    // return 형태 List<SearchResponseDto> -> (tagname, List<IndoorResponseDto>)
     @ApiOperation("키워드 검색을 통해 게시물 받아오기")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
@@ -45,6 +46,7 @@ public class SearchController {
         try {
             map.put("feedList", searchFeed(keyword, request));
             map.put("userList", searchUser(keyword));
+            map.put("groupList", searchGroup(keyword));
         } catch (Exception e) {
             logger.warn("전체 검색 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
@@ -53,18 +55,32 @@ public class SearchController {
 
     }
 
+    @ApiOperation("피드 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
+    })
     @GetMapping("/feed")
     public ResponseEntity<List<SearchResponseDto>> searchFeed(@RequestParam("keyword") String keyword,
                                                               HttpServletRequest request) {
         List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {
-            searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(
-                    jwtService.findId(request.getHeader("Authorization")), h)));
+            List<FeedResponseDto> feedResponseDtoList = searchService.searchFeeds(jwtService.findId(request.getHeader("Authorization")), h);
+            if(feedResponseDtoList.isEmpty()) {
+                continue;
+            } else {
+                searchResponseDto.add(new SearchResponseDto(h.getTagName(), searchService.searchFeeds(
+                        jwtService.findId(request.getHeader("Authorization")), h)));
+            }
+
         }
         return new ResponseEntity<>(searchResponseDto, HttpStatus.OK);
     }
 
+    @ApiOperation("유저 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
+    })
     @GetMapping("/user")
     public ResponseEntity<List<SimpleUserDto>> searchUser(@RequestParam("keyword") String keyword){
         List<SimpleUserDto> userDtoList = searchService.searchUsers(keyword);
@@ -74,10 +90,15 @@ public class SearchController {
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
 
-//    @GetMapping("/group")
-//    public ResponseEntity<List<SearchResponseDto>> searchGroup(@RequestParam("keyword") String keyword){
-//        return null;
-//    }
+    @ApiOperation("그륩 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyword", value = "검색명", required = true)
+    })
+    @GetMapping("/group")
+    public ResponseEntity<List<GroupResDto>> searchGroup(@RequestParam("keyword") String keyword){
+        List<GroupResDto> groupResDtoList = searchService.searchGroup(keyword);
+        return new ResponseEntity<>(groupResDtoList, HttpStatus.OK);
+    }
 
     @ApiOperation("태그 자동 완성")
     @ApiImplicitParams({

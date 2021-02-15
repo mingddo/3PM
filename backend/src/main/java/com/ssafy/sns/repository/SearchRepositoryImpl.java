@@ -1,5 +1,6 @@
 package com.ssafy.sns.repository;
 
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
@@ -37,10 +38,11 @@ public class SearchRepositoryImpl implements SearchRepository{
                 .getResultList();
     }
 
-//    @Override
-//    public List<User> searchGroups(String keyword) {
-//        return em.createQuery("select u from User u where u.nickname like :nickname", User.class)
-//                .setParameter("nickname", "%"+keyword+"%")
-//                .getResultList();
-//    }
+    @Override
+    public List<Group> searchGroups(String keyword) {
+        return em.createQuery("select g from Group g where g.name like :name", Group.class)
+                .setParameter("name", "%"+keyword+"%")
+                .getResultList();
+    }
+
 }
