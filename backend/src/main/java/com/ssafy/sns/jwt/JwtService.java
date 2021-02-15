@@ -21,7 +21,7 @@ public class JwtService {
 
     private String signature = "TOKEN";
     private final Long REF_EXPIRE = 60L * 24 * 10;
-    private final Long ACC_EXPIRE = 1L;
+    private final Long ACC_EXPIRE = 60L;
 
     //	로그인 성공시 사용자 정보를 기반으로 JWTToken을 생성하여 반환.
     public String createRefreshToken(Long id) {
