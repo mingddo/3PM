@@ -2,6 +2,8 @@ package com.ssafy.sns.dto.mypage;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,5 +19,6 @@ public class UserProfileDto {
     private int toMeFromOthersCnt;
     private int groupCnt;
     private String introduce;
+    private List<String> groups;
 
 }

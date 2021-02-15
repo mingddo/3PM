@@ -2,6 +2,7 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
+import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,7 @@ public interface UserService {
 
     public User findUserByKakaoId(Long id);
 
-    public List<User> findAllById(Long id);
+    public UserProfileDto findById(Long id);
 
     public void deleteUser(Long id);
 
