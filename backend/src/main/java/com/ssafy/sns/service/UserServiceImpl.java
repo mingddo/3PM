@@ -1,9 +1,13 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
 import com.ssafy.sns.dto.user.KakaoRequestDto;
+import com.ssafy.sns.dto.user.UserGroupsDto;
+import com.ssafy.sns.repository.GroupMemberRepository;
 import com.ssafy.sns.repository.UserRepository;
 import com.ssafy.sns.util.UnicodeHandler;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final S3Service s3Service;
     private final UnicodeHandler unicodeHandler;
     private final FollowServiceImpl followService;
-
+    private final GroupMemberRepository groupMemberRepository;
 
     public User findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -43,8 +47,28 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    public List<User> findAllById(Long id) {
-        return userRepository.findAllById(id);
+    public UserProfileDto makeUserProfileDto(User user) {
+        Long userId = user.getId();
+        int fromMeToOthersCnt = followService.fromMeToOthers(userId);
+        int toMeFromOthersCnt = followService.toMeFromOthers(userId);
+        int groupCnt = user.getGroupMembers().size();
+
+        return UserProfileDto.builder()
+                .username(user.getNickname())
+                .user_id(user.getId())
+                .user_img(user.getImg())
+                .fromMeToOthersCnt(fromMeToOthersCnt)
+                .toMeFromOthersCnt(toMeFromOthersCnt)
+                .groupCnt(groupCnt)
+                .introduce(user.getIntroduce())
+                .build();
+    }
+
+    @Override
+    public UserProfileDto findById(Long id) {
+        return userRepository.findById(id).stream()
+                .map(this::makeUserProfileDto)
+                .findFirst().get();
     }
 
 
@@ -94,21 +118,14 @@ public class UserServiceImpl implements UserService {
 
     public List<UserProfileDto> findAllUser() {
          return userRepository.findAll().stream()
-                 .map(user -> {
-                     Long userId = user.getId();
-                     int fromMeToOthersCnt = followService.fromMeToOthers(userId);
-                     int toMeFromOthersCnt = followService.toMeFromOthers(userId);
-                     int groupCnt = user.getGroupMembers().size(); // 나중에 Group Entity 생기면 추가 예정
+                 .map(this::makeUserProfileDto)
+                 .collect(Collectors.toList());
+    }
 
-                     return UserProfileDto.builder()
-                             .username(user.getNickname())
-                             .user_id(user.getId())
-                             .user_img(user.getImg())
-                             .fromMeToOthersCnt(fromMeToOthersCnt)
-                             .toMeFromOthersCnt(toMeFromOthersCnt)
-                             .groupCnt(groupCnt)
-                             .introduce(user.getIntroduce())
-                             .build();
-                 }).collect(Collectors.toList());
+    public List<GroupResDto> findUserGroups(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return user.getGroupMembers().stream()
+                .map(groupMember -> new GroupResDto(groupMember.getGroup()))
+                .collect(Collectors.toList());
     }
 }

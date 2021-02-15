@@ -1,13 +1,11 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
-import com.ssafy.sns.dto.user.DuplRequestDto;
-import com.ssafy.sns.dto.user.JwtResponseDto;
-import com.ssafy.sns.dto.user.KakaoRequestDto;
-import com.ssafy.sns.dto.user.UserFollowDto;
+import com.ssafy.sns.dto.user.*;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
 import com.ssafy.sns.service.UserServiceImpl;
@@ -130,6 +128,7 @@ public class UserController {
         int fromMeToOthersCnt = followService.fromMeToOthers(userId);
         int toMeFromOthersCnt = followService.toMeFromOthers(userId);
         int groupCnt = user.getGroupMembers().size(); // 나중에 Group Entity 생기면 추가 예정
+
 
         UserProfileDto result = UserProfileDto.builder()
                 .username(user.getNickname())
@@ -273,5 +272,12 @@ public class UserController {
         Long tokenId = jwtService.findId(token);
         User user = userService.findUserById(tokenId);
         return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowerList(user.getId(), toUserId));
+    }
+
+    @ApiOperation("유저가 가입한 그룹 정보 보여주기")
+    @GetMapping("/{userId}/groups")
+    public ResponseEntity<List<GroupResDto>> getGroupsByUser(@PathVariable("userId") Long userId) {
+        List<GroupResDto> userGroupsDtos = userService.findUserGroups(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userGroupsDtos);
     }
 }
