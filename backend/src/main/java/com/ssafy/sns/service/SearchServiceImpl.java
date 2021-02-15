@@ -35,6 +35,7 @@ public class SearchServiceImpl implements SearchService{
     private final HashtagRepositoryImpl hashtagRepository;
     private final UserRepositoryImpl userRepositoryImpl;
     private final UnicodeHandler unicodeHandler;
+    private final FollowServiceImpl followService;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
@@ -53,19 +54,22 @@ public class SearchServiceImpl implements SearchService{
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        1));
+                        1,
+                        followService.isFollow(userId, feed)));
             } else if(feed instanceof Insider) {
                 feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        2));
+                        2,
+                        followService.isFollow(userId, feed)));
             } else if(feed instanceof Worker) {
                 feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        4));
+                        4,
+                        followService.isFollow(userId, feed)));
             }
         }
         return feedResponseDtoList;

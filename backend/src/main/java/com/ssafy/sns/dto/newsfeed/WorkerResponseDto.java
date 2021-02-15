@@ -10,7 +10,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class WorkerResponseDto extends FeedResponseDto {
 
-    public WorkerResponseDto(Worker worker, int commentCnt, int likeCnt, boolean isClap) {
-        super(worker, commentCnt, likeCnt, isClap,4);
+    public WorkerResponseDto(Worker worker, int commentCnt, int likeCnt, boolean isClap, boolean isFollow) {
+        super(worker, commentCnt, likeCnt, isClap,4, isFollow);
     }
 }
