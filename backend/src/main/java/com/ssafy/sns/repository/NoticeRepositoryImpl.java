@@ -52,4 +52,9 @@ public class NoticeRepositoryImpl implements NoticeRepository{
                 .setParameter("user", user.getId())
                 .getResultList();
     }
+
+    @Override
+    public List<Notice> groupList(User user) {
+        return null;
+    }
 }
