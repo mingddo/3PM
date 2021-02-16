@@ -109,8 +109,20 @@
         class="fas fa-bars"
         :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
       ></i>
-      <span>오후세시</span>
-      <img src="@/assets/searching.svg" alt="" width="10%" height="80%" />
+      <div>
+        <span @click="goToHome" style="cursor:pointer;">오후세시</span>
+      </div>
+      <span style="width:60px">
+        <img
+          style="cursor:pointer; margin-right:10px"
+          @click="goToSearch"
+          src="@/assets/searching.svg"
+          alt=""
+          width="30%"
+          height="80%"
+        />
+        <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i>
+      </span>
     </div>
 
     <router-view :key="$route.fullPath" />
@@ -321,7 +333,7 @@ export default {
 };
 </script>
 <style>
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 768px) {
   #search {
     font-size: 16px;
   }
@@ -539,5 +551,17 @@ export default {
   .newsfeed-form-file-hr {
     border-top: 2px solid #f0d3c1;
   }
-}
+  .feed-detail-img {
+    width: 100%;
+  }
+  .feed-detail-comment-btn {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .feed-userprofile-space {
+    width: 45px;
+    height: 45px;
+  }
 </style>

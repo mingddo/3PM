@@ -155,9 +155,34 @@ input:focus {
   padding-bottom: 16px;
   z-index: 500;
 }
-.searchResultList > ul {
+.autocompleteUl.active {
+  display: none;
+}
+.autocompleteUl {
+  position: fixed;
+  width: 65%;
+  margin-left: 24px;
+  background-color: white;
+  padding: 10px 0;
+  border-radius: 0 0 5px 5px;
+}
+li {
+  list-style: none;
+  height: 30px;
+  font-size: 17px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 15px;
 }
 
+li:focus {
+  outline: none !important;
+}
+.selected-li {
+  border: none !important;
+  background-color: #fdf0d5;
+}
 .loading-img-frame {
   width: 100%;
   display: flex;

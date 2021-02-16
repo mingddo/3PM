@@ -9,13 +9,17 @@
           />
 
           <div class="feed-comment-userprofile-content">
-            <h3 class="feed-comment-userprofile-name" @click="goToProfile">{{ comment_info.user.nickname }}</h3>
-            <p class="feed-comment-userprofile-date">{{ agoDate != '0일전' ? agoDate : '오늘' }} </p>
+            <h3 class="feed-comment-userprofile-name" @click="goToProfile">
+              {{ comment_info.user.nickname }}
+            </h3>
+            <p class="feed-comment-userprofile-date">
+              {{ agoDate != "0일전" ? agoDate : "오늘" }}
+            </p>
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
         <div v-if="comment.user.id == userpk">
-          <i class="fas fa-bars feed-comment-btn-drop" @click="openModiDeleteBtn"></i>
+          <i class="fas fa-ellipsis-v" @click="openModiDeleteBtn"></i>
           <div v-show="!foldModiDrop" class="feed-comment-btn-drop-content">
             <div @click="changeCommentModiForm">
               수정
@@ -23,7 +27,6 @@
             <div @click="deleteComment">
               삭제
             </div>
-            
           </div>
         </div>
       </div>
@@ -31,39 +34,57 @@
         {{ commentForFeed }}
       </div>
       <div v-else class="feed-comment-modiInput-box">
-        <input class="feed-comment-modiInput" type="text" v-model="commentForFeed" @keyup.enter="modiComment">
+        <input
+          class="feed-comment-modiInput"
+          type="text"
+          v-model="commentForFeed"
+          @keyup.enter="modiComment"
+        />
         <button class="feed-comment-modiInput-btn" @click="modiComment">
           <i class="fas fa-check"></i>
         </button>
-        
       </div>
 
       <div class="feed-comment-like-nested">
         <div class="feed-comment-like-btn">
-          <img :src="comment.clap ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'" @click="likeComment"/>
+          <img
+            :src="
+              comment.clap
+                ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png'
+                : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'
+            "
+            @click="likeComment"
+          />
           <span @click="commentUserList">{{ comment_info.clapCnt }}</span>
           <!-- </i> -->
         </div>
         <div v-if="comment.user.id != userpk" @click="mentionUSer">
           <span>{{ comment_info.user.nickname }} 님을 언급</span>
-          <img src="https://img.icons8.com/metro/14/000000/very-popular-topic.png"/>
+          <img
+            src="https://img.icons8.com/metro/14/000000/very-popular-topic.png"
+          />
         </div>
       </div>
-      <UserList v-if="openList" :type=3 :users="userList" @closeList="closeList"/>
+      <UserList
+        v-if="openList"
+        :type="3"
+        :users="userList"
+        @closeList="closeList"
+      />
     </div>
   </article>
 </template>
 
 <script>
-import NewsFeedProfile from '../Common/NewsFeedProfile.vue';
-import { updateComment } from '@/api/comment.js'
-import { deleteComment } from '@/api/comment.js'
-import { clapComment } from '@/api/comment.js'
-import { clapCommentList } from '@/api/comment.js'
-import { mapState } from 'vuex'
-import UserList from '../Common/UserList.vue';
+import NewsFeedProfile from "../Common/NewsFeedProfile.vue";
+import { updateComment } from "@/api/comment.js";
+import { deleteComment } from "@/api/comment.js";
+import { clapComment } from "@/api/comment.js";
+import { clapCommentList } from "@/api/comment.js";
+import { mapState } from "vuex";
+import UserList from "../Common/UserList.vue";
 export default {
-  name: 'NewsFeedCommentItem',
+  name: "NewsFeedCommentItem",
   components: { NewsFeedProfile, UserList },
   props: {
     Category: Number,
@@ -85,137 +106,138 @@ export default {
       day: null,
     };
   },
-  mounted () {
+  mounted() {
     this.setDateTime();
   },
   methods: {
-    closeList () {
+    closeList() {
       this.openList = false;
     },
-    commentUserList () {
+    commentUserList() {
       this.openList = true;
       clapCommentList(
         this.comment.id,
         (res) => {
-          console.log(res)
-          this.userList = res.data.user
+          console.log(res);
+          this.userList = res.data.user;
         },
         (err) => {
-          console.log(err)
+          console.log(err);
         }
-      )
+      );
     },
-    setDateTime () {
-      let d = new Date ();
+    setDateTime() {
+      let d = new Date();
       let todayDate = d.getDate();
       let todayMonth = d.getMonth() + 1;
-      console.log(todayMonth)
+      console.log(todayMonth);
       if (this.comment) {
-        let date = this.comment.date.split('T')[0]
-        this.time = this.comment.date.split('T')[1]
-        this.year = date.split('-')[0]
-        this.month = date.split('-')[1]
-        this.day = date.split('-')[2]
+        let date = this.comment.date.split("T")[0];
+        this.time = this.comment.date.split("T")[1];
+        this.year = date.split("-")[0];
+        this.month = date.split("-")[1];
+        this.day = date.split("-")[2];
         if (this.month == todayMonth) {
-          let prevDay = todayDate - this.day
+          let prevDay = todayDate - this.day;
           if (prevDay < 7) {
-            this.agoDate = `${prevDay}일전`
-          } else if (prevDay < 14){
-            this.agoDate = `1주전`
+            this.agoDate = `${prevDay}일전`;
+          } else if (prevDay < 14) {
+            this.agoDate = `1주전`;
           } else if (prevDay < 21) {
-            this.agoDate = '2주전'
+            this.agoDate = "2주전";
           } else if (prevDay < 28) {
-            this.agoDate = '3주전'
+            this.agoDate = "3주전";
           } else {
-            this.agoDate = '4주전'
+            this.agoDate = "4주전";
           }
         } else {
-          let prevMon  = todayMonth - this.month
+          let prevMon = todayMonth - this.month;
           if (todayMonth < this.month) {
-            prevMon = 12 - this.month + todayMonth
+            prevMon = 12 - this.month + todayMonth;
           }
           if (prevMon < 4) {
-            this.agoDate = `${prevMon}개월전`
+            this.agoDate = `${prevMon}개월전`;
           } else {
-            this.agoDate = `수개월전`
+            this.agoDate = `수개월전`;
           }
-          
         }
       }
     },
-    mentionUSer () {
-      this.$emit('pushUserToComment', this.comment.user.nickname)
+    mentionUSer() {
+      this.$emit("pushUserToComment", this.comment.user.nickname);
     },
-    likeComment () {
+    likeComment() {
       // 댓글 좋아요 axios 요청
       clapComment(
         this.comment.id,
         () => {
           if (this.comment_info.clap) {
             this.comment_info.clap = false;
-            this.comment_info.clapCnt -= 1
+            this.comment_info.clapCnt -= 1;
           } else {
             this.comment_info.clap = true;
-            this.comment_info.clapCnt += 1
+            this.comment_info.clapCnt += 1;
           }
         },
         (err) => {
-          console.log(err)
+          console.log(err);
         }
-      )
-      
+      );
     },
-    deleteComment () {
+    deleteComment() {
       if (this.userpk !== this.comment.user.id) {
-        return alert('접근이 불가합니다!')
+        return alert("접근이 불가합니다!");
       }
       this.foldModiDrop = true;
-      const answer = window.confirm('댓글을 삭제하시겠습니까?')
+      const answer = window.confirm("댓글을 삭제하시겠습니까?");
       if (answer) {
         // axios DELETE 요청으로 삭제하기
         deleteComment(
           this.id,
           this.comment.id,
           (res) => {
-            console.log('삭제', res)
-            this.$emit('setComment')
+            console.log("삭제", res);
+            this.$emit("setComment");
           },
           (err) => {
-            console.log('삭제불가', err)
+            console.log("삭제불가", err);
           }
-        )
+        );
       }
     },
-    changeCommentModiForm () {
+    changeCommentModiForm() {
       this.modiForm = true;
       this.foldModiDrop = true;
     },
-    modiComment () {
+    modiComment() {
       updateComment(
         this.id,
         this.comment.id,
-        {"content":this.commentForFeed},
-        (res)=> {
-          console.log(res)
+        { content: this.commentForFeed },
+        (res) => {
+          console.log(res);
         },
-        (err)=>{
-          console.log(err)
+        (err) => {
+          console.log(err);
         }
-      )
+      );
       this.modiForm = false;
     },
-    openModiDeleteBtn () {
-      this.foldModiDrop = !this.foldModiDrop
+    openModiDeleteBtn() {
+      this.foldModiDrop = !this.foldModiDrop;
     },
-    goToProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.comment.user.nickname}})
+    goToProfile() {
+      this.$router.push({
+        name: "MyPage",
+        query: { name: this.comment.user.nickname },
+      });
     },
   },
   computed: {
     ...mapState({
-      userpk : (state) => state.userId,
+      userpk: (state) => state.userId,
       defaultImg: (state) => state.defaultImg,
-    })
+    }),
   },
 };
 </script>
@@ -268,11 +290,11 @@ export default {
   margin-right: 20px;
 }
 .feed-comment-btn-drop-content > div {
-  border-bottom: 1px solid rgb(155, 155, 155);;
-  padding : 10px
+  border-bottom: 1px solid rgb(155, 155, 155);
+  padding: 10px;
 }
 .feed-comment-btn-drop-content > div:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .feed-comment-btn-drop-content > div:last-child {
   border-bottom: 0px;

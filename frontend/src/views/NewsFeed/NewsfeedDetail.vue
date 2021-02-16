@@ -6,7 +6,6 @@
         <GroupNav v-if="Category == 2" :isHome="true" />
         <section v-if="fd" v-cloak class="feed-detail">
           <div v-if="Category == 2">
-            
             {{ fd.groupName }}
           </div>
           <div class="feed-detail-userprofile">
@@ -40,8 +39,15 @@
           </div>
 
           <article class="feed-detail-content-box">
-            <div v-if="fd.files.length != 0">
-              <div v-for="(file, idx) in fd.files" :key="idx">
+            <div
+              class="feed-detail-content-box-innerbox"
+              v-if="fd.files.length != 0"
+            >
+              <div
+                class="feed-detail-img-containerFrame"
+                v-for="(file, idx) in fd.files"
+                :key="idx"
+              >
                 <img
                   :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`"
                   class="feed-detail-img"
@@ -96,7 +102,7 @@
             </span>
           </div>
           <UserList
-            :type=1
+            :type="1"
             v-if="clapListOpen"
             :users="clapedUsers"
             @closeList="closeClapList"
@@ -108,7 +114,7 @@
                 src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
               />
               <span v-if="fd.clap">👏🏻</span>
-              {{ fd.clap ? "조금 더 고민해볼래요" : "굉장해요!" }}
+              {{ fd.clap ? "고민해볼래요" : "굉장해요!" }}
             </div>
             <div
               class="feed-detail-like-comment-share-btn"
@@ -130,21 +136,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { readIndoors } from '@/api/indoors.js'
-import { getGroupfeedsDetail } from '@/api/group.js'
-import { readOutdoors } from '@/api/outdoors.js'
-import { reedWorker } from '@/api/worker.js'
-import { clapFeed } from '@/api/feed.js'
-import { clapFeedList } from '@/api/feed.js'
-import Sidebar from '../../components/Common/Sidebar.vue';
-import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue';
-import UserList from '../../components/NewsFeed/Common/UserList.vue';
-import ModiAndDelete from '../../components/NewsFeed/Detail/ModiAndDelete.vue';
-import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
-import Location from '../../components/NewsFeed/Detail/Location.vue';
-import Comment from '../../components/NewsFeed/Detail/Comment.vue'
-import GroupNav from '../../components/GroupFeed/GroupNav.vue'
+import { mapState } from "vuex";
+import { readIndoors } from "@/api/indoors.js";
+import { getGroupfeedsDetail } from "@/api/group.js";
+import { readOutdoors } from "@/api/outdoors.js";
+import { reedWorker } from "@/api/worker.js";
+import { clapFeed } from "@/api/feed.js";
+import { clapFeedList } from "@/api/feed.js";
+import Sidebar from "../../components/Common/Sidebar.vue";
+import NewsFeedProfile from "../../components/NewsFeed/Common/NewsFeedProfile.vue";
+import UserList from "../../components/NewsFeed/Common/UserList.vue";
+import ModiAndDelete from "../../components/NewsFeed/Detail/ModiAndDelete.vue";
+import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
+import Location from "../../components/NewsFeed/Detail/Location.vue";
+import Comment from "../../components/NewsFeed/Detail/Comment.vue";
+import GroupNav from "../../components/GroupFeed/GroupNav.vue";
 
 export default {
   name: "NewsfeedDetail",
@@ -247,7 +253,7 @@ export default {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
       this.Category = this.$route.query.Category;
-      console.log('카테고리', this.Category)
+      console.log("카테고리", this.Category);
       if (this.Category == 1) {
         readIndoors(
           this.$route.query.id,
@@ -281,20 +287,17 @@ export default {
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 3) {
         // 청산별곡 get 요청
-        readOutdoors(
-          this.$route.query.id,
-          (res) => {
-            this.fd = res.data;
-            console.log(this.fd)
-            this.date = this.fd.date.split("T")[0];
-            this.time = this.fd.date.split("T")[1];
-            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); 
-            this.placeName = this.fd.placeName;
-            this.address = this.fd.address;
-            this.longitude = this.fd.lng;
-            this.latitude = this.fd.lat
-          }
-        )
+        readOutdoors(this.$route.query.id, (res) => {
+          this.fd = res.data;
+          console.log(this.fd);
+          this.date = this.fd.date.split("T")[0];
+          this.time = this.fd.date.split("T")[1];
+          this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>");
+          this.placeName = this.fd.placeName;
+          this.address = this.fd.address;
+          this.longitude = this.fd.lng;
+          this.latitude = this.fd.lat;
+        });
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
         // 워커홀릭 get 요청
@@ -330,6 +333,7 @@ export default {
 .feed-comment-input {
   width: 100%;
   height: 50px;
+  border: none;
 }
 .feed-detail-map {
   margin: auto;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <i class="fas fa-bars" @click="foldDrop"></i>
+    <i class="fas fa-ellipsis-v" @click="foldDrop"></i>
     <div v-if="!drop" class="feed-detail-user-drop">
       <div @click="goToProfile">
         프로필로
@@ -21,14 +21,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { followToggle } from '@/api/mypage.js'
+import { mapState } from "vuex";
+import { followToggle } from "@/api/mypage.js";
 export default {
-  name: 'UserInfoBtn',
+  name: "UserInfoBtn",
   props: {
     id: Number,
     follow: Boolean,
-    name: String
+    name: String,
   },
   data() {
     return {
@@ -36,44 +36,42 @@ export default {
       followState: this.follow,
     };
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
-    subscribe () {
+    subscribe() {
       followToggle(
         this.id,
         (res) => {
-          console.log(res)
+          console.log(res);
           if (this.followState) {
-            alert(`${this.name} 님의 소식을 받을 수 있어요!`)
+            alert(`${this.name} 님의 소식을 받을 수 있어요!`);
             this.followState = false;
             this.drop = true;
           } else {
-            alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`)
+            alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`);
             this.followState = true;
             this.drop = true;
           }
         },
         (err) => {
-          console.log(err)
+          console.log(err);
         }
-      )
+      );
     },
-    foldDrop () {
-      this.drop = !this.drop
+    foldDrop() {
+      this.drop = !this.drop;
     },
-    goToSetting () {
-      this.$router.push({ name: 'MyPageEdit'})
+    goToSetting() {
+      this.$router.push({ name: "MyPageEdit" });
     },
-    goToProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.id}})
+    goToProfile() {
+      this.$router.push({ name: "MyPage", query: { name: this.id } });
     },
   },
-  computed : {
+  computed: {
     ...mapState({
-      userpk : (state) => state.userId,
-    })
+      userpk: (state) => state.userId,
+    }),
   },
 };
 </script>
@@ -92,11 +90,11 @@ export default {
   text-align: center;
 }
 .feed-detail-user-drop > div {
-  border-bottom: 1px solid rgb(155, 155, 155);;
-  padding : 10px
+  border-bottom: 1px solid rgb(155, 155, 155);
+  padding: 10px;
 }
 .feed-detail-user-drop > div:hover {
-  box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .feed-detail-user-drop > div:last-child {
   border-bottom: 0px;

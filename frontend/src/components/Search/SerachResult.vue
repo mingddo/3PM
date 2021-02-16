@@ -50,7 +50,7 @@
         </div>
         <div class="resultBottomFrame">
           <div>👏🏻 {{ result.indoorResponseDtoList[0].likeCnt }}</div>
-          <div>댓글 105개</div>
+          <div>댓글 {{ result.indoorResponseDtoList[0].commentCnt }}개</div>
         </div>
       </div>
     </div>

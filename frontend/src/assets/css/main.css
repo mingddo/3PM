@@ -7,8 +7,13 @@
 }
 :root {
   --bg-color: #f4eee5;
+  --feed-bg-color: #f8f0e4;
   --white-color: #ffffff;
   --point-color: #f8f8f6;
+  --light-brown: #d1bbad;
+  --bold-brown: #b29887;
+  --black-color: #141414;
+  --highlight-yellow: #f5f730;
 }
 html {
   background-color: var(--bg-color);
@@ -42,15 +47,19 @@ button {
   background: none;
   border: none;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 30px;
+  border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   color: #585858;
   background-color: whitesmoke;
+  -webkit-tap-highlight-color: transparent;
 }
 button.active {
   background: #585858;
   color: white;
+}
+:hover {
+  outline: none;
 }
 
 /* Home.vue */
@@ -75,7 +84,7 @@ button.active {
   justify-content: center;
   align-items: center;
 }
-.home-category-modal-content{
+.home-category-modal-content {
   width: 250px;
   height: 250px;
   opacity: 0.5;
@@ -103,7 +112,7 @@ button.active {
   bottom: 5vh;
   right: 100px;
   z-index: 9999;
-  border : none;
+  border: none;
   outline: none;
 }
 .home-section {
@@ -170,8 +179,8 @@ button.active {
   height: 50px;
   position: fixed;
   bottom: 5vh;
-  left : 0;
-  right : 0;
+  left: 0;
+  right: 0;
   margin: 0 auto;
   font-weight: bold;
   transition: all 0.8s ease-in-out;
@@ -433,7 +442,7 @@ button.active {
   z-index: 20001;
   padding: 24px 0;
   background-color: var(--bg-color);
-  transition: all 1s ease-in-out;
+  transition: all 0.6s ease-in-out;
 }
 .sliderFrame.active {
   position: absolute;
@@ -444,7 +453,7 @@ button.active {
   z-index: 20001;
   padding: 24px 0;
   background-color: var(--bg-color);
-  transition: all 1.5s ease-in-out;
+  /* transition: all 1.5s ease-in-out; */
 }
 
 .slider-nav-content {

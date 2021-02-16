@@ -1,5 +1,5 @@
 <template>
-  <div class="filterGroupFrame">
+  <div class="filterGroupFrame" @click="gotoProfile">
     <div class="filterGroup">
       <div class="filterGroupImgFrame">
         <div class="filterGroupImg" @click="gotoProfile">
