@@ -353,6 +353,8 @@ export default {
                 this.loaded = false;
                 this.loading = false;
                 this.empty_search = true;
+                this.keyword = '';
+                this.$refs.search.focus();
               } else {
                 this.search_result_all = res.data;
                 this.search_result_feed = res.data.feedList.body;
