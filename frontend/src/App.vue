@@ -110,14 +110,17 @@
         :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
       ></i>
       <span @click="goToHome" style="cursor:pointer;">오후세시</span>
-      <img
-        style="cursor:pointer;"
-        @click="goToSearch"
-        src="@/assets/searching.svg"
-        alt=""
-        width="10%"
-        height="80%"
-      />
+      <span style="width:60px">
+        <img
+          style="cursor:pointer; margin-right:10px"
+          @click="goToSearch"
+          src="@/assets/searching.svg"
+          alt=""
+          width="30%"
+          height="80%"
+        />
+        <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i>
+      </span>
     </div>
 
     <router-view :key="$route.fullPath" />
