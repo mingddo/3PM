@@ -8,7 +8,7 @@
     <div class="map-space">
       <div class="map-about">
         <input class="map-input" type="text" id="keyword" v-model.trim="keyword" @keyup.enter="searchPlaces">
-        <ul v-if="items.length < 1" class="map-input-guide">
+        <div v-if="items.length < 1" class="map-input-guide">
           <li>
             위치를 공유해보세요
           </li>
@@ -18,12 +18,12 @@
           <li>
             현재 위치를 공유하고 싶다면 <br> 지도 우측상단 버튼을 클릭하세요
           </li>
-        </ul>
+        </div>
         <div id="menu_wrap" class="bg_white map-info" v-show="!fold">
           <div class="option">
           </div>
-          <ul id="placesList" >
-            <li class="item" v-for="(p, idx) in items" :key="idx">
+          <ul id="placesList" class="map-info-list">
+            <div class="item" v-for="(p, idx) in items" :key="idx">
               <span :class="`markerbg marker_${index+1}`" @click="select(p)">
                 <div class="info" @click="select(p)">
                   <h5>
@@ -45,7 +45,7 @@
                   </span>
                 </div>
               </span>
-            </li>
+            </div>
           </ul>
           <div id="pagination"></div>
 
@@ -344,6 +344,9 @@ export default {
   overflow: scroll;
   height: 33vh;
 }
+.map-info-list {
+  margin-top: 24px;
+}
 .map-about {
   width: 35%;
   background-color:  #b29887;;
@@ -365,6 +368,7 @@ export default {
 }
 .info {
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .info h5 {
   font-size: 16px;
@@ -372,23 +376,30 @@ export default {
 .info span {
   font-size: 15px;
 }
-
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 768px) {
   .map-space {
     display: block;
     width: 100%;
   }
   .map {
     width: 100%;
-    /* height: 40vh; */
+    /* height: 50vh; */
   }
   .map-about {
     width: 100%;
+    min-height: 20vh;
     background-color: #f0d3c1;
   }
   .map-info {
     width: 100%;
-    height: 50vh;
+    /* height: 50vh; */
+  }
+  .map-info-list {
+    margin-top: 10px;
+  }
+  .map-input-guide {
+    margin: 10px;
   }
 }
+
 </style>

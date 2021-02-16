@@ -97,7 +97,7 @@
 
           <div class="newsfeed-form-file">
             <div class="newsfeed-form-file-box">
-              <div class="newsfeed-form-img-box">
+              <div class="newsfeed-form-img-box" v-if="totalLen < 4">
                 <label for="image"> <div class="newsfeed-form-img-label"> 사진 </div> <i class="fas fa-plus-circle newsfeed-form-img-label-btn"></i> </label>
                 <input
                   class="newsfeed-form-img-input"
@@ -278,6 +278,7 @@ export default {
       fixGroup: false,
       modiPreview: [],
       selectLocation: false,
+      totalLen: null,
       // selectedVideo: null,
     };
   },
@@ -406,6 +407,7 @@ export default {
         this.form.tags = this.$route.params.feed.tags
         if (this.$route.params.feed.files) {
           this.form.filePaths = this.$route.params.feed.files
+          this.totalLen = this.form.filePaths.length
           this.imageUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${this.$route.params.feed.file}`
         }
         if (this.$route.params.feed.lng && this.$route.params.feed.lat) {
@@ -432,17 +434,21 @@ export default {
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
       console.log('files', files)
-
       if (files.length) {
-        this.selectedFile = files[0]
-        this.fileList.push(this.selectedFile)
-        this.fileSelect = true;
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.imageUrl = e.target.result;
-          this.previewUrl.push(this.imageUrl)
+        this.totalLen = this.form.filePaths.length + this.fileList.length
+        if (this.totalLen > 5) {
+          alert('더이상 이미지를 올릴 수 없습니다')
+        } else {
+          this.selectedFile = files[0]
+          this.fileList.push(this.selectedFile)
+          this.fileSelect = true;
+          let reader = new FileReader();
+          reader.onload = (e) => {
+            this.imageUrl = e.target.result;
+            this.previewUrl.push(this.imageUrl)
+          }
+          reader.readAsDataURL(this.selectedFile);
         }
-        reader.readAsDataURL(this.selectedFile);
       }
     },
     imgUpload (id) {
