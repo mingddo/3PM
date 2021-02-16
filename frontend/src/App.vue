@@ -109,7 +109,9 @@
         class="fas fa-bars"
         :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
       ></i>
-      <span @click="goToHome" style="cursor:pointer;">오후세시</span>
+      <div>
+        <span @click="goToHome" style="cursor:pointer;">오후세시</span>
+      </div>
       <span style="width:60px">
         <img
           style="cursor:pointer; margin-right:10px"
@@ -331,7 +333,7 @@ export default {
 };
 </script>
 <style>
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 768px) {
   #search {
     font-size: 16px;
   }
@@ -522,6 +524,19 @@ export default {
   }
   .save-Edit-profile {
     width: 250px;
+  }
+  .feed-detail-img {
+    width: 100%;
+  }
+  .feed-detail-comment-btn {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .feed-userprofile-space {
+    width: 45px;
+    height: 45px;
   }
 }
 </style>
