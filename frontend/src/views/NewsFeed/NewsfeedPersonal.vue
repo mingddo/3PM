@@ -14,9 +14,13 @@
     <div class="newsfeed-body">
       <Sidebar />
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
-        <GroupNav v-if="Category == 2" :isHome="true"/>
-        <NewsFeedRecommend v-if="Category == 4" :reco="reco" :Category="Category" />
-        <mountain-banner v-else-if="Category == 3"/>
+        <GroupNav v-if="Category == 2" :isHome="true" />
+        <NewsFeedRecommend
+          v-if="Category == 4"
+          :reco="reco"
+          :Category="Category"
+        />
+        <mountain-banner v-else-if="Category == 3" />
         <!-- 임시로 자리차지하기 -->
         <div class="newsfeed-recommend-place" v-else>
           <p
@@ -50,8 +54,8 @@ import { indoorsList } from "@/api/indoors.js";
 import { groupList } from "@/api/group.js";
 import { outdoorsList } from "@/api/outdoors.js";
 import { workerList } from "@/api/worker.js";
-import MountainBanner from '../../components/NewsFeed/Recommend/MountainBanner.vue';
-import GroupNav from '../../components/GroupFeed/GroupNav.vue';
+import MountainBanner from "../../components/NewsFeed/Recommend/MountainBanner.vue";
+import GroupNav from "../../components/GroupFeed/GroupNav.vue";
 
 export default {
   name: "NewsfeedPersonal",
@@ -81,10 +85,10 @@ export default {
         "https://cdn.pixabay.com/photo/2017/08/02/01/29/lifestyle-2569543_960_720.jpg",
 
       headerImgs: [
-        "https://cdn.pixabay.com/photo/2017/08/02/01/29/lifestyle-2569543_960_720.jpg",
-        "https://images.unsplash.com/photo-1525026198548-4baa812f1183?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=933&q=80",
-        "https://cdn.pixabay.com/photo/2020/03/03/20/31/boat-4899802_1280.jpg",
-        "https://cdn.pixabay.com/photo/2014/07/06/13/55/calculator-385506_1280.jpg",
+        require("../../assets/header/indoor.jpg"),
+        require("../../assets/header/hackinsider.jpg"),
+        require("../../assets/header/chungsan.jpg"),
+        require("../../assets/header/work.jpg"),
       ],
     };
   },
@@ -96,7 +100,7 @@ export default {
           this.page,
           (res) => {
             this.page = res.data.endNum;
-            console.log(this.page)
+            console.log(this.page);
             let feeds = res.data.feedList;
             if (feeds && feeds.length < 10) {
               this.last = true;
@@ -116,9 +120,9 @@ export default {
         groupList(
           this.page,
           (res) => {
-            this.page = this.page + 1
+            this.page = this.page + 1;
             let feeds = res.data.feedList;
-            console.log(feeds)
+            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }
@@ -139,7 +143,7 @@ export default {
           (res) => {
             this.page = res.data.endNum;
             let feeds = res.data.feedList;
-            console.log(feeds)
+            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }
@@ -151,17 +155,17 @@ export default {
           (err) => {
             console.log(err);
           }
-        )
+        );
       } else if (this.$route.query.Category == 4) {
         this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
-        console.log('워커홀릭')
+        console.log("워커홀릭");
         workerList(
           this.page,
           (res) => {
             this.page = res.data.endNum;
             let feeds = res.data.feedList;
-            console.log(feeds)
+            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }

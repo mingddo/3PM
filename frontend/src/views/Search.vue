@@ -29,7 +29,11 @@
               <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
               <i @click="Allsearch" class="icon-search fas fa-search"></i>
             </form>
-            <ul class="r" tabindex="0">
+            <ul
+              class="r"
+              :class="[autotag ? 'autocompleteUl' : 'autocompleteUl active']"
+              tabindex="0"
+            >
               <li
                 tabindex="-1"
                 v-for="(tag, idx) in tags"
@@ -95,31 +99,31 @@
           </span> -->
             <span v-if="filter === 1">
               <GroupResults
-                v-if="search_result_all.userList.body"
+                v-if="search_result_all.userList.body.length !== 0"
                 :groupresults="search_result_all.userList.body"
                 :category="category_person"
               />
               <GroupResults
-                v-if="search_result_all.groupList.body"
+                v-if="search_result_all.groupList.body.length !== 0"
                 :groupresults="search_result_all.groupList.body"
                 :category="category_group"
               />
             </span>
-            <span v-if="filter === 1 || filter === 2">
+            <span v-if="filter === 1 || (filter === 2 && search_result_feed)">
               <SerachResult
                 v-for="(result, idx) in search_result_feed"
                 :key="idx"
                 :result="result"
               />
             </span>
-            <span v-if="filter === 3">
+            <span v-if="filter === 3 && search_result_user">
               <FilterGroup
                 v-for="(grouplist, idx) in search_result_user"
                 :key="idx"
                 :grouplist="grouplist"
               />
             </span>
-            <span v-if="filter === 4">
+            <span v-if="filter === 4 && search_result_group">
               <GroupResult
                 v-for="(grouplist, idx) in search_result_group"
                 :key="idx"
@@ -158,7 +162,7 @@ import {
   searchfeed,
   searchuser,
   searchgroup,
-  // autocompleteUser,
+  autocompleteUser,
   autocompleteTag,
 } from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
@@ -186,58 +190,15 @@ export default {
   },
   data() {
     return {
+      autotag: false,
       tags: [],
       loading: false,
       loaded: true,
       empty_search: false,
       search_result: [],
-      search_result_all: {
-        feedList: {
-          headers: {},
-          body: [],
-          statusCode: "OK",
-          statusCodeValue: 200,
-        },
-        userList: {
-          headers: {},
-          body: [
-            {
-              id: null,
-              nickname: "",
-              img: null,
-            },
-          ],
-          statusCode: "OK",
-          statusCodeValue: 200,
-        },
-      },
-      search_result_user: [
-        {
-          id: null,
-          img: null,
-          nickname: "",
-        },
-      ],
-      search_result_feed: [
-        {
-          indoorResponseDtoList: [
-            {
-              content: "",
-              date: "",
-              file: "",
-              id: 0,
-              likeCnt: 0,
-              tags: [""],
-              user: {
-                id: 0,
-                img: null,
-                nickname: "",
-              },
-            },
-          ],
-          tagName: "string",
-        },
-      ],
+      search_result_all: {},
+      search_result_user: [],
+      search_result_feed: [],
       search_result_group: [],
       category_group: "그룹",
       category_person: "사람",
@@ -249,6 +210,7 @@ export default {
     // 인풋 창 검색어 넣고 포커스
     changeValue(str) {
       this.keyword = str;
+      this.autotag = false;
       this.tags = [];
       this.removeValue();
       this.$refs.search.focus();
@@ -265,26 +227,26 @@ export default {
         if (!hasClass) {
           const thisEl = document.querySelectorAll(".r li")[0];
           document.querySelector(".r").classList.add("key");
-          thisEl.classList.add("sel");
+          thisEl.classList.add("selected-li");
           thisEl.focus();
         } else {
           const lastEl = document.querySelector(".r li:last-child");
-          const thisEl = document.querySelector(".r li.sel");
+          const thisEl = document.querySelector(".r li.selected-li");
           const nextEl = thisEl.nextElementSibling;
-          if (!lastEl.classList.contains("sel")) {
-            thisEl.classList.remove("sel");
-            nextEl.classList.add("sel");
+          if (!lastEl.classList.contains("selected-li")) {
+            thisEl.classList.remove("selected-li");
+            nextEl.classList.add("selected-li");
             nextEl.focus();
           }
         }
       }
       if (keycode === "up" && hasClass) {
         const firstEl = document.querySelectorAll(".r li")[0];
-        const thisEl = document.querySelector(".r li.sel");
+        const thisEl = document.querySelector(".r li.selected-li");
         const prevEl = thisEl.previousElementSibling;
-        if (!firstEl.classList.contains("sel")) {
-          thisEl.classList.remove("sel");
-          prevEl.classList.add("sel");
+        if (!firstEl.classList.contains("selected-li")) {
+          thisEl.classList.remove("selected-li");
+          prevEl.classList.add("selected-li");
           prevEl.focus();
         } else {
           this.$refs.search.focus();
@@ -298,24 +260,43 @@ export default {
     removeValue() {
       if (document.querySelector(".r").classList.contains("key")) {
         document.querySelector(".r").classList.remove("key");
-        document.querySelector(".r li.sel").classList.remove("sel");
+        document
+          .querySelector(".r li.selected-li")
+          .classList.remove("selected-li");
       }
     },
 
     autoTag(e) {
-      console.log(e.target.value, "키워드 확인");
-      this.keyword = e.target.value;
-      autocompleteTag(
-        this.keyword,
-        (res) => {
-          console.log(res.data);
-          this.tags = res.data;
-          console.log(this.tags);
-        },
-        (err) => {
-          console.error(err);
+      if (e.target.value) {
+        this.keyword = e.target.value;
+        if (this.filter === 1 || this.filter == 2) {
+          autocompleteTag(
+            this.keyword,
+            (res) => {
+              if (res.data) {
+                this.autotag = true;
+                this.tags = res.data;
+              }
+            },
+            (err) => {
+              console.error(err);
+            }
+          );
+        } else if (this.filter === 3) {
+          autocompleteUser(
+            this.keyword,
+            (res) => {
+              if (res.data) {
+                this.autotag = true;
+                this.tags = res.data;
+              }
+            },
+            (err) => {
+              console.error(err);
+            }
+          );
         }
-      );
+      }
     },
     Allsearch() {
       if (this.keyword === "") {
@@ -338,7 +319,7 @@ export default {
           searchall(
             this.keyword,
             (res) => {
-              console.log(res.data);
+              console.log(res.data.groupList.body);
               if (
                 res.data.feedList.body.length === 0 &&
                 res.data.userList.body.length === 0 &&
@@ -423,6 +404,7 @@ export default {
     },
     keywordClear() {
       this.keyword = "";
+      this.autoTag = false;
     },
     checkquery() {
       if (this.$route.params.filter === "all") {
@@ -574,9 +556,12 @@ export default {
   watch: {
     keyword() {
       this.removeValue();
+      if (this.keyword === "") {
+        this.autotag = false;
+      }
     },
   },
 };
 </script>
 
-<style src="vue-advanced-search/dist/AdvancedSearch.css"></style>
+<style></style>
