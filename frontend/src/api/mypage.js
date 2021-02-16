@@ -19,10 +19,10 @@ function getprofileFeedIndoor(userid, pk,success,fail){
     .then(success)
     .catch(fail)
 }
-// 해당 유저가 작성한 그룹 게시글 조회
-function getprofileFeedGroup(userid, groupid, pk,success,fail){
+// 유저가 그룹 카테고리에서 작성한 피드 리스트 가져오기
+function getprofileFeedGroup(userid,pk,success,fail){
   instance
-    .get(`groups/${groupid}/feeds/users/${userid}`, {
+    .get(`users/${userid}/groups/feeds`, {
       params: {
         startNum: pk
       }
