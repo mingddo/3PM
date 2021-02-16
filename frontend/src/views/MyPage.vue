@@ -479,12 +479,14 @@ export default {
       getNotice(
         this.current_user,
         (res) => {
-          const resArray = []
-          // console.log(res.data)
-          for (let i=res.data.length-1;i>-1;i--) {
-            resArray.push(res.data[i])
+          console.log(res.data)
+          for (let i=0; i<res.data.length; i++) {
+            const data = res.data[i]
+            const other = data.other
+            if (this.current_user !== other.id) {
+              this.current_user_activityList.push(data)
+            } 
           }
-          this.current_user_activityList = res.data
         },
         (err) => {
           console.log('err',err)

@@ -47,8 +47,12 @@ export default {
   padding: 10px;
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
-
+.subscribedComponentFrame:hover {
+  background-color: rgba(0,0,0,0.15);
+  border-radius: 10px;
+}
 .subscribeImgFrame {
   width: 70px;
   height: 70px;
