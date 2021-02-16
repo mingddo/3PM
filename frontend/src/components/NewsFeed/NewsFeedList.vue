@@ -47,6 +47,7 @@ export default {
   name: "NewsFeedList",
   props: {
     feed: Array,
+    selectGroup: Object,
     Category: Number,
     last: Boolean,
     next: Boolean,
@@ -56,11 +57,19 @@ export default {
   },
   methods: {
     goToCreateForm() {
-      this.$router.push({
-        name: "NewsfeedForm",
-        query: { Category: this.Category },
-        params: { type: "NEW" },
-      });
+      if (this.selectGroup) {
+        this.$router.push({
+          name: "NewsfeedForm",
+          query: { Category: this.Category, group_id: this.selectGroup.id, group_name: this.selectGroup.name },
+          params: { type: "NEW", group: this.selectGroup },
+        });
+      } else {
+        this.$router.push({
+          name: "NewsfeedForm",
+          query: { Category: this.Category },
+          params: { type: "NEW" },
+        });
+      }
     },
   },
   watch: {},

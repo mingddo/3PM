@@ -441,6 +441,7 @@ export default {
     background-color: #f0d3c1;
     width: 150px;
     border-radius: 5px;
+    margin-bottom: 24px;
   }
   .newsfeed-form-profile-img-space {
     width: 45px;
@@ -525,6 +526,31 @@ export default {
   .save-Edit-profile {
     width: 250px;
   }
+  .map-space {
+    display: block;
+    width: 100%;
+  }
+  .map {
+    width: 100%;
+    /* height: 40vh; */
+  }
+  .map-about {
+    width: 100%;
+    background-color: #f0d3c1;
+  }
+  .map-info {
+    width: 100%;
+    height: 50vh;
+  }
+  .newsfeed-form-tag-input {
+    border-bottom: 3px solid #f0d3c1;
+  }
+  .newsfeed-form-img-box label {
+    border: 2px dashed #f0d3c1;
+  }
+  .newsfeed-form-file-hr {
+    border-top: 2px solid #f0d3c1;
+  }
   .feed-detail-img {
     width: 100%;
   }
@@ -538,5 +564,4 @@ export default {
     width: 45px;
     height: 45px;
   }
-}
 </style>

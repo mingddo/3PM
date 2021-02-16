@@ -1,17 +1,30 @@
 <template>
   <div class="map_wrap">
-    <button @click="getLocation">
-      <i class="fas fa-map-marker-alt"></i> 현재 위치
-    </button>
+    <div class="map-location">
+      <button class="map-location-btn" @click="getLocation">
+        <i class="fas fa-map-marker-alt"></i> 현재 위치
+      </button>
+    </div>
     <div class="map-space">
       <div class="map-about">
         <input class="map-input" type="text" id="keyword" v-model.trim="keyword" @keyup.enter="searchPlaces">
+        <ul v-if="items.length < 1" class="map-input-guide">
+          <li>
+            위치를 공유해보세요
+          </li>
+          <li>
+            위치는 검색해서 찾을 수 있습니다
+          </li>
+          <li>
+            현재 위치를 공유하고 싶다면 <br> 지도 우측상단 버튼을 클릭하세요
+          </li>
+        </ul>
         <div id="menu_wrap" class="bg_white map-info" v-show="!fold">
           <div class="option">
           </div>
-          <ul id="placesList">
+          <ul id="placesList" >
             <li class="item" v-for="(p, idx) in items" :key="idx">
-              <span :class="`markerbg marker_${index+1}`">
+              <span :class="`markerbg marker_${index+1}`" @click="select(p)">
                 <div class="info" @click="select(p)">
                   <h5>
                     {{ p.place_name }}      
@@ -311,6 +324,17 @@ export default {
   width: 65%;
   height: 40vh;
 }
+.map-location {
+  position: relative;
+  z-index: 10000;
+}
+.map-location-btn {
+  position: absolute;
+  margin: 10px;
+  /* z-index: 10000; */
+  right : 0;
+  top: 0
+}
 .map-space {
   display: flex;
   width: 100%;
@@ -318,11 +342,11 @@ export default {
 .map-info {
   width: 100%;
   overflow: scroll;
-  height: 30vh;
+  height: 33vh;
 }
 .map-about {
   width: 35%;
-  background-color: #e4e4e4;
+  background-color:  #b29887;;
   padding: 10px;
   min-height: 60px;
 }
@@ -331,6 +355,13 @@ export default {
   line-height: 30px;
   border: none;
   background-color: white;
+}
+.map-input-guide {
+  position: absolute;
+  margin: 24px;
+}
+.map-input-guide li {
+  font-size: 14px;
 }
 .info {
   margin-bottom: 10px;
@@ -349,10 +380,11 @@ export default {
   }
   .map {
     width: 100%;
-    height: 40vh;
+    /* height: 40vh; */
   }
   .map-about {
     width: 100%;
+    background-color: #f0d3c1;
   }
   .map-info {
     width: 100%;

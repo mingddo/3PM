@@ -67,6 +67,7 @@
         </section>
         <section>
           <NewsFeedList
+            :selectGroup="group_info"
             :Category="2"
             :feed="feed"
             :last="last"
@@ -79,8 +80,6 @@
 </template>
 
 <script>
-// import NewsFeedHeader from "@/components/NewsFeed/NewsFeedHeader.vue";
-// import NewsFeedList from "@/components/NewsFeed/NewsFeedList.vue";
 import { joinGroup } from '@/api/group.js'
 import { secedeGroup } from '@/api/group.js'
 import { getGroupDetail } from '@/api/group.js'
@@ -115,20 +114,7 @@ export default {
       group: {},
       selectedFile: null,
       imageUrl: null,
-      group_info: {
-        // id: 1,
-        // group_img: "",
-        name: "볼링 너 밖에 없어",
-        description: "안녕하세요 여기는 볼링을 사랑하는 볼링 그룹입니다.",
-        leaders: [
-          {
-            id: 1,
-            nickname: "박성호"
-          }
-        ],
-        memberCnt: "502",
-        // group_people_id: [1, 2, 3, 4, 5, 9],
-      },
+      group_info: {},
       memberModal: false,
     };
   },
