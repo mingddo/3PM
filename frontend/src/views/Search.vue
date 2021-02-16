@@ -5,25 +5,43 @@
       <section class="searchFrame">
         <!-- mobile -->
         <div class="searchResultFrame">
-          <div class="searchResultList">
+          <div 
+            class="searchResultList" 
+            @keyup.down="selectValue('down')"
+            @keyup.up="selectValue('up')"
+            @mouseover="removeValue"
+          >
             <form @submit.prevent="Allsearch" class="search_input">
               <div class="inputframe">
                 <label for="search"></label>
                 <input
+                  class="r"
                   required
                   type="text"
                   id="search"
                   placeholder="검색어를 입력해 주세요"
                   v-model.trim="keyword"
                   @input="autoTag"
-                  autocomplete="off"
+                  autocomplete="off"  
+                  ref="search"                
                 />
               </div>
               <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
               <i @click="Allsearch" class="icon-search fas fa-search"></i>
             </form>
-            <ul>
-              <li v-for="(tag, idx) in tags" :key="idx">{{ tag.value }}</li>
+            <ul 
+              class="r" 
+              tabindex="0"              
+            >
+              <li 
+                tabindex="-1"
+                v-for="(tag, idx) in tags" 
+                :key="idx"
+                @click="changeValue(tag.value)"
+                @keyup.enter="selectValue('enter', tag.value)"
+              >
+                {{ tag.value }}
+              </li>
             </ul>
           </div>
           <div class="searchResultList">
@@ -149,6 +167,14 @@ import {
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
+// 방향키로 페이지 창 못 움직이게 하는 코드
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
 export default {
   components: {
     Sidebar,
@@ -219,6 +245,64 @@ export default {
     };
   },
   methods: {
+    // 인풋 창 검색어 넣고 포커스
+    changeValue(str) {
+      this.keyword = str;
+      this.tags = [];
+      this.removeValue();
+      this.$refs.search.focus();
+    },
+    // 방향키로 태그리스트 이동 및 엔터로 검색창에 반영
+    selectValue(keycode, str) {
+
+      let hasClass = false;
+      if (document.querySelector('.r').classList != null) {
+        hasClass = document.querySelector('.r').classList.contains('key');
+      }      
+
+      const isTags = this.tags.length != 0;   
+      if (keycode === 'down' && isTags) {
+        if (!hasClass) {
+          const thisEl = document.querySelectorAll('.r li')[0];
+          document.querySelector('.r').classList.add('key');
+          thisEl.classList.add('sel');
+          thisEl.focus();
+        } else {
+          const lastEl = document.querySelector('.r li:last-child');
+          const thisEl = document.querySelector('.r li.sel');
+          const nextEl = thisEl.nextElementSibling;
+          if (!lastEl.classList.contains('sel')) {
+            thisEl.classList.remove('sel');
+            nextEl.classList.add('sel');
+            nextEl.focus();
+          }
+        }
+      }
+      if (keycode === 'up' && hasClass) {
+        const firstEl = document.querySelectorAll('.r li')[0];
+        const thisEl = document.querySelector('.r li.sel');
+        const prevEl = thisEl.previousElementSibling;
+        if (!firstEl.classList.contains('sel')) {
+          thisEl.classList.remove('sel');
+          prevEl.classList.add('sel');
+          prevEl.focus();
+        } else {
+          this.$refs.search.focus();
+        }
+      }
+      if (keycode === 'enter' && hasClass) {
+        this.changeValue(str);
+      }
+      
+    },
+    // 검색창에서 마우스오버하거나 선택시 클래스리스트 비우기
+    removeValue() {
+      if (document.querySelector('.r').classList.contains('key')) {
+        document.querySelector('.r').classList.remove('key');
+        document.querySelector('.r li.sel').classList.remove('sel');
+      }
+    },
+
     select(e) {
       console.log("셀렉", e);
       this.model = e;
@@ -491,6 +575,11 @@ export default {
   created() {
     this.checkquery();
   },
+  watch: {
+    keyword() {
+      this.removeValue();
+    }
+  }
 };
 </script>
 
