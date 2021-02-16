@@ -97,16 +97,6 @@
 
           <div class="newsfeed-form-file">
             <div class="newsfeed-form-file-box">
-              <div class="newsfeed-form-img-box" v-if="totalLen < 4">
-                <label for="image"> <div class="newsfeed-form-img-label"> 사진 </div> <i class="fas fa-plus-circle newsfeed-form-img-label-btn"></i> </label>
-                <input
-                  class="newsfeed-form-img-input"
-                  id="image"
-                  type="file"
-                  @change="selectFile"
-                  accept="image/*"
-                />
-              </div>
               <div v-for="view in form.filePaths" :key="view.id">
                 <div class="newsfeed-form-img-prevbox">
                   <img
@@ -129,6 +119,16 @@
                   <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
                   <img :src="view2" alt="미리보기 이미지" />
                 </div>
+              </div>
+              <div class="newsfeed-form-img-box" v-if="totalLen < 5">
+                <label for="image"> <div class="newsfeed-form-img-label"> 사진 </div> <i class="fas fa-plus-circle newsfeed-form-img-label-btn"></i> </label>
+                <input
+                  class="newsfeed-form-img-input"
+                  id="image"
+                  type="file"
+                  @change="selectFile"
+                  accept="image/*"
+                />
               </div>
             </div>
             <div class="newsfeed-form-file-hr-box">
@@ -319,11 +319,13 @@ export default {
     deleteImgmodi (view) {
       let check = this.form.filePaths.findIndex(element => element === view)
       this.form.filePaths.splice(check, 1)
+      this.totalLen = this.form.filePaths.length + this.fileList.length
     },
     deleteImg (view) {
       let check = this.previewUrl.findIndex(element => element === view)
       this.previewUrl.splice(check, 1)
       this.fileList.splice(check, 1)
+      this.totalLen = this.form.filePaths.length + this.fileList.length
     },
     tagApi (tag) {
       searchAutoTag(
@@ -448,6 +450,7 @@ export default {
             this.previewUrl.push(this.imageUrl)
           }
           reader.readAsDataURL(this.selectedFile);
+          this.totalLen = this.form.filePaths.length + this.fileList.length
         }
       }
     },
