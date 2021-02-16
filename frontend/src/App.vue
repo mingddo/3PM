@@ -451,5 +451,11 @@ export default {
     width: 1.5em;
     height: 1.5em;
   }
+  .home-category-modal-overay {
+    display: none;
+  }
+  .home-category-modal-btn {
+    display: none;
+  }
 }
 </style>
