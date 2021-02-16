@@ -59,6 +59,53 @@ button.active {
   width: 100%;
   position: absolute;
 }
+.home-category-modal-overay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease-in-out;
+}
+.home-category-modal-content-frame {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home-category-modal-content{
+  width: 250px;
+  height: 250px;
+  opacity: 0.5;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+}
+.home-category-modal-content:hover {
+  opacity: 1;
+}
+
+.home-category-modal-content img {
+  width: 200px;
+  height: 200px;
+}
+.home-category-modal-btn {
+  position: fixed;
+  bottom: 5vh;
+  right: 100px;
+  z-index: 9999;
+  border : none;
+  outline: none;
+}
 .home-section {
   width: 100%;
   height: 100vh;
