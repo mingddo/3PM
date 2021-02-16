@@ -82,7 +82,7 @@ export default {
 
       headerImgs: [
         "https://cdn.pixabay.com/photo/2017/08/02/01/29/lifestyle-2569543_960_720.jpg",
-        "",
+        "https://images.unsplash.com/photo-1525026198548-4baa812f1183?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=933&q=80",
         "https://cdn.pixabay.com/photo/2020/03/03/20/31/boat-4899802_1280.jpg",
         "https://cdn.pixabay.com/photo/2014/07/06/13/55/calculator-385506_1280.jpg",
       ],
