@@ -296,7 +296,7 @@ export default {
           this.getWorkerFeed();
           break;
         case 'group':
-          this.getGroupFeed(this.groupIds);
+          this.getGroupFeed();
       }
     },
     getIndoorFeed() {
@@ -359,44 +359,36 @@ export default {
         }
       );
     },
-    getGroupFeed(groupIds) {
-      for (let i=0;i<groupIds.length;i++) {
-        const groupId = groupIds[i]
+    getGroupFeed() {
         getprofileFeedGroup(
           this.profile_user,
-          groupId,
-          0,
+          this.feedObj.group.feed_page_no,
           (res) => {
-            console.log('getprofileFeedGroup',res.data)
+            this.feedObj.group.feed_page_no = res.data.endNum;
             let feeds = res.data.feedList;
+            if (feeds.length < 10) {
+              this.feedObj.group.last = true;
+            }
             for (let f of feeds) {
               this.feedObj.group.feed.push(f);
             }
+            this.feedObj.group.next = false;
           },
           (err) => {
             console.log('getprofileFeedGroup',err)
           }
         )
-      }
     },
     getGroups() {
-      return new Promise((resolve,reject) => {
         getprofileGroups(
           this.profile_user,
           (res) => {
             this.groups = res.data
-            for (let i=0;i<this.groups.length;i++) {
-              const groupId =this.groups[i].id
-              this.groupIds.push(groupId)
-            }
-            resolve(this.groupIds)
           },
           (err) => {
-            console.log('getprofileGroups',err)
-            reject()
+            console.log(err)
           }
         )
-      })
     },
     setScroll() {
       window.addEventListener("scroll", () => {
@@ -514,10 +506,7 @@ export default {
     this.setScroll();
     this.getfollowingList();
     this.getActiviy();
-    this.getGroups()
-    .then((res) => {
-      this.getGroupFeed(res)
-    })
+    this.getGroups();
   },
 };
 </script>
