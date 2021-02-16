@@ -41,13 +41,13 @@
   width: 50%;
 }
 .feed-detail-content {
-  background-color: #ffffff;
+  background-color: #fff9f3;
   text-align: left;
   width: 100%;
   padding: 30px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border-radius: 30px;
+  border-radius: 5px;
 }
 .feed-detail-modi-delete {
   margin: 10px;
@@ -354,7 +354,7 @@
   flex-direction: column;
 }
 .newsfeed-form-group-list-btn {
-  margin-top:20px;
+  margin-top: 20px;
   /* position: fixed;
   top: 0;
   right: 0; */

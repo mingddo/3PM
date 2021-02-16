@@ -451,5 +451,61 @@ export default {
     width: 1.5em;
     height: 1.5em;
   }
+  .myPageEdit-Header-Title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 12px;
+  }
+  .mypageEdit {
+    margin: 80px auto;
+    width: 90%;
+  }
+  .nickname-edit-input-frame {
+    width: 80%;
+  }
+  .nickname-edit-input-frame-btn {
+    width: 80%;
+  }
+  .nickname-edit-input-frame > input {
+    width: 60%;
+  }
+  .introEdit-frame > input {
+    width: 80%;
+    font-size: 15px;
+  }
+  .intro-Edit-btn {
+    font-size: 13px;
+    width: 60px;
+  }
+
+  .edit-dupli-btn {
+    font-size: 13px;
+    padding: 5px;
+  }
+  .nicknameexist {
+    width: 90%;
+  }
+  .edit-profile-Img-btn {
+    padding: 10px;
+    font-size: 13px;
+  }
+  .nicknameEdit-btn {
+    font-size: 13px;
+    height: 70%;
+  }
+  .profile-edit-img-frame {
+    width: 30%;
+    height: 30%;
+    margin-top: 12px;
+  }
+  .nickname-warn {
+    flex-wrap: wrap;
+  }
+  .prrfile-content-frame {
+    width: 90%;
+  }
+  .save-Edit-profile {
+    width: 250px;
+  }
 }
 </style>
