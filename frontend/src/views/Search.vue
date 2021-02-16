@@ -15,11 +15,16 @@
                   id="search"
                   placeholder="검색어를 입력해 주세요"
                   v-model.trim="keyword"
+                  @input="autoTag"
+                  autocomplete="off"
                 />
               </div>
               <i @click="keywordClear" class="icon-cancel fas fa-times"></i>
               <i @click="Allsearch" class="icon-search fas fa-search"></i>
             </form>
+            <ul>
+              <li v-for="(tag, idx) in tags" :key="idx">{{ tag.value }}</li>
+            </ul>
           </div>
           <div class="searchResultList">
             <div class="searchFilterList">
@@ -138,14 +143,23 @@ import {
   searchfeed,
   searchuser,
   searchgroup,
+  // autocompleteUser,
+  autocompleteTag,
 } from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
 export default {
-  components: { Sidebar, GroupResults, SerachResult, FilterGroup, GroupResult },
+  components: {
+    Sidebar,
+    GroupResults,
+    SerachResult,
+    FilterGroup,
+    GroupResult,
+  },
   data() {
     return {
+      tags: [],
       loading: false,
       loaded: true,
       empty_search: false,
@@ -205,6 +219,26 @@ export default {
     };
   },
   methods: {
+    select(e) {
+      console.log("셀렉", e);
+      this.model = e;
+      console.log(this.model, "요기요!!");
+    },
+    autoTag(e) {
+      console.log(e.target.value, "키워드 확인");
+      this.keyword = e.target.value;
+      autocompleteTag(
+        this.keyword,
+        (res) => {
+          console.log(res.data);
+          this.tags = res.data;
+          console.log(this.tags);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },
     Allsearch() {
       if (this.keyword === "") {
         alert("검색어를 입력해주세요");
@@ -460,4 +494,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style src="vue-advanced-search/dist/AdvancedSearch.css"></style>
