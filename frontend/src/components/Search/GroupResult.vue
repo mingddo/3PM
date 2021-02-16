@@ -3,7 +3,7 @@
     <div class="Group-resultImgFrame">
       <img
         v-if="grouplist.groupImg"
-        :src="`https://dtbqjjy7vxgz8.cloudfront.net/${grouplist.img}`"
+        :src="`https://dtbqjjy7vxgz8.cloudfront.net/${grouplist.groupImg}`"
         alt=""
         class="Group-resultImgFrame-img"
       />
