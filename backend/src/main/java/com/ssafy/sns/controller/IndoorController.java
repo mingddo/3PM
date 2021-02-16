@@ -33,6 +33,26 @@ public class IndoorController {
     private final IndoorServiceImpl indoorService;
     private final JwtService jwtService;
 
+    @ApiOperation("꽃보다집 추천 게시물")
+    @GetMapping(value = "/recommend", produces = "application/json; charset=utf8")
+    public ResponseEntity<FeedListResponseDto> getRecommendList() {
+
+        HttpStatus status;
+        FeedListResponseDto feedListResponseDto = null;
+
+        try {
+
+            logger.info("getFeedMyList = 꽃보다집 추천 리스트 가져오기");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getFeedMyList - 꽃보다집 추천 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(feedListResponseDto, status);
+    }
+
+
     // 내가 쓴 게시글 불러오기
     @ApiOperation("해당 유저 작성한 꽃보다집 전체 조회")
     @ApiImplicitParams({

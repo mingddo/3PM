@@ -8,7 +8,6 @@ import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
