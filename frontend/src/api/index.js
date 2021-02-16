@@ -1,7 +1,6 @@
 import axios from 'axios'
 // API_KEY 받아오고
 const  API_BASE_URL = `http://i4b208.p.ssafy.io/api/`
-
   
 function createInstance() {
   const instance = axios.create({

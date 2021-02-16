@@ -41,6 +41,7 @@ public class SearchController {
     @GetMapping("/all")
     public ResponseEntity<Map<String, Object>> searchAll(@RequestParam("keyword") String keyword,
                                                          HttpServletRequest request){
+        System.out.println("keyword: " + keyword);
         Map<String, Object> map = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
         try {

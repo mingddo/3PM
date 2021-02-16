@@ -26,7 +26,7 @@ public class SearchRepositoryImpl implements SearchRepository{
 
     @Override
     public List<Feed> searchFeeds(Hashtag hash) {
-        return em.createQuery("select f from Feed f where f.id = (select fh.feed.id from FeedHashtag fh where fh.hashtag.id = :hash)", Feed.class)
+        return em.createQuery("select f from Feed f where f.id in (select fh.feed.id from FeedHashtag fh where fh.hashtag.id = :hash)", Feed.class)
                 .setParameter("hash", hash.getId())
                 .getResultList();
     }
