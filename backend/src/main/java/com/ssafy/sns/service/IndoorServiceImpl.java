@@ -178,7 +178,7 @@ public class IndoorServiceImpl implements FeedService {
         fileService.modifyFiles(prevFileNames, curFileNames);
     }
 
-    public void feedRecommend() {
-
+    public FeedListResponseDto feedRecommend() {
+        return null;
     }
 }

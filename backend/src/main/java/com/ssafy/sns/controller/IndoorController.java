@@ -41,7 +41,7 @@ public class IndoorController {
         FeedListResponseDto feedListResponseDto = null;
 
         try {
-
+            feedListResponseDto = indoorService.feedRecommend();
             logger.info("getFeedMyList = 꽃보다집 추천 리스트 가져오기");
             status = HttpStatus.OK;
         } catch (Exception e) {
