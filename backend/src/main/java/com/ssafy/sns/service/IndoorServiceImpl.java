@@ -177,4 +177,8 @@ public class IndoorServiceImpl implements FeedService {
         List<String> curFileNames = feedRequestDto.getFilePaths();
         fileService.modifyFiles(prevFileNames, curFileNames);
     }
+
+    public void feedRecommend() {
+
+    }
 }

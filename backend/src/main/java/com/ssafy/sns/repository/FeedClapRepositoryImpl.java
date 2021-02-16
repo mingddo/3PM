@@ -48,4 +48,15 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
     public FeedClap findById(Long feedClapId) {
         return em.find(FeedClap.class, feedClapId);
     }
+
+    @Override
+    public List<FeedClap> findIndoorRecommend() {
+//        return em.createQuery("SELECT f " +
+//                "FROM FeedClap f " +
+//                "WHERE TYPE(f) = Indoor AND ")
+//                .setFirstResult(0)
+//                .setMaxResults(3)
+//                .getResultList();
+        return null;
+    }
 }
