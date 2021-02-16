@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import { getAllGroup } from '@/api/group.js'
+import { mapState } from 'vuex'
+import { getprofileGroups } from '@/api/mypage.js'
 import GroupRecommend from "@/components/GroupFeed/GroupRecommend.vue";
 import GroupJoined from '../../components/GroupFeed/GroupJoined.vue';
 import GroupNotFound from '../../components/GroupFeed/GroupNotFound.vue';
@@ -38,7 +39,8 @@ export default {
   },
   methods: {
     getGroupList () {
-      getAllGroup(
+      getprofileGroups(
+        this.userpk,
         (res) => {
           // console.log(res)
           this.groupList = res.data
@@ -51,6 +53,11 @@ export default {
     goto_create_group() {
       this.$router.push({ name: "groupform" });
     },
+  },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
   },
 };
 </script>

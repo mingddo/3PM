@@ -1,11 +1,11 @@
 <template>
   <div class="newsfeed-like-list">
     <div class="newsfeed-like-list-header">
-      <h2> 이 글에 👏박수를 친 사람들</h2>
+      <h2>{{ title }} </h2>
     </div>
 
     <div class="newsfeed-like-list-body">
-      <div class="newsfeed-like-list-user" v-for="(user, idx) in clapedUsers" :key="idx">
+      <div class="newsfeed-like-list-user" v-for="(user, idx) in users" :key="idx">
         <div class="newsfeed-like-list-userProfile">
           <NewsFeedProfile
             :proImg="user.img !== null ? user.img : defaultImg"
@@ -21,31 +21,41 @@
     </div>
 
     <div class="newsfeed-like-list-footer">
-      <button class="newsfeed-like-list-btnClose" @click="closeClapList">닫기</button>
+      <button class="newsfeed-like-list-btnClose" @click="closeList">닫기</button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import NewsFeedProfile from './Common/NewsFeedProfile.vue';
+import NewsFeedProfile from './NewsFeedProfile.vue';
 export default {
   components: { NewsFeedProfile },
   name: 'NewsFeedClapUser',
   props: {
-    clapedUsers: Array,
+    users: Array,
+    type: Number,
   },
   data() {
     return {
-      
+      title: '',
     };
   },
   mounted() {
-    
+    this.setTitle();
   },
   methods: {
-    closeClapList () {
-      this.$emit('closeClapList')
+    setTitle () {
+      if (this.type == 1) {
+        this.title = '이 글에 👏박수를 친 사람들'
+      } else if (this.type == 2) {
+        this.title = '멤버'
+      } else if (this.type == 3) {
+        this.title = '이 댓글에 👏박수를 친 사람들'
+      }
+    },
+    closeList () {
+      this.$emit('closeList')
     },
     goToProfile (user) {
       this.$router.push({ name: 'MyPage', query: { name: user.id}})

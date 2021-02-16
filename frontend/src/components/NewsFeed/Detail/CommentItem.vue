@@ -41,7 +41,7 @@
       <div class="feed-comment-like-nested">
         <div class="feed-comment-like-btn">
           <img :src="comment.clap ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png' : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'" @click="likeComment"/>
-            <span>{{ comment_info.clapCnt }}</span>
+          <span @click="commentUserList">{{ comment_info.clapCnt }}</span>
           <!-- </i> -->
         </div>
         <div v-if="comment.user.id != userpk" @click="mentionUSer">
@@ -49,6 +49,7 @@
           <img src="https://img.icons8.com/metro/14/000000/very-popular-topic.png"/>
         </div>
       </div>
+      <UserList v-if="openList" :type=3 :users="userList" @closeList="closeList"/>
     </div>
   </article>
 </template>
@@ -58,10 +59,12 @@ import NewsFeedProfile from '../Common/NewsFeedProfile.vue';
 import { updateComment } from '@/api/comment.js'
 import { deleteComment } from '@/api/comment.js'
 import { clapComment } from '@/api/comment.js'
+import { clapCommentList } from '@/api/comment.js'
 import { mapState } from 'vuex'
+import UserList from '../Common/UserList.vue';
 export default {
   name: 'NewsFeedCommentItem',
-  components: { NewsFeedProfile },
+  components: { NewsFeedProfile, UserList },
   props: {
     Category: Number,
     comment: Object,
@@ -69,6 +72,8 @@ export default {
   },
   data() {
     return {
+      openList: false,
+      userList: [],
       modiForm: false,
       commentForFeed: this.comment.content,
       foldModiDrop: true,
@@ -84,6 +89,22 @@ export default {
     this.setDateTime();
   },
   methods: {
+    closeList () {
+      this.openList = false;
+    },
+    commentUserList () {
+      this.openList = true;
+      clapCommentList(
+        this.comment.id,
+        (res) => {
+          console.log(res)
+          this.userList = res.data.user
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     setDateTime () {
       let d = new Date ();
       let todayDate = d.getDate();

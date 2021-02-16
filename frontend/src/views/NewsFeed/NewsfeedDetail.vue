@@ -66,6 +66,7 @@
             <!-- <div v-if="Category == 2 || Category == 3"> -->
             <Location
               v-if="Category == 3 && latitude && longitude"
+              :address="address"
               :latitude="latitude"
               :longitude="longitude"
               :placeName="placeName"
@@ -94,10 +95,11 @@
               <span v-else> 0</span>
             </span>
           </div>
-          <NewsFeedClapUser
+          <UserList
+            :type=1
             v-if="clapListOpen"
-            :clapedUsers="clapedUsers"
-            @closeClapList="closeClapList"
+            :users="clapedUsers"
+            @closeList="closeClapList"
           />
           <div class="feed-detail-like-comment-share-btn-box">
             <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
@@ -137,7 +139,7 @@ import { clapFeed } from '@/api/feed.js'
 import { clapFeedList } from '@/api/feed.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue';
-import NewsFeedClapUser from '../../components/NewsFeed/NewsFeedClapUser.vue';
+import UserList from '../../components/NewsFeed/Common/UserList.vue';
 import ModiAndDelete from '../../components/NewsFeed/Detail/ModiAndDelete.vue';
 import UserInfoBtn from '../../components/NewsFeed/Detail/UserInfoBtn.vue';
 import Location from '../../components/NewsFeed/Detail/Location.vue';
@@ -149,7 +151,7 @@ export default {
   components: {
     Sidebar,
     NewsFeedProfile,
-    NewsFeedClapUser,
+    UserList,
     ModiAndDelete,
     UserInfoBtn,
     Location,
@@ -334,6 +336,9 @@ export default {
 }
 .feed-detail-map-name {
   text-align: right;
+}
+.feed-detail-map-placeName {
+  font-weight: bold;
 }
 .feed-detail-comment-plus {
   text-align: center;
