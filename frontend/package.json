@@ -15,6 +15,7 @@
     "rxjs": "^6.6.3",
     "v-tooltip": "^2.1.2",
     "vue": "^2.6.11",
+    "vue-advanced-search": "^0.1.43",
     "vue-carousel": "^0.18.0",
     "vue-carousel-3d": "^1.0.1",
     "vue-infinite-loading": "^2.4.5",

@@ -46,9 +46,33 @@ function searchgroup(keyword,success,fail){
     .catch(fail)
 }
 
+function autocompleteTag(hashtag,success,fail){
+  instance
+    .get(`search/auto/tag`, {
+      params: {
+        hashtag: hashtag
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+
+function autocompleteUser(user_name,success,fail){
+  instance
+    .get(`search/auto/user`, {
+      params: {
+        nickname: user_name
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+
 export {
   searchall,
   searchfeed,
   searchuser,
-  searchgroup
+  searchgroup,
+  autocompleteUser,
+  autocompleteTag
 }
