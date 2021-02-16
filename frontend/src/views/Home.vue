@@ -163,8 +163,8 @@ export default {
       return new Promise((resolve, reject) => {
         window.Kakao.Auth.login({
           scope: "account_email, gender, age_range",
-          success: (authObj) => {
-            console.log("kakaoLogin", authObj);
+          success: () => {
+            // console.log("kakaoLogin", authObj);
             this.kakaoAccoutInfo();
             resolve();
           },
@@ -181,7 +181,7 @@ export default {
       })
         .then((res) => {
           const kakaoId = res.id;
-          console.log("kakaoAccoutInfo 함수", res);
+          // console.log("kakaoAccoutInfo 함수", res);
           const user_age = res.kakao_account.age_range;
           getUser(
             {
@@ -192,7 +192,7 @@ export default {
               // true -> user 정보가 있으면  Home
               if (res.data) {
                 // 세션에 토큰 설정
-                console.log("getUser 정보", res.data);
+                // console.log("getUser 정보", res.data);
                 const responseUserId = res.data.id;
                 const authToken = res.data["accToken"];
                 const refToken = res.data["refToken"];
