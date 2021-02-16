@@ -117,11 +117,15 @@ button.active {
 }
 .login-btn {
   z-index: 1000;
-  width: auto;
+  width: 60%;
+  min-width: 200px;
+  max-width: 360px;
   height: 50px;
   position: fixed;
   bottom: 5vh;
-  right: 45%;
+  left : 0;
+  right : 0;
+  margin: 0 auto;
   font-weight: bold;
   transition: all 0.8s ease-in-out;
   padding: 0.25rem 1rem;
