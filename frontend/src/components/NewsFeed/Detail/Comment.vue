@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="feed-detail-comment-input-box">
-      <news-feed-profile 
+      <NewsFeedProfile 
         class="feed-detail-comment-img"
-        :proImg="defaultImg"
+        :proImg="myImg ? myImg : defaultImg"
         :userId="userpk"
       />
 
@@ -12,7 +12,7 @@
         :items="items"
         offset="6"
       >
-        <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" autocomplete="false" name="comment" id="comment" cols="30" rows="10" :value="commentInput" @keyup="commentKeyup"></textarea>
+        <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" autocomplete="false" name="comment" id="comment" cols="30" rows="10" v-model="commentInput" @input="commentKeyup" @keyup.enter="stopAuto"></textarea>
       </Mentionable>
       <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
     </div>
@@ -44,6 +44,7 @@ import { mapState } from 'vuex'
 import { commentList } from '@/api/comment.js'
 import { createComment } from '@/api/comment.js'
 import { searchAutoUser } from '@/api/comment.js'
+import { getprofileInfo } from '@/api/mypage.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
 export default {
@@ -67,6 +68,7 @@ export default {
       page: 0,
       last: false,
       delIdx: null,
+      myImg: null,
     };
   },
   mounted() {
@@ -74,8 +76,20 @@ export default {
   },
   created () {
     this.setComment(0);
+    this.getImg();
   },
   methods: {
+    getImg () {
+      getprofileInfo(
+        this.userpk,
+        (res) => {
+          this.myImg = res.data.user_img
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     unshiftComment (commentId) {
       this.delIdx = this.comments.findIndex((item) => {
         return item.id == commentId
@@ -164,8 +178,11 @@ export default {
       let input = document.getElementById('comment')
       input.focus();
     },
-    commentKeyup (e) {
-      this.commentInput = e.target.value;
+    stopAuto () {
+      this.auto = false;
+    },
+    commentKeyup () {
+      // this.commentInput = e.target.value;
       let lastChar = this.commentInput.charAt(this.commentInput.length-1)
       if (lastChar == '@') {
         this.auto = true;
@@ -183,45 +200,19 @@ export default {
           cnt = results.length
         }
         let mentionedUser = this.commentInput.split('@')[cnt]
-        let saveMention = mentionedUser.split(' ')
-        if (saveMention.length > 1 || e.code == 'Space' || e.code == 'Enter') {
-          this.auto = false;
-        } else if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "ArrowLeft" && e.key !== "ArrowRight" && mentionedUser) {
-          // console.log('api요청 단어', this.iSound(mentionedUser), this.mSound(mentionedUser), this.tSound(mentionedUser))
-          console.log('api요청 단어', mentionedUser)
-          // mentionedUser 을 db에 요청하여, 관련된 문자로 시작되는 단어 리스트를 받아 this.itmes 에 저장한다.
-          // 현재는 백 api가 설정되어있지 않으므로 items를 직접 설정한다.
+        let saveMention = mentionedUser.split(' ')[0]
+        console.log(saveMention)
+        if (mentionedUser) {
           searchAutoUser(
             mentionedUser,
             (res) => {
               console.log(res)
+              this.items = res.data
             },
             (err) => {
               console.log(err)
             }
           )
-          this.items = [
-            {
-              value: '1',
-              label: '장수민',
-            },
-            {
-              value: '2',
-              label: '잔수민',
-            },
-            {
-              value: '3',
-              label: '자스민',
-            },
-            {
-              value: '4',
-              label: '장슈민',
-            },
-            {
-              value: '5',
-              label: '장수밍',
-            },
-          ]
         }
       }
     },

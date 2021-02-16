@@ -11,8 +11,9 @@
 
 <script>
 import { deleteIndoors } from '@/api/indoors.js'
-import { deleteWorker } from '@/api/worker.js'
 import { deleteGroupFeed } from '@/api/group.js'
+import { deleteOutdoors } from '@/api/outdoors.js'
+import { deleteWorker } from '@/api/worker.js'
 
 import { mapState } from 'vuex'
 
@@ -68,6 +69,15 @@ export default {
             )
           } else if (this.Category == 3) {
             // 청산별고 DELETE 요청
+            deleteOutdoors(
+              this.fd.id,
+              () => {
+                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
           } else if (this.Category == 4) {
             // 워커홀릭 DELETE 요청
             deleteWorker(

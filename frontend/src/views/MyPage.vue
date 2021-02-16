@@ -143,7 +143,7 @@
               <NewsFeedList :feed="feedObj[currentFeedName].feed" :last="feedObj[currentFeedName].last" :Category="feedObj[currentFeedName].category" />
             </section>
             <section v-if="activetab === 2" class="myPageActivity">
-              <Activity :activities="current_user_activityList" />
+              <Activity :activities="current_user_activity.list" :activitiesLast="current_user_activity.last" />
             </section>
             <section v-if="activetab === 3" class="myPageActivity">
               <SubscribedList :subscribedlist="current_user_followingList" @decrement="onDeleteSubscriber" />
@@ -236,7 +236,13 @@ export default {
       extra : 100,
       currentFeedName : 'indoor',
       current_user_followingList: [],
-      current_user_activityList : [],
+      current_user_activity : {
+        last : false,
+        next : false,
+        page_no : 0,
+        list : [],
+        extra : 100,
+      },
     };
   },
   methods: {
@@ -280,6 +286,7 @@ export default {
             this.feedObj[keyName].feed_page_no = 0
           }
         }
+        this.current_user_activity.extra = 100
         this.extra = 100
         resolve()
       })  
@@ -390,8 +397,28 @@ export default {
           }
         )
     },
+    setActivityScroll() {
+      window.addEventListener("scroll", () => {
+        if(this.activetab !==2) {return}
+        let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+        let windowHeight = window.innerHeight; // 스크린 창
+        let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+        if (
+          !this.current_user_activity.next &&
+          !this.current_user_activity.last &&
+          scrollLocation + windowHeight + this.current_user_activity.extra >= fullHeight
+        ) {
+          this.current_user_activity.next = true;
+          setTimeout(() => {
+            this.current_user_activity.extra += 100
+            this.getActiviy();
+          }, 1000);
+        }
+      });
+    },
     setScroll() {
       window.addEventListener("scroll", () => {
+        if(this.activetab !==1) {return}
         let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
         let windowHeight = window.innerHeight; // 스크린 창
         let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
@@ -409,11 +436,6 @@ export default {
       });
     },
     usercheck() {
-      // console.log(
-      //   "같은 유저인지?",
-      //   this.$store.state.userId,
-      //   this.$route.query.name
-      // );
       if (
         this.$route.query.name === undefined ||
         this.$route.query.name === this.$store.state.userId ||
@@ -422,32 +444,26 @@ export default {
         this.current_user = this.$store.state.userId;
         this.profile_user = this.$store.state.userId;
         this.mypage = true;
-        // this.current_user = 뷰엑스나 세션에서 아이디 가지고 오기
       } else {
         this.profile_user = this.$route.query.name;
         this.mypage = false;
-        // console.log("내 프로필이 아니다", this.profileinfo);
       }
     },
     getprofileInfo() {
       getprofileInfo(
         this.profile_user,
         (res) => {
-          // console.log(res);
           this.profileinfo = res.data;
         },
         (err) => {
           console.log(err);
         }
       );
-      // this.$router.push({ name: "MyPage", query: { username: "장수민" } });
-      // axios 요청보내서 현재 쿼리에 있는 사람 정보 가지고 오는 것
     },
     followToggle() {
       followToggle(
         this.profile_user,
         () => {
-          // console.log("팔로우 되는지", res.data);
           if (this.subscribed === false) {
             (this.subscribed = true),
               (this.profileinfo.toMeFromOthersCnt =
@@ -467,7 +483,6 @@ export default {
       followingList(
         this.current_user,
         (res) => {
-          // console.log("내가팔로우하는 사람", res.data);
           this.current_user_followingList = res.data;
         },
         (err) => {
@@ -478,15 +493,17 @@ export default {
     getActiviy() {
       getNotice(
         this.current_user,
+        this.current_user_activity.page_no,
         (res) => {
-          console.log(res.data)
-          for (let i=0; i<res.data.length; i++) {
-            const data = res.data[i]
-            const other = data.other
-            if (this.current_user !== other.id) {
-              this.current_user_activityList.push(data)
-            } 
-          }
+          this.current_user_activity.page_no = res.data.endNum
+            let notices = res.data.noticeResponseDtos;
+            if (notices.length < 10) {
+              this.current_user_activity.last = true;
+            }
+            for (let n of notices) {
+              this.current_user_activity.list.push(n);
+            }
+            this.current_user_activity.next = false;
         },
         (err) => {
           console.log('err',err)
@@ -499,12 +516,12 @@ export default {
     } 
   },
   created() {
-    // console.log(this.$store.state.userId);
     this.usercheck();
     this.getprofileInfo();
     this.setFeedList(this.currentFeedName);
   },
   mounted() {
+    this.setActivityScroll();
     this.setScroll();
     this.getfollowingList();
     this.getActiviy();

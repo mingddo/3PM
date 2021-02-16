@@ -7,9 +7,49 @@
         </button>
       </div>
       <div v-else>
+          <div class="home-category-modal-btn">
+            <button  @click="onClickCategoryToggle">카테고리 버튼</button>
+          </div>
+        <div class="home-category-modal-overay" :style="{ display : modalDisplay}">
+          <div class="home-category-modal-content-frame">
+            <div class="home-category-modal-content" @mouseover="mouseHover.indoor = true" @mouseleave="mouseHover.indoor = false" @click="onClickCategory(1)">
+              <div>
+                 <img src="../assets/img/indoor.svg" alt="" />
+              </div>
+              <div class="home-category-modal-content-hover-background">
+                <div class="home-category-modal-content-hover-background-header">꽃보다집</div>
+              </div>
+            </div>
+            <div class="home-category-modal-content" @mouseover="mouseHover.group = true" @mouseleave="mouseHover.group = false" @click="onClickCategory(2)">
+              <div>
+                <img src="../assets/img/hackinsider.svg" alt="" />
+              </div>
+              <div class="home-category-modal-content-hover-background">
+                <div class="home-category-modal-content-hover-background-header">핵인싸</div>
+              </div>
+            </div>
+            <div class="home-category-modal-content" @mouseover="mouseHover.outdoor = true" @mouseleave="mouseHover.outdoor = false" @click="onClickCategory(3)">
+              <div>
+                <img src="../assets/img/chungsan2.svg" alt="" />
+              </div>
+              <div class="home-category-modal-content-hover-background">
+                <div class="home-category-modal-content-hover-background-header">청산별곡</div>
+              </div>
+            </div>
+            <div class="home-category-modal-content" @mouseover="mouseHover.worker = true" @mouseleave="mouseHover.worker = false" @click="onClickCategory(4)">
+              <div>
+                <img src="../assets/img/workerholic2.svg" alt="" />
+              </div>
+              <div class="home-category-modal-content-hover-background">
+                <div class="home-category-modal-content-hover-background-header">워커홀릭</div>
+              </div>
+            </div>
+          </div>
+        </div>
         <button class="login-btn" style="z-index:1000" @click="onClickLogout">
           로그아웃
         </button>
+
       </div>
       <!-- <button class="login-btn" @click="deleteKakaoConnection">회원연결끊기</button> -->
       <section class="clock-container">
@@ -129,6 +169,8 @@ export default {
       ss: "",
       clockBox: "",
       sections: "",
+      categoryToggle : false,
+      modalDisplay : null,
     };
   },
   computed: {
@@ -150,6 +192,49 @@ export default {
       "setUserId",
       "setUserInfo",
     ]),
+    mouseHover(category,status) {
+      // status === 1 mouse hover
+      // status === 0 mouse out
+      console.log(category,status)
+      switch(category) {
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          break;
+        case 4:
+          break;
+      }
+    },
+    mouseEnter(e) {
+      console.log('mouseEnter',e)
+    },
+    mouseOut(e) {
+      console.log('mouseOut',e)
+    },
+    onClickCategory(e) {
+        this.$router.push({
+        name: "NewsfeedPersonal",
+        query: { Category: `${e}` },
+      });
+    },
+    onClickCategoryToggle() {
+      const overlay = document.querySelector('.home-category-modal-overay')
+      this.categoryToggle = !this.categoryToggle;
+      if(this.categoryToggle) {
+        overlay.style = " opacity : 0"
+        setTimeout(() => {
+          this.modalDisplay = 'none';
+        }, 500);
+      }
+      else {
+        this.modalDisplay = null
+        setTimeout(() => {
+          overlay.style = " opacity : 1"
+        }, 5);
+      }
+    },
     scrollStatus() {
       // let viewportHeight = window.innerHeight;
       let scrollPos = window.scrollY / this.windowInnerHeight;
@@ -249,9 +334,12 @@ export default {
       this.kakaoLogin()
         .then(() => {
           this.$router.push({
-            name: "NewsfeedPersonal",
-            query: { Category: "1" },
+            name: "Home",
           });
+          // this.$router.push({
+          //   name: "NewsfeedPersonal",
+          //   query: { Category: "1" },
+          // });
         })
         .catch(() => {
           console.log("error");
