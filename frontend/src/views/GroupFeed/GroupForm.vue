@@ -4,6 +4,19 @@
       <Sidebar />
       <div class="group-detail">
         <GroupNav :isHome="false"/>
+        <div class="newsfeed-form-img-box">
+          <label for="image"> <i class="far fa-images"></i> 그룹 이미지 등록하기 </label>
+          <input
+            class="newsfeed-form-img-input"
+            id="image"
+            type="file"
+            @change="selectFile"
+            accept="image/*"
+          />
+        </div>
+        <div class="group-detail-img-space" v-if="imageUrl">
+          <img class="group-detail-img" :src="imageUrl" alt="">
+        </div>
         <div class="group-form">
           <input
             type="text"
@@ -21,18 +34,14 @@
             class="group-form-descript"
           ></textarea>
         </div>
-        <div class="newsfeed-form-img-box">
-          <label for="image"> <i class="far fa-images"></i> 사진 </label>
-          <input
-            class="newsfeed-form-img-input"
-            id="image"
-            type="file"
-            @change="selectFile"
-            accept="image/*"
-          />
-        </div>
         <div class="group-form-submit-btn">
           <button class="create-group-btn" @click="create">그룹만들기</button>
+        </div>
+        <div class="fa-3x group-form-loading" v-if="uploadingImg">
+          <i class="fas fa-spinner fa-spin"></i>
+          <div>
+            이미지 업로드 중입니다
+          </div>
         </div>
       </div>
     </div>
@@ -50,6 +59,7 @@ export default {
   components: { Sidebar, GroupNav },
   data(){
     return{
+      uploadingImg: false,
       form: {
         name: "",
         description: "",
@@ -57,6 +67,7 @@ export default {
       completed: false,
       fileSelect: false,
       selectedFile: null,
+      imageUrl: null,
     }
   },
   methods:{
@@ -65,6 +76,13 @@ export default {
       if (files.length) {
         this.fileSelect = true;
         this.selectedFile = files[0]
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageUrl = e.target.result;
+          console.log(this.imageUrl)
+          // this.previewUrl.push(this.imageUrl)
+        }
+        reader.readAsDataURL(this.selectedFile);
       }
     },
     imgUpload (id) {
@@ -83,23 +101,30 @@ export default {
     },
     create () {
       this.completed = true;
-      createGroup(
-        this.form,
-        (res) => {
-          if (this.selectFile) {
-            this.imgUpload(res.data.id)
-            setTimeout(() => {
-              this.$router.push({ name: 'groupdetail', query: { groupId : res.data.id } })
-            }, 500);
-          } else {
-            this.$router.push({ name: 'groupdetail', query: { groupId: res.data.id }})
+      if (!this.form.name) {
+        alert('그룹 이름을 입력해주세요')
+      } else if (!this.form.description) {
+        alert('그룹 소개를 입력해주세요')
+      } else {
+        createGroup(
+          this.form,
+          (res) => {
+            if (this.selectedFile) {
+              this.imgUpload(res.data.id)
+              this.uploadingImg = true;
+              setTimeout(() => {
+                this.$router.push({ name: 'groupdetail', query: { groupId : res.data.id } })
+              }, 1000);
+            } else {
+              this.$router.push({ name: 'groupdetail', query: { groupId: res.data.id }})
+            }
+            console.log(res)
+          },
+          (err) => {
+            console.log(err)
           }
-          console.log(res)
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+        )
+      }
     },
   },
     beforeRouteLeave (to, from, next) {
@@ -156,5 +181,28 @@ export default {
   border-radius: 5px;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+.group-form-loading {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.group-form-loading > i {
+  font-size: 50px;
+  margin: 10px;
 }
 </style>

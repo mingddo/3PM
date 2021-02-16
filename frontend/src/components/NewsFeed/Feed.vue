@@ -55,10 +55,9 @@
           <!-- {{ fd.content }} -->
         </p>
       </div>
-
-      <div v-if="Category == 3">
-        {{ fd.placeName !== null ? fd.placeName : "위치 정보 없음" }}
-      </div>
+    </div>
+    <div v-if="Category == 3 && fd.address" class="feed-location">
+      <i class="fas fa-map-marker-alt"></i> {{ fd.placeName !== null ? fd.placeName : fd.address }}
     </div>
     <div class="feed-footer">
       <div class="feed-footer-box" @click="goToDetail">
