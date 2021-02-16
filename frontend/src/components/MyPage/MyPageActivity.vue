@@ -54,8 +54,15 @@ export default {
           case 'Indoor':
             category = 1
             break
-          default:
-            category = 1
+          case 'Insider':
+            category = 2
+            break;
+          case 'Outdoor':
+            category = 3
+            break;
+          case 'Worker':
+            category = 4
+            break;
         }
         this.$router.push({ name: 'NewsfeedDetail', query: { id: feedId, Category: category } })
       }

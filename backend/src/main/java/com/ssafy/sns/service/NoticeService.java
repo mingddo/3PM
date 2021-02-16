@@ -3,12 +3,10 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.follow.Follow;
-import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.notice.Notice;
 import com.ssafy.sns.domain.user.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NoticeService {
 

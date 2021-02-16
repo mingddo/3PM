@@ -97,6 +97,7 @@ export default {
       isPossibleName: false,
       isOverlapped: true,
       introduce: "",
+      completed: false,
     };
   },
   methods: {
@@ -137,7 +138,9 @@ export default {
     EditProfile() {
       console.log("고고", this.changeURL);
       const formData = new FormData();
-      formData.append("file", this.changeURL);
+      if (this.changeURL) {
+        formData.append("file", this.changeURL);
+      }
       formData.append("nickname", this.userInfo.nickname);
       formData.append("introduce", this.userInfo.introduce);
       console.log(formData);
@@ -146,6 +149,8 @@ export default {
         formData,
         (res) => {
           console.log(res);
+          alert("내 정보가 수정되었어요!");
+          this.completed = true;
           this.$router.push({
             name: "MyPage",
             query: { name: this.$store.state.userId },

@@ -164,7 +164,12 @@
   width: 100%;
   border-radius: 10px;
 }
-
+.myPageActivity-feed-filter-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
 .myPagemainSection {
   width: 70%;
   margin-top: 0px;
@@ -235,7 +240,10 @@
   align-items: center;
   margin: 10px 0;
 }
-
+.activityComponentFrame:hover {
+  background-color: rgba(0,0,0,0.15);
+  border-radius: 10px;
+}
 .activityContent {
   width: 80%;
   height: 70px;

@@ -15,7 +15,7 @@
       <Sidebar />
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
         <GroupNav v-if="Category == 2" :isHome="true"/>
-        <NewsFeedRecommend v-if="Category == 4 || Category == 2" :reco="reco" :Category="Category" />
+        <NewsFeedRecommend v-if="Category == 4" :reco="reco" :Category="Category" />
         <mountain-banner v-else-if="Category == 3"/>
         <!-- 임시로 자리차지하기 -->
         <div class="newsfeed-recommend-place" v-else>
@@ -46,7 +46,10 @@ import NewsFeedHeader from "../../components/NewsFeed/NewsFeedHeader.vue";
 import NewsFeedList from "../../components/NewsFeed/NewsFeedList.vue";
 import NewsFeedRecommend from "../../components/NewsFeed/Recommend/NewsFeedRecommend.vue";
 import Sidebar from "../../components/Common/Sidebar.vue";
-import { feedList } from "@/api/feed.js";
+import { indoorsList } from "@/api/indoors.js";
+import { groupList } from "@/api/group.js";
+import { outdoorsList } from "@/api/outdoors.js";
+import { workerList } from "@/api/worker.js";
 import MountainBanner from '../../components/NewsFeed/Recommend/MountainBanner.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 
@@ -89,10 +92,11 @@ export default {
     setFeedList() {
       if (this.$route.query.Category == 1) {
         this.Category = 1;
-        feedList(
+        indoorsList(
           this.page,
           (res) => {
             this.page = res.data.endNum;
+            console.log(this.page)
             let feeds = res.data.feedList;
             if (feeds && feeds.length < 10) {
               this.last = true;
@@ -109,12 +113,67 @@ export default {
       } else if (this.$route.query.Category == 2) {
         this.Category = 2;
         // 핵인싸 axios Get 무한스크롤 요청보내기
+        groupList(
+          this.page,
+          (res) => {
+            this.page = this.page + 1
+            let feeds = res.data.feedList;
+            console.log(feeds)
+            if (feeds && feeds.length < 10) {
+              this.last = true;
+            }
+            for (let f of feeds) {
+              this.feed.push(f);
+            }
+            this.next = false;
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       } else if (this.$route.query.Category == 3) {
         this.Category = 3;
         // 청산별곡 axios Get 무한스크롤 요청보내기
+        outdoorsList(
+          this.page,
+          (res) => {
+            this.page = res.data.endNum;
+            let feeds = res.data.feedList;
+            console.log(feeds)
+            if (feeds && feeds.length < 10) {
+              this.last = true;
+            }
+            for (let f of feeds) {
+              this.feed.push(f);
+            }
+            this.next = false;
+          },
+          (err) => {
+            console.log(err);
+          }
+        )
       } else if (this.$route.query.Category == 4) {
         this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
+        console.log('워커홀릭')
+        workerList(
+          this.page,
+          (res) => {
+            this.page = res.data.endNum;
+            let feeds = res.data.feedList;
+            console.log(feeds)
+            if (feeds && feeds.length < 10) {
+              this.last = true;
+            }
+            for (let f of feeds) {
+              this.feed.push(f);
+            }
+            this.next = false;
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       }
     },
     setScroll() {

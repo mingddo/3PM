@@ -3,7 +3,6 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.notice.NoticeFeedClap;
-import com.ssafy.sns.domain.notice.NoticeFollow;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.clap.ClapResponseDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;

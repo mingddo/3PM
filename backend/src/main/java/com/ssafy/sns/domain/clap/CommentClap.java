@@ -1,5 +1,6 @@
 package com.ssafy.sns.domain.clap;
 
+import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.user.User;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class CommentClap  {
+public class CommentClap extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

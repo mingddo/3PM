@@ -22,13 +22,19 @@
             <div v-if="Category == 2" class="newsfeed-form-group-container">
               <div @click="chooseGroup">{{ groupName }}</div>
               <div v-if="select" class="newsfeed-form-group">
-                <div class="newsfeed-form-group-list-btn">
-                  <button @click="chooseGroup">X</button>
-                </div>
-                <div class="newsfeed-form-group-list">
+                <div class="newsfeed-form-group-list" v-if="groupList.length > 0">
                   <div v-for="(group, idx) of groupList" :key="idx">
-                    <button @click="selectGroup(group)">{{ group }}</button>
+                    <button @click="selectGroup(group)">{{ group.name }}</button>
                   </div>
+                </div>
+                <div class="newsfeed-form-group-none" v-else>
+                  가입된 그룹이 없습니다. 그룹에 가입해주세요!
+                  <div class="newsfeed-form-group-redirect-btn" @click="goToGroupPage">
+                    그룹 찾으러 가기
+                  </div>
+                </div>
+                <div class="newsfeed-form-group-list-btn">
+                  <button @click="chooseGroup">닫기</button>
                 </div>
               </div>
             </div>
@@ -39,7 +45,7 @@
                 <Mentionable
                   :keys="['#']"
                   :items="items"
-                  offset="6"
+                  offset="10"
                 >
                   <input
                     class="newsfeed-form-tag-input"
@@ -48,6 +54,8 @@
                     placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
                     :value="inputTag"
                     @keyup="autoTag"
+                    @click="setInputTag"
+                    autocomplete="false"
                   />
                 </Mentionable>
                 <i class="far fa-question-circle" @click="qtToggle"></i>
@@ -157,10 +165,24 @@
 // import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import '@/assets/css/mention.css'
 import { Mentionable } from 'vue-mention'
-import { createFeed } from '@/api/feed.js'
-import { updateFeed } from '@/api/feed.js'
-import { uploadFile } from '@/api/feed.js'
 import { searchAutoTag } from '@/api/feed.js'
+
+import { createIndoors } from '@/api/indoors.js'
+import { updateIndoors } from '@/api/indoors.js'
+import { uploadIndoorsFile } from '@/api/indoors.js'
+
+import { getAllGroup } from '@/api/group.js'
+import { createGroupFeed } from '@/api/group.js'
+import { updateGroupFeed } from '@/api/group.js'
+import { uploadGroupFile } from '@/api/group.js'
+
+import { createOutdoors } from '@/api/outdoors.js'
+import { uploadOutdoorsFile } from '@/api/outdoors.js'
+
+import { createWorker } from '@/api/worker.js'
+import { updateWorker } from '@/api/worker.js'
+import { uploadWorkerFile } from '@/api/worker.js'
+
 import { mapState } from 'vuex'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
@@ -182,7 +204,7 @@ export default {
       type: 'NEW',
       completed: false,
       select: false,
-      inputTag: "#",
+      inputTag: "",
       form: {
         tags: [],
         filePaths: [],
@@ -194,13 +216,24 @@ export default {
       fileList: [],
       groupName: "그룹을 선택해주세요",
       groupList: [],
+      selectedGroup: null,
       location: null,
       showMap: false,
       fileSelect : false,
       items : []
     };
   },
+
   methods: {
+    goToGroupPage () {
+      this.completed = true;
+      this.$router.push({ name: 'grouppage' })
+    },
+    setInputTag () {
+      if (this.inputTag == '') {
+        this.inputTag = '#'
+      }
+    },
     sendLocation (place) {
       this.location = place
     },
@@ -208,7 +241,8 @@ export default {
       this.showMap = !this.showMap;
     },
     selectGroup (group) {
-      this.groupName = group
+      this.groupName = group.name
+      this.selectedGroup = group.id
       this.select = false
     },
     chooseGroup () {
@@ -231,6 +265,7 @@ export default {
     },
     autoTag (e) {
       this.inputTag = e.target.value;
+      if (this.inputTag == '') {this.inputTag = '#'}
       let tmpTag = this.inputTag.split('#')[1]
         tmpTag = tmpTag.replace(/ /g , '')
       if (e.key == 'Enter' || e.code == 'Space') {
@@ -241,35 +276,13 @@ export default {
         searchAutoTag(
           tmpTag,
           (res) => {
-            console.log(res)
+            this.items = res.data
           },
           (err) => {
             console.log(err)
           }
         )
-        this.items = [
-            {
-              value: '태그1',
-              label: '태그1 - 257명',
-            },
-            {
-              value: '택그2',
-              label: '택그2 - 237명',
-            },
-            {
-              value: '택으3',
-              label: '택으3 - 27명',
-            },
-            {
-              value: '태끄4',
-              label: '태끄4 - 217명',
-            },
-            {
-              value: '테그5',
-              label: '테그5 - 2명',
-            },
-          ]
-        }
+      }
     },
     addTag (t) {
       if (!t) {
@@ -289,11 +302,19 @@ export default {
     setDefault () {
       this.Category = this.$route.query.Category
       if (this.Category == 2) {
-        this.groupList = ['testGroup', 'testGroup2', 'testGroup3']
+        getAllGroup(
+          (res) => {
+            console.log(res)
+            this.groupList = res.data
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
       }
       if (this.$route.params.type == 'MODI') {
         this.type = 'MODI'
-        this.form.content = this.$route.params.feed.content
+        this.form.content = this.$route.params.feed.content.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
         this.form.tags = this.$route.params.feed.tags
         if (this.$route.params.feed.file) {
           this.imageUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${this.$route.params.feed.file}`
@@ -329,27 +350,53 @@ export default {
         // console.log(i)
         const formData = new FormData ();
         formData.append('file', i)
-        uploadFile(
-          id,
-          formData,
-          {},
-          (err) => {
-            console.log(err)
-          }
-        )
+        if (this.Category == 1) {
+          uploadIndoorsFile(
+            id,
+            formData,
+            {},
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else if (this.Category == 2) {
+          uploadGroupFile(
+            this.selectedGroup,
+            id,
+            formData,
+            {},
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else if (this.Category == 3) {
+          // 청산별곡
+          uploadOutdoorsFile(
+            id,
+            formData,
+            {},
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else if (this.Category == 4) {
+          uploadWorkerFile(
+            id,
+            formData,
+            {},
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
       }
     },
     createFeedNew () {
-      // const formData = new FormData ();
-      // formData.append('content', this.form.content)
-      // formData.append('file', this.fileList)
-      // formData.append('tags', this.form.tags)
-      // console.log(formData)
       this.completed = true;
       if (this.type == 'NEW' || this.type == 'SHARE') {
         // axios create 요청
         if (this.Category == 1) {
-          createFeed (
+          createIndoors (
             this.form,
             (res) => {
               if (this.fileSelect) {
@@ -368,16 +415,72 @@ export default {
             }
           )
         } else if (this.Category == 2) {
-          if (this.GroupName == "그룹을 선택해주세요") {
+          if (this.selectedGroup == null) {
             alert('그룹을 선택해주세요!')
           } else {
             // 핵인싸 create 요청
+            createGroupFeed(
+              this.selectedGroup,
+              this.form,
+              (res) => {
+                // console.log(res)
+                if (this.fileSelect) {
+                  this.imgUpload(res.data);
+                  alert('이미지 업로드 중입니다!')
+                  setTimeout(() => {
+                    this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category, group: this.selectedGroup } })
+                  }, 500);
+                } else {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category, group: this.selectedGroup } })
+                }
+              },
+              (err) => {
+                console.log(err)
+              }
+
+            )
             // formData.append('groupName', this.groupName)
           }
         } else if (this.Category == 3) {
           // 청산별곡 create 요청
+          createOutdoors(
+            this.form,
+            (res) => {
+              console.log(res)
+              if (this.fileSelect) {
+                this.imgUpload(res.data);
+                alert('이미지 업로드 중입니다!')
+                setTimeout(() => {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+                }, 500);
+              } else {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              }
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
         } else if (this.Category == 4) {
           // 워커홀릭 create 요청
+          createWorker (
+            this.form,
+            (res) => {
+              if (this.fileSelect) {
+                this.imgUpload(res.data);
+                alert('이미지 업로드 중입니다!')
+                setTimeout(() => {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+                }, 500);
+              } else {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              }
+            },
+            (err) => {
+              console.log(err)
+              alert('다시 로그인해주세요')
+            }
+          )
         } else {
           // 404 페이지 이동
           alert('잘못된 접근입니다.')
@@ -388,11 +491,12 @@ export default {
         if (this.userpk == this.$route.params.feed.user.id) {
           if (this.Category == 1) {
             console.log(this.$route.params.feed.id)
-            updateFeed (
+            updateIndoors (
               this.$route.params.feed.id,
               this.form,
               (res) => {
                 console.log('수정', res)
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
               },
               (err) => {
                 console.log(err)
@@ -401,15 +505,39 @@ export default {
             )
           } else if (this.Category == 2) {
             // 핵인싸 put 요청
+            updateGroupFeed(
+              this.$route.params.group,
+              this.$route.params.feed.id,
+              this.form,
+              (res) => {
+                console.log(res)
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, group: this.$route.params.group, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
           } else if (this.Category == 3) {
             // 청산별곡 put 요청
           } else if (this.Category == 4) {
             // 워커홀릭 put 요청
+            updateWorker (
+              this.$route.params.feed.id,
+              this.form,
+              (res) => {
+                console.log('수정', res)
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+                alert('본인만 수정할 수 있습니다.')
+              }
+            )
           } else {
             // 404 페이지 이동
             alert('잘못된 접근입니다.')
           }
-          this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+          
         } else {
           alert('본인만 수정할 수 있습니다!!!')
         }

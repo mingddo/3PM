@@ -4,8 +4,10 @@
       <img class="pofileImg" src="@/assets/loverduck.png" alt="프로필사진" />
     </div>
     <div class="activityContent">
-      <div>{{ group.groupname }}</div>
-      <div>{{ group.signupDate }}</div>
+      <div>그룹명 : {{ group.name }}</div>
+      <div>그룹 소개 : {{ group.description }}</div>
+      <div>그룹원 수 :{{ group.memberCnt }}</div>
+      <div>{{ group.createdDate }}</div>
     </div>
   </div>
 </template>

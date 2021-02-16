@@ -75,8 +75,14 @@
           </span> -->
             <span v-if="filter === 1">
               <GroupResults
+                v-if="search_result_all.userList.body"
                 :groupresults="search_result_all.userList.body"
                 :category="category_person"
+              />
+              <GroupResults
+                v-if="search_result_all.groupList.body"
+                :groupresults="search_result_all.groupList.body"
+                :category="category_group"
               />
             </span>
             <span v-if="filter === 1 || filter === 2">
@@ -127,7 +133,12 @@
 import GroupResults from "@/components/Search/GroupResults.vue";
 import SerachResult from "../components/Search/SerachResult.vue";
 import FilterGroup from "../components/Search/FilterGroup.vue";
-import { searchall, searchfeed, searchuser } from "@/api/search.js";
+import {
+  searchall,
+  searchfeed,
+  searchuser,
+  searchgroup,
+} from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
 
@@ -218,7 +229,8 @@ export default {
               console.log(res.data);
               if (
                 res.data.feedList.body.length === 0 &&
-                res.data.userList.body.length === 0
+                res.data.userList.body.length === 0 &&
+                res.data.groupList.body.length === 0
               ) {
                 this.loaded = false;
                 this.loading = false;
@@ -265,6 +277,25 @@ export default {
                 this.empty_search = true;
               } else {
                 this.search_result_user = res.data;
+                this.loaded = true;
+                this.loading = false;
+              }
+            },
+            (err) => {
+              console.err(err);
+            }
+          );
+        } else if (this.filter === 4) {
+          searchgroup(
+            this.keyword,
+            (res) => {
+              console.log("그룹 검색", res);
+              if (res.data.length === 0) {
+                this.loaded = false;
+                this.loading = false;
+                this.empty_search = true;
+              } else {
+                this.search_result_group = res.data;
                 this.loaded = true;
                 this.loading = false;
               }

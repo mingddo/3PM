@@ -1,7 +1,5 @@
 package com.ssafy.sns.controller;
 
-import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.dto.clap.ClapResponseDto;
 import com.ssafy.sns.dto.comment.CommentRequestDto;
 import com.ssafy.sns.dto.comment.CommentResponseDto;
@@ -20,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @CrossOrigin(origins = { "*" })
@@ -63,7 +59,6 @@ public class FeedController {
     @GetMapping(value = "/{feedId}/claps")
     public ResponseEntity<ClapResponseDto> getClap(@PathVariable("feedId") Long feedId) {
         HttpStatus status = HttpStatus.ACCEPTED;
-        Map<String, Object> resultMap = new HashMap<>();
         ClapResponseDto clapResponseDto = null;
         // 박수 불러오기
         try {
@@ -202,7 +197,6 @@ public class FeedController {
     @GetMapping(value = "/comments/{commentId}/claps")
     public ResponseEntity<ClapResponseDto> getCommentClap(@PathVariable("commentId") Long commentId) {
         HttpStatus status = HttpStatus.ACCEPTED;
-        Map<String, Object> resultMap = new HashMap<>();
         ClapResponseDto clapResponseDto = null;
         // 박수 불러오기
         try {

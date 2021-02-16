@@ -6,7 +6,7 @@
           <img
             class="filterGroupImg-img"
             v-if="grouplist.img"
-            :src="grouplist.img"
+            :src="`https://dtbqjjy7vxgz8.cloudfront.net/${grouplist.img}`"
             alt=""
           />
           <img
@@ -48,5 +48,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

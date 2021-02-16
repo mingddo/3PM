@@ -5,7 +5,6 @@ import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;

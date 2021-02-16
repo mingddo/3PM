@@ -14,8 +14,8 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Outdoor extends Feed {
 
-    Long lat;
-    Long lng;
+    Double lat;
+    Double lng;
     String address;
     String placeName;
 

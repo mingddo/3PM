@@ -18,4 +18,6 @@ public interface FeedClapRepository {
     List<FeedClap> findClapAll(Feed feed);
 
     FeedClap findById(Long feedClapId);
+
+    List<FeedClap> findIndoorRecommend();
 }
