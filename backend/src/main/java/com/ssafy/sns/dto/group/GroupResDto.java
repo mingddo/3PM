@@ -22,6 +22,7 @@ public class GroupResDto implements Comparable<GroupResDto>{
     private int memberCnt;
     private List<GroupMemberResDto> leaders;
     private List<GroupMemberResDto> members;
+    private Long leaderId;
 
 
     public GroupResDto(Group group) {
@@ -40,6 +41,7 @@ public class GroupResDto implements Comparable<GroupResDto>{
                 .map(GroupMemberResDto::new)
                 .collect(Collectors.toList());
         this.memberCnt = group.getGroupMembers().size();
+        this.leaderId = this.leaders.get(0).getId();
     }
 
     @Override

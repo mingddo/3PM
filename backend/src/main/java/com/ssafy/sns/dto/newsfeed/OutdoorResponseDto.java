@@ -10,8 +10,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class OutdoorResponseDto extends FeedResponseDto {
 
-    Long lat;
-    Long lng;
+    Double lat;
+    Double lng;
     String address;
     String placeName;
 

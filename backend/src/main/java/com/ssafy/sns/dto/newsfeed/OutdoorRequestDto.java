@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class OutdoorRequestDto extends FeedRequestDto {
 
-    Long lat;
-    Long lng;
+    Double lat;
+    Double lng;
     String address;
     String placeName;
 
