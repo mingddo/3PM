@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="feed-detail-comment-input-box">
-      <news-feed-profile 
+      <NewsFeedProfile 
         class="feed-detail-comment-img"
-        :proImg="defaultImg"
+        :proImg="myImg ? myImg : defaultImg"
         :userId="userpk"
       />
 
@@ -44,6 +44,7 @@ import { mapState } from 'vuex'
 import { commentList } from '@/api/comment.js'
 import { createComment } from '@/api/comment.js'
 import { searchAutoUser } from '@/api/comment.js'
+import { getprofileInfo } from '@/api/mypage.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
 export default {
@@ -67,6 +68,7 @@ export default {
       page: 0,
       last: false,
       delIdx: null,
+      myImg: null,
     };
   },
   mounted() {
@@ -74,8 +76,20 @@ export default {
   },
   created () {
     this.setComment(0);
+    this.getImg();
   },
   methods: {
+    getImg () {
+      getprofileInfo(
+        this.userpk,
+        (res) => {
+          this.myImg = res.data.user_img
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     unshiftComment (commentId) {
       this.delIdx = this.comments.findIndex((item) => {
         return item.id == commentId
