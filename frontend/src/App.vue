@@ -109,8 +109,15 @@
         class="fas fa-bars"
         :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
       ></i>
-      <span>오후세시</span>
-      <img src="@/assets/searching.svg" alt="" width="10%" height="80%" />
+      <span @click="goToHome" style="cursor:pointer;">오후세시</span>
+      <img
+        style="cursor:pointer;"
+        @click="goToSearch"
+        src="@/assets/searching.svg"
+        alt=""
+        width="10%"
+        height="80%"
+      />
     </div>
 
     <router-view :key="$route.fullPath" />
