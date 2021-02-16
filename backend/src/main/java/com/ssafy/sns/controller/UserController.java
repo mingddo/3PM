@@ -1,15 +1,16 @@
 package com.ssafy.sns.controller;
 
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.mypage.ProfileRequestDto;
 import com.ssafy.sns.dto.mypage.ProfileResponseDto;
 import com.ssafy.sns.dto.mypage.UserProfileDto;
-import com.ssafy.sns.dto.user.DuplRequestDto;
-import com.ssafy.sns.dto.user.JwtResponseDto;
-import com.ssafy.sns.dto.user.KakaoRequestDto;
-import com.ssafy.sns.dto.user.UserFollowDto;
+import com.ssafy.sns.dto.newsfeed.FeedListResponseDto;
+import com.ssafy.sns.dto.newsfeed.InsiderResDto;
+import com.ssafy.sns.dto.user.*;
 import com.ssafy.sns.jwt.JwtService;
 import com.ssafy.sns.service.FollowServiceImpl;
+import com.ssafy.sns.service.InsiderService;
 import com.ssafy.sns.service.UserServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,10 +39,9 @@ import java.util.Map;
 public class UserController {
 
     private final UserServiceImpl userService;
-
     private final FollowServiceImpl followService;
-
     private final JwtService jwtService;
+    private final InsiderService insiderService;
 
     public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -101,6 +101,13 @@ public class UserController {
         return new ResponseEntity(isDuplicated, HttpStatus.OK);
     }
 
+    @ApiOperation("유저 전체 조회")
+    @GetMapping
+    public ResponseEntity findAllUsers() {
+        List<UserProfileDto> allUser = userService.findAllUser();
+        return new ResponseEntity(allUser, HttpStatus.OK);
+    }
+
 
     /**
      * [마이페이지 유저 정보] [프로필 정보]
@@ -123,6 +130,7 @@ public class UserController {
         int fromMeToOthersCnt = followService.fromMeToOthers(userId);
         int toMeFromOthersCnt = followService.toMeFromOthers(userId);
         int groupCnt = user.getGroupMembers().size(); // 나중에 Group Entity 생기면 추가 예정
+
 
         UserProfileDto result = UserProfileDto.builder()
                 .username(user.getNickname())
@@ -225,7 +233,7 @@ public class UserController {
     @ApiOperation("사용자의 프로필 정보를 수정한다.")
     @PutMapping("/{userId}")
     public ResponseEntity updateProfile(@PathVariable("userId") Long userId,
-                                        @RequestPart("file") MultipartFile file,
+                                        @RequestPart(value = "file", required = false) MultipartFile file,
                                         ProfileRequestDto dto,
                                         HttpServletRequest request) throws IOException {
         User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
@@ -266,5 +274,22 @@ public class UserController {
         Long tokenId = jwtService.findId(token);
         User user = userService.findUserById(tokenId);
         return ResponseEntity.status(HttpStatus.OK).body(followService.getFollowerList(user.getId(), toUserId));
+    }
+
+    @ApiOperation("유저가 가입한 그룹 정보 보여주기")
+    @GetMapping("/{userId}/groups")
+    public ResponseEntity<List<GroupResDto>> getGroupsByUser(@PathVariable("userId") Long userId) {
+        List<GroupResDto> userGroupsDtos = userService.findUserGroups(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(userGroupsDtos);
+    }
+
+    @ApiOperation("유저가 그룹 카테고리에서 작성한 피드 리스트 가져오기")
+    @GetMapping("/{userId}/groups/feeds")
+    public ResponseEntity<InsiderResDto> getGroupFeedsByUser(@PathVariable("userId") Long userId,
+                                                             @RequestParam("startNum") int startNum,
+                                                             HttpServletRequest request) {
+        User viewer = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+        FeedListResponseDto feedListResponseDto =  insiderService.findAllByUser(viewer.getId(), userId, startNum);
+        return new ResponseEntity(feedListResponseDto, HttpStatus.OK);
     }
 }

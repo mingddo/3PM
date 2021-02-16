@@ -8,7 +8,7 @@ const instance = AuthorizationInstance();
 // r
 function commentList(id, num, success, fail) {
   instance
-    .get(`indoors/${id}/comments`, {
+    .get(`feeds/${id}/comments`, {
       params: {
         startNum: num
       }
@@ -20,7 +20,7 @@ function commentList(id, num, success, fail) {
 // c
 function createComment(id, comment, success, fail) {
   instance
-    .post(`indoors/${id}/comments`, comment)
+    .post(`feeds/${id}/comments`, comment)
     .then(success)
     .catch(fail);
 }
@@ -28,7 +28,7 @@ function createComment(id, comment, success, fail) {
 // 멘션
 function searchAutoUser(key, success, fail) {
   instance
-    .get(`search/auto/tag`, {
+    .get(`search/auto/user`, {
       params: {
         nickname: key,
       }
@@ -40,7 +40,7 @@ function searchAutoUser(key, success, fail) {
 // u
 function updateComment(id, commentId, comment, success, fail) {
   instance
-    .put(`indoors/${id}/comments/${commentId}`, comment)
+    .put(`feeds/${id}/comments/${commentId}`, comment)
     .then(success)
     .catch(fail);
 }
@@ -48,7 +48,7 @@ function updateComment(id, commentId, comment, success, fail) {
 // d
 function deleteComment(id, commentId, success, fail) {
   instance
-    .delete(`indoors/${id}/comments/${commentId}`)
+    .delete(`feeds/${id}/comments/${commentId}`)
     .then(success)
     .catch(fail);
 }
@@ -56,14 +56,14 @@ function deleteComment(id, commentId, success, fail) {
 // 박수
 function clapComment(commentId, success, fail) {
   instance
-    .post(`indoors/comments/${commentId}/claps`)
+    .post(`feeds/comments/${commentId}/claps`)
     .then(success)
     .catch(fail);
 }
 
-function clapList(commentId, success, fail) {
+function clapCommentList(commentId, success, fail) {
   instance
-    .get(`indoors/comments/${commentId}/claps`)
+    .get(`feeds/comments/${commentId}/claps`)
     .then(success)
     .catch(fail);
 }
@@ -74,6 +74,6 @@ export {
   updateComment,
   deleteComment,
   clapComment,
-  clapList,
+  clapCommentList,
   searchAutoUser
 }

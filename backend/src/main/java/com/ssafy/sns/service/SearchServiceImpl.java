@@ -1,11 +1,13 @@
 package com.ssafy.sns.service;
 
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.newsfeed.Insider;
 import com.ssafy.sns.domain.newsfeed.Worker;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchUserDto;
@@ -33,6 +35,7 @@ public class SearchServiceImpl implements SearchService{
     private final HashtagRepositoryImpl hashtagRepository;
     private final UserRepositoryImpl userRepositoryImpl;
     private final UnicodeHandler unicodeHandler;
+    private final FollowServiceImpl followService;
 
     @Override
     public List<Hashtag> searchHashtags(String keyword) {
@@ -51,19 +54,22 @@ public class SearchServiceImpl implements SearchService{
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        1));
+                        1,
+                        followService.isFollow(userId, feed)));
             } else if(feed instanceof Insider) {
                 feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        2));
+                        2,
+                        followService.isFollow(userId, feed)));
             } else if(feed instanceof Worker) {
                 feedResponseDtoList.add(new FeedResponseDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
-                        4));
+                        4,
+                        followService.isFollow(userId, feed)));
             }
         }
         return feedResponseDtoList;
@@ -97,5 +103,15 @@ public class SearchServiceImpl implements SearchService{
                 .stream()
                 .map(u -> new SearchUserDto(u.getNickname()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GroupResDto> searchGroup(String keyword) {
+        List<Group> groupList = searchRepository.searchGroups(keyword);
+        List<GroupResDto> groupResDtoList = new ArrayList<>();
+        for (Group g : groupList) {
+            groupResDtoList.add(new GroupResDto(g));
+        }
+        return groupResDtoList;
     }
 }

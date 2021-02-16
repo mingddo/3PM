@@ -26,8 +26,9 @@ public class FeedResponseDto {
     private int likeCnt;
     private int category;
     private boolean isClap;
+    private boolean isFollow;
 
-    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt,boolean isClap) {
+    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt,boolean isClap, boolean isFollow) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
@@ -42,10 +43,11 @@ public class FeedResponseDto {
         this.commentCnt = commentCnt;
         this.likeCnt = likeCnt;
         this.isClap = isClap;
+        this.isFollow = isFollow;
     }
 
     @Builder
-    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category) {
+    public FeedResponseDto(Feed feed, int commentCnt, int likeCnt, boolean isClap, int category, boolean isFollow) {
         this.id = feed.getId();
         this.user = new SimpleUserDto(feed.getUser());
         this.content = feed.getContent();
@@ -61,5 +63,6 @@ public class FeedResponseDto {
         this.likeCnt = likeCnt;
         this.isClap = isClap;
         this.category = category;
+        this.isFollow = isFollow;
     }
 }

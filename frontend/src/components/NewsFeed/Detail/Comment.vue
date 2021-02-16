@@ -12,7 +12,7 @@
         :items="items"
         offset="6"
       >
-        <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" name="comment" id="comment" cols="30" rows="10" :value="commentInput" @keyup="commentKeyup"></textarea>
+        <textarea class="feed-comment-input" placeholder="댓글을 입력해주세요" autocomplete="false" name="comment" id="comment" cols="30" rows="10" :value="commentInput" @keyup="commentKeyup"></textarea>
       </Mentionable>
       <button class="feed-detail-comment-btn" @click="createComment"><i class="fas fa-plus"></i></button>
     </div>
@@ -26,7 +26,7 @@
           :id="id"
           :Category="Category"
           @pushUserToComment="pushUserToComment"
-          @unshiftComment="unshiftComment"
+          @setComment="setComment(0)"
         />
         <hr>
       </div>
@@ -115,19 +115,18 @@ export default {
           }
           console.log(this.mention)
         }
-        if (this.Category == 1) {
-          createComment(
-            this.id,
-            { "content" : this.commentInput},
-            (r) => {
-              console.log(r)
-              this.setComment(0)
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        }
+        createComment(
+          this.id,
+          { "content" : this.commentInput},
+          (r) => {
+            console.log(r)
+            this.comments = [];
+            this.setComment(0)
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
         // let mentioned = slice.split(' ')[0]
         // console.log(mentioned)
         // alert(`${this.commentInput} 내용의 댓글을 작성할게요`)
@@ -136,30 +135,29 @@ export default {
       }
     },
     setComment (num) {
-      if (this.Category == 1) {
-        commentList(
-          this.id,
-          num,
-          (res) => {
-            this.page = res.data.endNum
-            if (num == 0) {
-              this.comments = []
-            }
-            let comment = res.data.comments;
-            console.log(comment)
-            if (comment && comment.length < 10) {
-              this.last = true;
-            }
-            for (let f of comment) {
-              this.comments.push(f);
-            }
-
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+      console.log('하,,,', num)
+      if (num == 0) {
+        this.comments = []
       }
+      commentList(
+        this.id,
+        num,
+        (res) => {
+          this.page = res.data.endNum
+          let comment = res.data.comments;
+          console.log('comment', comment)
+          if (comment && comment.length < 10) {
+            this.last = true;
+          }
+          for (let f of comment) {
+            this.comments.push(f);
+          }
+
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
     },
     pushUserToComment (user) {
       this.commentInput += `@${user} `

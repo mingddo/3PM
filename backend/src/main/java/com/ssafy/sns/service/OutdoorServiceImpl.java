@@ -30,6 +30,7 @@ public class OutdoorServiceImpl implements FeedService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
+    private final FollowServiceImpl followService;
 
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
@@ -40,7 +41,8 @@ public class OutdoorServiceImpl implements FeedService {
             outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
         }
         return new FeedListResponseDto<>(outdoorResponseDtoList, num + outdoorList.size());
     }
@@ -54,7 +56,8 @@ public class OutdoorServiceImpl implements FeedService {
             outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
                     (int) commentRepository.findListById(feed).count(),
                     feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent()));
+                    feedClapRepository.findClap(user, feed).isPresent(),
+                    followService.isFollow(userId, feed)));
         }
         return new FeedListResponseDto<>(outdoorResponseDtoList, num + outdoorList.size());
     }
@@ -67,7 +70,8 @@ public class OutdoorServiceImpl implements FeedService {
         return new OutdoorResponseDto((Outdoor) feed,
                 (int) commentRepository.findListById(feed).count(),
                 feedClapRepository.findClapAll(feed).size(),
-                feedClapRepository.findClap(user, feed).isPresent());
+                feedClapRepository.findClap(user, feed).isPresent(),
+                followService.isFollow(userId, feed));
     }
 
     @Override

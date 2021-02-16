@@ -10,7 +10,10 @@
 </template>
 
 <script>
-import { deleteFeed } from '@/api/feed.js'
+import { deleteIndoors } from '@/api/indoors.js'
+import { deleteWorker } from '@/api/worker.js'
+import { deleteGroupFeed } from '@/api/group.js'
+
 import { mapState } from 'vuex'
 
 export default {
@@ -29,7 +32,11 @@ export default {
   },
   methods: {
     changeModiForm () {
-      this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
+      if (this.Category) {
+        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd, group: this.fd.groupId }})
+      } else {
+        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
+      }
     },
     deleteFeed () {
       if (this.userpk == this.fd.user.id) {
@@ -37,10 +44,10 @@ export default {
         if (answer) {
           if (this.Category == 1) {
             console.log('삭제할 id', this.fd.id)
-            deleteFeed(
+            deleteIndoors(
               this.fd.id,
               () => {
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: 1}})
+                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
               },
               (err) => {
                 console.log(err)
@@ -48,10 +55,30 @@ export default {
             )
           } else if (this.Category == 2) {
             // 핵인싸 DELETE 요청
+            deleteGroupFeed(
+              this.fd.groupId,
+              this.fd.id,
+              (res) => {
+                console.log(res)
+                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
           } else if (this.Category == 3) {
             // 청산별고 DELETE 요청
           } else if (this.Category == 4) {
             // 워커홀릭 DELETE 요청
+            deleteWorker(
+              this.fd.id,
+              () => {
+                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
           }
         }
       }

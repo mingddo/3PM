@@ -3,6 +3,17 @@ import { AuthorizationInstance } from './index.js'
 const instance = AuthorizationInstance();
 
 // get 요청
+function groupList(id, success, fail) {
+  instance
+    .get('groups/feeds', {
+      params: {
+        startNum: id
+      }}
+    )
+    .then(success)
+    .catch(fail)
+}
+
 function getAllGroup(success, fail) {
   instance
     .get('groups')
@@ -17,9 +28,13 @@ function getGroupDetail(group_id, success, fail) {
   .catch(fail)
 }
 
-function getGroupfeeds(group_id, success, fail) {
+function getGroupfeeds(group_id, pk, success, fail) {
   instance
-  .get(`groups/${group_id}/feeds`)
+  .get(`groups/${group_id}/feeds`, {
+    params: {
+      startNum: pk,
+    }
+  })
   .then(success)
   .catch(fail)
 }
@@ -92,7 +107,7 @@ function deleteGroup(group_id, success, fail) {
 
 function deleteGroupFeed(group_id, feed_id, success, fail) {
   instance
-    .put(`groups/${group_id}/feeds/${feed_id}`)
+    .delete(`groups/${group_id}/feeds/${feed_id}`)
     .then(success)
     .catch(fail);
 }
@@ -105,6 +120,7 @@ function secedeGroup(group_id, feed_id, success, fail) {
 }
 
 export{
+  groupList,
   getAllGroup, 
   getGroupDetail, 
   getGroupfeeds, 

@@ -1,5 +1,8 @@
 <template>
   <article class="feed-box">
+    <div v-if="Category == 2" @click="goToGroupDetail">
+      {{ fd.groupName }}
+    </div>
     <div class="feed-userprofile-box">
       <NewsFeedProfile
         :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
@@ -37,10 +40,15 @@
     </div>
 
     <div class="feed-content-box">
-      <div v-if="fd.files.length != 0" @click="goToDetail">
-        <div v-for="(file, idx) in fd.files" :key="idx">
-          <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${file}`" alt="업로드 파일">
-        </div>
+      <div
+        class="feed-content-box-img-container"
+        v-if="fd.files.length != 0"
+        @click="goToDetail"
+      >
+        <img
+          :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.files[0]}`"
+          alt="업로드 파일"
+        />
       </div>
       <div v-else @click="goToDetail">
         <p v-html="content">
@@ -48,8 +56,8 @@
         </p>
       </div>
 
-      <div v-if="Category == 2 || Category == 3">
-        {{ placeName !== null ? placeName : "위치 정보 없음" }}
+      <div v-if="Category == 3">
+        {{ fd.placeName !== null ? fd.placeName : "위치 정보 없음" }}
       </div>
     </div>
     <div class="feed-footer">
@@ -141,13 +149,27 @@ export default {
         params: { filter: "feed" },
       });
     },
+    goToGroupDetail () {
+      this.$router.push({
+        name: "groupdetail",
+        query: { groupId: this.fd.groupId},
+      });
+    },
     goToDetail() {
       console.log("마이페이지에서 카테고리 기ㅏ기", this.Category);
-      this.$router.push({
-        name: "NewsfeedDetail",
-        query: { id: this.fd.id, Category: this.fd.category },
-        params: { fd: this.fd },
-      });
+      if (this.Category == 2) {
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: { id: this.fd.id, group: this.fd.groupId, Category: 2 },
+          params: { fd: this.fd },
+        });
+      } else {
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: { id: this.fd.id, Category: this.fd.category },
+          params: { fd: this.fd },
+        });
+      }
     },
   },
   mounted() {

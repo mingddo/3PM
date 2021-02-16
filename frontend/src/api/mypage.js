@@ -8,8 +8,8 @@ function getprofileInfo(user_id,success,fail){
     .then(success)
     .catch(fail)
 }
-
-function getprofileFeed(userid, pk,success,fail){
+// 해당 유저 작성한 꽃보다집 전체 조회
+function getprofileFeedIndoor(userid, pk,success,fail){
   instance
     .get(`indoors/user/${userid}`, {
       params: {
@@ -18,6 +18,46 @@ function getprofileFeed(userid, pk,success,fail){
     } )
     .then(success)
     .catch(fail)
+}
+// 해당 유저가 작성한 그룹 게시글 조회
+function getprofileFeedGroup(userid, groupid, pk,success,fail){
+  instance
+    .get(`groups/${groupid}/feeds/users/${userid}`, {
+      params: {
+        startNum: pk
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+// 해당 유저 작성한 청산별곡 전체 조회
+function getprofileFeedOutdoor(userid,pk,success,fail){
+  instance
+    .get(`outdoors/user/${userid}`, {
+      params: {
+        startNum: pk
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+// 해당 유저 작성한 워커홀릭 전체 조회
+function getprofileFeedWorker(userid, pk,success,fail){
+  instance
+    .get(`worker/user/${userid}`, {
+      params: {
+        startNum: pk
+      }
+    } )
+    .then(success)
+    .catch(fail)
+}
+// 해당 유저가 가입한 그룹 정보 보여주기
+function getprofileGroups(userid,success,fail) {
+  instance
+  .get(`users/${userid}/groups`)
+  .then(success)
+  .catch(fail)
 }
 
 function followToggle(userid,success,fail){
@@ -48,7 +88,24 @@ function userInfoDetail(userid,success,fail){
     .catch(fail)
 }
 
+function editUserInfo(userid, userinfo, success,fail){
+  instance
+    .put(`users/${userid}`, userinfo)
+    .then(success)
+    .catch(fail)
+}
+
 
 export {
-  getprofileInfo,getprofileFeed, followToggle, followerList, followingList, userInfoDetail 
+  getprofileInfo,
+  getprofileFeedIndoor, 
+  getprofileFeedOutdoor,
+  getprofileFeedGroup,
+  getprofileFeedWorker,
+  getprofileGroups,
+  followToggle, 
+  followerList, 
+  followingList, 
+  userInfoDetail, 
+  editUserInfo
 }

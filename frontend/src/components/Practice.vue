@@ -1,58 +1,27 @@
 <template>
   <div>
-    <div v-if="editing">
-      <h4>프로필 이미지 업로드</h4>
-      <clipper-upload v-model="src[0]"
-        ><button>이미지 업로드</button></clipper-upload
-      >
-      <div class="flex">
-        <clipper-fixed
-          class="basic lg clipper-fixed"
-          :src="src[0]"
-          :round="true"
-          ref="clipper"
-          preview="fixed-preview"
-          :rotate="rotation"
-        ></clipper-fixed>
-      </div>
-      <button @click="getResult">이미지 선택</button>
+    <h4>프로필 이미지 업로드</h4>
+    <clipper-upload v-model="src[0]"
+      ><button>이미지 업로드</button></clipper-upload
+    >
+    <div class="flex">
+      <clipper-fixed
+        class="basic lg clipper-fixed"
+        :src="src[0]"
+        :round="true"
+        ref="clipper"
+        preview="fixed-preview"
+        :rotate="rotation"
+      ></clipper-fixed>
     </div>
-    <div v-else>
-      <div>
-        프로필
-      </div>
-      <div class="profile-edit-img-frame">
-        <img v-if="userInfo.user_img" :src="userInfo.user_img" alt="" />
-        <img v-else src="@/assets/img/profileM.svg" alt="" width="80px" />
-      </div>
-      <button>프로필 이미지 수정</button>
-      <div>닉네임 : {{ userInfo.nickname }} <button>수정</button></div>
-      <hr />
-      <div>프로필 소개</div>
-      <div v-if="userInfo.introduce">{{ userInfo.introduce }}</div>
-      <div v-else>
-        프로필 소개가 아직 없습니다.
-        <button @click="writeIntroduce = true">작성하기</button>
-      </div>
-      <div
-        :class="[writeIntroduce ? 'write-introduce active' : 'write-introduce']"
-      >
-        <input
-          type="text"
-          placeholder="프로필 소개를 입력해 주세요"
-          width="400px"
-          height="50px"
-        />
-        <button>저장하기</button>
-      </div>
-    </div>
+    <button @click="profilegoback">돌아가기</button>
+    <button @click="getResult">이미지 선택</button>
   </div>
 </template>
 
 <script>
 import { clipperFixed } from "vuejs-clipper";
 import { clipperUpload } from "vuejs-clipper";
-import { userInfoDetail } from "@/api/mypage.js";
 export default {
   components: {
     clipperFixed,
@@ -60,35 +29,41 @@ export default {
   },
   data() {
     return {
-      src: ["@/assets/img/00.jpg"],
+      src: [require("@/assets/img/profileM.svg")],
       rotation: 0,
       resultURL: null,
-      editing: false,
-      userInfo: {},
-      writeIntroduce: false,
     };
   },
   methods: {
     getResult() {
       const canvas = this.$refs.clipper.clip(); //call component's clip method
       this.resultURL = canvas.toDataURL("image/jpeg", 1); //canvas->image
-      console.log("유알엘 변환", URL.revokeObjectURL(this.resultURL));
-    },
-    getUserProfileInfo() {
-      userInfoDetail(
-        this.$store.state.userId,
-        (res) => {
-          console.log("axios res", res.data);
-          this.userInfo = res.data;
-        },
-        (err) => {
-          console.error(err);
-        }
+
+      const aaa = this.dataURLtoFile(
+        this.resultURL,
+        `${this.$store.state.userId}.png`
       );
+      console.log(aaa);
+      if (this.resultURL) {
+        this.$emit("previewURL", this.resultURL);
+        this.$emit("edit_url", aaa);
+      }
+      this.$emit("endUrlEdit", false);
     },
-  },
-  created() {
-    this.getUserProfileInfo();
+    profilegoback() {
+      this.$emit("endUrlEdit", false);
+    },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
   },
 };
 </script>
