@@ -45,7 +45,7 @@ function updateOutdoors(feed_pk, feed, success, fail) {
 // d
 function deleteOutdoors(feed_pk, success, fail) {
   instance
-    .delete(`indoors/${feed_pk}`)
+    .delete(`outdoors/${feed_pk}`)
     .then(success)
     .catch(fail);
 }

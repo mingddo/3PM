@@ -49,6 +49,10 @@
 
 <script>
 export default {
+  props: {
+    latitude: Number,
+    longitude: Number,
+  },
   data () {
     return {
       fold: true,
@@ -64,9 +68,10 @@ export default {
       index: null,
       placePos: {},
       pageNum: null,
-      lat: 36.353793856820566,
-      lng: 127.33999670291793,
+      lat: this.latitude,
+      lng: this.longitude,
       type: null,
+      location: {},
     }
   },
   mounted() {
@@ -81,7 +86,14 @@ export default {
         console.log('ok', result)
         // var infoDiv = document.getElementById('centerAddr');
         for(let i = 0; i < result.length; i++) {
+          console.log('결과', result)
           this.keyword = result[i].address.address_name
+          this.location.placeName = null
+          this.location.address = result[i].address.address_name
+          this.location.city = result[i].address.region_1depth_name
+          this.location.lng = this.lng
+          this.location.lat = this.lat
+          this.$emit('sendLocation', this.location)
           // this.keyword = result[i].address_name
           // console.log(this.keyword)
           this.searchPlaces();
@@ -94,6 +106,7 @@ export default {
       return this.map.panTo(moveLatLon)
     },
     handleGeoSuccess(position) {
+      this.location = {}
       this.lat = position.coords.latitude;
       this.lng = position.coords.longitude;
       console.log(this.lat, this.lng)
@@ -118,14 +131,21 @@ export default {
       }
     },
     select (item) {
-      console.log(item)
+      this.location = {}
+      console.log('선택', item)
       this.selected = true;
       this.selectLocation = item
       this.lat = item.y
       this.lng = item.x
       this.fold = true
+      this.location.placeName = item.place_name
+      this.location.lng = item.x
+      this.location.lat = item.y
+      this.location.address = item.address_name
+      this.location.city = item.address_name.split(' ')[0]
+      console.log('도시', this.location.city)
       this.setMap()
-      this.$emit('sendLocation', this.selectLocation)
+      this.$emit('sendLocation', this.location)
       this.setZoomable(false);
     },
     setMap () {

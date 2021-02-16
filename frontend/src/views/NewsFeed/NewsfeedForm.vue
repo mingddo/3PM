@@ -53,9 +53,11 @@
                     type="text"
                     placeholder="태그를 작성후 엔터를 눌러 태그를 등록해주세요"
                     :value="inputTag"
-                    @keyup="autoTag"
+                    @input="autoTag"
                     @click="setInputTag"
-                    autocomplete="false"
+                    @keyup.enter="addTag"
+                    @keyup.space="addTag"
+                    autocomplete="off"
                   />
                 </Mentionable>
                 <i class="far fa-question-circle" @click="qtToggle"></i>
@@ -129,10 +131,10 @@
             </div>
           </div>
           <div v-if="showMap">
-            <inputmap @sendLocation="sendLocation" />
+            <inputmap @sendLocation="sendLocation" :latitude="latitude" :longitude="longitude"/>
             <div v-if="location">
-              {{ location.place_name }}
-              {{ location.address_name }}
+              {{ location }}
+              <!-- {{ location }} -->
             </div>
           </div>
           <div class="newsfeed-form-img">
@@ -156,6 +158,12 @@
             <button class="create-feed-btn" @click="createFeedNew">작성하기</button>
           </div>
         </section>
+        <div class="fa-3x newsfeed-form-loading" v-if="uploadingImg">
+          <i class="fas fa-spinner fa-spin"></i>
+          <div>
+            이미지 업로드 중입니다
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -171,12 +179,13 @@ import { createIndoors } from '@/api/indoors.js'
 import { updateIndoors } from '@/api/indoors.js'
 import { uploadIndoorsFile } from '@/api/indoors.js'
 
-import { getAllGroup } from '@/api/group.js'
+import { getprofileGroups } from '@/api/mypage.js'
 import { createGroupFeed } from '@/api/group.js'
 import { updateGroupFeed } from '@/api/group.js'
 import { uploadGroupFile } from '@/api/group.js'
 
 import { createOutdoors } from '@/api/outdoors.js'
+import { updateOutdoors } from '@/api/outdoors.js'
 import { uploadOutdoorsFile } from '@/api/outdoors.js'
 
 import { createWorker } from '@/api/worker.js'
@@ -199,6 +208,26 @@ export default {
   },
   data() {
     return {
+      uploadingImg: false,
+      city_code: {
+        '서울': 1 ,   
+        '경기': 2 ,   
+        '광주': 3 ,   
+        '대구': 4 ,   
+        '대전': 5 ,   
+        '부산': 6 ,   
+        '울산': 7 ,   
+        '인천': 8 ,   
+        '강원': 9 ,   
+        '경남': 10,   
+        '경북': 11,   
+        '전남': 12,   
+        '전북': 13,   
+        '충북': 14,   
+        '충남': 15,   
+        '제주': 16,   
+        '세종': 17   
+      },
       tagToggle:false,
       Category: 0,
       type: 'NEW',
@@ -220,7 +249,13 @@ export default {
       location: null,
       showMap: false,
       fileSelect : false,
-      items : []
+      items : [],
+      latitude: 36.3553675622378,
+      longitude: 127.298408300646,
+      on: false,
+      abortController: null,
+      signal: null,
+      temp: [],
     };
   },
 
@@ -235,7 +270,9 @@ export default {
       }
     },
     sendLocation (place) {
+      console.log('뭐지', place)
       this.location = place
+      console.log(this.location)
     },
     revealMap () {
       this.showMap = !this.showMap;
@@ -263,37 +300,40 @@ export default {
       this.fileList.splice(check, 1)
       console.log(this.fileList)
     },
+    tagApi (tag) {
+      searchAutoTag(
+        tag,
+        (res) => {
+          this.items = res.data
+          console.log(this.items)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     autoTag (e) {
+      console.log(e)
       this.inputTag = e.target.value;
       if (this.inputTag == '') {this.inputTag = '#'}
       let tmpTag = this.inputTag.split('#')[1]
         tmpTag = tmpTag.replace(/ /g , '')
-      if (e.key == 'Enter' || e.code == 'Space') {
-        if (tmpTag) {this.addTag(tmpTag);}
-      } else if (e.code !== "ArrowDown" && e.code !== "ArrowUp" && e.code !== "ArrowLeft" && e.code !== "ArrowRight" && tmpTag) {
+      if (tmpTag) {
         console.log('api요청', tmpTag)
-        // console.log('정상', e)
-        searchAutoTag(
-          tmpTag,
-          (res) => {
-            this.items = res.data
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+        this.tagApi(tmpTag)
       }
     },
     addTag (t) {
-      if (!t) {
+      let tag = t.target.value.split('#')[1]
+      if (!tag) {
         alert('태그를 입력해주세요!')
       } else {
         if (this.form.tags) {
-          let check = this.form.tags.findIndex(element => element === t)
+          let check = this.form.tags.findIndex(element => element === tag)
           if (check !== -1) {
             alert('이미 존재하는 태그입니다')
           } else {
-            this.form.tags.push(t);
+            this.form.tags.push(tag);
           }
         }
       }
@@ -302,7 +342,8 @@ export default {
     setDefault () {
       this.Category = this.$route.query.Category
       if (this.Category == 2) {
-        getAllGroup(
+        getprofileGroups(
+          this.userpk,
           (res) => {
             console.log(res)
             this.groupList = res.data
@@ -318,6 +359,15 @@ export default {
         this.form.tags = this.$route.params.feed.tags
         if (this.$route.params.feed.file) {
           this.imageUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${this.$route.params.feed.file}`
+        }
+        if (this.$route.params.feed.longitude && this.$route.params.feed.latitude) {
+          this.longitude = this.$route.params.feed.lng
+          this.latitude = this.$route.params.feed.lat
+          this.location.placeName = this.$route.params.feed.placeName
+          this.location.city = this.$route.params.feed.city
+          this.location.lng = this.$route.params.feed.lng
+          this.location.lat = this.$route.params.feed.lat
+          this.location.address = this.$route.params.feed.address
         }
       } else if (this.$route.params.type == 'SHARE') {
         // let link = document.location.href;
@@ -401,10 +451,10 @@ export default {
             (res) => {
               if (this.fileSelect) {
                 this.imgUpload(res.data);
-                alert('이미지 업로드 중입니다!')
+                this.uploadingImg = true;
                 setTimeout(() => {
                   this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-                }, 500);
+                }, 1000);
               } else {
                 this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
               }
@@ -443,6 +493,13 @@ export default {
           }
         } else if (this.Category == 3) {
           // 청산별곡 create 요청
+          if (this.location) {
+            this.form.lat = this.location.lat
+            this.form.lng = this.location.lng
+            this.form.address = this.location.address
+            this.form.placeName = this.location.placeName
+            // this.form.city = this.city_code[this.location.city]
+          }
           createOutdoors(
             this.form,
             (res) => {
@@ -519,6 +576,18 @@ export default {
             )
           } else if (this.Category == 3) {
             // 청산별곡 put 요청
+            updateOutdoors(
+              this.$route.params.feed.id,
+              this.form,
+              (res) => {
+                console.log('수정', res)
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+                alert('본인만 수정할 수 있습니다.')
+              }
+            )
           } else if (this.Category == 4) {
             // 워커홀릭 put 요청
             updateWorker (

@@ -5,46 +5,61 @@
       <div class="group-detail">
         <GroupNav :isHome="false"/>
         <div class="group-detail-header">
-          <div class="group-detail-img-space">
-            <img class="group-detail-img" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${group_info.groupImg}`" alt="">
+          <div class="group-detail-img-space" v-if="!modiForm">
+            <img class="group-detail-img" :src="group_info.groupImg ? `https://dtbqjjy7vxgz8.cloudfront.net/${group_info.groupImg}` : 'https://picsum.photos/200'" alt="그룹이미지" />
           </div>
-          <div @click="changeModiForm">
-            {{ modiForm ? '수정' : '그룹 수정하기'}}
+          <div class="group-detail-img-form" v-else>
+            <label class="group-detail-img-space" for="groupImage"> <img class="group-detail-img group-detail-img-form" :src="imageUrl ? imageUrl : `https://dtbqjjy7vxgz8.cloudfront.net/${group_info.groupImg}`" alt="그룹이미지" /> </label>
+            <input
+              id="groupImage"
+              type="file"
+              accept="image/*"
+              @change="selectGroupImg"
+            />
+          </div>
+          <div v-if="group_info.leaderId == userpk" class="group-detail-modi">
+            <i v-if="modiForm" class="far fa-check-square group-detail-modi-btn"  @click="changeModiForm"></i>
+            <i v-else class="fas fa-edit group-detail-modi-btn"  @click="changeModiForm"></i>
+            <!-- {{ modiForm ? '수정' : '그룹 수정하기'}} -->
           </div>
           <div class="group-detail-title" v-if="!modiForm">{{ group.name }}</div>
-          <div v-else>
-            <input type="text" v-model="group.name">
+          <div class="group-detail-title-input-box" v-else>
+            <input class="group-detail-title-input" type="text" v-model="group.name">
           </div>
           <div class="group-detail-introduce" v-if="!modiForm">
             {{ group.description }}
           </div>
-          <div v-else>
-            <input type="text" v-model="group.description">
+          <div class="group-detail-introduce-input-box" v-else>
+            <input class="group-detail-introduce-input" type="text" v-model="group.description">
           </div>
-          <div class="group-detail-join-btn">
-            <span v-if="!isjoined" @click="join">
+          <div v-if="!isjoined" class="group-detail-join-btn"  @click="join">
               그룹 가입하기
-            </span>
-            <span v-else @click="secede">
-              그룹 탈퇴하기
-            </span>
-          </div>
-          <div @click="groupDelete">
-            그룹 삭제하기
           </div>
           <div class="group-detail-info">
             <div>
               <div>그룹장</div>
-              <div v-for="(leader, idx) in group_info.leaders" :key="idx">
-                {{leader.nickname}}
+              <div class="group-detail-leader" @click="goToleaderProfile">
+                {{ group_info.leaders[0].nickname }}
               </div>
             </div>
             <div>
               <div>회원수</div>
-              <div>{{ group_info.memberCnt }}</div>
+              <div class="group-detail-member" @click="memberListOpen">{{ group_info.memberCnt }}</div>
             </div>
           </div>
+          <UserList
+            type=2
+            v-if="memberModal"
+            :users="group_info.members"
+            @closeList="closeMemberList"
+          />
           <hr>
+          <div v-if="group_info.leaders[0].id =! userpk" class="group-detail-secede-btn-pos">
+            <span class="group-detail-secede-btn" @click="secede">그룹 탈퇴하기</span> 
+          </div>
+          <div v-else class="group-detail-secede-btn-pos">
+            <span class="group-detail-secede-btn" @click="groupDelete">그룹 삭제하기</span>  
+          </div>
         </div>
 
         <section>
@@ -72,13 +87,18 @@ import { getGroupDetail } from '@/api/group.js'
 import { updateGroupInfo } from '@/api/group.js'
 import { getGroupfeeds } from '@/api/group.js'
 import { deleteGroup } from '@/api/group.js'
+import { createGroupImg } from '@/api/group.js'
+
+import { mapState } from 'vuex'
+
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupRecommend from '../../components/GroupFeed/GroupRecommend.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
+import UserList from '../../components/NewsFeed/Common/UserList.vue'
 
 export default {
-  components: { Sidebar, GroupRecommend, NewsFeedList, GroupNav },
+  components: { Sidebar, GroupRecommend, NewsFeedList, GroupNav, UserList },
   data() {
     return {
       modiForm: false,
@@ -93,6 +113,8 @@ export default {
       navbarHeight: 70,
       isjoined: "false",
       group: {},
+      selectedFile: null,
+      imageUrl: null,
       group_info: {
         // id: 1,
         // group_img: "",
@@ -107,20 +129,46 @@ export default {
         memberCnt: "502",
         // group_people_id: [1, 2, 3, 4, 5, 9],
       },
+      memberModal: false,
     };
   },
   methods: {
-    groupDelete () {
-      deleteGroup(
-        this.group_info.id,
-        (res) => {
-          console.log(res)
-          this.$router.push({ name: 'grouppage' })
-        },
-        (err) => {
-          console.log(err)
+    selectGroupImg (e) {
+      let files = e.target.files
+      if (files.length) {
+        this.selectedFile = files[0]
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.imageUrl = e.target.result;
+          console.log(this.imageUrl)
+          // this.previewUrl.push(this.imageUrl)
         }
-      )
+        reader.readAsDataURL(this.selectedFile);
+      }
+    },
+    goToleaderProfile () {
+      this.$router.push({ name: 'MyPage', query: { name: this.group_info.leaderId }})
+    },
+    closeMemberList () {
+      this.memberModal = false;
+    },
+    memberListOpen (){
+      this.memberModal = true;
+    },
+    groupDelete () {
+      const answer = window.confirm('한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?')
+      if (answer) {
+        deleteGroup(
+          this.group_info.id,
+          (res) => {
+            console.log(res)
+            this.$router.push({ name: 'grouppage' })
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
     },
     changeModiForm () {
       if (this.modiForm == true) {
@@ -134,21 +182,38 @@ export default {
             console.log(err)
           }
         )
+        if (this.selectedFile) {
+          const formData = new FormData ();
+          formData.append('file', this.selectedFile)
+          createGroupImg(
+            this.group_info.id,
+            formData,
+            (res) => {
+              console.log(res)
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
       }
       this.modiForm = !this.modiForm;
     },
     secede () {
-      secedeGroup(
-        this.group_info.id,
-        (res) => {
-          console.log(res)
-          alert('그룹에 탈퇴되었습니다!')
-          this.isjoined = false
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
+      const answer = window.confirm('정말로 탈퇴하시겠습니까?')
+      if (answer) {
+        secedeGroup(
+          this.group_info.id,
+          (res) => {
+            console.log(res)
+            alert('그룹에 탈퇴되었습니다!')
+            this.isjoined = false
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
     },
     join () {
       joinGroup(
@@ -188,7 +253,7 @@ export default {
       getGroupDetail(
         this.$route.query.groupId,
         (res) => {
-          console.log(res)
+          console.log('그룹정보', res.data)
           this.group_info = res.data
           this.group.name = this.group_info.name
           this.group.description = this.group_info.description
@@ -236,6 +301,11 @@ export default {
   mounted () {
     this.setScroll();
   },
+  computed: {
+    ...mapState({
+      userpk : (state) => state.userId,
+    })
+  },
 };
 </script>
 
@@ -252,7 +322,7 @@ export default {
 }
 .group-detail-img-space {
   margin: auto;
-  cursor: pointer;
+  /* cursor: pointer; */
   width: 150px;
   height: 150px;
   text-align: left;
@@ -269,14 +339,45 @@ export default {
   height: 100%;
   object-fit: cover;
 }
+.group-detail-img-form{
+  cursor: pointer
+}
+.group-detail-img-form input[type="file"] { 
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
 .group-detail-title {
   margin: 20px;
   font-size: 24px;
   text-align: center;
 }
+.group-detail-title-input-box {
+  display: flex;
+  justify-content: center;
+}
+.group-detail-title-input {
+  margin: 20px;
+  font-size: 24px;
+}
 .group-detail-introduce {
   text-align: center;
   font-size: 14px;
+}
+.group-detail-introduce-input-box {
+    display: flex;
+  justify-content: center;
+}
+.group-detail-introduce-input {
+  font-size: 14px;
+}
+.group-detail-modi-btn {
+  cursor: pointer;
 }
 .group-detail-join-btn {
   width: 100%;
@@ -290,6 +391,19 @@ export default {
   cursor: pointer;
   margin: 15px;
 }
+.group-detail-leader {
+  cursor: pointer;
+}
+.group-detail-member {
+  cursor: pointer;
+}
+.group-detail-secede-btn-pos {
+  text-align: right;
+}
+.group-detail-secede-btn {
+  cursor: pointer;
+  font-size: 12px;
+}
 .group-detail-info {
   margin: auto;
   display: flex;
@@ -301,6 +415,9 @@ export default {
 }
 .group-detail-info > div > div:last-child {
   font-size: 14px;
+}
+.group-detail-modi {
+  text-align: right;
 }
 @media screen and (max-width: 1050px) {
   .group-detail {
