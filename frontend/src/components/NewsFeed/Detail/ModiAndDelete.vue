@@ -33,8 +33,8 @@ export default {
   },
   methods: {
     changeModiForm () {
-      if (this.Category) {
-        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd, group: this.fd.groupId }})
+      if (this.Category == 2) {
+        this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd, group: this.fd.groupId, name: this.fd.groupName }})
       } else {
         this.$router.push({ name: 'NewsfeedForm', query: { Category: this.Category }, params: { type: 'MODI', feed: this.fd }})
       }

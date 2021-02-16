@@ -9,25 +9,20 @@
         <GroupNav v-if="Category == 2" :isHome="true"/>
         <section class="newsfeed-form-content">
           <div class="newsfeed-form-profile">
-            <div class="newsfeed-form-profile-img-space">
-              <img
-                src="http://image.yes24.com/momo/TopCate2600/MidCate6/259955881.jpg"
-                alt="유저프로필이미지"
-                class="newsfeed-form-profile-img"
-              />
-            </div>
+            <NewsFeedProfile  :userId="userpk" :proImg="myImg ? myImg : defaultImg"/>
             <div class="newsfeed-form-profile-name">
-              username
+              {{myName}}
             </div>
             <div v-if="Category == 2" class="newsfeed-form-group-container">
-              <div @click="chooseGroup">{{ groupName }}</div>
+              <div v-if="!fixGroup" @click="chooseGroup" class="newsfeed-form-group-btn highlight">{{ groupName }}</div>
+              <div v-else class="highlight">{{ groupName }}</div>
               <div v-if="select" class="newsfeed-form-group">
                 <div class="newsfeed-form-group-list" v-if="groupList.length > 0">
                   <div v-for="(group, idx) of groupList" :key="idx">
                     <button @click="selectGroup(group)">{{ group.name }}</button>
                   </div>
                 </div>
-                <div class="newsfeed-form-group-none" v-else>
+                <div class="newsfeed-for  m-group-none" v-else>
                   가입된 그룹이 없습니다. 그룹에 가입해주세요!
                   <div class="newsfeed-form-group-redirect-btn" @click="goToGroupPage">
                     그룹 찾으러 가기
@@ -69,7 +64,7 @@
           </div>
 
           <div class="newsfeed-form-tag-container">
-            <span v-for="(tag, idx) in form.tags" :key="idx">
+            <span v-for="(tag, idx_t) in form.tags" :key="idx_t">
               <button>
                 {{ tag }}
                 <i @click="deleteTag(tag)" class="fas fa-times-circle"></i>
@@ -100,59 +95,78 @@
             ></textarea>
           </div>
 
-          <div class="newsfeed-form-file-box">
-            <div class="newsfeed-form-img-box">
-              <label for="image"> <i class="far fa-images"></i> 사진 </label>
-              <input
-                class="newsfeed-form-img-input"
-                id="image"
-                type="file"
-                @change="selectFile"
-                accept="image/*"
-              />
-            </div>
-            <div class="newsfeed-form-img-box">
-              <label for="video"> <i class="fas fa-video"></i> 동영상 </label>
-              <input
-                class="newsfeed-form-img-input"
-                id="video"
-                type="file"
-                @change="selectFile"
-                accept="video/*"
-              />
-            </div>
-            <div
-              class="newsfeed-form-img-box"
-              v-if="Category == 2 || Category == 3"
-            >
-              <div class="newsfeed-form-input-map" @click="revealMap">
-                <i class="fas fa-map"></i> 지도
+          <div class="newsfeed-form-file">
+            <div class="newsfeed-form-file-box">
+              <div class="newsfeed-form-img-box">
+                <label for="image"> <div class="newsfeed-form-img-label"> 사진 </div> <i class="fas fa-plus-circle newsfeed-form-img-label-btn"></i> </label>
+                <input
+                  class="newsfeed-form-img-input"
+                  id="image"
+                  type="file"
+                  @change="selectFile"
+                  accept="image/*"
+                />
+              </div>
+              <div v-for="view in form.filePaths" :key="view.id">
+                <div class="newsfeed-form-img-prevbox">
+                  <img
+                    class="newsfeed-form-img-prevbox-delbtn"
+                    src="https://img.icons8.com/fluent/20/000000/close-window.png"
+                    @click="deleteImgmodi(view)"
+                  />
+                  <img :src="`https://dtbqjjy7vxgz8.cloudfront.net/${view}`" alt="미리보기 이미지" />
+                </div>
+              </div>
+              <div v-for="(view2, idx2) in previewUrl" :key="idx2">
+                <div class="newsfeed-form-img-prevbox">
+                  <!-- <i class="fas fa-times-circle newsfeed-form-img-prevbox-delbtn"></i> -->
+                  
+                  <img
+                    class="newsfeed-form-img-prevbox-delbtn"
+                    src="https://img.icons8.com/fluent/20/000000/close-window.png"
+                    @click="deleteImg(view2)"
+                  />
+                  <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
+                  <img :src="view2" alt="미리보기 이미지" />
+                </div>
               </div>
             </div>
+            <div class="newsfeed-form-file-hr-box">
+              <hr class="newsfeed-form-file-hr">
+            </div>
+            <div class="newsfeed-form-img-guide">
+              <ul>
+                <li>
+                  회원님의 사진을 공유해주세요
+                </li>
+                <li>
+                  사진은 가로로 찍은 사진을 권장합니다
+                </li>
+                <li>
+                  사진은 최대 5장 이내로 등록해주세요
+                </li>
+              </ul>
+            </div>
           </div>
+
+          <div
+            class="newsfeed-form-img-box"
+            v-if=" Category == 3 && type == 'NEW'"
+          >
+            <div class="newsfeed-form-input-map" @click="revealMap">
+              <i class="fas fa-map-marker-alt"></i>위치 태그하기
+            </div>
+          </div>
+          
           <div v-if="showMap">
             <inputmap @sendLocation="sendLocation" :latitude="latitude" :longitude="longitude"/>
-            <div v-if="location">
-              {{ location }}
-              <!-- {{ location }} -->
-            </div>
           </div>
-          <div class="newsfeed-form-img">
-            <div v-for="(view, idx) in previewUrl" :key="idx">
-              <div class="newsfeed-form-img-prevbox">
-                <!-- <i class="fas fa-times-circle newsfeed-form-img-prevbox-delbtn"></i> -->
-                <img
-                  class="newsfeed-form-img-prevbox-delbtn"
-                  src="https://img.icons8.com/fluent/20/000000/close-window.png"
-                  @click="deleteImg(view)"
-                />
-                <!-- <i class="far fa-times-circle  newsfeed-form-img-prevbox-delbtn"></i> -->
-                <img :src="view" alt="미리보기 이미지" />
-              </div>
-            </div>
-            <div class="newsfeed-form-img-prevbox">
-              사진
-            </div>
+          <div class="newsfeed-form-location" v-if="selectLocation">
+            <i class="fas fa-map-marker-alt"></i>
+            <b>{{ location.placeName || location.place_name }}</b>
+            {{ location.address || location.address_name }}
+            <span>을 공유합니다</span>
+            <!-- {{ location }} -->
           </div>
           <div class="newsfeed-form-submit-btn">
             <button class="create-feed-btn" @click="createFeedNew">작성하기</button>
@@ -174,6 +188,7 @@
 import '@/assets/css/mention.css'
 import { Mentionable } from 'vue-mention'
 import { searchAutoTag } from '@/api/feed.js'
+import { getprofileInfo } from '@/api/mypage.js'
 
 import { createIndoors } from '@/api/indoors.js'
 import { updateIndoors } from '@/api/indoors.js'
@@ -196,6 +211,7 @@ import { mapState } from 'vuex'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
+import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue'
 
 export default {
   name: 'NewsfeedForm',
@@ -204,7 +220,8 @@ export default {
     Sidebar,
     Inputmap,
     Mentionable,
-    GroupNav
+    GroupNav,
+    NewsFeedProfile
   },
   data() {
     return {
@@ -246,7 +263,7 @@ export default {
       groupName: "그룹을 선택해주세요",
       groupList: [],
       selectedGroup: null,
-      location: null,
+      location: {},
       showMap: false,
       fileSelect : false,
       items : [],
@@ -256,6 +273,12 @@ export default {
       abortController: null,
       signal: null,
       temp: [],
+      myImg: null,
+      myName: null,
+      fixGroup: false,
+      modiPreview: [],
+      selectLocation: false,
+      // selectedVideo: null,
     };
   },
 
@@ -270,9 +293,8 @@ export default {
       }
     },
     sendLocation (place) {
-      console.log('뭐지', place)
       this.location = place
-      console.log(this.location)
+      this.selectLocation = true;
     },
     revealMap () {
       this.showMap = !this.showMap;
@@ -293,12 +315,14 @@ export default {
       let check = this.form.tags.findIndex(element => element === tag)
       this.form.tags.splice(check, 1)
     },
+    deleteImgmodi (view) {
+      let check = this.form.filePaths.findIndex(element => element === view)
+      this.form.filePaths.splice(check, 1)
+    },
     deleteImg (view) {
-      console.log(view)
       let check = this.previewUrl.findIndex(element => element === view)
       this.previewUrl.splice(check, 1)
       this.fileList.splice(check, 1)
-      console.log(this.fileList)
     },
     tagApi (tag) {
       searchAutoTag(
@@ -339,35 +363,60 @@ export default {
       }
       this.inputTag = '#';
     },
+    getImg () {
+      getprofileInfo(
+        this.userpk,
+        (res) => {
+          this.myImg = res.data.user_img
+          this.myName = res.data.username
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     setDefault () {
       this.Category = this.$route.query.Category
+      // console.log('default', this.$route.params.feed)
       if (this.Category == 2) {
-        getprofileGroups(
-          this.userpk,
-          (res) => {
-            console.log(res)
-            this.groupList = res.data
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
+        if (this.$route.query.group_id) {
+          this.groupName = this.$route.query.group_name,
+          this.selectedGroup = this.$route.query.group_id
+          this.fixGroup = true;
+        } else if (this.$route.params.type == 'MODI') {
+          this.groupName = this.$route.params.name,
+          this.selectedGroup = this.$route.params.group
+          this.fixGroup = true;
+        } else {
+          getprofileGroups(
+            this.userpk,
+            (res) => {
+              console.log(res)
+              this.groupList = res.data
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
       }
       if (this.$route.params.type == 'MODI') {
         this.type = 'MODI'
         this.form.content = this.$route.params.feed.content.replace(/(<br>|<br\/>|<br \/>)/g, '\r\n');
         this.form.tags = this.$route.params.feed.tags
-        if (this.$route.params.feed.file) {
+        if (this.$route.params.feed.files) {
+          this.form.filePaths = this.$route.params.feed.files
           this.imageUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${this.$route.params.feed.file}`
         }
-        if (this.$route.params.feed.longitude && this.$route.params.feed.latitude) {
-          this.longitude = this.$route.params.feed.lng
+        if (this.$route.params.feed.lng && this.$route.params.feed.lat) {
           this.latitude = this.$route.params.feed.lat
+          this.longitude = this.$route.params.feed.lng
           this.location.placeName = this.$route.params.feed.placeName
           this.location.city = this.$route.params.feed.city
           this.location.lng = this.$route.params.feed.lng
           this.location.lat = this.$route.params.feed.lat
           this.location.address = this.$route.params.feed.address
+          this.selectLocation = true;
         }
       } else if (this.$route.params.type == 'SHARE') {
         // let link = document.location.href;
@@ -382,11 +431,12 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
+      console.log('files', files)
+
       if (files.length) {
-        this.fileList.push(files[0])
-        this.fileSelect = true;
         this.selectedFile = files[0]
-        console.log(this.selectedFile)
+        this.fileList.push(this.selectedFile)
+        this.fileSelect = true;
         let reader = new FileReader();
         reader.onload = (e) => {
           this.imageUrl = e.target.result;
@@ -494,10 +544,10 @@ export default {
         } else if (this.Category == 3) {
           // 청산별곡 create 요청
           if (this.location) {
-            this.form.lat = this.location.lat
-            this.form.lng = this.location.lng
-            this.form.address = this.location.address
-            this.form.placeName = this.location.placeName
+            this.form.lat = this.location.lat || this.location.y
+            this.form.lng = this.location.lng || this.location.x
+            this.form.address = this.location.address || this.location.address_name
+            this.form.placeName = this.location.placeName || this.location.place_name
             // this.form.city = this.city_code[this.location.city]
           }
           createOutdoors(
@@ -551,9 +601,16 @@ export default {
             updateIndoors (
               this.$route.params.feed.id,
               this.form,
-              (res) => {
-                console.log('수정', res)
-                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+              () => {
+                if (this.fileSelect) {
+                  this.imgUpload(this.$route.params.feed.id);
+                  alert('이미지 업로드 중입니다!')
+                  setTimeout(() => {
+                    this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                  }, 500);
+                } else {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                }
               },
               (err) => {
                 console.log(err)
@@ -566,9 +623,16 @@ export default {
               this.$route.params.group,
               this.$route.params.feed.id,
               this.form,
-              (res) => {
-                console.log(res)
-                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, group: this.$route.params.group, Category: this.Category } })
+              () => {
+                if (this.fileSelect) {
+                  this.imgUpload(this.$route.params.feed.id);
+                  alert('이미지 업로드 중입니다!')
+                  setTimeout(() => {
+                    this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category, group: this.selectedGroup } })
+                  }, 500);
+                } else {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category, group: this.selectedGroup } })
+                }
               },
               (err) => {
                 console.log(err)
@@ -576,12 +640,25 @@ export default {
             )
           } else if (this.Category == 3) {
             // 청산별곡 put 요청
+            this.form.lat = this.location.lat || this.location.y
+            this.form.lng = this.location.lng || this.location.x
+            this.form.address = this.location.address || this.location.address_name
+            this.form.placeName = this.location.placeName || this.location.place_name
+            // this.form.city = this.city_code[this.location.city]
+            console.log(this.form)
             updateOutdoors(
               this.$route.params.feed.id,
               this.form,
-              (res) => {
-                console.log('수정', res)
-                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+              () => {
+                if (this.fileSelect) {
+                  this.imgUpload(this.$route.params.feed.id);
+                  alert('이미지 업로드 중입니다!')
+                  setTimeout(() => {
+                    this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                  }, 500);
+                } else {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                }
               },
               (err) => {
                 console.log(err)
@@ -593,9 +670,16 @@ export default {
             updateWorker (
               this.$route.params.feed.id,
               this.form,
-              (res) => {
-                console.log('수정', res)
-                this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+              () => {
+                if (this.fileSelect) {
+                  this.imgUpload(this.$route.params.feed.id);
+                  alert('이미지 업로드 중입니다!')
+                  setTimeout(() => {
+                    this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                  }, 500);
+                } else {
+                  this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
+                }
               },
               (err) => {
                 console.log(err)
@@ -615,6 +699,7 @@ export default {
   },
   created () {
     this.setDefault();
+    this.getImg();
     // this.getLocation();
   },
   beforeRouteLeave (to, from, next) {
@@ -633,6 +718,7 @@ export default {
   computed: {
     ...mapState({
       userpk : (state) => state.userId,
+      defaultImg: (state) => state.defaultImg
     })
   },
 };
