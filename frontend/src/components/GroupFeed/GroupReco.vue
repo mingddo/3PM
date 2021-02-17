@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="group-reco-frame">
     <div class="group-reco-title">
       오늘의 신규 그룹
     </div>
@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="group-content-section">
-            <div class="group-reco-name">
+            <div class="group-reco-name" @click="goToGroupDetail">
               {{ recoGroup[page].name }}
             </div>
             
@@ -72,6 +72,9 @@ export default {
         this.next = true;
       }
     },
+    goToGroupDetail () {
+      this.$router.push({ name : 'groupdetail', query: { groupId: this.recoGroup[this.page].id}})
+    },
   },
   computed: {
     ...mapState({
@@ -82,6 +85,9 @@ export default {
 </script>
 
 <style>
+.group-reco-frame {
+  margin-bottom: 30px;
+}
 .group-reco-title {
   margin: 20px;
   font-size: 24px;
@@ -98,12 +104,9 @@ export default {
   display: flex;
   align-items: center;
   width: 80%;
-  height: 180px;
+  height: 100%;
   border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
   background-color: var(--light-brown);
-  margin-bottom: 24px;
 }
 .group-reco-prev-btn {
   cursor: pointer;

@@ -69,11 +69,15 @@ export default {
   justify-content: space-between;
   border-bottom: 1px solid lightgrey;
   padding : 20px;
+  background-color: #fffcf9 ;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 .group-page-group {
   display: flex;
+  width: 90%;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 .group-page-img-space {
   cursor: pointer;
@@ -90,7 +94,7 @@ export default {
   margin: 5px;
 }
 .group-page-info {
-  /* width: 50%; */
+  min-width: 120px;
   padding : 20px;
 }
 .group-page-name {
@@ -108,5 +112,11 @@ export default {
 }
 .group-page-created {
   font-size: 12px;
+}
+@media screen and (max-width: 900px) {
+  .group-page-img-space {
+    width: 60px;
+    height: 60px;
+  }
 }
 </style>

@@ -17,23 +17,23 @@
               @change="selectGroupImg"
             />
             <div class="group-modi-img-guide">
-              <span class="highlight">그룹이미지</span>
-              <div>
-                사진을 클릭하여 사진을 변경해주세요.
-              </div>
+              사진을 클릭하여 사진을 변경해주세요.
             </div>
           </div>
-          <!-- <div v-else>
-            외않되; {{ leader}} {{ userpk}}
-          </div> -->
-
-          <div class="group-detail-title" v-if="!modiForm">{{ group.name }}</div>
-          <div class="group-detail-title-input-box" v-else>
+          <div>
+            
+          </div>
+          <div class="group-detail-body">
+            <div class="group-detail-title" v-if="!modiForm">{{ group.name }}</div>
+            <div class="group-detail-info">
+                <div v-if="leaderInfo" class="group-detail-leader" @click="goToleaderProfile">그룹장 : {{ leaderInfo.nickname }}</div>
+                <div class="group-detail-member" @click="memberListOpen">회원수 : {{ group_info.memberCnt }}</div>
+            </div>
+          </div>
+          <div class="group-detail-title-input-box" v-if="modiForm">
             <input id="groupName" class="group-detail-title-input" type="text" v-model="group.name">
-            <div class="group-detail-title-guide">그룹 이름을 입력해주세요</div>
           </div>
           <div class="group-detail-introduce" v-if="!modiForm">
-            <div> 그룹 소개를 입력해주세요 </div>
             {{ group.description }}
           </div>
           <div class="group-detail-introduce-input-box" v-else>
@@ -42,20 +42,8 @@
           <div v-if="modiForm" class="group-detail-modi-save" @click="changeModiForm">
             <i  class="far fa-check-square"> </i>저장
           </div>
-          <div v-if="!isjoined" class="group-detail-join-btn"  @click="join">
+          <div v-if="!isjoined && !( userId == leader)" class="group-detail-join-btn"  @click="join">
               그룹 가입하기
-          </div>
-          <div class="group-detail-info">
-            <div>
-              <div>그룹장</div>
-              <div v-if="leaderInfo" class="group-detail-leader" @click="goToleaderProfile">
-                {{ leaderInfo.nickname }}
-              </div>
-            </div>
-            <div>
-              <div>회원수</div>
-              <div class="group-detail-member" @click="memberListOpen">{{ group_info.memberCnt }}</div>
-            </div>
           </div>
           <UserList
             type=2
@@ -65,16 +53,15 @@
           />
           <hr style="border-top: 2px var(--light-brown)">
           <div class="group-detail-edit">
-            <div v-if="group_info.leaderId == userpk" class="group-detail-modi">
+            <div v-if="group_info.leaderId == userId" class="group-detail-modi">
               <div v-if="!modiForm" class="group-detail-modi-btn" @click="changeModiForm">
                 <i  class="fas fa-edit group-detail-modi-btn"></i>수정하기
               </div>
-              <!-- {{ modiForm ? '수정' : '그룹 수정하기'}} -->
             </div>
-            <div v-if="leader =! userpk" class="group-detail-secede-btn-pos">
+            <div v-if="isjoined" class="group-detail-secede-btn-pos">
               <span class="group-detail-secede-btn" @click="secede">그룹 탈퇴하기</span> 
             </div>
-            <div v-else class="group-detail-secede-btn-pos">
+            <div v-if="leader == userId" class="group-detail-secede-btn-pos">
               <span class="group-detail-secede-btn" @click="groupDelete">그룹 삭제하기</span>  
             </div>
           </div>
@@ -146,8 +133,6 @@ export default {
         let reader = new FileReader();
         reader.onload = (e) => {
           this.imageUrl = e.target.result;
-          console.log(this.imageUrl)
-          // this.previewUrl.push(this.imageUrl)
         }
         reader.readAsDataURL(this.selectedFile);
       }
@@ -166,8 +151,7 @@ export default {
       if (answer) {
         deleteGroup(
           this.group_info.id,
-          (res) => {
-            console.log(res)
+          () => {
             this.$router.push({ name: 'grouppage' })
           },
           (err) => {
@@ -210,10 +194,9 @@ export default {
       if (answer) {
         secedeGroup(
           this.group_info.id,
-          (res) => {
-            console.log(res)
+          () => {
             alert('그룹에 탈퇴되었습니다!')
-            this.isjoined = false
+            this.isjoined = false 
           },
           (err) => {
             console.log(err)
@@ -224,9 +207,9 @@ export default {
     join () {
       joinGroup(
         this.group_info.id,
-        (res) => {
-          console.log(res)
+        () => {
           alert('그룹에 가입되었습니다!')
+          this.isjoined = true 
         },
         (err) => {
           console.log(err)
@@ -238,7 +221,6 @@ export default {
         this.$route.query.groupId,
         this.page,
         (res) => {
-          console.log(res)
           this.page = this.page + 1;
           let feeds = res.data.feedList;
           if (feeds && feeds.length < 10) {
@@ -259,7 +241,6 @@ export default {
       getGroupDetail(
         this.$route.query.groupId,
         (res) => {
-          console.log('그룹정보', res.data)
           this.group_info = res.data
           this.group.name = this.group_info.name
           this.group.description = this.group_info.description
@@ -268,9 +249,7 @@ export default {
           } else if (this.group_info.leader.id) {
             this.leader = this.group_info.leader.id
           }
-          console.log(this.leader, this.userpk)
           this.leaderInfo = this.group_info.leaders[0]
-          //  console.log('리버요', this.group_info.leaders)
           this.validjoin();
         },
         (err) => {
@@ -279,14 +258,16 @@ export default {
       )
     },
     validjoin() {
-      this.group_info.group_people_id.map((user) => {
-        if (user === this.$store.state.userId) {
-          return (this.isjoined = true);
-        } else {
-          return (this.isjoined = false);
+      const me = this.$store.state.userId
+      for (let i=0; i<this.group_info.members.length;i++) {
+        const member = this.group_info.members[i]
+        const memberId = member.id
+        if (memberId === me) {
+          this.isjoined = true
+          return
         }
-      });
-      console.log(this.isjoined);
+      }
+      this.isjoined = false
     },
     setScroll() {
       window.addEventListener("scroll", () => {
@@ -312,15 +293,12 @@ export default {
     }
     this.getgroupInfo();
     this.setFeedList();
-    // this.validjoin();
   },
   mounted () {
     this.setScroll();
   },
   computed: {
-    ...mapState({
-      userpk : (state) => state.userId,
-    })
+    ...mapState(["userId"]),
   },
 };
 </script>
@@ -332,25 +310,30 @@ export default {
   border-radius: 50px;
 }
 .group-detail-header {
-  background-color: var(--bold-brown);
-  border-radius: 5px;
-  width: 90%;
+  background-color: #fffcf9;
+  border-radius: 10px;
+  width: 100%;
   margin: auto;
-  padding: 40px;
+  /* padding: 40px; */
+  margin-bottom: 30px;
+  
 }
 .group-detail-img-space {
   margin: auto;
-  /* cursor: pointer; */
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 60%;
+  border-radius: 20px;
   text-align: left;
   border: solid 1px rgba(0, 0, 0, 0.2);
-  border-radius: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.group-detail-body {
+  display: flex;
+  justify-content: space-between;
 }
 .group-detail-img {
   width: 100%;
@@ -371,15 +354,13 @@ export default {
   border: 0;
 }
 .group-detail-title {
-  margin: 20px;
+  padding: 20px;
   font-size: 24px;
-  text-align: center;
+  display: flex;
+  align-items: center;
 }
 .group-detail-title-input-box div {
   text-align: center;
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 .group-detail-title-guide {
   font-size: 12px;
@@ -389,20 +370,34 @@ export default {
   text-align: center;
 }
 .group-detail-title-input {
-
-  margin: 20px 20px 0px 20px;
-  /* font-size: 24px; */
+  width: 90%;
+  padding: 10px;
+  border: 0;
+  background-color: transparent;
+  border-bottom: 2px solid #9e7f6d;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .group-detail-introduce {
-  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
   font-size: 14px;
+  margin-bottom: 20px;
 }
 .group-detail-introduce-input-box {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .group-detail-introduce-input {
-  font-size: 14px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background-color: #fffcf9;
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 .group-detail-modi {
   display: flex;
@@ -410,11 +405,7 @@ export default {
 }
 .group-detail-modi-btn {
   cursor: pointer;
-  font-size: 12px;
-  /* cursor: pointer; */
-  /* background-color: #fff9f3; */
-  /* border-radius: 5px; */
-  /* padding : 5px; */
+  font-size: 16px;
 }
 .group-detail-modi-save {
   margin-top: 5px;
@@ -447,18 +438,16 @@ export default {
 }
 .group-detail-secede-btn {
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 .group-detail-info {
-  margin: auto;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
 }
-.group-detail-info > div > div {
-  margin: 10px;
-  text-align: center;
-}
-.group-detail-info > div > div:last-child {
+.group-detail-info div {
   font-size: 14px;
 }
 .group-modi-img-guide {
@@ -473,18 +462,17 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 }
-@media screen and (max-width: 1050px) {
-  .group-detail {
+@media screen and (max-width: 900px) {
+.group-detail {
     margin-top: 100px;
     width: 100%;
   }
   .group-detail-join-btn {
     margin-left: 0;
     margin-right: 0;
-  }
-  .group-page-img-section {
-    min-width: 25%;
   }
 }
 </style>

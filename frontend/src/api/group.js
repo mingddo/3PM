@@ -112,7 +112,7 @@ function deleteGroupFeed(group_id, feed_id, success, fail) {
     .catch(fail);
 }
 
-function secedeGroup(group_id, feed_id, success, fail) {
+function secedeGroup(group_id, success, fail) {
   instance
     .delete(`groups/${group_id}/members`)
     .then(success)

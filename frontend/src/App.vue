@@ -334,7 +334,7 @@ export default {
 };
 </script>
 <style>
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 900px) {
   #search {
     font-size: 16px;
   }
@@ -581,5 +581,6 @@ export default {
   .feed-footer-box {
     padding: 10px
   }
+    
 }
 </style>
