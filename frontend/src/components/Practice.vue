@@ -1,11 +1,24 @@
 <template>
-  <div>
-    <h4>프로필 이미지 업로드</h4>
-    <clipper-upload v-model="src[0]"
-      ><button>이미지 업로드</button></clipper-upload
+  <div class="edit-profieImg-component">
+    <div class="editImg-upload-title highlight">프로필 이미지 업로드</div>
+    <clipper-upload class="select-Edit-Img"
+      ><button class="select-Edit-Img-btn">
+        이미지 선택
+      </button></clipper-upload
     >
     <div class="flex">
       <clipper-fixed
+        v-if="userImg"
+        class="basic lg clipper-fixed"
+        :src="`https://dtbqjjy7vxgz8.cloudfront.net/${userImg}`"
+        :round="true"
+        ref="clipper"
+        preview="fixed-preview"
+        :rotate="rotation"
+      ></clipper-fixed>
+
+      <clipper-fixed
+        v-else
         class="basic lg clipper-fixed"
         :src="src[0]"
         :round="true"
@@ -14,8 +27,10 @@
         :rotate="rotation"
       ></clipper-fixed>
     </div>
-    <button @click="profilegoback">돌아가기</button>
-    <button @click="getResult">이미지 선택</button>
+    <div class="edit-btn-container">
+      <button @click="profilegoback">돌아가기</button>
+      <button @click="getResult">저장</button>
+    </div>
   </div>
 </template>
 
@@ -26,6 +41,9 @@ export default {
   components: {
     clipperFixed,
     clipperUpload,
+  },
+  props: {
+    userImg: String,
   },
   data() {
     return {
@@ -72,16 +90,14 @@ export default {
 .flex {
   display: flex;
   flex-wrap: wrap;
-  width: 60%;
+  width: 80%;
 }
 .flex .lg {
   flex-basis: 0;
   flex-grow: 3;
-  margin: 3px;
 }
 .flex .md {
   flex-basis: 0;
-  margin: 3px;
   flex-grow: 2;
 }
 .basic {

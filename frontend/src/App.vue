@@ -464,6 +464,9 @@ export default {
     width: 1.5em;
     height: 1.5em;
   }
+  .edit-btn-container > button {
+    padding: 5px;
+  }
   .home-category-modal-overay {
     display: none;
   }
@@ -513,9 +516,19 @@ export default {
     height: 70%;
   }
   .profile-edit-img-frame {
-    width: 30%;
-    height: 30%;
+    width: 80px;
+    height: 80px;
     margin-top: 12px;
+  }
+  .editImg-upload-title {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .edit-profieImg-component {
+    width: 100%;
+  }
+  .select-Edit-Img-btn {
+    padding: 5px;
   }
   .nickname-warn {
     flex-wrap: wrap;
@@ -525,6 +538,10 @@ export default {
   }
   .save-Edit-profile {
     width: 250px;
+    margin: 12px;
+  }
+  .profile-intro-frame-title-container {
+    width: 90%;
   }
   .map-space {
     display: block;

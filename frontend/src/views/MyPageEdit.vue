@@ -1,117 +1,130 @@
 <template>
-  <div class="mypageEdit">
-    <div class="mypageEdit-Toggle-Img" v-if="editing">
-      <Practice
-        @edit_url="edit_url"
-        @endUrlEdit="endUrlEdit"
-        @previewURL="previewURL"
-      />
-    </div>
-    <div class="mypageEdit-Toggle-Img" v-else>
-      <div class="myPageEdit-Header-Title">
-        내 정보 수정
+  <div class="newsfeed-body">
+    <Sidebar />
+    <div class="mypageEdit">
+      <div class="mypageEdit-Toggle-Img" v-if="editing">
+        <Practice
+          :userImg="userInfo.user_img"
+          @edit_url="edit_url"
+          @endUrlEdit="endUrlEdit"
+          @previewURL="previewURL"
+        />
       </div>
-      <div class="profile-edit-img-frame">
-        <div v-if="!preview">
-          <img
-            v-if="userInfo.user_img"
-            :src="`https://dtbqjjy7vxgz8.cloudfront.net/${userInfo.user_img}`"
-            alt=""
-          />
-          <img v-else src="@/assets/img/profileM.svg" alt="" width="80px" />
+      <div class="mypageEdit-Toggle-Img" v-else>
+        <div class="myPageEdit-Header-Title">
+          내 정보 수정
         </div>
-        <div v-else>
-          <img :src="preview_URL" alt="" />
-        </div>
-      </div>
-
-      <button @click="editing = true" class="edit-profile-Img-btn">
-        프로필 이미지 수정
-      </button>
-
-      <div class="nicknameEdit-frame">
-        <div class="nicknameexist" v-if="!nicknameedit">
-          <div>
-            <span class="highlight">닉네임</span> : {{ userInfo.nickname }}
-          </div>
-          <button
-            class="nicknameEdit-btn"
-            @click="nicknameedit = !nicknameedit"
-          >
-            수정
-          </button>
-        </div>
-
-        <div class="nicknameEditForm" v-else>
-          <div class="nickname-warn">
-            <span>※ 닉네임은</span>
-            <span class="highlight-warn"
-              >영어/한글/숫자 4자 이상 10자 이내로</span
-            >
-            <span>입력 가능합니다.</span>
-          </div>
-          <div class="nickname-edit-input-frame">
-            <input
-              v-model="nickname"
-              type="text"
-              placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력"
+        <div class="profile-edit-img-frame">
+          <div v-if="!preview">
+            <img
+              v-if="userInfo.user_img"
+              :src="`https://dtbqjjy7vxgz8.cloudfront.net/${userInfo.user_img}`"
+              alt=""
             />
-            <button
-              @click="checkOverlap"
-              :disabled="!isPossibleName"
-              class="edit-dupli-btn"
-              :class="{ disabledBtn: !isPossibleName }"
-            >
-              중복확인
-            </button>
-          </div>
-          <div class="nickname-edit-input-frame-btn">
-            <button class="edit-nickname-back-btn" @click="backtoEdit">
-              돌아가기
-            </button>
-            <button
-              class="edit-nickname-confirm-btn"
-              @click="changenickname"
-              :disabled="isOverlapped"
-              :class="{ disabledBtn: isOverlapped }"
-            >
-              닉네임 수정하기
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="profile-intro-frame">
-        <div class="highlight">프로필 소개</div>
-        <div class="prrfile-content-frame" v-if="!introduceedit">
-          <div class="intro-content" v-if="userInfo.introduce">
-            {{ userInfo.introduce }}
+            <img v-else src="@/assets/img/profileM.svg" alt="" width="80px" />
           </div>
           <div v-else>
-            프로필 소개가 아직 없습니다.
+            <img :src="preview_URL" alt="" />
           </div>
-          <button
-            class="intro-Edit-btn"
-            @click="introduceedit = !introduceedit"
-          >
-            수정
-          </button>
         </div>
 
-        <div v-else class="introEdit-frame">
-          <input type="text" v-model="introduce" />
-          <div class="nickname-edit-input-frame-btn">
-            <button class="edit-nickname-back-btn" @click="introgoback">
-              돌아가기
-            </button>
-            <button class="edit-nickname-confirm-btn" @click="saveintroduce">
-              저장하기
+        <button @click="editing = true" class="edit-profile-Img-btn">
+          프로필 이미지 수정
+        </button>
+
+        <div class="nicknameEdit-frame">
+          <div class="nicknameexist" v-if="!nicknameedit">
+            <div>
+              <span class="highlight">닉네임</span> : {{ userInfo.nickname }}
+            </div>
+            <button
+              class="nicknameEdit-btn"
+              @click="nicknameedit = !nicknameedit"
+            >
+              수정
             </button>
           </div>
+
+          <div class="nicknameEditForm" v-else>
+            <div class="nickname-warn">
+              <span>※ 닉네임은</span>
+              <span class="highlight-warn"
+                >영어/한글/숫자 4자 이상 10자 이내로</span
+              >
+              <span>입력 가능합니다.</span>
+            </div>
+            <div class="nickname-edit-input-frame">
+              <input
+                v-model="nickname"
+                type="text"
+                placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력"
+              />
+              <button
+                @click="checkOverlap"
+                :disabled="!isPossibleName"
+                class="edit-dupli-btn"
+                :class="{ disabledBtn: !isPossibleName }"
+              >
+                중복확인
+              </button>
+            </div>
+            <div class="nickname-edit-input-frame-btn">
+              <button class="edit-nickname-back-btn" @click="backtoEdit">
+                돌아가기
+              </button>
+              <button
+                class="edit-nickname-confirm-btn"
+                @click="changenickname"
+                :disabled="isOverlapped"
+                :class="{ disabledBtn: isOverlapped }"
+              >
+                닉네임 수정하기
+              </button>
+            </div>
+          </div>
         </div>
+
+        <div class="profile-intro-frame">
+          <div class="profile-intro-frame-title-container">
+            <div class="highlight">프로필 소개</div>
+            <button
+              v-if="!introduceedit"
+              class="intro-Edit-btn"
+              @click="introduceedit = !introduceedit"
+            >
+              수정
+            </button>
+          </div>
+          <div class="prrfile-content-frame" v-if="!introduceedit">
+            <div class="intro-content" v-if="userInfo.introduce">
+              {{ userInfo.introduce }}
+            </div>
+            <div v-else>
+              프로필 소개가 아직 없습니다.
+            </div>
+          </div>
+
+          <div v-else class="introEdit-frame">
+            <input type="text" v-model="introduce" />
+            <div class="nickname-edit-input-frame-btn">
+              <button class="edit-nickname-back-btn" @click="introgoback">
+                돌아가기
+              </button>
+              <button class="edit-nickname-confirm-btn" @click="saveintroduce">
+                저장하기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button
+          v-if="!editing && !nicknameedit && !introduceedit"
+          class="save-Edit-profile"
+          @click="EditProfile"
+        >
+          저장하기
+        </button>
       </div>
-
-      <button class="save-Edit-profile" @click="EditProfile">저장하기</button>
     </div>
   </div>
 </template>
@@ -120,9 +133,10 @@
 import Practice from "../components/Practice.vue";
 import { userInfoDetail, editUserInfo } from "@/api/mypage.js";
 import { checkOverlapped } from "@/api/signup.js";
+import Sidebar from "../components/Common/Sidebar.vue";
 
 export default {
-  components: { Practice },
+  components: { Practice, Sidebar },
   data() {
     return {
       editing: false,
