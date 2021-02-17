@@ -518,3 +518,7 @@
   justify-content: space-between;
   align-items: center;
 }
+.myPageEdit_valid {
+  background-color: #aca9a7;
+  color: gray;
+}

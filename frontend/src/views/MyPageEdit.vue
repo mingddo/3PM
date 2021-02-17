@@ -118,8 +118,9 @@
         </div>
 
         <button
-          v-if="!editing && !nicknameedit && !introduceedit"
+          disabled="disabled_valid"
           class="save-Edit-profile"
+          :class="[disabled_valid ? 'myPageEdit_valid' : '']"
           @click="EditProfile"
         >
           저장하기
@@ -153,6 +154,15 @@ export default {
       introduce: "",
       completed: false,
     };
+  },
+  computed: {
+    disabled_valid() {
+      if (this.editing || this.nicknameedit || this.introduceedit) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     introgoback() {
