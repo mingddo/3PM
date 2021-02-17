@@ -3,7 +3,7 @@
     <div class="group-reco-header">
       이런 그룹은 어떠신가요?
     </div>
-    <GroupRecoSplide />
+    <GroupRecoSplide :recoGroup="recoGroup"/>
   </div>
 
 </template>
@@ -16,21 +16,24 @@ export default {
   components : {
     GroupRecoSplide
   },
+  props: {
+    recoGroup: Array,
+  },
   data() {
     return {
-      c: [{}, {}, {}, {}, {}, {}, {}],
-      options: {
-        rewind: true,
-        type: "loop",
-        perPage: 2,
-        padding: {
-          right: "50px",
-          left: "50px",
-        },
-        pagination: true,
+      // c: this.recoGroup,
+      // options: {
+      //   rewind: true,
+      //   type: "loop",
+      //   perPage: 2,
+      //   padding: {
+      //     right: "50px",
+      //     left: "50px",
+      //   },
+      //   pagination: true,
 
-        classes: { pagination: "splide__pagination" },
-      },
+      //   classes: { pagination: "splide__pagination" },
+      // },
     };
   },
 };
