@@ -38,7 +38,9 @@ export default {
       });
     },
   },
-  mounted() {},
+  mounted() {
+    console.log('0000000000000000',this.grouplist)
+  },
 };
 </script>
 

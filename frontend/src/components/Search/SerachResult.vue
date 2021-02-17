@@ -22,7 +22,13 @@
           <div @click="goToProfile" class="resultTitle">
             {{ result.indoorResponseDtoList[0].user.nickname }}
           </div>
-          <div class="resultCategory">핵인싸</div>
+          <div class="resultCategory">
+            <template v-if="result.indoorResponseDtoList[0].category == 1">꽃보다집</template>
+            <template v-if="result.indoorResponseDtoList[0].category == 2">핵인싸</template>
+            <template v-if="result.indoorResponseDtoList[0].category == 3">청산별곡</template>
+            <template v-if="result.indoorResponseDtoList[0].category == 4">워커홀릭</template>
+          </div>
+          <!-- <div v-if="result.indoorResponseDtoList[0].groupName">{{ result.indoorResponseDtoList[0].groupName }}</div> -->
         </div>
       </div>
       <!-- <div class="resultHeader">sss</div> -->
@@ -43,8 +49,8 @@
                   </button>
                 </span>
               </div>
-            </div>
-            <div>{{ result.indoorResponseDtoList[0].content }}</div>
+            </div>            
+            <div v-html="result.indoorResponseDtoList[0].content"></div>
           </div>
           <div class="resultthumbnail"></div>
         </div>
@@ -52,6 +58,7 @@
           <div>👏🏻 {{ result.indoorResponseDtoList[0].likeCnt }}</div>
           <div>댓글 {{ result.indoorResponseDtoList[0].commentCnt }}개</div>
         </div>
+
       </div>
     </div>
   </div>
@@ -82,13 +89,28 @@ export default {
         query: { name: this.result.indoorResponseDtoList[0].user.id },
       });
     },
-    gotoDetail() {
+
+    goToDetail() {
+    console.log("마이페이지에서 카테고리 기ㅏ기", this.Category);
+    if (this.result.indoorResponseDtoList[0].category == 2) {
       this.$router.push({
         name: "NewsfeedDetail",
-        query: { id: this.result.indoorResponseDtoList[0].id, Category: "1" },
-        params: { fd: this.result.indoorResponseDtoList[0] },
+        query: { id: this.result.indoorResponseDtoList[0].id, group: this.result.indoorResponseDtoList[0].groupId, Category: 2 },
+        params: { fd: this.result.indoorResponseDtoList[0]  },
       });
-    },
+    } else {
+      this.$router.push({
+        name: "NewsfeedDetail",
+        query: {  id: this.result.indoorResponseDtoList[0].id, Category: this.result.indoorResponseDtoList[0].category },
+        params: { fd: this.result.indoorResponseDtoList[0]  },
+      });
+    }
+  },
+
+
+
+
+
     setDateTime() {
       if (this.result) {
         let date = this.result.indoorResponseDtoList[0].date.split("T")[0];
