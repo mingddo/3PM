@@ -8,6 +8,7 @@
 
 <script>
 import "@/assets/css/splide.css";
+import { indoorReco } from '@/api/reco.js'
 import { mapState } from 'vuex'
 import RecommendCard from './RecommendCard.vue';
 
@@ -21,7 +22,7 @@ export default {
   data() {
     return {
       age: null,
-      c: [{}, {}, {}],
+      c: [{}, {}, {}, {}, {}],
       options: {
         rewind: true,
         width: 2000,
@@ -54,6 +55,21 @@ export default {
     setRecommend () {
       if (this.Category == 1) {
         // 꽃보다 집 추천
+        indoorReco(
+          (res) => {
+            console.log(res)
+            this.c = res.data.feedList
+            // for (let i of res.data.feedList) {
+            //   let obj = {}
+            //   obj.tag = 
+            // }
+            
+            // obj.tag = 
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
       } else if (this.Category == 2) {
         // 청산별곡
         this.placeName = '대전'

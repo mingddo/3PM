@@ -200,9 +200,13 @@
   justify-content: center;
   align-items: center;
 }
+.newsfeed-loading-box > div {
+  color: var(--bold-brown)
+}
 .newsfeed-loading {
   font-size: 50px;
   margin: 10px;
+  color: var(--bold-brown)
 }
 /* NewsfeedList */
 

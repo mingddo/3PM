@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend_card" id="recoContent" :style="`background-image: url(${op.img ? op.img : defaultImg})`">
+  <div class="recommend_card" id="recoContent" :style="`background-image: url(${op.img ? op.img : defaultImg}); background-size: auto 100%`">
     <div class="recommend_contentFrame">
       <div class="recommend_preview">
         <div class="tag">
@@ -93,7 +93,7 @@ export default {
   margin: auto;
   z-index: 100;
   /* background-image: url("https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg"); */
-  background-color: azure;
+  background-color: var;
   background-size: cover;
   background-position: 50% 50%;
   background-repeat: no-repeat;
