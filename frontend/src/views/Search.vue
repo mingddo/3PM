@@ -35,6 +35,7 @@
               tabindex="0"
             >
               <li
+                class="autoImtem"
                 tabindex="-1"
                 v-for="(tag, idx) in tags"
                 :key="idx"
