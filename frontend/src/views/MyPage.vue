@@ -33,14 +33,14 @@
                 <div
                   :class="{ profielSubscribedNone: subscribed }"
                   class="myPageSubscribed"
-                  @click="followToggle"
+                  @click="onClickFollowToggle"
                 >
                   {{ profileinfo.username }}님의 소식 받기
                 </div>
                 <div
                   :class="{ profielSubscribedNone: !subscribed }"
                   class="myPageSubscribed"
-                  @click="followToggle"
+                  @click="onClickFollowToggle"
                 >
                   {{ profileinfo.username }}님의 소식 끊기
                 </div>
@@ -460,6 +460,19 @@ export default {
         }
       );
     },
+    onClickFollowToggle() {
+      if (this.subscribed === true) {
+        if (confirm('구독을 취소하시겠어요?')) {
+          this.followToggle()
+        }
+        else {
+          return
+        }
+      }
+      else {
+        this.followToggle()
+      }
+    },
     followToggle() {
       followToggle(
         this.profile_user,
@@ -517,8 +530,10 @@ export default {
   },
   created() {
     this.usercheck();
-    this.getprofileInfo();
+    this.getfollowingList();
     this.setFeedList(this.currentFeedName);
+    this.getprofileInfo();
+
   },
   mounted() {
     this.setActivityScroll();
