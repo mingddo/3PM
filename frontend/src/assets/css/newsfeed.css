@@ -520,7 +520,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  /* padding: 0 10px; */
+  padding: 0 20px;
 }
 .feed-userprofile-space {
   cursor: pointer;
@@ -534,7 +534,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 5px;
+  margin-right: 10px;
 }
 .feed-userprofile-image {
   width: 100%;
@@ -582,8 +582,13 @@
 }
 .feed-content-box p {
   width: 100%;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.feed-content-box iframe {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
 }
 .feed-tag-box {
   display: flex;
@@ -604,7 +609,7 @@
 }
 .feed-footer-box {
   display: flex;
-  padding: 10px 10px 0 10px;
+  padding: 20px 20px 0 20px;
   justify-content: space-between;
 }
 .feed-footer-box > div {
