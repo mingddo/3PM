@@ -42,56 +42,118 @@ export default {
     },
     deleteFeed () {
       if (this.userpk == this.fd.user.id) {
-        const answer = window.confirm('정말로 삭제하시겠습니까?')
-        if (answer) {
-          if (this.Category == 1) {
-            console.log('삭제할 id', this.fd.id)
-            deleteIndoors(
-              this.fd.id,
-              () => {
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
-          } else if (this.Category == 2) {
-            // 핵인싸 DELETE 요청
-            deleteGroupFeed(
-              this.fd.groupId,
-              this.fd.id,
-              (res) => {
-                console.log(res)
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
-          } else if (this.Category == 3) {
-            // 청산별고 DELETE 요청
-            deleteOutdoors(
-              this.fd.id,
-              () => {
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
-          } else if (this.Category == 4) {
-            // 워커홀릭 DELETE 요청
-            deleteWorker(
-              this.fd.id,
-              () => {
-                this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
-              },
-              (err) => {
-                console.log(err)
-              }
-            )
+        Swal.fire({ 
+          title: '정말로 삭제하시겠습니까?', 
+          text: '', 
+          icon: 'warning', 
+          showCancelButton: true, 
+          confirmButtonColor: '#3085d6', 
+          cancelButtonColor: '#d33', 
+          confirmButtonText: '삭제하기', 
+          cancelButtonText: '돌아가기'
+        }).then(result => {
+          if (result.isConfirmed) {
+            if (this.Category == 1) {
+              console.log('삭제할 id', this.fd.id)
+              deleteIndoors(
+                this.fd.id,
+                () => {
+                  this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+                },
+                (err) => {
+                  console.log(err)
+                }
+              )
+            } else if (this.Category == 2) {
+              // 핵인싸 DELETE 요청
+              deleteGroupFeed(
+                this.fd.groupId,
+                this.fd.id,
+                (res) => {
+                  console.log(res)
+                  this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+                },
+                (err) => {
+                  console.log(err)
+                }
+              )
+            } else if (this.Category == 3) {
+              // 청산별고 DELETE 요청
+              deleteOutdoors(
+                this.fd.id,
+                () => {
+                  this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+                },
+                (err) => {
+                  console.log(err)
+                }
+              )
+            } else if (this.Category == 4) {
+              // 워커홀릭 DELETE 요청
+              deleteWorker(
+                this.fd.id,
+                () => {
+                  this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+                },
+                (err) => {
+                  console.log(err)
+                }
+              )
+            }
           }
-        }
+        });
+
+
+      //   const answer = window.confirm('정말로 삭제하시겠습니까?')
+      //   if (answer) {
+      //     if (this.Category == 1) {
+      //       console.log('삭제할 id', this.fd.id)
+      //       deleteIndoors(
+      //         this.fd.id,
+      //         () => {
+      //           this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+      //         },
+      //         (err) => {
+      //           console.log(err)
+      //         }
+      //       )
+      //     } else if (this.Category == 2) {
+      //       // 핵인싸 DELETE 요청
+      //       deleteGroupFeed(
+      //         this.fd.groupId,
+      //         this.fd.id,
+      //         (res) => {
+      //           console.log(res)
+      //           this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+      //         },
+      //         (err) => {
+      //           console.log(err)
+      //         }
+      //       )
+      //     } else if (this.Category == 3) {
+      //       // 청산별고 DELETE 요청
+      //       deleteOutdoors(
+      //         this.fd.id,
+      //         () => {
+      //           this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+      //         },
+      //         (err) => {
+      //           console.log(err)
+      //         }
+      //       )
+      //     } else if (this.Category == 4) {
+      //       // 워커홀릭 DELETE 요청
+      //       deleteWorker(
+      //         this.fd.id,
+      //         () => {
+      //           this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
+      //         },
+      //         (err) => {
+      //           console.log(err)
+      //         }
+      //       )
+      //     }
+      //   }
       }
     },
   },

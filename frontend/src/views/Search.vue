@@ -304,7 +304,8 @@ export default {
       console.log(this.$route.query.query);
       this.autotag = false;
       if (this.keyword === "") {
-        alert("검색어를 입력해주세요");
+        // alert("검색어를 입력해주세요");
+        Swal.fire("검색어를 입력해주세요", '', 'error');
         return;
       }
       if (this.$route.query.query === "") {

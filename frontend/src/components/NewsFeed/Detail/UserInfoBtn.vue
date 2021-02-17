@@ -44,11 +44,13 @@ export default {
         (res) => {
           console.log(res);
           if (this.followState) {
-            alert(`${this.name} 님의 소식을 받을 수 있어요!`);
+            // alert(`${this.name} 님의 소식을 받을 수 있어요!`);
+            Swal.fire(`${this.name} 님의 소식을 받을 수 있어요`, '', 'success');
             this.followState = false;
             this.drop = true;
           } else {
-            alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`);
+            // alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`);
+            Swal.fire(`${this.name} 님의 소식을 더이상 받지 않을 거에요`, '', 'success');
             this.followState = true;
             this.drop = true;
           }

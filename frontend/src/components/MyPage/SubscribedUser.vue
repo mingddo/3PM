@@ -26,16 +26,40 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
     },
     deleteSubscribe() { 
-      if (confirm("구독 취소하시겠습니까?")) {
-        followToggle(
-          this.subscriber.id,
-          (res) => {
-            console.log(res)
-            this.$emit('decrement')},
-          (err) => {console.log(err);}
-        );
-      }
-      else return
+      Swal.fire({ 
+        title: '구독 취소하시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '구독 취소하기', 
+        cancelButtonText: '돌아가기'
+      }).then(result => {
+        if (result.isConfirmed) {
+          followToggle(
+            this.subscriber.id,
+            (res) => {
+              console.log(res)
+              this.$emit('decrement')},
+            (err) => {console.log(err);}
+          );
+        } else {
+          return;
+        }
+      });
+
+
+      // if (confirm("구독 취소하시겠습니까?")) {
+      //   followToggle(
+      //     this.subscriber.id,
+      //     (res) => {
+      //       console.log(res)
+      //       this.$emit('decrement')},
+      //     (err) => {console.log(err);}
+      //   );
+      // }
+      // else return
     },
   }
 }

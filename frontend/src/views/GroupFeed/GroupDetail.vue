@@ -147,18 +147,41 @@ export default {
       this.memberModal = true;
     },
     groupDelete () {
-      const answer = window.confirm('한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?')
-      if (answer) {
-        deleteGroup(
-          this.group_info.id,
-          () => {
-            this.$router.push({ name: 'grouppage' })
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
-      }
+      Swal.fire({ 
+        title: '한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '삭제하기', 
+        cancelButtonText: '취소'
+      }).then(result => {
+        if (result.isConfirmed) {
+          deleteGroup(
+            this.group_info.id,
+            () => {
+              this.$router.push({ name: 'grouppage' })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
+      });
+
+      // const answer = window.confirm('한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?')
+      // if (answer) {
+      //   deleteGroup(
+      //     this.group_info.id,
+      //     () => {
+      //       this.$router.push({ name: 'grouppage' })
+      //     },
+      //     (err) => {
+      //       console.log(err)
+      //     }
+      //   )
+      // }
     },
     changeModiForm () {
       if (this.modiForm == true) {
@@ -190,25 +213,50 @@ export default {
       this.modiForm = !this.modiForm;
     },
     secede () {
-      const answer = window.confirm('정말로 탈퇴하시겠습니까?')
-      if (answer) {
-        secedeGroup(
-          this.group_info.id,
-          () => {
-            alert('그룹에 탈퇴되었습니다!')
-            this.isjoined = false 
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
-      }
+      Swal.fire({ 
+        title: '정말로 탈퇴하시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '탈퇴하기', 
+        cancelButtonText: '취소'
+      }).then(result => {
+        if (result.isConfirmed) {
+          secedeGroup(
+            this.group_info.id,
+            () => {            
+              Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+              this.isjoined = false 
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
+      });
+
+      // const answer = window.confirm('정말로 탈퇴하시겠습니까?')
+      // if (answer) {
+      //   secedeGroup(
+      //     this.group_info.id,
+      //     () => {
+      //       alert('그룹에 탈퇴되었습니다!')
+      //       this.isjoined = false 
+      //     },
+      //     (err) => {
+      //       console.log(err)
+      //     }
+      //   )
+      // }
     },
     join () {
       joinGroup(
         this.group_info.id,
         () => {
-          alert('그룹에 가입되었습니다!')
+          // alert('그룹에 가입되었습니다!')
+          Swal.fire('그룹에 가입되었습니다', '', 'success');
           this.isjoined = true 
         },
         (err) => {

@@ -140,7 +140,8 @@ export default {
         this.handleGeoSuccess, //위치 정보 얻었을떄 실행되는 함수
         this.handleGeoError);  //위치 정보 error시 실행되는 함수
       } else {
-        alert('GPS를 지원하지 않습니다.')
+        // alert('GPS를 지원하지 않습니다.')
+        Swal.fire('GPS를 지원하지 않습니다', '', 'warning');
       }
     },
     select (item) {
@@ -187,7 +188,8 @@ export default {
         this.setZoomable(true);
         this.place.keywordSearch(this.keyword, this.placeSearchCB)
       } else {
-        alert('검색어를 입력해주세요')
+        // alert('검색어를 입력해주세요')
+        Swal.fire('검색어를 입력해주세요', '', 'error');
       }
     },
     placeSearchCB (data, status, pagination) {
@@ -196,9 +198,11 @@ export default {
         this.displayPlaces(data)
         this.displayPagination(pagination)
       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색결과가 존재하지 않습니다.')
+        // alert('검색결과가 존재하지 않습니다.')
+        Swal.fire('검색결과가 존재하지 않습니다', '', 'error');
       } else if (status === kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
+        // alert('검색 결과 중 오류가 발생했습니다.');
+        Swal.fire('검색 결과 중 오류가 발생했습니다', '', 'error');
         return;
       }
     },

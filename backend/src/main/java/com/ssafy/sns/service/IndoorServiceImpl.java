@@ -86,6 +86,11 @@ public class IndoorServiceImpl implements FeedService {
         // 글 등록
         Indoor indoor = ((Indoor) feedRepository.save(new Indoor(feedRequestDto, user)));
 
+        // 파일 저장하기
+        for (String fileName : feedRequestDto.getFilePaths()) {
+            fileService.addFile(fileName, indoor);
+        }
+
         user.addFeed(indoor);
 
         // 태그 등록

@@ -462,14 +462,28 @@ export default {
     },
     onClickFollowToggle() {
       if (this.subscribed === true) {
-        if (confirm('구독을 취소하시겠어요?')) {
-          this.followToggle()
-        }
-        else {
-          return
-        }
+        Swal.fire({ 
+          title: '구독을 취소하시겠어요?', 
+          text: '', 
+          icon: 'warning', showCancelButton: true, 
+          confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', 
+          confirmButtonText: '네', cancelButtonText: '아니요' 
+        }).then((result) => { 
+          if (result.isConfirmed) { 
+            Swal.fire( '구독 취소가 완료되었습니다.', '', 'success' );
+            this.followToggle()
+          } 
+        })
+
+        // if (confirm('구독을 취소하시겠어요?')) {
+        //   this.followToggle()
+        // }
+        // else {
+        //   return
+        // }
       }
       else {
+        Swal.fire( '구독이 완료되었습니다.', '', 'success' );
         this.followToggle()
       }
     },
