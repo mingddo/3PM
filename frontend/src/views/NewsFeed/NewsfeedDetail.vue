@@ -181,6 +181,7 @@ import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
 import Location from "../../components/NewsFeed/Detail/Location.vue";
 import Comment from "../../components/NewsFeed/Detail/Comment.vue";
 import GroupNav from "../../components/GroupFeed/GroupNav.vue";
+import Swal from 'sweetalert2';
 
 export default {
   name: "NewsfeedDetail",
@@ -280,7 +281,7 @@ export default {
     },
     shareFeed() {
       // const answer = window.confirm("내 피드에 공유하시겠습니까?");
-      
+
       Swal.fire({
         title: "내 피드에 공유하시겠습니까?",
         text: '',

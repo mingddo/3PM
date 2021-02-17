@@ -212,6 +212,7 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
 import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue'
+import Swal from 'sweetalert2';
 
 export default {
   name: 'NewsfeedForm',

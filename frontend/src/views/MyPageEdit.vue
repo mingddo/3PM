@@ -135,6 +135,7 @@ import Practice from "../components/Practice.vue";
 import { userInfoDetail, editUserInfo } from "@/api/mypage.js";
 import { checkOverlapped } from "@/api/signup.js";
 import Sidebar from "../components/Common/Sidebar.vue";
+import Swal from 'sweetalert2';
 
 export default {
   components: { Practice, Sidebar },

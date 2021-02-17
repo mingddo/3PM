@@ -137,6 +137,7 @@ import "@/assets/css/main.css";
 import "@/assets/css/newsfeed.css";
 import "@/assets/css/mypage.css";
 import "@/assets/css/search.css";
+import Swal from 'sweetalert2';
 
 export default {
   components: {},

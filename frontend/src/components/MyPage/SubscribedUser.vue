@@ -16,6 +16,8 @@
 
 <script>
 import { followToggle } from "@/api/mypage.js";
+import Swal from 'sweetalert2';
+
 export default {
   props: {
     subscriber: Object,

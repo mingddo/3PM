@@ -22,6 +22,7 @@
 <script>
 import {mapActions,mapState} from 'vuex'
 import { createUser,checkOverlapped } from '@/api/signup.js'
+import Swal from 'sweetalert2';
 
 export default {
   name: 'Signup',

@@ -47,6 +47,8 @@ import { searchAutoUser } from '@/api/comment.js'
 import { getprofileInfo } from '@/api/mypage.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
+import Swal from 'sweetalert2';
+
 export default {
   name: 'Comment',
   components: {

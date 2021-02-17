@@ -14,8 +14,8 @@ import { deleteIndoors } from '@/api/indoors.js'
 import { deleteGroupFeed } from '@/api/group.js'
 import { deleteOutdoors } from '@/api/outdoors.js'
 import { deleteWorker } from '@/api/worker.js'
-
 import { mapState } from 'vuex'
+import Swal from 'sweetalert2';
 
 export default {
   name: 'ModiAndDelete',

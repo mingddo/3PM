@@ -176,6 +176,8 @@ import {
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 import {getNotice} from "@/api/notice.js"
+import Swal from 'sweetalert2';
+
 export default {
   components: {
     Sidebar,
