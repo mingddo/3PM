@@ -300,6 +300,9 @@ export default {
       }
     },
     Allsearch() {
+      this.$route.query.query = this.keyword;
+      console.log(this.$route.query.query);
+      this.autotag = false;
       if (this.keyword === "") {
         alert("검색어를 입력해주세요");
         return;

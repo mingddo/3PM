@@ -2,7 +2,7 @@
   <div>
     <div class="resultListFrame">
       <div class="resultHeader">
-        <div class="resultImgFrame" @click="goToProfile">
+        <div class="resultImgFrame" @click="goToDetail">
           <img
             v-if="result.indoorResponseDtoList[0].user.img"
             class="resultImgFrame-img"
@@ -22,7 +22,14 @@
           <div @click="goToProfile" class="resultTitle">
             {{ result.indoorResponseDtoList[0].user.nickname }}
           </div>
-          <div class="resultCategory">
+          <div 
+            v-if="result.indoorResponseDtoList[0].category == 2" 
+            @click="goToGroup" 
+            class="resultTitle"
+          >
+            {{ result.indoorResponseDtoList[0].groupName }}
+          </div>
+          <div class="resultCategory" style="color: #b29887; font-weight: 500">
             <template v-if="result.indoorResponseDtoList[0].category == 1">꽃보다집</template>
             <template v-if="result.indoorResponseDtoList[0].category == 2">핵인싸</template>
             <template v-if="result.indoorResponseDtoList[0].category == 3">청산별곡</template>
@@ -33,11 +40,11 @@
       </div>
       <!-- <div class="resultHeader">sss</div> -->
       <div class="categorytitlehr"></div>
-      <div class="resultDetailFrame" @click="gotoDetail">
+      <div class="resultDetailFrame" @click="goToDetail">
         <div class="resultDetailUper">
           <div class="resultDetail">
             <div class="resulttag">
-              <div class="resultdate">{{ year }}.{{ month }}.{{ day }}</div>
+              <!-- <div class="resultdate">{{ year }}.{{ month }}.{{ day }}</div> -->
               <div class="resulttags">
                 <button class="tagName">{{ result.tagName }}</button>
                 <span v-if="result.indoorResponseDtoList[0].tags">
@@ -91,23 +98,28 @@ export default {
     },
 
     goToDetail() {
-    console.log("마이페이지에서 카테고리 기ㅏ기", this.Category);
-    if (this.result.indoorResponseDtoList[0].category == 2) {
-      this.$router.push({
-        name: "NewsfeedDetail",
-        query: { id: this.result.indoorResponseDtoList[0].id, group: this.result.indoorResponseDtoList[0].groupId, Category: 2 },
-        params: { fd: this.result.indoorResponseDtoList[0]  },
-      });
-    } else {
-      this.$router.push({
-        name: "NewsfeedDetail",
-        query: {  id: this.result.indoorResponseDtoList[0].id, Category: this.result.indoorResponseDtoList[0].category },
-        params: { fd: this.result.indoorResponseDtoList[0]  },
-      });
-    }
-  },
+      console.log("마이페이지에서 카테고리 기ㅏ기", this.result.indoorResponseDtoList[0]);
+      if (this.result.indoorResponseDtoList[0].category == 2) {
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: { id: this.result.indoorResponseDtoList[0].id, group: this.result.indoorResponseDtoList[0].groupId, Category: 2 },
+          params: { fd: this.result.indoorResponseDtoList[0]  },
+        });
+      } else {
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: {  id: this.result.indoorResponseDtoList[0].id, Category: this.result.indoorResponseDtoList[0].category },
+          params: { fd: this.result.indoorResponseDtoList[0]  },
+        });
+      }
+    },
 
-
+    goToGroup() {
+      this.$router.push({
+        name: "groupdetail",
+        query: { groupId: this.result.indoorResponseDtoList[0].groupId},
+      });
+    },
 
 
 
