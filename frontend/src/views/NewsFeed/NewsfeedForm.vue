@@ -353,12 +353,14 @@ export default {
     addTag (t) {
       let tag = t.target.value.split('#')[1]
       if (!tag) {
-        alert('태그를 입력해주세요!')
+        // alert('태그를 입력해주세요!')
+        Swal.fire('태그를 입력해주세요', '', 'warning');
       } else {
         if (this.form.tags) {
           let check = this.form.tags.findIndex(element => element === tag)
           if (check !== -1) {
-            alert('이미 존재하는 태그입니다')
+            // alert('이미 존재하는 태그입니다')
+            Swal.fire('이미 존재하는 태그입니다', '', 'error');
           } else {
             this.form.tags.push(tag);
           }
@@ -439,7 +441,8 @@ export default {
       if (files.length) {
         this.totalLen = this.form.filePaths.length + this.fileList.length
         if (this.totalLen > 5) {
-          alert('더이상 이미지를 올릴 수 없습니다')
+          // alert('더이상 이미지를 올릴 수 없습니다')
+          Swal.fire('더이상 이미지를 올릴 수 없습니다', '', 'error');
         } else {
           this.selectedFile = files[0]
           this.fileList.push(this.selectedFile)
@@ -520,12 +523,14 @@ export default {
             },
             (err) => {
               console.log(err)
-              alert('인증된 유저만 작성 가능합니다.')
+              // alert('인증된 유저만 작성 가능합니다.')
+              Swal.fire('인증된 유저만 작성 가능합니다', '', 'error');
             }
           )
         } else if (this.Category == 2) {
           if (this.selectedGroup == null) {
-            alert('그룹을 선택해주세요!')
+            // alert('그룹을 선택해주세요!')
+            Swal.fire('그룹을 선택해주세요', '', 'error');
           } else {
             // 핵인싸 create 요청
             createGroupFeed(
@@ -594,12 +599,14 @@ export default {
             },
             (err) => {
               console.log(err)
-              alert('다시 로그인해주세요')
+              // alert('다시 로그인해주세요')
+              Swal.fire('다시 로그인해주세요', '', 'error');
             }
           )
         } else {
           // 404 페이지 이동
-          alert('잘못된 접근입니다.')
+          // alert('잘못된 접근입니다.')
+          Swal.fire('잘못된 접근입니다', '', 'error');
         }
 
       } else {
@@ -623,7 +630,8 @@ export default {
               },
               (err) => {
                 console.log(err)
-                alert('본인만 수정할 수 있습니다.')
+                // alert('본인만 수정할 수 있습니다.')
+                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
               }
             )
           } else if (this.Category == 2) {
@@ -671,7 +679,8 @@ export default {
               },
               (err) => {
                 console.log(err)
-                alert('본인만 수정할 수 있습니다.')
+                // alert('본인만 수정할 수 있습니다.')
+                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
               }
             )
           } else if (this.Category == 4) {
@@ -692,16 +701,19 @@ export default {
               },
               (err) => {
                 console.log(err)
-                alert('본인만 수정할 수 있습니다.')
+                // alert('본인만 수정할 수 있습니다.')
+                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
               }
             )
           } else {
             // 404 페이지 이동
-            alert('잘못된 접근입니다.')
+            // alert('잘못된 접근입니다.')
+            Swal.fire('잘못된 접근입니다', '', 'error');
           }
           
         } else {
-          alert('본인만 수정할 수 있습니다!!!')
+          // alert('본인만 수정할 수 있습니다!!!')
+          Swal.fire('본인만 수정할 수 있습니다', '', 'error');
         }
       }
     },
@@ -718,13 +730,30 @@ export default {
     if (this.completed) {
       next();
     } else {
-      const answer =
-        window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')
-      if (answer) {
-        next();
-      } else {
-        next(false);
-      }
+      Swal.fire({ 
+        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '나가기', 
+        cancelButtonText: '취소'
+      }).then(result => {
+        if (result.isConfirmed) {
+          next();
+        } else {
+          next(false);
+        }
+      })
+
+      // const answer =
+      //   window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')      
+      // if (answer) {
+      //   next();
+      // } else {
+      //   next(false);
+      // }
     }
   },
   computed: {

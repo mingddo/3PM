@@ -189,24 +189,53 @@ export default {
     },
     deleteComment() {
       if (this.userpk !== this.comment.user.id) {
-        return alert("접근이 불가합니다!");
+        // return alert("접근이 불가합니다!");
+        Swal.fire('접근이 불가합니다', '', 'error');
+        return;
       }
       this.foldModiDrop = true;
-      const answer = window.confirm("댓글을 삭제하시겠습니까?");
-      if (answer) {
-        // axios DELETE 요청으로 삭제하기
-        deleteComment(
-          this.id,
-          this.comment.id,
-          (res) => {
-            console.log("삭제", res);
-            this.$emit("setComment");
-          },
-          (err) => {
-            console.log("삭제불가", err);
-          }
-        );
-      }
+
+      Swal.fire({ 
+        title: '댓글을 삭제하시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '나가기', 
+        cancelButtonText: '돌아가기'
+      }).then(result => {
+        if (result.isConfirmed) {
+          // axios DELETE 요청으로 삭제하기
+          deleteComment(
+            this.id,
+            this.comment.id,
+            (res) => {
+              console.log("삭제", res);
+              this.$emit("setComment");
+            },
+            (err) => {
+              console.log("삭제불가", err);
+            }
+          );
+        }
+      });
+
+      // const answer = window.confirm("댓글을 삭제하시겠습니까?");
+      // if (answer) {
+      //   // axios DELETE 요청으로 삭제하기
+      //   deleteComment(
+      //     this.id,
+      //     this.comment.id,
+      //     (res) => {
+      //       console.log("삭제", res);
+      //       this.$emit("setComment");
+      //     },
+      //     (err) => {
+      //       console.log("삭제불가", err);
+      //     }
+      //   );
+      // }
     },
     changeCommentModiForm() {
       this.modiForm = true;

@@ -66,7 +66,8 @@ export default {
     },
     likeComment () {
       // 댓글 좋아요 axios 요청
-      alert(`${this.comment.content}를 좋아합니다!`)
+      // alert(`${this.comment.content}를 좋아합니다!`)
+      Swal.fire(`${this.comment.content}를 좋아합니다!`, '', 'info');
     },
     deleteComment () {
       // 유저 본인 맞는 지 확인 한 번 하고

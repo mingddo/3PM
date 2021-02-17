@@ -246,11 +246,13 @@ export default {
         this.fd.id,
         (res) => {
           if (!this.fd.clap) {
-            alert(`좋아요!`);
+            // alert(`좋아요!`);
+            Swal.fire('좋아요!', '', 'success');
             this.fd.likeCnt = this.fd.likeCnt + 1;
             this.fd.clap = true;
           } else {
-            alert("좋아요 취소!");
+            // alert("좋아요 취소!");
+            Swal.fire('좋아요 취소!', '', 'success');
             this.fd.likeCnt = this.fd.likeCnt - 1;
             this.fd.clap = false;
           }
@@ -277,82 +279,97 @@ export default {
       )
     },
     shareFeed() {
-      const answer = window.confirm("내 피드에 공유하시겠습니까?");
-      if (answer) {
-        if (this.fd.files) {
-          let urls = ""
-          for (let i of this.fd.files) {
-            let fileUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${i}`
-            let img = `<div style="width:100%; background-color: rgb(0, 0, 0, 0.8);> <img width="100%" src="${fileUrl}" alt="미리보기 이미지" /> </div>`
-            urls = urls + '<br>' + img
+      // const answer = window.confirm("내 피드에 공유하시겠습니까?");
+      
+      Swal.fire({
+        title: "내 피드에 공유하시겠습니까?",
+        text: '',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '공유하기', 
+        cancelButtonText: '취소하기'
+      }).then(result => {
+        if (result.isConfirmed) {
+          if (this.fd.files) {
+            let urls = ""
+            for (let i of this.fd.files) {
+              let fileUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${i}`
+              let img = `<div style="width:100%; background-color: rgb(0, 0, 0, 0.8);> <img width="100%" src="${fileUrl}" alt="미리보기 이미지" /> </div>`
+              urls = urls + '<br>' + img
+            }
+            this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> <br> ${urls} ${this.fd.content}`
+          } else {
+            this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> ${this.fd.content}`
           }
-          this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> <br> ${urls} ${this.fd.content}`
-        } else {
-          this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> ${this.fd.content}`
-        }
-          this.shareForm.filePaths = this.fd.files
-          this.shareForm.tags = this.fd.tags
-        if (this.Category == 3) {
-          this.shareForm.lat = this.fd.lat
-          this.shareForm.lng = this.fd.lng
-          this.shareForm.placeName = this.fd.placeName
-          this.shareForm.address = this.fd.address
-        }
-        if (this.Category == 1) {
-          createIndoors(
-            this.shareForm,
-            (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        } else if (this.Category == 2) {
-          getprofileGroups(
-            this.userpk,
-            (res) => {
-              console.log(res)
-              this.groupList = res.data
-              this.groupModal = true;
-            },
-            (err) => {
-              console.log(err)
-            }  
-          )
-        } else if (this.Category == 3) {
-          createOutdoors(
-            this.shareForm,
-            (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        } else if (this.Category == 4) {
-          createWorker(
-            this.shareForm,
-            (res) => {
-              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        } else {
-          alert('잘못된 접근입니다.')
-        }
-        // this.$router.push({
-        //   name: "NewsfeedForm",
-        //   query: { Category: this.Category },
-        //   params: {
-        //     type: "SHARE",
-        //     feed: this.fd,
-        //     link: document.location.href,
-        //   },
-        // });
-      }
+            this.shareForm.filePaths = this.fd.files
+            this.shareForm.tags = this.fd.tags
+          if (this.Category == 3) {
+            this.shareForm.lat = this.fd.lat
+            this.shareForm.lng = this.fd.lng
+            this.shareForm.placeName = this.fd.placeName
+            this.shareForm.address = this.fd.address
+          }
+          if (this.Category == 1) {
+            createIndoors(
+              this.shareForm,
+              (res) => {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
+          } else if (this.Category == 2) {
+            getprofileGroups(
+              this.userpk,
+              (res) => {
+                console.log(res)
+                this.groupList = res.data
+                this.groupModal = true;
+              },
+              (err) => {
+                console.log(err)
+              }  
+            )
+          } else if (this.Category == 3) {
+            createOutdoors(
+              this.shareForm,
+              (res) => {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
+          } else if (this.Category == 4) {
+            createWorker(
+              this.shareForm,
+              (res) => {
+                this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
+          } else {
+            // alert('잘못된 접근입니다.')
+            Swal.fire('잘못된 접근입니다.', '', 'error');
+          }
+          // this.$router.push({
+          //   name: "NewsfeedForm",
+          //   query: { Category: this.Category },
+          //   params: {
+          //     type: "SHARE",
+          //     feed: this.fd,
+          //     link: document.location.href,
+          //   },
+          // });
+        
+        } 
+      })
+      
     },
     focusComment() {
       let input = document.getElementById("comment");

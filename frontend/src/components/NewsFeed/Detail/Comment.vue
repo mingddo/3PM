@@ -114,7 +114,8 @@ export default {
     },
     createComment () {
       if (!this.commentInput) {
-        alert('내용을 입력해주세요')
+        // alert('내용을 입력해주세요')
+        Swal.fire('내용을 입력해주세요', '', 'success');
       } else {
         let results = this.commentInput.match(/@/g); 
         if (results == !null) {

@@ -275,7 +275,8 @@ export default {
           this.setAuthToken(null);
           this.setKakaoId(null);
           this.setUserStatus(null);
-          alert("logout");
+          // alert("logout");
+          Swal.fire('Logout', '', 'success');
           resolve();
         });
       });

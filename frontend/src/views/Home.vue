@@ -313,7 +313,12 @@ export default {
         this.setAuthToken(null);
         this.setKakaoId(null);
         this.setUserStatus(null);
-        alert("logout");
+        // alert("logout");
+        Swal.fire({
+          icon: 'success',
+          title: '로그아웃',
+          text: '카카오 로그아웃 완료'
+        })
       });
     },
 
@@ -333,6 +338,7 @@ export default {
     onClickLogin() {
       this.kakaoLogin()
         .then(() => {
+          Swal.fire('로그인', '카카오 로그인 완료', 'success');
           this.$router.push({name: "Home"}).catch((err) => {
             if (err.name !== "NavigationDuplicated") {
               console.log(err)

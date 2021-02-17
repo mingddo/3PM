@@ -53,7 +53,8 @@ export default {
       this.$router.push({name : "Home"});
     }
     if(this.userStatus) {
-      alert('회원가입 하셨어요!!')
+      // alert('회원가입 하셨어요!!')
+      Swal.fire('회원가입 하셨어요!!', '', 'success');
       this.$router.push({name : "Home"});
     }
   },
@@ -102,15 +103,18 @@ export default {
         (res) => {
           this.isOverlapped = res.data;
           if(this.isOverlapped) {
-            alert('사용 불가능한 ❌❌ 아이디입니다');
+            // alert('사용 불가능한 아이디입니다');
+            Swal.fire('사용 불가능한 아이디입니다', '', 'error');
             }
           else {
             this.checkedName = this.nickname;
-            alert('사용 가능한 ⭕⭕ 아이디입니다');
+            // alert('사용 가능한 아이디입니다');
+            Swal.fire('사용 가능한 아이디입니다', '', 'success');
           }
         },
         (err) => {
-          alert('err',err)
+          // alert('err',err);
+          Swal.fire('ERROR', err, 'error');
         }
       )
     },

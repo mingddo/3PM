@@ -36,20 +36,47 @@ export default {
   },
   methods: {
     secede () {
-      const answer = window.confirm('정말로 탈퇴하시겠습니까?')
-      if (answer) {
-        secedeGroup(
-          this.group.id,
-          (res) => {
-            console.log(res)
-            alert('그룹에 탈퇴되었습니다!')
-            this.isjoined = false
-          },
-          (err) => {
-            console.log(err)
-          }
-        )
-      }
+      Swal.fire({ 
+        title: '정말로 탈퇴하시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '탈퇴하기', 
+        cancelButtonText: '돌아가기'
+      }).then(result => {
+        if (result.isConfirmed) {
+          secedeGroup(
+            this.group.id,
+            (res) => {
+              console.log(res)
+              // alert('그룹에 탈퇴되었습니다!')
+              Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+              this.isjoined = false
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        }
+      });
+
+      // const answer = window.confirm('정말로 탈퇴하시겠습니까?')
+      // if (answer) {
+      //   secedeGroup(
+      //     this.group.id,
+      //     (res) => {
+      //       console.log(res)
+      //       // alert('그룹에 탈퇴되었습니다!')
+      //       Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+      //       this.isjoined = false
+      //     },
+      //     (err) => {
+      //       console.log(err)
+      //     }
+      //   )
+      // }
     },
     goToGroupDetail () {
       this.$router.push({ name : 'groupdetail', query: { groupId: this.group.id}})

@@ -103,9 +103,11 @@ export default {
     create () {
       this.completed = true;
       if (!this.form.name) {
-        alert('그룹 이름을 입력해주세요')
+        // alert('그룹 이름을 입력해주세요')
+        Swal.fire('그룹 이름을 입력해주세요', '', 'error');
       } else if (!this.form.description) {
-        alert('그룹 소개를 입력해주세요')
+        // alert('그룹 소개를 입력해주세요')
+        Swal.fire('그룹 소개를 입력해주세요', '', 'error');
       } else {
         createGroup(
           this.form,
@@ -132,13 +134,30 @@ export default {
     if (this.completed) {
       next();
     } else {
-      const answer =
-        window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')
-      if (answer) {
-        next();
-      } else {
-        next(false);
-      }
+      Swal.fire({ 
+        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
+        text: '', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#3085d6', 
+        cancelButtonColor: '#d33', 
+        confirmButtonText: '나가기', 
+        cancelButtonText: '돌아가기'
+      }).then(result => {
+        if (result.isConfirmed) {
+          next();
+        } else {
+          next(false);
+        }
+      });
+
+      // const answer =
+      //   window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')
+      // if (answer) {
+      //   next();
+      // } else {
+      //   next(false);
+      // }
     }
   },
   computed: {

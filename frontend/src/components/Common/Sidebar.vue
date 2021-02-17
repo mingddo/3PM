@@ -314,7 +314,8 @@ export default {
     onClickSidebarSetting(e) {
       this.sideBarToggle(e);
       setTimeout(() => {
-        alert("setting 창으로 가기");
+        // alert("setting 창으로 가기");
+        Swal.fire('Setting 으로 가기', '', 'success');
         location.reload();
       }, 10);
     },
@@ -330,7 +331,8 @@ export default {
           this.setAuthToken(null);
           this.setKakaoId(null);
           this.setUserStatus(null);
-          alert("logout");
+          // alert("logout");
+          Swal.fire('Logout', '', 'success');
           resolve();
         });
       });
