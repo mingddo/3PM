@@ -234,6 +234,9 @@ export default {
     },
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.setFeedList();
   },
   mounted() {
