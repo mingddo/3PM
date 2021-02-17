@@ -3,12 +3,14 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.group.GroupMember;
 import com.ssafy.sns.domain.group.MemberRole;
+import com.ssafy.sns.domain.notice.NoticeGroup;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.group.GroupReqDto;
 import com.ssafy.sns.dto.group.GroupCreateResDto;
 import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.repository.GroupMemberRepository;
 import com.ssafy.sns.repository.GroupRepository;
+import com.ssafy.sns.repository.NoticeRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final S3Service s3Service;
+    private final NoticeRepositoryImpl noticeRepository;
 
     public GroupCreateResDto create(User user, GroupReqDto reqDto) throws IOException {
         // 이미 그룹 이름이 있다면!!
@@ -52,6 +55,7 @@ public class GroupService {
         // 이미 가입했는 지 확인
         if (!groupMemberRepository.findByUserAndGroup(user, group).isPresent()) {
             groupMemberRepository.save(new GroupMember(user, group, MemberRole.MEMBER));
+            noticeRepository.save(new NoticeGroup(groupId, user.getId()));
             return true;
         }
         return false;

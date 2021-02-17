@@ -1,18 +1,12 @@
 package com.ssafy.sns.repository;
 
-import com.ssafy.sns.domain.clap.FeedClap;
-import com.ssafy.sns.domain.comment.Comment;
-import com.ssafy.sns.domain.follow.Follow;
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.notice.Notice;
-import com.ssafy.sns.domain.notice.NoticeComment;
-import com.ssafy.sns.domain.notice.NoticeFeedClap;
-import com.ssafy.sns.domain.notice.NoticeFollow;
 import com.ssafy.sns.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
@@ -54,7 +48,16 @@ public class NoticeRepositoryImpl implements NoticeRepository{
     }
 
     @Override
-    public List<Notice> groupList(User user) {
-        return null;
+    public List<Notice> groupList(Group group) {
+        return em.createQuery("select ng from NoticeGroup ng where ng.group_id in (select g.group.id from GroupMember g where g.group.id = :group)", Notice.class)
+                .setParameter("group", group.getId())
+                .getResultList();
+    }
+
+    @Override
+    public List<Group> groupLeader(User user) {
+        return em.createQuery("select g from Group g where g.id in (select gm.group.id from GroupMember gm where gm.user.id = :user and gm.role = 'LEADER')", Group.class)
+                .setParameter("user", user.getId())
+                .getResultList();
     }
 }

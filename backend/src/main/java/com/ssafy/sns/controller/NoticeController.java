@@ -3,11 +3,9 @@ package com.ssafy.sns.controller;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.follow.Follow;
-import com.ssafy.sns.domain.notice.Notice;
-import com.ssafy.sns.domain.notice.NoticeComment;
-import com.ssafy.sns.domain.notice.NoticeFeedClap;
-import com.ssafy.sns.domain.notice.NoticeFollow;
+import com.ssafy.sns.domain.notice.*;
 import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.SimpleGroupResDto;
 import com.ssafy.sns.dto.notice.NoticeListResponseDto;
 import com.ssafy.sns.dto.notice.NoticeResponseDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;
@@ -44,11 +42,15 @@ public class NoticeController {
         List<Notice> followList = noticeService.followList(me);
         List<Notice> feedClabList = noticeService.feedClabList(me);
         List<Notice> commentList = noticeService.commentList(me);
+        List<Notice> groupList = noticeService.groupList(me);
+        System.out.println("groupList.size() = " + groupList.size());
         List<Notice> joined1 = Stream.concat(followList.stream(), feedClabList.stream())
                 .collect(Collectors.toList());
         List<Notice> joined2 = Stream.concat(joined1.stream(), commentList.stream())
                 .collect(Collectors.toList());
-        joined2.sort(new Comparator<Notice>() {
+        List<Notice> joined3 = Stream.concat(joined2.stream(), groupList.stream())
+                .collect(Collectors.toList());
+        joined3.sort(new Comparator<Notice>() {
             @Override
             public int compare(Notice o1, Notice o2) {
                 return o2.getCreatedDate().compareTo(o1.getCreatedDate());
@@ -56,11 +58,10 @@ public class NoticeController {
         });
         List<NoticeResponseDto> noticeResponseDto = new ArrayList<>();
         createdDate = (createdDate == null) ? LocalDateTime.now() : createdDate;
-        int end = startNum+10 > joined2.size() ? joined2.size() : startNum+10;
+        int end = startNum+10 > joined3.size() ? joined3.size() : startNum+10;
         for (int i = startNum; i < end; i++) {
-            Notice notice = joined2.get(i);
+            Notice notice = joined3.get(i);
             if(notice.getCreatedDate().compareTo(createdDate) > 0) {
-                System.out.println("test");
                 continue;
             }
             System.out.println("notice.getCreatedDate() = " + notice.getCreatedDate());
@@ -74,8 +75,6 @@ public class NoticeController {
                 Follow follow = noticeService.findFollow(((NoticeFollow) notice).getFollow_id());
                 fromId = follow.getFromUser().getId();
                 simpleOther = new SimpleUserDto(userService.findUserById(fromId));
-                System.out.println("userId = " + userId);
-                System.out.println("fromId = " + fromId);
                 noticeResponseDto.add(new NoticeResponseDto(1, simpleOther));
             } else if(notice instanceof NoticeFeedClap) {
                 FeedClap feedClap = noticeService.findFeedClap(((NoticeFeedClap) notice).getFeed_clab_id());
@@ -102,6 +101,11 @@ public class NoticeController {
                     }
                     noticeResponseDto.add(new NoticeResponseDto(3, simpleOther, feedId, category, commentContent));
                 }
+            } else if(notice instanceof NoticeGroup) {
+                fromId = ((NoticeGroup) notice).getMember_id();
+                simpleOther = new SimpleUserDto(userService.findUserById(fromId));
+                SimpleGroupResDto group = new SimpleGroupResDto(noticeService.findGroup(((NoticeGroup) notice).getGroup_id()));
+                noticeResponseDto.add(new NoticeResponseDto(4, simpleOther, group));
             }
         }
         NoticeListResponseDto noticeListResponseDto = new NoticeListResponseDto(noticeResponseDto, end);

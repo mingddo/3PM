@@ -3,7 +3,7 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.comment.Comment;
 import com.ssafy.sns.domain.follow.Follow;
-import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.notice.Notice;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.repository.*;
@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -23,6 +26,8 @@ public class NoticeServiceImpl implements NoticeService{
     private final CommentRepositoryImpl commentRepository;
     private final FeedClapRepositoryImpl feedClapRepository;
     private final FeedRepositoryImpl feedRepository;
+    private final GroupMemberRepository groupMemberRepository;
+    private final GroupRepository groupRepository;
 
     @Override
     public List<Notice> followList(User user) {
@@ -40,6 +45,17 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
+    public List<Notice> groupList(User user) {
+        List<Group> groupList = noticeRepository.groupLeader(user);
+        List<Notice> noticeList = new ArrayList<>();
+        for (Group g : groupList) {
+            noticeList = Stream.concat(noticeList.stream(), noticeRepository.groupList(g).stream())
+                    .collect(Collectors.toList());
+        }
+        return noticeList;
+    }
+
+    @Override
     public Follow findFollow(Long followId) {
         return followRepository.findFollowById(followId);
     }
@@ -52,6 +68,11 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     public FeedClap findFeedClap(Long feedClapId) {
         return feedClapRepository.findById(feedClapId);
+    }
+
+    @Override
+    public Group findGroup(Long groupId) {
+        return groupRepository.findById(groupId).get();
     }
 
     @Override

@@ -1,14 +1,11 @@
 package com.ssafy.sns.dto.notice;
 
-import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.user.User;
+import com.ssafy.sns.dto.group.SimpleGroupResDto;
 import com.ssafy.sns.dto.user.SimpleUserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.Optional;
 
 @Getter
 @ToString
@@ -20,6 +17,7 @@ public class NoticeResponseDto {
     private Long feedId;
     private String category;
     private String commentContent;
+    private SimpleGroupResDto group;
 
     @Builder
     public NoticeResponseDto(int type, SimpleUserDto other) {
@@ -42,5 +40,12 @@ public class NoticeResponseDto {
         this.feedId = feedId;
         this.category = category;
         this.commentContent = commentContent;
+    }
+
+    @Builder
+    public NoticeResponseDto(int type, SimpleUserDto other, SimpleGroupResDto group) {
+        this.type = type;
+        this.other = other;
+        this.group = group;
     }
 }
