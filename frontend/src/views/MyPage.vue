@@ -492,9 +492,28 @@ export default {
         }
       );
     },
+    checkIsFollowingUser() {
+      followingList(
+        this.$store.state.userId,
+        (res) => {
+          const myFollowings = res.data
+          const you = Number(this.profile_user)
+          for(let i=0; i<myFollowings.length; i++) {
+            const followingUser = myFollowings[i].id
+            if (followingUser === you) {
+              this.subscribed = true
+              return
+            }
+          }
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },    
     getfollowingList() {
       followingList(
-        this.current_user,
+        this.profile_user,
         (res) => {
           this.current_user_followingList = res.data;
         },
@@ -505,7 +524,7 @@ export default {
     },
     getActiviy() {
       getNotice(
-        this.current_user,
+        this.profile_user,
         this.current_user_activity.page_no,
         (res) => {
           this.current_user_activity.page_no = res.data.endNum
@@ -530,7 +549,6 @@ export default {
   },
   created() {
     this.usercheck();
-    this.getfollowingList();
     this.setFeedList(this.currentFeedName);
     this.getprofileInfo();
 
@@ -541,6 +559,9 @@ export default {
     this.getfollowingList();
     this.getActiviy();
     this.getGroups();
+    if(!this.mypage) {
+      this.checkIsFollowingUser()
+    }
   },
 };
 </script>
