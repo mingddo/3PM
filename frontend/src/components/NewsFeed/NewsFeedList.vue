@@ -82,4 +82,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.feed-list-frame{
+  
+}
+</style>

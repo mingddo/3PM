@@ -47,7 +47,6 @@ export default {
 .group-nav-content {
   padding: 10px;
   font-size: 24px;
-  background-color: var(--point-color);
   border-radius: 5px;
 }
 
