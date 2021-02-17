@@ -418,9 +418,14 @@ export default {
     height: 200px;
     margin-top: 50px;
   }
+  .newsfeed-header-title {
+    font-size: 50px;
+  }
+  .newsfeed-header-intro {
+    font-size: 8px;
+  }
   .newsfeed-body {
     margin-top: 0px;
-
     padding-top: 0;
   }
   .sliderToggle {

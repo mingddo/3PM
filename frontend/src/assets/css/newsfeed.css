@@ -52,7 +52,7 @@
   align-items: center;
 }
 .feed-detail-img {
-  padding: 10px;
+  /* padding: 10px; */
   width: 65%;
 }
 .feed-detail-content {
@@ -641,7 +641,37 @@
 .animate__animated.animate__fadeIn {
   --animate-duration: 2.5s;
 }
-
+.newsfeed-header-text {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  /* justify-content: flex-end; */
+  align-items: flex-end;
+}
+.newsfeed-header-title {
+  /* position: relative; */
+  margin-top: auto;
+  /* display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: right; */
+  /* margin-top: 100px; */
+  /* bottom: 0; */
+  font-size: 150px;
+  color: white;
+  font-family: 'SDSamliphopangche_Outline';
+  /* font-family: 'HSBombaram3_Regular'; */
+  /* font-family: 'HSGyoulnoonkot'; */
+  /* font-family: 'Cafe24Oneprettynight'; */
+  /* font-family: 'JSDongkang-Regular'; */
+}
+.newsfeed-header-intro {
+  text-align: right;
+  color: white;
+  font-size: 20px;
+  /* font-family: 'MapoGoldenPier'; */
+  /* font-family: 'JSDongkang-Regular'; */
+}
 /* newsfeedform */
 
 .newsfeed-form-img {
