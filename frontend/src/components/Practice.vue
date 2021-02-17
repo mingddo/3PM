@@ -1,31 +1,24 @@
 <template>
   <div class="edit-profieImg-component">
     <div class="editImg-upload-title highlight">프로필 이미지 업로드</div>
-    <clipper-upload class="select-Edit-Img"
-      ><button class="select-Edit-Img-btn">
-        이미지 선택
-      </button></clipper-upload
+    <clipper-upload 
+      class="select-Edit-Img"
+      v-model="src"
     >
+      <button class="select-Edit-Img-btn" @click="show">
+        이미지 선택
+      </button>
+    </clipper-upload>
     <div class="flex">
       <clipper-fixed
-        v-if="userImg"
         class="basic lg clipper-fixed"
-        :src="`https://dtbqjjy7vxgz8.cloudfront.net/${userImg}`"
+        :src="src"
         :round="true"
         ref="clipper"
         preview="fixed-preview"
         :rotate="rotation"
       ></clipper-fixed>
 
-      <clipper-fixed
-        v-else
-        class="basic lg clipper-fixed"
-        :src="src[0]"
-        :round="true"
-        ref="clipper"
-        preview="fixed-preview"
-        :rotate="rotation"
-      ></clipper-fixed>
     </div>
     <div class="edit-btn-container">
       <button @click="profilegoback">돌아가기</button>
@@ -47,19 +40,35 @@ export default {
   },
   data() {
     return {
-      src: [require("@/assets/img/profileM.svg")],
+      src: '',
       rotation: 0,
       resultURL: null,
+      fileExtension: '',
     };
   },
   methods: {
+    show() {
+      console.log('hi');
+    },
     getResult() {
       const canvas = this.$refs.clipper.clip(); //call component's clip method
-      this.resultURL = canvas.toDataURL("image/jpeg", 1); //canvas->image
+
+      let idx = 0;
+      const length = this.userImg.length;
+      // .위치 찾기
+      for (let i = 0; i < length; i++) {
+        if (this.userImg.charAt(i) === '.') {
+          idx = i;
+          break;
+        }
+      }
+      this.fileExtension = this.userImg.slice(idx + 1);      
+
+      this.resultURL = canvas.toDataURL(`image/${this.fileExtension}`, 1); //canvas->image
 
       const aaa = this.dataURLtoFile(
         this.resultURL,
-        `${this.$store.state.userId}.png`
+        `${this.$store.state.userId}.${this.fileExtension}`
       );
       console.log(aaa);
       if (this.resultURL) {
@@ -74,6 +83,7 @@ export default {
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],
+        // mime = `image/${this.fileExtension}`,
         bstr = atob(arr[1]),
         n = bstr.length,
         u8arr = new Uint8Array(n);
@@ -82,7 +92,15 @@ export default {
       }
       return new File([u8arr], filename, { type: mime });
     },
+    save(){
+      if(this.userImg){
+        this.src = `https://dtbqjjy7vxgz8.cloudfront.net/${this.userImg}`
+      }
+    }
   },
+  mounted(){
+    this.save()
+  }
 };
 </script>
 
