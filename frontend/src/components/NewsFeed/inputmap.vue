@@ -16,7 +16,7 @@
             위치는 검색해서 찾을 수 있습니다
           </li>
           <li>
-            현재 위치를 공유하고 싶다면 <br> 지도 우측상단 버튼을 클릭하세요
+            현재 위치를 공유하고 싶다면 지도 우측상단 버튼을 클릭하세요
           </li>
         </div>
         <div id="menu_wrap" class="bg_white map-info" v-show="!fold">
@@ -360,11 +360,16 @@ export default {
   background-color: white;
 }
 .map-input-guide {
-  position: absolute;
+
+  position: relative;
   margin: 24px;
 }
 .map-input-guide li {
+  position: relative;
   font-size: 14px;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
 }
 .info {
   margin-bottom: 10px;

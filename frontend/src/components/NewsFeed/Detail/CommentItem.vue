@@ -126,6 +126,9 @@ export default {
         }
       );
     },
+    setComment () {
+      this.comment = this.commen.replace(/(\n|\r\n)/g, '<br>')
+    },
     setDateTime() {
       let d = new Date();
       let todayDate = d.getDate();

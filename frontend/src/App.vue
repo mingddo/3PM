@@ -121,7 +121,8 @@
           width="30%"
           height="80%"
         />
-        <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i>
+        <!-- <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i> -->
+        <img style="cursor:pointer; " src="https://img.icons8.com/flat_round/20/000000/bell.png"/>
       </span>
     </div>
 

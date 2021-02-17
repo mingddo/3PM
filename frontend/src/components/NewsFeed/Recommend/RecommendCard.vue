@@ -1,9 +1,9 @@
 <template>
-  <div class="recommend_card" id="recoContent" :style="`background-image: url(${op.img ? op.img : defaultImg}); background-size: auto 100%`">
+  <div class="recommend_card" id="recoContent" :style="`background-image: url(https://dtbqjjy7vxgz8.cloudfront.net/${ op.files && op.files.length > 0 ? op.files[0] : defaultImg}); background-size: auto 100%`">
     <div class="recommend_contentFrame">
       <div class="recommend_preview">
         <div class="tag">
-          <span v-for="(tag,idx) in op.tag" :key="idx">
+          <span v-for="(tag,idx) in op.tags" :key="idx">
             {{ tag }}
           </span>
         </div>
@@ -11,8 +11,8 @@
           <div class="imgFrame">
             <img v-if="op.user" :src="op.user.img" alt="" />
           </div>
-          <div class="preview_username">{{ op.user.nickname }}</div>
-          <div class="preview_content" v-html="contentBox">
+          <div v-if="op.user" class="preview_username" @click="goToProfile">{{ op.user.nickname }}</div>
+          <div class="preview_content" v-html="contentBox ? contentBox : op.content">
             <!-- {{ op.content }} -->
           </div>
           <div class="preview_link" @click="goToPage">
@@ -32,23 +32,43 @@ export default {
   },
   data() {
     return {
-      defaultImg : `https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg`,
-      contentBox: null,
+      defaultImg : [`20210217092232025_cate1.jpg`, `20210217092258303_cate2.jpg`, `20210217092619464_cate33.jpg`][this.Category - 1],
+      contentBox: this.op.content
     };
   },
-  mounted () {
+  created () {
     this.setContentIndent();
   },
   methods : {
+    goToProfile () {
+      this.$router.push({
+        name: "MyPage",
+        query: { name: this.op.user.id }
+      })
+    },
     setContentIndent () {
-      this.contentBox = this.op.content
-      this.contentBox = this.contentBox.replace(/(\n|\r\n)/g, '<br>')
+      if (this.op.content) {
+        console.log('content', this.contentBox)
+        this.contentBox = this.op.content
+        this.contentBox = this.contentBox.replace(/(\n|\r\n)/g, '<br>')
+      }
     },
     goToPage () {
       if (this.Category == 4) {
         window.open(this.op.link)
+      } else if (this.Category == 2) {
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: { id: this.op.id, group: this.op.groupId, Category: this.op.category },
+          params: {op: this.op },
+        })
       } else {
         // router push
+        this.$router.push({
+          name: "NewsfeedDetail",
+          query: { id: this.op.id, Category: this.op.category },
+          params: { fd: this.op },
+        })
       }
     },
   },
@@ -63,6 +83,7 @@ export default {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 .preview_content {
@@ -93,7 +114,7 @@ export default {
   margin: auto;
   z-index: 100;
   /* background-image: url("https://i.pinimg.com/564x/a1/be/e4/a1bee43eb0516544180573aa8fed7e37.jpg"); */
-  background-color: var;
+  background-color: rgb(0, 0, 0, 0.8);;
   background-size: cover;
   background-position: 50% 50%;
   background-repeat: no-repeat;

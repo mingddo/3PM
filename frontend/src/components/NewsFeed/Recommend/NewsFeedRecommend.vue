@@ -37,8 +37,8 @@ export default {
         this.title = `핵인싸`
       } else if (this.Category == 3) {
         this.title = `청산별곡`
-      } else if (this.Categpry == 1) {
-        this.title = `베스트`
+      } else if (this.Category == 1) {
+        this.title = `오늘의 인기 게시물`
       }
     },
   },
