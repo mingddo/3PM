@@ -3,8 +3,11 @@
     <header class="myPageActivityHeader">
       <h2>가입한 그룹 목록</h2>
     </header>
-    <div class="myPageActivityContentFrame">
+    <div v-if="grouplist.length" class="myPageActivityContentFrame">
       <Group v-for="(group, idx) in grouplist" :key="idx" :group="group" />
+    </div>
+    <div v-else class="myPageActivityContentFrame">
+      가입한 그룹이 없습니다.
     </div>
   </div>
 </template>
@@ -25,7 +28,7 @@ export default {
   width: 100%;
 }
 .myPageActivityHeader {
-  width: 90%;
+  width: 100%;
   margin: auto;
   /* padding: 5px 50px; */
   display: flex;
@@ -46,13 +49,14 @@ export default {
 .fa-angle-right {
   font-size: 30px;
 }
-
 .myPageActivityContentFrame {
-  width: 90%;
-  margin: auto;
+  width: 100%;
+  margin: 10px;
   padding: 15px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
 }
+
 </style>

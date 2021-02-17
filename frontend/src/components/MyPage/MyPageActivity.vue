@@ -90,4 +90,12 @@ export default {
   -webkit-line-clamp: 4;
   overflow: hidden;
 }
+.activityComponentFrame {
+  width: 90%;
+  margin: auto;
+  padding: 15px 0;
+  display: flex;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  border-radius: 10px;
+}
 </style>

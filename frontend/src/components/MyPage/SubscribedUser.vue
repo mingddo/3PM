@@ -1,10 +1,12 @@
 <template>
   <div class="subscribedComponentFrame" @click="goToProfile">
-    <div class="subscribeImgFrame">
-      <img class="pofileImg" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${subscriber.profileImg}`" alt="프로필사진" />
-    </div>
-    <div class="subscriberName">
-      <div>{{ subscriber.nickname }}</div>
+    <div style="display:flex">
+      <div class="subscribeImgFrame">
+        <img class="pofileImg" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${subscriber.profileImg}`" alt="프로필사진" />
+      </div>
+      <div class="subscriberName">
+        <div>{{ subscriber.nickname }}</div>
+      </div>
     </div>
     <div>
       <button class="deleteSubscribe" @click="deleteSubscribe">구독삭제</button>
@@ -24,13 +26,16 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
     },
     deleteSubscribe() { 
-      followToggle(
-        this.subscriber.id,
-        (res) => {
-          console.log(res)
-          this.$emit('decrement')},
-        (err) => {console.log(err);}
-      );
+      if (confirm("구독 취소하시겠습니까?")) {
+        followToggle(
+          this.subscriber.id,
+          (res) => {
+            console.log(res)
+            this.$emit('decrement')},
+          (err) => {console.log(err);}
+        );
+      }
+      else return
     },
   }
 }
@@ -41,7 +46,7 @@ export default {
   width: 100%;
   height: 70px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   margin: 7px;
   padding: 10px;
@@ -66,6 +71,7 @@ export default {
 }
 
 .subscriberName {
+  min-width: 50px;
   width: 60%;
   height: 70px;
   display: flex;
@@ -78,6 +84,9 @@ export default {
   font-weight: 700;
 }
 .deleteSubscribe {
+  background-color: salmon;
+  min-width: 80px;
   z-index: 10000;
+  margin-left: auto;
 }
 </style>
