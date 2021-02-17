@@ -49,7 +49,7 @@ export default {
     }
   },
   mounted() {
-    if (!this.$store.state.userStatus) {
+    if (!this.$store.state.kakaoId) {
       this.$router.push({name : "Home"});
     }
     if(this.userStatus) {
