@@ -83,6 +83,11 @@ public class OutdoorServiceImpl implements FeedService {
         Outdoor outdoor = ((Outdoor) feedRepository.save(new Outdoor(feedRequestDto, user)));
         user.addFeed(outdoor);
 
+        // 파일 저장하기
+        for (String fileName : feedRequestDto.getFilePaths()) {
+            fileService.addFile(fileName, outdoor);
+        }
+
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
 

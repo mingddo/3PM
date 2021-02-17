@@ -127,6 +127,11 @@ public class InsiderService {
         Insider insider = new Insider(insiderReqDto, user, group);
         feedRepository.save(insider); // insiderRepository 인지 뭔지 헷갈리네,,,
 
+        // 파일 저장하기
+        for (String fileName : insiderReqDto.getFilePaths()) {
+            fileService.addFile(fileName, insider);
+        }
+
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
 

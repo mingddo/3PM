@@ -84,6 +84,11 @@ public class WorkerServiceImpl implements FeedService {
 
         user.addFeed(worker);
 
+        // 파일 저장하기
+        for (String fileName : feedRequestDto.getFilePaths()) {
+            fileService.addFile(fileName, worker);
+        }
+
         // 태그 등록
         List<Hashtag> hashtags = new ArrayList<>();
 
