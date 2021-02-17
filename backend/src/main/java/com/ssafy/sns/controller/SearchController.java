@@ -3,6 +3,7 @@ package com.ssafy.sns.controller;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.dto.group.GroupResDto;
 import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
+import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchResponseDto;
 import com.ssafy.sns.dto.search.SearchUserDto;
@@ -66,7 +67,7 @@ public class SearchController {
         List<Hashtag> hashtagList = searchService.searchHashtags(keyword);
         List<SearchResponseDto> searchResponseDto = new ArrayList<>(); //  태그명, 태그게시물 List
         for (Hashtag h : hashtagList) {
-            List<FeedResponseDto> feedResponseDtoList = searchService.searchFeeds(jwtService.findId(request.getHeader("Authorization")), h);
+            List<InsiderResDto> feedResponseDtoList = searchService.searchFeeds(jwtService.findId(request.getHeader("Authorization")), h);
             if(feedResponseDtoList.isEmpty()) {
                 continue;
             } else {
