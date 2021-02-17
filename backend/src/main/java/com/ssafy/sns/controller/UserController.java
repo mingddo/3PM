@@ -64,7 +64,7 @@ public class UserController {
 
     @ApiOperation("로그인 여부 확인")
     @PostMapping("/login")
-    public ResponseEntity isKakaoLogin(@RequestBody KakaoRequestDto dto) {
+    public ResponseEntity isKakaoLogin(@RequestBody KakaoLoginRequestDto dto) {
 
         // 해당 유저가 존재하는지 확인
         User user = userService.findUserByKakaoId(dto.getKakaoId());
@@ -163,25 +163,6 @@ public class UserController {
 
         return null;
     }
-
-//    @ApiOperation("내 프로필 수정")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userId", value = "회원 번호", required = true),
-//    })
-//    @PutMapping("{userId}")
-//    public ResponseEntity updateUser(@PathVariable("userId") Long userId, @RequestBody KakaoRequestDto dto, HttpServletRequest request) {
-//
-//        String token = request.getHeader("Authorization");
-//        Long tokenId = jwtService.findId(token);
-//        User user = userService.findUserById(tokenId);
-//
-//        if (user.getId() != userId) {
-//            return new ResponseEntity("사용자 접근 에러", HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        user.setNickname(dto.getUsername());
-//        return new ResponseEntity("성공", HttpStatus.OK);
-//    }
 
     @ApiOperation("내 프로필 삭제")
     @ApiImplicitParams({
