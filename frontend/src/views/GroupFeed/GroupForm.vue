@@ -4,18 +4,17 @@
       <Sidebar />
       <div class="group-detail">
         <GroupNav :isHome="false"/>
-        <div class="newsfeed-form-img-box">
-          <label for="image"> <i class="far fa-images"></i> 그룹 이미지 등록하기 </label>
+        <div class="group-form-img-space">
+          <label v-if="!isSelect" class="group-form-img-space-label" for="image"> <i class="far fa-images"></i> 그룹 이미지 </label>
+          <label v-else class="group-detail-img-space" for="image"><img class="group-form-img-space-label" style="cursor: pointer;" :src="imageUrl" alt=""></label>
           <input
-            class="newsfeed-form-img-input"
             id="image"
             type="file"
             @change="selectFile"
             accept="image/*"
           />
-        </div>
-        <div class="group-detail-img-space" v-if="imageUrl">
-          <img class="group-detail-img" :src="imageUrl" alt="">
+          <div class="group-form-img-guide"> <span class="highlight">그룹 이미지</span> <div v-if="isSelect" style="font-size: 12px;"> 변경을 원하시면 이미지를 다시 클릭해주세요 </div> </div>
+          
         </div>
         <div class="group-form">
           <input
@@ -68,10 +67,12 @@ export default {
       fileSelect: false,
       selectedFile: null,
       imageUrl: null,
+      isSelect: false,
     }
   },
   methods:{
     selectFile (e) {
+      this.isSelect = true;
       let files = e.target.files || e.dataTransfer.files;
       if (files.length) {
         this.fileSelect = true;
@@ -173,6 +174,46 @@ export default {
 .group-form-submit-btn {
   display: flex;
   justify-content: center;
+}
+.group-form-img-space-label {
+  margin: auto;
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  text-align: left;
+  border: solid 1px rgba(0, 0, 0, 0.2);
+  border-radius: 100%;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* margin: 24px;
+  position: relative;
+  height: 100px;
+  width: 100px;
+  border: 2px dashed rgb(158, 127, 109);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  /* padding: 0.5em 0.75em; */
+  /* font-size: inherit;
+  line-height: normal;
+  vertical-align: middle;
+  cursor: pointer; */
+}
+.group-form-img-space-label-selected {
+
+}
+.group-form-img-guide {
+  margin-top:10px;
+  text-align: center;
+}
+.group-form-img-space input[type="file"] {
+  display: none;
 }
 .create-group-btn {
   height: 40px;

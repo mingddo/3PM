@@ -35,13 +35,13 @@ public class IndoorController {
 
     @ApiOperation("꽃보다집 추천 게시물")
     @GetMapping(value = "/recommend", produces = "application/json; charset=utf8")
-    public ResponseEntity<FeedListResponseDto> getRecommendList() {
+    public ResponseEntity<FeedListResponseDto> getRecommendList(HttpServletRequest request) {
 
         HttpStatus status;
         FeedListResponseDto feedListResponseDto = null;
 
         try {
-
+            feedListResponseDto = indoorService.feedRecommend(jwtService.findId(request.getHeader("Authorization")));
             logger.info("getFeedMyList = 꽃보다집 추천 리스트 가져오기");
             status = HttpStatus.OK;
         } catch (Exception e) {

@@ -1,9 +1,9 @@
 <template>
   <div class="group-nav">
-    <div class="group-nav-content"> 
-      <span class="group-nav-btn" :class="{groupNavBtnActive:isHome}" @click="goToGroupFeed">홈 </span>  |
+    <span class="group-nav-content"> 
+      <span class="group-nav-btn" :class="{groupNavBtnActive:isHome}" @click="goToGroupFeed">홈 </span>
       <span class="group-nav-btn" :class="{groupNavBtnActive:!isHome}" @click="goToGroupPage">그룹</span>
-    </div>
+    </span>
   </div>
 </template>
 
@@ -31,11 +31,14 @@ export default {
 
 <style>
 .group-nav {
-  margin: 20px;
-  
+  /* margin: 20px; */
+  margin-bottom: 20px;
 }
 .group-nav-content {
+  padding: 10px;
   font-size: 24px;
+  background-color: var(--point-color);
+  border-radius: 5px;
 }
 
 .group-nav-btn {

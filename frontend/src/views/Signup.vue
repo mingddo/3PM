@@ -49,6 +49,9 @@ export default {
     }
   },
   mounted() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     if(this.userStatus) {
       alert('회원가입 하셨어요!!')
       this.$router.push({name : "Home"});

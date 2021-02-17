@@ -16,7 +16,7 @@
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
         <GroupNav v-if="Category == 2" :isHome="true" />
         <NewsFeedRecommend
-          v-if="Category == 4"
+          v-if="Category == 4 || Category == 1"
           :reco="reco"
           :Category="Category"
         />
@@ -234,6 +234,9 @@ export default {
     },
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.setFeedList();
   },
   mounted() {

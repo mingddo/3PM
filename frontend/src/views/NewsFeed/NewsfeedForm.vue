@@ -535,7 +535,7 @@ export default {
                 // console.log(res)
                 if (this.fileSelect) {
                   this.imgUpload(res.data);
-                  alert('이미지 업로드 중입니다!')
+                  this.uploadingImg = true;
                   setTimeout(() => {
                     this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category, group: this.selectedGroup } })
                   }, 500);
@@ -565,7 +565,7 @@ export default {
               console.log(res)
               if (this.fileSelect) {
                 this.imgUpload(res.data);
-                alert('이미지 업로드 중입니다!')
+                this.uploadingImg = true;
                 setTimeout(() => {
                   this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
                 }, 500);
@@ -584,7 +584,7 @@ export default {
             (res) => {
               if (this.fileSelect) {
                 this.imgUpload(res.data);
-                alert('이미지 업로드 중입니다!')
+                this.uploadingImg = true;
                 setTimeout(() => {
                   this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
                 }, 500);
@@ -613,7 +613,7 @@ export default {
               () => {
                 if (this.fileSelect) {
                   this.imgUpload(this.$route.params.feed.id);
-                  alert('이미지 업로드 중입니다!')
+                  this.uploadingImg = true;
                   setTimeout(() => {
                     this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
                   }, 500);
@@ -635,7 +635,7 @@ export default {
               () => {
                 if (this.fileSelect) {
                   this.imgUpload(this.$route.params.feed.id);
-                  alert('이미지 업로드 중입니다!')
+                  this.uploadingImg = true;
                   setTimeout(() => {
                     this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category, group: this.selectedGroup } })
                   }, 500);
@@ -661,7 +661,7 @@ export default {
               () => {
                 if (this.fileSelect) {
                   this.imgUpload(this.$route.params.feed.id);
-                  alert('이미지 업로드 중입니다!')
+                  this.uploadingImg = true;
                   setTimeout(() => {
                     this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
                   }, 500);
@@ -682,7 +682,7 @@ export default {
               () => {
                 if (this.fileSelect) {
                   this.imgUpload(this.$route.params.feed.id);
-                  alert('이미지 업로드 중입니다!')
+                  this.uploadingImg = true;
                   setTimeout(() => {
                     this.$router.push({ name: 'NewsfeedDetail', query: { id : this.$route.params.feed.id, Category: this.Category } })
                   }, 500);
@@ -707,6 +707,9 @@ export default {
     },
   },
   created () {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.setDefault();
     this.getImg();
     // this.getLocation();

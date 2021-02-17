@@ -1,10 +1,14 @@
 package com.ssafy.sns.repository;
 
+import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -61,5 +65,18 @@ public class FeedRepositoryImpl implements FeedRepository {
         return em.createQuery("select type(f) from Feed f where f.id = :feed")
                 .setParameter("feed", feedId)
                 .getSingleResult();
+    }
+
+    public List<Feed> findIndoorRecommend() {
+
+        return em.createQuery("SELECT f.feed " +
+                "FROM FeedClap f " +
+                "WHERE f.createdDate > :time " +
+//                "WHERE TYPE(f) = :category ", FeedClap.class)
+                "GROUP BY f.feed " +
+                "ORDER BY COUNT(f.feed) DESC", Feed.class)
+                .setParameter("time", LocalDateTime.now().minusDays(3))
+//                .setParameter("category", Indoor.class)
+                .getResultList();
     }
 }

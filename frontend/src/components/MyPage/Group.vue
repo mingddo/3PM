@@ -7,7 +7,7 @@
       <div>그룹명 : {{ group.name }}</div>
       <div>그룹 소개 : {{ group.description }}</div>
       <div>그룹원 수 :{{ group.memberCnt }}</div>
-      <div>{{ group.createdDate }}</div>
+      <div>그룹 생성일 :  {{ createdDateChange() }}</div>
     </div>
   </div>
 </template>
@@ -18,18 +18,23 @@ export default {
     group: Object,
   },
   mounted() {
-    console.log(this.activity);
+    this.createdDateChange()
   },
+  methods : {
+    createdDateChange() {
+      let createdDate = this.group.createdDate.split('-')
+      const year = createdDate[0]
+      const month = createdDate[1]
+      const day = createdDate[2].split('T')[0]
+      const createdDateChanged = `${year}년 ${month}월 ${day}일`
+      return createdDateChanged
+    }
+  }
 };
 </script>
 
 <style scoped>
-.activityComponentFrame {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  margin: 10px 0;
-}
+
 
 .profileImgFrame {
   width: 70px;
@@ -43,12 +48,4 @@ export default {
   justify-content: center;
 }
 
-.activityContent {
-  width: 60%;
-  height: 70px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
-}
 </style>

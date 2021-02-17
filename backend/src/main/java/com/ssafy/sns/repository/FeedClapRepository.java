@@ -19,5 +19,4 @@ public interface FeedClapRepository {
 
     FeedClap findById(Long feedClapId);
 
-    List<FeedClap> findIndoorRecommend();
 }

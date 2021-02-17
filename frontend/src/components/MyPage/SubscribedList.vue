@@ -1,11 +1,9 @@
 <template>
   <div class="SubscribedComponent">
-    <header class="myPageActivityHeader">
-      <h2>구독자</h2>
-    </header>
+
     <div class="subscribedContentFrame">
       <h3>구독 목록</h3>
-      <div class="subscribedContent">
+      <div class="subscribedContent" v-if="subscribedlist.length">
         <SubscribedUser
           v-for="(subscriber, idx) in subscribedlist"
           :key="idx"
@@ -13,6 +11,9 @@
           @decrement="deleteSubscribe"
           
         />
+      </div>
+      <div v-else class="subscribedContent">
+        구독하는 사람이 없습니다.
       </div>
     </div>
   </div>
@@ -38,7 +39,7 @@ export default {
   width: 100%;
 }
 .myPageActivityHeader {
-  width: 90%;
+  width: 100%;
   margin: auto;
   /* padding: 5px 50px; */
   display: flex;
@@ -61,13 +62,14 @@ export default {
 }
 
 .subscribedContentFrame {
-  width: 90%;
+  width: 100%;
   padding: 15px;
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
+  background: #fff;
 }
 
 .subscribedContent {

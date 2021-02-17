@@ -2,7 +2,7 @@
   <div>
     <div class="newsfeed-body" >
         <Sidebar />
-      <div class="group-detail">
+      <div class="group-detail" v-if="group_info">
         <GroupNav :isHome="false"/>
         <div class="group-detail-header">
           <div class="group-detail-img-space" v-if="!modiForm">
@@ -16,21 +16,31 @@
               accept="image/*"
               @change="selectGroupImg"
             />
+            <div class="group-modi-img-guide">
+              <span class="highlight">그룹이미지</span>
+              <div>
+                사진을 클릭하여 사진을 변경해주세요.
+              </div>
+            </div>
           </div>
-          <div v-if="group_info.leaderId == userpk" class="group-detail-modi">
-            <i v-if="modiForm" class="far fa-check-square group-detail-modi-btn"  @click="changeModiForm"></i>
-            <i v-else class="fas fa-edit group-detail-modi-btn"  @click="changeModiForm"></i>
-            <!-- {{ modiForm ? '수정' : '그룹 수정하기'}} -->
-          </div>
+          <!-- <div v-else>
+            외않되; {{ leader}} {{ userpk}}
+          </div> -->
+
           <div class="group-detail-title" v-if="!modiForm">{{ group.name }}</div>
           <div class="group-detail-title-input-box" v-else>
-            <input class="group-detail-title-input" type="text" v-model="group.name">
+            <input id="groupName" class="group-detail-title-input" type="text" v-model="group.name">
+            <div class="group-detail-title-guide">그룹 이름을 입력해주세요</div>
           </div>
           <div class="group-detail-introduce" v-if="!modiForm">
+            <div> 그룹 소개를 입력해주세요 </div>
             {{ group.description }}
           </div>
           <div class="group-detail-introduce-input-box" v-else>
-            <input class="group-detail-introduce-input" type="text" v-model="group.description">
+            <textarea id="group-intro" class="group-detail-introduce-input" cols="30" rows="10"  v-model="group.description"></textarea>
+          </div>
+          <div v-if="modiForm" class="group-detail-modi-save" @click="changeModiForm">
+            <i  class="far fa-check-square"> </i>저장
           </div>
           <div v-if="!isjoined" class="group-detail-join-btn"  @click="join">
               그룹 가입하기
@@ -38,8 +48,8 @@
           <div class="group-detail-info">
             <div>
               <div>그룹장</div>
-              <div class="group-detail-leader" @click="goToleaderProfile">
-                {{ group_info.leaders[0].nickname }}
+              <div v-if="leaderInfo" class="group-detail-leader" @click="goToleaderProfile">
+                {{ leaderInfo.nickname }}
               </div>
             </div>
             <div>
@@ -53,17 +63,25 @@
             :users="group_info.members"
             @closeList="closeMemberList"
           />
-          <hr>
-          <div v-if="group_info.leaders[0].id =! userpk" class="group-detail-secede-btn-pos">
-            <span class="group-detail-secede-btn" @click="secede">그룹 탈퇴하기</span> 
-          </div>
-          <div v-else class="group-detail-secede-btn-pos">
-            <span class="group-detail-secede-btn" @click="groupDelete">그룹 삭제하기</span>  
+          <hr style="border-top: 2px var(--light-brown)">
+          <div class="group-detail-edit">
+            <div v-if="group_info.leaderId == userpk" class="group-detail-modi">
+              <div v-if="!modiForm" class="group-detail-modi-btn" @click="changeModiForm">
+                <i  class="fas fa-edit group-detail-modi-btn"></i>수정하기
+              </div>
+              <!-- {{ modiForm ? '수정' : '그룹 수정하기'}} -->
+            </div>
+            <div v-if="leader =! userpk" class="group-detail-secede-btn-pos">
+              <span class="group-detail-secede-btn" @click="secede">그룹 탈퇴하기</span> 
+            </div>
+            <div v-else class="group-detail-secede-btn-pos">
+              <span class="group-detail-secede-btn" @click="groupDelete">그룹 삭제하기</span>  
+            </div>
           </div>
         </div>
 
         <section>
-          <GroupRecommend />
+          <!-- <GroupRecommend /> -->
         </section>
         <section>
           <NewsFeedList
@@ -91,13 +109,13 @@ import { createGroupImg } from '@/api/group.js'
 import { mapState } from 'vuex'
 
 import Sidebar from '../../components/Common/Sidebar.vue';
-import GroupRecommend from '../../components/GroupFeed/GroupRecommend.vue';
+// import GroupRecommend from '../../components/GroupFeed/GroupRecommend.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 import UserList from '../../components/NewsFeed/Common/UserList.vue'
 
 export default {
-  components: { Sidebar, GroupRecommend, NewsFeedList, GroupNav, UserList },
+  components: { Sidebar, NewsFeedList, GroupNav, UserList },
   data() {
     return {
       modiForm: false,
@@ -116,6 +134,8 @@ export default {
       imageUrl: null,
       group_info: {},
       memberModal: false,
+      leader: null,
+      leaderInfo: null,
     };
   },
   methods: {
@@ -133,7 +153,7 @@ export default {
       }
     },
     goToleaderProfile () {
-      this.$router.push({ name: 'MyPage', query: { name: this.group_info.leaderId }})
+      this.$router.push({ name: 'MyPage', query: { name: this.leader }})
     },
     closeMemberList () {
       this.memberModal = false;
@@ -243,7 +263,14 @@ export default {
           this.group_info = res.data
           this.group.name = this.group_info.name
           this.group.description = this.group_info.description
-
+          if (this.group_info.leaderId) {
+            this.leader = this.group_info.leaderId
+          } else if (this.group_info.leader.id) {
+            this.leader = this.group_info.leader.id
+          }
+          console.log(this.leader, this.userpk)
+          this.leaderInfo = this.group_info.leaders[0]
+          //  console.log('리버요', this.group_info.leaders)
           this.validjoin();
         },
         (err) => {
@@ -280,6 +307,9 @@ export default {
     },
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.getgroupInfo();
     this.setFeedList();
     // this.validjoin();
@@ -302,6 +332,8 @@ export default {
   border-radius: 50px;
 }
 .group-detail-header {
+  background-color: var(--bold-brown);
+  border-radius: 5px;
   width: 90%;
   margin: auto;
   padding: 40px;
@@ -343,27 +375,54 @@ export default {
   font-size: 24px;
   text-align: center;
 }
+.group-detail-title-input-box div {
+  text-align: center;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+.group-detail-title-guide {
+  font-size: 12px;
+}
 .group-detail-title-input-box {
-  display: flex;
-  justify-content: center;
+  font-size: 12px;
+  text-align: center;
 }
 .group-detail-title-input {
-  margin: 20px;
-  font-size: 24px;
+
+  margin: 20px 20px 0px 20px;
+  /* font-size: 24px; */
 }
 .group-detail-introduce {
   text-align: center;
   font-size: 14px;
 }
 .group-detail-introduce-input-box {
-    display: flex;
+  display: flex;
   justify-content: center;
 }
 .group-detail-introduce-input {
   font-size: 14px;
 }
+.group-detail-modi {
+  display: flex;
+  /* text-align: right; */
+}
 .group-detail-modi-btn {
   cursor: pointer;
+  font-size: 12px;
+  /* cursor: pointer; */
+  /* background-color: #fff9f3; */
+  /* border-radius: 5px; */
+  /* padding : 5px; */
+}
+.group-detail-modi-save {
+  margin-top: 5px;
+  cursor: pointer;
+  background-color: #fff9f3;
+  border-radius: 5px;
+  padding : 5px;
+  text-align: center;
 }
 .group-detail-join-btn {
   width: 100%;
@@ -402,8 +461,18 @@ export default {
 .group-detail-info > div > div:last-child {
   font-size: 14px;
 }
-.group-detail-modi {
-  text-align: right;
+.group-modi-img-guide {
+  margin-top: 5px;
+  text-align: center;
+}
+.group-modi-img-guide > div {
+  margin-top: 10px;
+  font-size: 12px;
+}
+.group-detail-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 @media screen and (max-width: 1050px) {
   .group-detail {
@@ -413,6 +482,9 @@ export default {
   .group-detail-join-btn {
     margin-left: 0;
     margin-right: 0;
+  }
+  .group-page-img-section {
+    min-width: 25%;
   }
 }
 </style>

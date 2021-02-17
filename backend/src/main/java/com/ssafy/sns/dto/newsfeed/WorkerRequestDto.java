@@ -12,8 +12,4 @@ import java.util.List;
 @NoArgsConstructor
 public class WorkerRequestDto extends FeedRequestDto {
 
-    @Builder
-    public WorkerRequestDto(String content, String file, List<String> tags) {
-        super(content, null, tags);
-    }
 }

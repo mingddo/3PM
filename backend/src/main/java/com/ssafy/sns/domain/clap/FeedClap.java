@@ -3,14 +3,14 @@ package com.ssafy.sns.domain.clap;
 import com.ssafy.sns.domain.BaseTimeEntity;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.user.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity
 public class FeedClap extends BaseTimeEntity {
 

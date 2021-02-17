@@ -33,14 +33,14 @@
                 <div
                   :class="{ profielSubscribedNone: subscribed }"
                   class="myPageSubscribed"
-                  @click="followToggle"
+                  @click="onClickFollowToggle"
                 >
                   {{ profileinfo.username }}님의 소식 받기
                 </div>
                 <div
                   :class="{ profielSubscribedNone: !subscribed }"
                   class="myPageSubscribed"
-                  @click="followToggle"
+                  @click="onClickFollowToggle"
                 >
                   {{ profileinfo.username }}님의 소식 끊기
                 </div>
@@ -460,6 +460,19 @@ export default {
         }
       );
     },
+    onClickFollowToggle() {
+      if (this.subscribed === true) {
+        if (confirm('구독을 취소하시겠어요?')) {
+          this.followToggle()
+        }
+        else {
+          return
+        }
+      }
+      else {
+        this.followToggle()
+      }
+    },
     followToggle() {
       followToggle(
         this.profile_user,
@@ -479,9 +492,28 @@ export default {
         }
       );
     },
+    checkIsFollowingUser() {
+      followingList(
+        this.$store.state.userId,
+        (res) => {
+          const myFollowings = res.data
+          const you = Number(this.profile_user)
+          for(let i=0; i<myFollowings.length; i++) {
+            const followingUser = myFollowings[i].id
+            if (followingUser === you) {
+              this.subscribed = true
+              return
+            }
+          }
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    },    
     getfollowingList() {
       followingList(
-        this.current_user,
+        this.profile_user,
         (res) => {
           this.current_user_followingList = res.data;
         },
@@ -492,7 +524,7 @@ export default {
     },
     getActiviy() {
       getNotice(
-        this.current_user,
+        this.profile_user,
         this.current_user_activity.page_no,
         (res) => {
           this.current_user_activity.page_no = res.data.endNum
@@ -516,9 +548,13 @@ export default {
     } 
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.usercheck();
-    this.getprofileInfo();
     this.setFeedList(this.currentFeedName);
+    this.getprofileInfo();
+
   },
   mounted() {
     this.setActivityScroll();
@@ -526,6 +562,10 @@ export default {
     this.getfollowingList();
     this.getActiviy();
     this.getGroups();
+    if(!this.mypage) {
+      this.checkIsFollowingUser()
+    }
+    
   },
 };
 </script>
