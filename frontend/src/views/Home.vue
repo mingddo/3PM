@@ -333,13 +333,11 @@ export default {
     onClickLogin() {
       this.kakaoLogin()
         .then(() => {
-          this.$router.push({
-            name: "Home",
-          });
-          // this.$router.push({
-          //   name: "NewsfeedPersonal",
-          //   query: { Category: "1" },
-          // });
+          this.$router.push({name: "Home"}).catch((err) => {
+            if (err.name !== "NavigationDuplicated") {
+              console.log(err)
+            }
+          })
         })
         .catch(() => {
           console.log("error");
