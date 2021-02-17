@@ -311,10 +311,9 @@ export default {
 }
 .group-detail-header {
   background-color: #fffcf9;
-  border-radius: 10px;
+  border-radius: 20px;
   width: 100%;
   margin: auto;
-  /* padding: 40px; */
   margin-bottom: 30px;
   
 }

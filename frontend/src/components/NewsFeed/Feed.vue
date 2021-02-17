@@ -1,5 +1,5 @@
 <template>
-  <article class="feed-box">
+  <article>
     <div class="feed-group-box" v-if="Category == 2" @click="goToGroupDetail">
       <div class="feed-group-name">{{ fd.groupName }}</div>
       <img class="feed-group-box-img" src="https://static.thenounproject.com/png/64410-200.png" alt=""> 
