@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="container">
-      <p>마지막으로 사용할 닉네임을 입력해주세요.</p>
+      <p>사용하실 닉네임을 입력해주세요.</p>
       <div class="signup-input">
-        <input v-model="nickname" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력">
+        <input @input="nickname = $event.target.value" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력" @keyup="nicknameValidate" @keydown="nicknameValidate">
         <button 
         @click="checkOverlap"
         :disabled="!isPossibleName"
@@ -30,15 +30,29 @@ export default {
       nickname : '',
       isPossibleName : false,
       isOverlapped : true,
+      checkedName : '',
     }
   },
   computed : {
     ...mapState(['userStatus','kakaoId','userId']),
   },
   watch : {
-    nickname : function() {
-      this.nicknameValidate();
+    isPossibleName : function() {
+      if (this.isPossibleName === false) {
+        this.isOverlapped = true
+      }
     },
+    nickname : function() {
+      if (this.nickname !== this.checkedName) {
+        this.isOverlapped = true
+      }
+    }
+  },
+  mounted() {
+    if(this.userStatus) {
+      alert('회원가입 하셨어요!!')
+      this.$router.push({name : "Home"});
+    }
   },
   methods : {
     ...mapActions(['setUserStatus','setAuthToken','setRefToken','setUserId']),
@@ -54,7 +68,6 @@ export default {
           const authToken = res.data['accToken'];
           const refToken = res.data["refToken"];
 
-          console.log(res.data)
           this.setUserId(responseUserId);
           this.setAuthToken(authToken);
           this.setRefToken(refToken);
@@ -79,19 +92,17 @@ export default {
       }
     },
     checkOverlap() {
-      // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
-      console.log(this.nickname)
       checkOverlapped(
         {
           'username' : this.nickname,
         },
         (res) => {
-          console.log(res)
           this.isOverlapped = res.data;
           if(this.isOverlapped) {
             alert('사용 불가능한 ❌❌ 아이디입니다');
             }
           else {
+            this.checkedName = this.nickname;
             alert('사용 가능한 ⭕⭕ 아이디입니다');
           }
         },
@@ -111,6 +122,9 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .container * {
+    max-width: 800px;
   }
   .container p {
     font-size: 1.5rem;
@@ -133,19 +147,22 @@ export default {
     margin-bottom: 1rem;
   }
   .signup-input button {
+    background-color: #b29887;
+    color: black;
+    border-radius: 5px;
     width: 100%;
     height: 50px;
     padding : 0.25rem 1rem;
-    background: none;
     border: none;
     box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
-    border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
-    color: #585858;
   }
   .disabledBtn {
     opacity: .2;
+  }
+  .container p {
+    margin-bottom: 10px;
   }
 </style>
 
