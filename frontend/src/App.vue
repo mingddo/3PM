@@ -526,22 +526,6 @@ export default {
   .save-Edit-profile {
     width: 250px;
   }
-  .map-space {
-    display: block;
-    width: 100%;
-  }
-  .map {
-    width: 100%;
-    /* height: 40vh; */
-  }
-  .map-about {
-    width: 100%;
-    background-color: #f0d3c1;
-  }
-  .map-info {
-    width: 100%;
-    height: 50vh;
-  }
   .newsfeed-form-tag-input {
     border-bottom: 3px solid #f0d3c1;
   }
@@ -563,6 +547,21 @@ export default {
   .feed-userprofile-space {
     width: 45px;
     height: 45px;
+  }
+  .feed-box {
+    padding: 0;
+  }
+  .feed-group-box {
+    padding : 10px 0;
+  }
+  .feed-content-box {
+    padding: 0;
+  }
+  .feed-content-box-img-container {
+    background-color: rgb(0, 0, 0, 0.8)
+  }
+  .feed-footer-box {
+    padding: 10px
   }
 }
 </style>

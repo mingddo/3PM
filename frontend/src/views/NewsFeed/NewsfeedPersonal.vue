@@ -194,7 +194,7 @@ export default {
           this.next = true;
           setTimeout(() => {
             this.setFeedList();
-          }, 300);
+          }, 500);
         }
       });
     },

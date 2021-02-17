@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="changeModiForm">
+    <button v-if="!isShare" @click="changeModiForm">
       수정하기
     </button>
     <button @click="deleteFeed">
@@ -22,6 +22,7 @@ export default {
   props: {
     fd: Object,
     Category: Number,
+    isShare: Boolean,
   },
   data() {
     return {

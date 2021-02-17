@@ -1,11 +1,13 @@
 <template>
   <article class="feed-box">
-    <div v-if="Category == 2" @click="goToGroupDetail">
-      {{ fd.groupName }}
+    <div class="feed-group-box" v-if="Category == 2" @click="goToGroupDetail">
+      <div class="feed-group-name">{{ fd.groupName }}</div>
+      <img class="feed-group-box-img" src="https://static.thenounproject.com/png/64410-200.png" alt=""> 
     </div>
     <div class="feed-userprofile-box">
       <NewsFeedProfile
         :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
+        :userId="fd.user.id"
       />
 
       <div class="feed-userprofile-content">
@@ -62,11 +64,11 @@
     <div class="feed-footer">
       <div class="feed-footer-box" @click="goToDetail">
         <div>
-          👏🏻
+          <img src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"/>
           <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span>
         </div>
         <div>
-          <i class="far fa-comment"></i>
+          <img src="https://img.icons8.com/ios/17/000000/topic.png"/>
           <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
           <span v-else> 0</span>
         </div>

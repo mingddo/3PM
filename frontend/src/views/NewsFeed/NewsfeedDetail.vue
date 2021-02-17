@@ -4,6 +4,25 @@
       <Sidebar />
       <div class="newsfeed-D">
         <GroupNav v-if="Category == 2" :isHome="true" />
+        <div v-if="groupModal" class="newsfeed-form-group-container">
+          <div class="newsfeed-form-group">
+            <span class="newsfeed-share-group-selector">그룹 선택해주세요</span>
+            <div class="newsfeed-form-group-list" v-if="groupList.length > 0">
+              <div v-for="(group, idx) of groupList" :key="idx">
+                <button @click="selectGroup(group)">{{ group.name }}</button>
+              </div>
+            </div>
+            <div class="newsfeed-for  m-group-none" v-else>
+              가입된 그룹이 없습니다. 그룹에 가입해주세요!
+              <div class="newsfeed-form-group-redirect-btn" @click="goToGroupPage">
+                그룹 찾으러 가기
+              </div>
+            </div>
+            <div class="newsfeed-form-group-list-btn">
+              <button @click="chooseGroup">닫기</button>
+            </div>
+          </div>
+        </div>
         <section v-if="fd" v-cloak class="feed-detail">
           <div v-if="Category == 2">
             {{ fd.groupName }}
@@ -84,6 +103,7 @@
             v-if="userpk == fd.user.id"
             :fd="fd"
             :Category="Number(Category)"
+            :isShare="isShare"
           />
 
           <div class="feed-detail-like-comment">
@@ -137,10 +157,20 @@
 
 <script>
 import { mapState } from "vuex";
+
 import { readIndoors } from "@/api/indoors.js";
+import { createIndoors } from '@/api/indoors.js'
+
 import { getGroupfeedsDetail } from "@/api/group.js";
+import { createGroupFeed } from '@/api/group.js'
+import { getprofileGroups } from '@/api/mypage.js'
+
 import { readOutdoors } from "@/api/outdoors.js";
-import { reedWorker } from "@/api/worker.js";
+import { createOutdoors } from '@/api/outdoors.js'
+
+import { reedWorker } from "@/api/worker.js"
+import { createWorker } from '@/api/worker.js'
+
 import { clapFeed } from "@/api/feed.js";
 import { clapFeedList } from "@/api/feed.js";
 import Sidebar from "../../components/Common/Sidebar.vue";
@@ -181,9 +211,20 @@ export default {
       longitude: null,
       placeName: null,
       address: null,
+      shareForm: {},
+      groupModal: false,
+      groupList: [],
+      sel_group_id: null,
+      isShare: false,
     };
   },
   methods: {
+    goToGroupPage () {
+      this.$router.push({ name: 'grouppage' })
+    },
+    chooseGroup () {
+      this.groupModal = false;
+    },
     closeClapList() {
       this.clapListOpen = false;
     },
@@ -221,18 +262,96 @@ export default {
         }
       );
     },
+    selectGroup (g) {
+      this.sel_group_id = g.id
+      this.groupModal = false;
+      createGroupFeed(
+        g.id,
+        this.shareForm,
+        (res) => {
+          this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category, group: g.id } })
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
+    },
     shareFeed() {
       const answer = window.confirm("내 피드에 공유하시겠습니까?");
       if (answer) {
-        this.$router.push({
-          name: "NewsfeedForm",
-          query: { Category: this.Category },
-          params: {
-            type: "SHARE",
-            feed: this.fd,
-            link: document.location.href,
-          },
-        });
+        if (this.fd.files) {
+          let urls = ""
+          for (let i of this.fd.files) {
+            let fileUrl = `https://dtbqjjy7vxgz8.cloudfront.net/${i}`
+            let img = `<div style="width:100%; background-color: rgb(0, 0, 0, 0.8);> <img width="100%" src="${fileUrl}" alt="미리보기 이미지" /> </div>`
+            urls = urls + '<br>' + img
+          }
+          this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> <br> ${urls} ${this.fd.content}`
+        } else {
+          this.shareForm.content = `<b>[공유]</b> <a href="${document.location.href}">원문이동</a> ${this.fd.content}`
+        }
+          this.shareForm.filePaths = this.fd.files
+          this.shareForm.tags = this.fd.tags
+        if (this.Category == 3) {
+          this.shareForm.lat = this.fd.lat
+          this.shareForm.lng = this.fd.lng
+          this.shareForm.placeName = this.fd.placeName
+          this.shareForm.address = this.fd.address
+        }
+        if (this.Category == 1) {
+          createIndoors(
+            this.shareForm,
+            (res) => {
+              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else if (this.Category == 2) {
+          getprofileGroups(
+            this.userpk,
+            (res) => {
+              console.log(res)
+              this.groupList = res.data
+              this.groupModal = true;
+            },
+            (err) => {
+              console.log(err)
+            }  
+          )
+        } else if (this.Category == 3) {
+          createOutdoors(
+            this.shareForm,
+            (res) => {
+              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else if (this.Category == 4) {
+          createWorker(
+            this.shareForm,
+            (res) => {
+              this.$router.push({ name: 'NewsfeedDetail', query: { id : res.data, Category: this.Category } })
+            },
+            (err) => {
+              console.log(err)
+            }
+          )
+        } else {
+          alert('잘못된 접근입니다.')
+        }
+        // this.$router.push({
+        //   name: "NewsfeedForm",
+        //   query: { Category: this.Category },
+        //   params: {
+        //     type: "SHARE",
+        //     feed: this.fd,
+        //     link: document.location.href,
+        //   },
+        // });
       }
     },
     focusComment() {
@@ -263,6 +382,10 @@ export default {
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+            let st = this.fd.content.split(" ")[0]
+            if (st == '<b>[공유]</b>') {
+              this.isShare = true;
+            }
           },
           (err) => {
             console.log(err);
@@ -279,6 +402,10 @@ export default {
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+            let st = this.fd.content.split(" ")[0]
+            if (st == '<b>[공유]</b>') {
+              this.isShare = true;
+            }
           },
           (err) => {
             console.log(err);
@@ -297,6 +424,10 @@ export default {
           this.address = this.fd.address;
           this.longitude = this.fd.lng;
           this.latitude = this.fd.lat;
+          let st = this.fd.content.split(" ")[0]
+          if (st == '<b>[공유]</b>') {
+            this.isShare = true;
+          }
         });
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
@@ -309,6 +440,10 @@ export default {
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
+            let st = this.fd.content.split(" ")[0]
+            if (st == '<b>[공유]</b>') {
+              this.isShare = true;
+            }
           },
           (err) => {
             console.log(err);
