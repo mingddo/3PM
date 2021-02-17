@@ -2,13 +2,10 @@ package com.ssafy.sns.service;
 
 import com.ssafy.sns.domain.group.Group;
 import com.ssafy.sns.domain.hashtag.Hashtag;
-import com.ssafy.sns.domain.newsfeed.Feed;
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.domain.newsfeed.Insider;
-import com.ssafy.sns.domain.newsfeed.Worker;
+import com.ssafy.sns.domain.newsfeed.*;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.group.GroupResDto;
-import com.ssafy.sns.dto.newsfeed.FeedResponseDto;
+import com.ssafy.sns.dto.newsfeed.InsiderResDto;
 import com.ssafy.sns.dto.search.SearchHashtagDto;
 import com.ssafy.sns.dto.search.SearchUserDto;
 import com.ssafy.sns.repository.*;
@@ -44,32 +41,43 @@ public class SearchServiceImpl implements SearchService{
     }
 
     @Override
-    public List<FeedResponseDto> searchFeeds(Long userId, Hashtag hash) {
+    public List<InsiderResDto> searchFeeds(Long userId, Hashtag hash) {
         User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
         List<Feed> feedList = searchRepository.searchFeeds(hash);
-        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
+        List<InsiderResDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
             if(feed instanceof Indoor) {
-                feedResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new InsiderResDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
                         1,
-                        followService.isFollow(userId, feed)));
+                        followService.isFollow(userId, feed), null, null));
             } else if(feed instanceof Insider) {
-                feedResponseDtoList.add(new FeedResponseDto(feed,
+                feedResponseDtoList.add(new InsiderResDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
                         2,
-                        followService.isFollow(userId, feed)));
-            } else if(feed instanceof Worker) {
-                feedResponseDtoList.add(new FeedResponseDto(feed,
+                        followService.isFollow(userId, feed),
+                        ((Insider) feed).getGroup().getId(),
+                        ((Insider) feed).getGroup().getName()
+                        ));
+            } else if (feed instanceof Outdoor) {
+                feedResponseDtoList.add(new InsiderResDto(feed,
+                        (int) commentRepository.findListById(feed).count(),
+                        feedClapRepository.findClapAll(feed).size(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
+                        3,
+                        followService.isFollow(userId, feed), null, null));
+            }
+            else if(feed instanceof Worker) {
+                feedResponseDtoList.add(new InsiderResDto(feed,
                         (int) commentRepository.findListById(feed).count(),
                         feedClapRepository.findClapAll(feed).size(),
                         feedClapRepository.findClap(user, feed).isPresent(),
                         4,
-                        followService.isFollow(userId, feed)));
+                        followService.isFollow(userId, feed), null, null));
             }
         }
         return feedResponseDtoList;
