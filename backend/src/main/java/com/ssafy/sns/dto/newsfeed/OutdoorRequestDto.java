@@ -16,9 +16,5 @@ public class OutdoorRequestDto extends FeedRequestDto {
     Double lng;
     String address;
     String placeName;
-
-    @Builder
-    public OutdoorRequestDto(String content, String file, List<String> tags) {
-        super(content, null, tags);
-    }
+    Integer code;
 }

@@ -10,7 +10,7 @@ spring:
   # jpa settings
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     generate-ddl: false
     show-sql: true
     database: mysql

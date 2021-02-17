@@ -2,11 +2,13 @@ package com.ssafy.sns.repository;
 
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,16 +49,5 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
     @Override
     public FeedClap findById(Long feedClapId) {
         return em.find(FeedClap.class, feedClapId);
-    }
-
-    @Override
-    public List<FeedClap> findIndoorRecommend() {
-//        return em.createQuery("SELECT f " +
-//                "FROM FeedClap f " +
-//                "WHERE TYPE(f) = Indoor AND ")
-//                .setFirstResult(0)
-//                .setMaxResults(3)
-//                .getResultList();
-        return null;
     }
 }
