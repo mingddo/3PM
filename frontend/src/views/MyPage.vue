@@ -548,6 +548,9 @@ export default {
     } 
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.usercheck();
     this.setFeedList(this.currentFeedName);
     this.getprofileInfo();
@@ -562,6 +565,7 @@ export default {
     if(!this.mypage) {
       this.checkIsFollowingUser()
     }
+    
   },
 };
 </script>

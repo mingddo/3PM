@@ -307,6 +307,9 @@ export default {
     },
   },
   created() {
+    if (!this.$store.state.userStatus) {
+      this.$router.push({name : "Home"});
+    }
     this.getgroupInfo();
     this.setFeedList();
     // this.validjoin();
