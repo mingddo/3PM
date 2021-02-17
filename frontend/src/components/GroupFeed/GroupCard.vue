@@ -29,6 +29,7 @@
 <script>
 import { mapState } from 'vuex'
 import { secedeGroup } from '@/api/group.js'
+import Swal from 'sweetalert2';
 
 export default {
   props: {

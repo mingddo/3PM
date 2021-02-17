@@ -28,6 +28,7 @@ import GroupNotFound from '../../components/GroupFeed/GroupNotFound.vue';
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 import GroupReco from '../../components/GroupFeed/GroupReco.vue';
+
 export default {
   components: { GroupJoined, GroupNotFound, Sidebar, GroupNav, GroupReco },
   data() {

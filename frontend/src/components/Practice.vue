@@ -30,6 +30,7 @@
 <script>
 import { clipperFixed } from "vuejs-clipper";
 import { clipperUpload } from "vuejs-clipper";
+
 export default {
   components: {
     clipperFixed,

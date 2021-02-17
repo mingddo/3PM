@@ -100,6 +100,7 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 import UserList from '../../components/NewsFeed/Common/UserList.vue'
+import Swal from 'sweetalert2';
 
 export default {
   components: { Sidebar, NewsFeedList, GroupNav, UserList },

@@ -168,6 +168,7 @@ import {
 } from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
+import Swal from 'sweetalert2';
 
 // 방향키로 페이지 창 못 움직이게 하는 코드
 window.addEventListener(

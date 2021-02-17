@@ -83,6 +83,8 @@ import { clapComment } from "@/api/comment.js";
 import { clapCommentList } from "@/api/comment.js";
 import { mapState } from "vuex";
 import UserList from "../Common/UserList.vue";
+import Swal from 'sweetalert2';
+
 export default {
   name: "NewsFeedCommentItem",
   components: { NewsFeedProfile, UserList },

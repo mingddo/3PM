@@ -23,6 +23,8 @@
 <script>
 import { mapState } from "vuex";
 import { followToggle } from "@/api/mypage.js";
+import Swal from 'sweetalert2';
+
 export default {
   name: "UserInfoBtn",
   props: {

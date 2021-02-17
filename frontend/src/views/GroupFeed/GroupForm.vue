@@ -53,6 +53,7 @@ import { createGroup } from '@/api/group.js'
 import { createGroupImg } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
+import Swal from 'sweetalert2';
 
 export default {
   components: { Sidebar, GroupNav },
