@@ -8,7 +8,7 @@
   >
     <div class="recommend_contentFrame">
       <div class="group_info">
-        <div class="group_title">빵빵덕 두마리</div>
+        <div class="group_title">{{ op.name }}</div>
         <div>
           <i class="fas fa-users" style="cololr:white"></i>
           {{ member }}

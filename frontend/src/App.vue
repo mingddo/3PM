@@ -569,7 +569,7 @@ export default {
     padding: 0;
   }
   .feed-group-box {
-    padding : 10px 0;
+    padding : 10px 0 0 0;
   }
   .feed-content-box {
     padding: 0;

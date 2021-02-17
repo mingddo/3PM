@@ -1,7 +1,9 @@
 <template>
   <splide :options="options">
+    <!-- <splide-slide> -->
     <splide-slide v-for="(op, idx) in c" :key="idx">
       <GroupRecommendCard :op="op"/>
+          <!-- {{ op }} -->
     </splide-slide>
   </splide>
 </template>
@@ -12,6 +14,9 @@ import GroupRecommendCard from './GroupRecommendCard.vue';
 export default {
   components: { GroupRecommendCard },
   name: 'GroupRecoSplide',
+  props: {
+    recoGroup: Array,
+  },
   data() {
     return {
       c: [{}, {}, {}],
@@ -34,10 +39,33 @@ export default {
     };
   },
   mounted() {
-    
+    this.setRecommend();
   },
   methods: {
-    
+    setRecommend () {
+      console.log('reco', this.recoGroup)
+      for (let i of this.recoGroup) {
+        console.log('i', i)
+        let obj = {}
+        obj.name = i.name;
+        obj.member = i.memberCnt;
+        obj.img = i.groupImg;
+        obj.description = i.description;
+        console.log(obj)
+        this.c.push(obj)
+      }
+      console.log('c', this.c)
+      // this.c = [
+      //   { name: '안녕'},
+      //   { name:' 머야'},
+      //   { name: '제발'}
+      // ]
+      // this.c = [
+      //   { name: '안녕'},
+      //   { name:' 머야'},
+      //   { name: '제발'}
+      // ]
+    },
   },
 };
 </script>

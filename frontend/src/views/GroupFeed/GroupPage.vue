@@ -4,7 +4,8 @@
       <Sidebar />
       <div class="group-detail">
         <GroupNav :isHome="false"/>
-        <GroupRecommend />
+        <GroupReco :recoGroup="recoGroup"/>
+        <!-- <GroupRecommend :recoGroup="recoGroup"/> -->
         <div class="group-create-btn" @click="goto_create_group">그룹 만들기</div>
         <!-- <GroupCard v-for="(group, idx) in groupList" :key="idx" :group="group"/> -->
         <hr>
@@ -21,17 +22,20 @@
 <script>
 import { mapState } from 'vuex'
 import { getprofileGroups } from '@/api/mypage.js'
-import GroupRecommend from "@/components/GroupFeed/GroupRecommend.vue";
+import { getAllGroup } from '@/api/group.js'
+// import GroupRecommend from "@/components/GroupFeed/GroupRecommend.vue";
 import GroupJoined from '../../components/GroupFeed/GroupJoined.vue';
 import GroupNotFound from '../../components/GroupFeed/GroupNotFound.vue';
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
+import GroupReco from '../../components/GroupFeed/GroupReco.vue';
 export default {
-  components: { GroupRecommend, GroupJoined, GroupNotFound, Sidebar, GroupNav },
+  components: { GroupJoined, GroupNotFound, Sidebar, GroupNav, GroupReco },
   data() {
     return {
       // groups: [{}, {}, {}, {}],
       groupList: [],
+      recoGroup: [],
     };
   },
   created () {
@@ -39,6 +43,20 @@ export default {
   },
   methods: {
     getGroupList () {
+      getAllGroup(
+        (res) => {
+          if (res.data.length < 9) {
+            this.recoGroup = res.data
+          } else {
+            this.recoGroup = res.data.slice(0, 9)
+          }
+          console.log('그룹', this.recoGroup)
+        },
+        (err) => {
+          console.log(err)
+        }
+      ),
+
       getprofileGroups(
         this.userpk,
         (res) => {
