@@ -118,10 +118,10 @@
         </div>
 
         <button
-          disabled="disabled_valid"
+          :disabled="disabled_valid"
           class="save-Edit-profile"
           :class="[disabled_valid ? 'myPageEdit_valid' : '']"
-          @click="EditProfile"
+          @click="editProfile"
         >
           저장하기
         </button>
@@ -199,7 +199,7 @@ export default {
       this.nicknameedit = false;
       this.nickname = this.userInfo.nickname;
     },
-    EditProfile() {
+    editProfile() {
       console.log("고고", this.changeURL);
       const formData = new FormData();
       if (this.changeURL) {
@@ -256,9 +256,9 @@ export default {
             console.log(res);
             this.isOverlapped = res.data;
             if (this.isOverlapped) {
-              alert("사용 불가능한 ❌❌ 아이디입니다");
+              alert("사용 불가능한 아이디입니다 😥😥😥😥");
             } else {
-              alert("사용 가능한 ⭕⭕ 아이디입니다");
+              alert("사용 가능한 아이디입니다 😆😆😆😆");
             }
           },
           (err) => {
