@@ -183,11 +183,12 @@ public class IndoorServiceImpl implements FeedService {
         List<Feed> indoorRecommend = feedRepository.findIndoorRecommend();
         List<IndoorResponseDto> indoorResponseDtoList = new ArrayList<>();
         for (Feed feed : indoorRecommend) {
-            if (feed instanceof Indoor) indoorResponseDtoList.add(new IndoorResponseDto((Indoor)feed,
-                    (int) commentRepository.findListById(feed).count(),
-                    feedClapRepository.findClapAll(feed).size(),
-                    feedClapRepository.findClap(user, feed).isPresent(),
-                    followService.isFollow(userId, feed)));
+            if (feed instanceof Indoor)
+                indoorResponseDtoList.add(new IndoorResponseDto((Indoor) feed,
+                        (int) commentRepository.findListById(feed).count(),
+                        feedClapRepository.findClapAll(feed).size(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
+                        followService.isFollow(userId, feed)));
             if (indoorResponseDtoList.size() > 5) break;
         }
         return new FeedListResponseDto(indoorResponseDtoList, 0);
