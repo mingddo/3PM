@@ -48,6 +48,6 @@ export default {
 }
 
 .groupNavBtnActive {
-  color: #f0856a
+  color: #b29887;
 }
 </style>

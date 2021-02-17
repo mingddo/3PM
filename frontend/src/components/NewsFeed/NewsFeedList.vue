@@ -30,12 +30,18 @@
         >새 피드 작성</i
       > -->
     </div>
-    <div class="spinner-container" v-else :class="{ loading: !next }">
+    <div class="fa-3x newsfeed-loading-box" v-else>
+      <i class="fas fa-spinner fa-spin newsfeed-loading"></i>
+      <div>
+        LOADING ...
+      </div>
+    </div>
+    <!-- <div class="spinner-container" v-else :class="{ loading: !next }">
       <img
         class="spinner"
         src="https://img.icons8.com/material-two-tone/96/000000/spinner--v3.png"
       />
-    </div>
+    </div> -->
   </section>
 </template>
 
