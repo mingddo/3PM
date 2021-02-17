@@ -77,8 +77,6 @@ public class FeedRepositoryImpl implements FeedRepository {
                 "ORDER BY COUNT(f.feed) DESC", Feed.class)
                 .setParameter("time", LocalDateTime.now().minusDays(3))
 //                .setParameter("category", Indoor.class)
-                .setFirstResult(0)
-                .setMaxResults(3)
                 .getResultList();
     }
 }
