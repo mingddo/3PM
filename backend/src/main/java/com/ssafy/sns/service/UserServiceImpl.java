@@ -112,6 +112,11 @@ public class UserServiceImpl implements UserService {
         user.setKakaoId(dto.getKakaoId());
         user.setNickname(dto.getUsername());
         user.setNicknameSplit(unicodeHandler.splitHangeulToConsonant(dto.getUsername()));
+        if (dto.getProfileImg() == null || "string".equals(dto.getProfileImg())) {
+            user.setImg("default.gif");
+        } else {
+            user.setImg(dto.getProfileImg());
+        }
 
         return userRepository.save(user);
     }
