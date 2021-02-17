@@ -3,6 +3,7 @@ package com.ssafy.sns.service;
 import com.ssafy.sns.domain.hashtag.FeedHashtag;
 import com.ssafy.sns.domain.hashtag.Hashtag;
 import com.ssafy.sns.domain.newsfeed.Feed;
+import com.ssafy.sns.domain.newsfeed.Indoor;
 import com.ssafy.sns.domain.newsfeed.Outdoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
@@ -175,5 +176,27 @@ public class OutdoorServiceImpl implements FeedService {
                 .collect(Collectors.toList());
         List<String> curFileNames = feedRequestDto.getFilePaths();
         fileService.modifyFiles(prevFileNames, curFileNames);
+    }
+
+    public FeedListResponseDto feedRecommend(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);//.orElseThrow(NoSuchElementException::new);
+        List<OutdoorResponseDto> outdoorResponseDtoList = new ArrayList<>();
+        List<Long> feedIds = feedClapRepository.findManyClapFeed();
+        boolean[] checkFeed = new boolean[18];
+        int checkCnt = 0;
+        for (Long feedId : feedIds) {
+            Feed feed = feedRepository.findById(feedId);
+            if (!(feed instanceof Outdoor)) continue;
+            if (checkFeed[((Outdoor)feed).getCode()]) continue;
+            outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
+                        (int) commentRepository.findListById(feed).count(),
+                        feedClapRepository.findClapAll(feed).size(),
+                        feedClapRepository.findClap(user, feed).isPresent(),
+                        followService.isFollow(userId, feed)));
+            checkCnt++;
+            if (checkCnt == 17) break;
+        }
+
+        return new FeedListResponseDto(outdoorResponseDtoList, 0);
     }
 }

@@ -50,4 +50,14 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
     public FeedClap findById(Long feedClapId) {
         return em.find(FeedClap.class, feedClapId);
     }
+
+    public List<Long> findManyClapFeed() {
+        return em.createQuery("SELECT f.feed.id " +
+                "FROM FeedClap f " +
+                "WHERE f.createdDate > :time " +
+                "GROUP BY f.feed " +
+                "ORDER BY COUNT(f.feed) DESC", Long.class)
+                .setParameter("time", LocalDateTime.now().minusDays(3))
+                .getResultList();
+    }
 }

@@ -3,6 +3,7 @@ package com.ssafy.sns.repository;
 import com.ssafy.sns.domain.clap.FeedClap;
 import com.ssafy.sns.domain.newsfeed.Feed;
 import com.ssafy.sns.domain.newsfeed.Indoor;
+import com.ssafy.sns.domain.newsfeed.Outdoor;
 import com.ssafy.sns.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

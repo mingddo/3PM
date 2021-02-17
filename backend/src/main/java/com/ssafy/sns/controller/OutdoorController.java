@@ -28,6 +28,25 @@ public class OutdoorController {
     private final OutdoorServiceImpl outdoorService;
     private final JwtService jwtService;
 
+    @ApiOperation("청산별곡 추천 게시물")
+    @GetMapping(value = "/recommend", produces = "application/json; charset=utf8")
+    public ResponseEntity<FeedListResponseDto> getRecommendList(HttpServletRequest request) {
+
+        HttpStatus status;
+        FeedListResponseDto feedListResponseDto = null;
+
+        try {
+            feedListResponseDto = outdoorService.feedRecommend(jwtService.findId(request.getHeader("Authorization")));
+            logger.info("getFeedMyList = 청산별곡 추천 리스트 가져오기");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getFeedMyList - 청산별곡 추천 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(feedListResponseDto, status);
+    }
+
     // 내가 쓴 게시글 불러오기
     @ApiOperation("해당 유저 작성한 청산별곡 전체 조회")
     @ApiImplicitParams({
