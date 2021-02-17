@@ -72,11 +72,11 @@ public class FeedRepositoryImpl implements FeedRepository {
         return em.createQuery("SELECT f.feed " +
                 "FROM FeedClap f " +
                 "WHERE f.createdDate > :time " +
-                "AND TYPE(f.feed) = :category " +
+//                "WHERE TYPE(f) = :category ", FeedClap.class)
                 "GROUP BY f.feed " +
                 "ORDER BY COUNT(f.feed) DESC", Feed.class)
                 .setParameter("time", LocalDateTime.now().minusDays(3))
-                .setParameter("category", Feed.class)
+//                .setParameter("category", Indoor.class)
                 .setFirstResult(0)
                 .setMaxResults(3)
                 .getResultList();

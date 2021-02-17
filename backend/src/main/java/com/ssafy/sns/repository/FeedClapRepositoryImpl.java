@@ -50,5 +50,4 @@ public class FeedClapRepositoryImpl implements FeedClapRepository {
     public FeedClap findById(Long feedClapId) {
         return em.find(FeedClap.class, feedClapId);
     }
-
 }

@@ -14,6 +14,7 @@ public class OutdoorResponseDto extends FeedResponseDto {
     Double lng;
     String address;
     String placeName;
+    Integer code;
 
     public OutdoorResponseDto(Outdoor outdoor, int commentCnt, int likeCnt, boolean isClap, boolean isFollow) {
         super(outdoor, commentCnt, likeCnt, isClap,3, isFollow);
@@ -21,5 +22,6 @@ public class OutdoorResponseDto extends FeedResponseDto {
         this.lng = outdoor.getLng();
         this.address = outdoor.getAddress();
         this.placeName = outdoor.getPlaceName();
+        this.code = outdoor.getCode();
     }
 }

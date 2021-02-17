@@ -18,6 +18,7 @@ public class Outdoor extends Feed {
     Double lng;
     String address;
     String placeName;
+    Integer code;
 
     public Outdoor(FeedRequestDto feedRequestDto, User user) {
         super(feedRequestDto.getContent(), user,null);
@@ -25,6 +26,7 @@ public class Outdoor extends Feed {
         this.lng = ((OutdoorRequestDto)feedRequestDto).getLng();
         this.address = ((OutdoorRequestDto)feedRequestDto).getAddress();
         this.placeName = ((OutdoorRequestDto)feedRequestDto).getPlaceName();
+        this.code = ((OutdoorRequestDto)feedRequestDto).getCode();
     }
 
     public void update(OutdoorRequestDto outdoorRequestDto) {
