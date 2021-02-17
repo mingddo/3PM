@@ -22,6 +22,11 @@ export default {
   methods: {
     goToProfile () {
       this.$router.push({ name: 'MyPage', query: { name: this.userId}})
+      .catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      })
     },
   },
 };

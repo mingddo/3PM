@@ -62,7 +62,7 @@
               태그를 입력하시면 검색시 회원님의 게시물이 나타납니다.
             </div>
           </div>
-
+          
           <div class="newsfeed-form-tag-container">
             <span v-for="(tag, idx_t) in form.tags" :key="idx_t">
               <button>
@@ -416,7 +416,7 @@ export default {
           this.latitude = this.$route.params.feed.lat
           this.longitude = this.$route.params.feed.lng
           this.location.placeName = this.$route.params.feed.placeName
-          this.location.city = this.$route.params.feed.city
+          this.location.code = this.$route.params.feed.code
           this.location.lng = this.$route.params.feed.lng
           this.location.lat = this.$route.params.feed.lat
           this.location.address = this.$route.params.feed.address
@@ -557,8 +557,8 @@ export default {
             this.form.lng = this.location.lng || this.location.x
             this.form.address = this.location.address || this.location.address_name
             this.form.placeName = this.location.placeName || this.location.place_name
-            // this.form.city = this.city_code[this.location.city]
-          }
+            this.form.code = this.city_code[this.location.city]
+          } 
           createOutdoors(
             this.form,
             (res) => {
@@ -653,7 +653,7 @@ export default {
             this.form.lng = this.location.lng || this.location.x
             this.form.address = this.location.address || this.location.address_name
             this.form.placeName = this.location.placeName || this.location.place_name
-            // this.form.city = this.city_code[this.location.city]
+            this.form.code = this.city_code[this.location.city]
             console.log(this.form)
             updateOutdoors(
               this.$route.params.feed.id,

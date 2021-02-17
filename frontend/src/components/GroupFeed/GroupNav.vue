@@ -21,9 +21,19 @@ export default {
   methods: {
     goToGroupFeed () {
       this.$router.push({ name: 'NewsfeedPersonal', query: { Category : 2}})
+      .catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      })
     },
     goToGroupPage () {
       this.$router.push({ name: 'grouppage'})
+      .catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      })
     },
   },
 };

@@ -5,8 +5,8 @@
     </div>
     <div v-if="recoGroup" class="group-reco"> 
       <!-- <button class="group-reco-prev-btn" v-if="prev" @click="prePage">이전</button> -->
-      <divw class="group-reco-prev-btn" v-if="prev" @click="prePage"><i class="fas fa-chevron-circle-left"></i></divw>
-        <div  class="group-reco-card" :style="`background-image: url(https://dtbqjjy7vxgz8.cloudfront.net/${recoGroup[page].groupImg ? recoGroup[page].groupImg : defaultImg}) backgroundSize: 'cover'`">
+      <div class="group-reco-prev-btn" v-if="prev" @click="prePage"><i class="fas fa-chevron-circle-left"></i></div>
+        <div v-if="recoGroup[page]" class="group-reco-card" :style="`background-image: url(https://dtbqjjy7vxgz8.cloudfront.net/${recoGroup[page].groupImg ? recoGroup[page].groupImg : defaultImg}) backgroundSize: 'cover'`">
           <div class="group-img-section">
             <div class="group-reco-img-space">
               <img class="group-reco-img" :src="recoGroup[page].groupImg ? `https://dtbqjjy7vxgz8.cloudfront.net/${recoGroup[page].groupImg}` : `https://dtbqjjy7vxgz8.cloudfront.net/${defaultImg}`" alt="그룹프로필">
