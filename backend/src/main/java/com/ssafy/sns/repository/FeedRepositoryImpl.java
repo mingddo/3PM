@@ -81,4 +81,29 @@ public class FeedRepositoryImpl implements FeedRepository {
 //                .setParameter("category", Indoor.class)
                 .getResultList();
     }
+
+
+//    public List<Feed> findManyClapFeed() {
+//        return em.createQuery("SELECT f.feed " +
+//                "FROM FeedClap f " +
+//                "WHERE f.createdDate > :time " +
+////                "AND TYPE (f.feed) = :category " +
+//                "GROUP BY f.feed " +
+//                "ORDER BY COUNT(f.feed) DESC", Feed.class)
+//                .setParameter("time", LocalDateTime.now().minusDays(3))
+////                .setParameter("category", Outdoor.class)
+//                .getResultList();
+//    }
+//
+//    public Feed findOutdoor(Feed feed, Integer code) {
+//        return em.createQuery("SELECT f " +
+//                "FROM Outdoor f " +
+//                "WHERE TYPE(f) = :category " +
+//                "AND f.id = :feedId " +
+//                "AND f.code = :code ", Feed.class)
+//                .setParameter("feedId", feed.getId())
+//                .setParameter("category", Outdoor.class)
+//                .setParameter("code", code)
+//                .getSingleResult();
+//    }
 }

@@ -8,12 +8,14 @@ import com.ssafy.sns.domain.newsfeed.Outdoor;
 import com.ssafy.sns.domain.user.User;
 import com.ssafy.sns.dto.newsfeed.*;
 import com.ssafy.sns.repository.*;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,6 +34,8 @@ public class OutdoorServiceImpl implements FeedService {
     private final S3Service s3Service;
     private final FileServiceImpl fileService;
     private final FollowServiceImpl followService;
+    private final OutdoorRepo outdoorRepo;
+    private final FeedClapRepo feedClapRepo;
 
     @Override
     public FeedListResponseDto findMyList(Long userId, Long targetId, int num) {
@@ -179,24 +183,41 @@ public class OutdoorServiceImpl implements FeedService {
     }
 
     public FeedListResponseDto feedRecommend(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);//.orElseThrow(NoSuchElementException::new);
-        List<OutdoorResponseDto> outdoorResponseDtoList = new ArrayList<>();
-        List<Long> feedIds = feedClapRepository.findManyClapFeed();
-        boolean[] checkFeed = new boolean[18];
-        int checkCnt = 0;
-        for (Long feedId : feedIds) {
-            Feed feed = feedRepository.findById(feedId);
-            if (!(feed instanceof Outdoor)) continue;
-            if (checkFeed[((Outdoor)feed).getCode()]) continue;
-            outdoorResponseDtoList.add(new OutdoorResponseDto((Outdoor) feed,
-                        (int) commentRepository.findListById(feed).count(),
-                        feedClapRepository.findClapAll(feed).size(),
-                        feedClapRepository.findClap(user, feed).isPresent(),
-                        followService.isFollow(userId, feed)));
-            checkCnt++;
-            if (checkCnt == 17) break;
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        // 3일 이내 피드들 리스트
+        System.out.println(LocalDateTime.now().minusDays(3));
+        List<Outdoor> outdoors = outdoorRepo.findAll().stream()
+                .filter(outdoor -> outdoor.getCreatedDate().isAfter(LocalDateTime.now().minusDays(3)))
+                .sorted((o1, o2) -> o2.getFeedClapList().size() - o1.getFeedClapList().size())
+                .collect(Collectors.toList());
+
+        Outdoor[] recommends = new Outdoor[18]; // 1 ~ 17 사용
+        int cnt = 0;
+        for (Outdoor outdoor : outdoors) {
+            int code = outdoor.getCode();
+            if (recommends[code] == null) {
+                recommends[code] = outdoor;
+                cnt++;
+            }
+            if (cnt == 17) {
+                break;
+            }
         }
 
-        return new FeedListResponseDto(outdoorResponseDtoList, 0);
+        List<OutdoorResponseDto> outdoorResponseDtoList = new ArrayList<>();
+        for (Outdoor outdoor : recommends) {
+            if(outdoor == null) {
+                continue;
+            }
+            System.out.println("hi");
+            outdoorResponseDtoList.add(new OutdoorResponseDto(outdoor,
+                    (int) commentRepository.findListById(outdoor).count(),
+                    feedClapRepository.findClapAll(outdoor).size(),
+                    feedClapRepository.findClap(user, outdoor).isPresent(),
+                    followService.isFollow(userId, outdoor)));
+        }
+
+        System.out.println(11111111);
+        return new FeedListResponseDto<>(outdoorResponseDtoList, 0);
     }
 }
