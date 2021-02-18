@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserProfile(Long id, ProfileRequestDto dto, MultipartFile file) throws IOException { // id 가 유효할 경우 이 메소드가 실행된다
         User user = userRepository.findById(id).get();
 
-        if (dto.getIntroduce() != null) {
+        if (dto.getIntroduce() != null || "null".equals(dto.getIntroduce())) {
             user.setIntroduce(dto.getIntroduce());
         }
         if (dto.getNickname() != null) {
