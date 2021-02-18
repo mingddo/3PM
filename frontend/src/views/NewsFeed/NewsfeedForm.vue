@@ -160,7 +160,7 @@
 
           <div
             class="newsfeed-form-img-box"
-            v-if=" Category == 3 && type == 'NEW'"
+            v-if=" Category == 3 && type == 'NEW' || type == 'MODI'"
           >
             <div class="newsfeed-form-input-map" @click="revealMap">
               <i class="fas fa-map-marker-alt"></i>위치 태그하기
@@ -601,7 +601,7 @@ export default {
           createOutdoors(
             this.form,
             (res) => {
-              console.log(res)
+              console.log('청산별곡 글쓰기', res)
               if (this.fileSelect) {
                 this.imgUpload(res.data);
                 this.uploadingImg = true;
