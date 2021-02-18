@@ -25,6 +25,9 @@
       <div v-if="activity.type === 3" class="activityContent">
         {{activity.other.nickname}}님이 댓글을 남겼습니다. : {{activity.commentContent}}
       </div>
+      <div v-if="activity.type === 4" class="activityContent">
+        {{activity.other.nickname}}님이 {{activity.group.name}}에 가입하셨습니다.
+      </div>
 
       <!-- <div>{{ activity }}</div> -->
   </div>
@@ -42,9 +45,13 @@ export default {
         // type 1 팔로우
         // type 2 게시물 좋아요
         // type 3 댓글
+        // type 4 그룹
       if (type === 1) {
         // 팔로우하기, 그럼 클릭했을때는 상대방 프로필로 가야한다
         this.$router.push({ name: 'MyPage', query: { name: this.activity.other.id}})
+      }
+      else if (type === 4 ) {
+        this.$router.push({ name : 'groupdetail', query: { groupId: this.activity.group.id}})
       }
       else {
         // 게시물을 좋아요 댓글, 그럼 클릭했을때는 해당 게시물로 가야한다
@@ -91,11 +98,14 @@ export default {
   overflow: hidden;
 }
 .activityComponentFrame {
-  width: 90%;
+  cursor: pointer;
+  background-color: #fffcf9;
+  width: 100%;
   margin: auto;
   padding: 15px 0;
   display: flex;
   box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 </style>

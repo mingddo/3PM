@@ -4,19 +4,20 @@
       <h2>가입한 그룹 목록</h2>
     </header>
     <div v-if="grouplist.length" class="myPageActivityContentFrame">
-      <Group v-for="(group, idx) in grouplist" :key="idx" :group="group" />
+      <GroupCard v-for="(group, idx) in grouplist" :key="idx" :group="group"/>
     </div>
     <div v-else class="myPageActivityContentFrame">
-      가입한 그룹이 없습니다.
+      <div class="group-page-card">가입한 그룹이 없습니다.</div>
     </div>
   </div>
 </template>
 
 <script>
-import Group from "./Group.vue";
+// import Group from "./Group.vue";
+import GroupCard from '../GroupFeed/GroupCard.vue';
 
 export default {
-  components: { Group },
+  components: { GroupCard },
   props: {
     grouplist: Array,
   },
@@ -51,7 +52,6 @@ export default {
 }
 .myPageActivityContentFrame {
   width: 100%;
-  margin: 10px;
   padding: 15px 0;
   display: flex;
   flex-direction: column;
