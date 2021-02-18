@@ -207,10 +207,10 @@
             </div>
           </div>
           
-          <div v-if="showMap">
+          <div v-if="showMap && Category == 3">
             <inputmap @sendLocation="sendLocation" :latitude="latitude" :longitude="longitude"/>
           </div>
-          <div class="newsfeed-form-location" v-if="selectLocation">
+          <div class="newsfeed-form-location" v-if="selectLocation && Category == 3">
             <i class="fas fa-map-marker-alt"></i>
             <b>{{ location.placeName || location.place_name }}</b>
             {{ location.address || location.address_name }}
@@ -419,6 +419,17 @@ export default {
     },
     selectCate (c) {
       this.Category = c + 1
+      if (this.Category == 2) {
+        getprofileGroups(
+          this.userpk,
+          (res) => {
+            this.groupList = res.data
+          },
+          (err) => {
+            console.log(err)
+          }
+        )
+      }
       this.changeCate = false
     },
     changeCategory () {
