@@ -107,7 +107,7 @@ export default {
     setFeedList() {
       if (this.$route.query.Category == 1) {
         this.headerTitle = '꽃보다 집'
-        this.headerIntro = '엄마, 남편, 사장님, 며느리 였던 삶은 은퇴합니다. <br> 내 인생을 사는 당신을 위한 취미 일상 공유 SNS'
+        this.headerIntro = '내 인생을 사는 당신을 위한 취미 일상 공유 SNS'
         this.Category = 1;
         indoorsList(
           this.page,
@@ -129,7 +129,7 @@ export default {
         );
       } else if (this.$route.query.Category == 2) {
         this.headerTitle = '핵인싸'
-        this.headerIntro = '월요일은 탁구, 화요일은 그림, 그리고 수요일은 ... <br> 언제나 모임의 중심이 되는 당신을 위한 그룹 SNS'
+        this.headerIntro = '언제나 모임의 중심이 되는 당신을 위한 그룹 SNS'
         this.Category = 2;
         // 핵인싸 axios Get 무한스크롤 요청보내기
         groupList(
@@ -152,7 +152,7 @@ export default {
         );
       } else if (this.$route.query.Category == 3) {
         this.headerTitle = '청산별곡'
-        this.headerIntro = '속시끄럽고 지겨웠던 도시생활, 이제는 쉬고싶다. <br> 속세를 떠나고픈 당신을 위한 자연 공유 SNS'
+        this.headerIntro = '속세를 떠나고픈 당신을 위한 자연 공유 SNS'
         this.Category = 3;
         // 청산별곡 axios Get 무한스크롤 요청보내기
         outdoorsList(
@@ -175,7 +175,7 @@ export default {
         );
       } else if (this.$route.query.Category == 4) {
         this.headerTitle = '워커홀릭'
-        this.headerIntro = '은퇴가 아닌 잠깐의 휴식이었을 뿐, 몸에 좀이 쑤셔 못견디겠다면?<br>열정 넘치는 당신을 위한 일자리, 복지 정보 공유 SNS'
+        this.headerIntro = '열정 넘치는 당신을 위한 일자리, 복지 정보 공유 SNS'
         this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
         console.log("워커홀릭");

@@ -1229,7 +1229,7 @@ body {
   height: 20%;
   font-size: 1.5em;
   font-weight: 700;
-  z-index: 10000;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: center;

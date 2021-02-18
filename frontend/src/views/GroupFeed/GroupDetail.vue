@@ -305,7 +305,7 @@ export default {
 
 <style>
 .group-detail {
-  width: 70%;
+  width: 50%;
   margin-top: 80px;
   border-radius: 50px;
 }

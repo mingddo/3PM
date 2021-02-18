@@ -326,7 +326,7 @@ export default {
 }
 .map-location {
   position: relative;
-  z-index: 10000;
+  z-index: 100;
 }
 .map-location-btn {
   position: absolute;
@@ -367,7 +367,6 @@ export default {
 .map-input-guide li {
   position: relative;
   font-size: 14px;
-  white-space: nowrap;
   /* overflow: hidden; */
   /* text-overflow: ellipsis; */
 }

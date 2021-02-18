@@ -394,6 +394,10 @@ export default {
   .searchFilterTilte {
     font-size: 16px;
   }
+  .autocompleteUl {
+    width: 85%;
+    margin-left : 15px;
+  }
   .Groups-resultCategoryTitle {
     margin-top: 10px;
   }
@@ -431,7 +435,7 @@ export default {
   .sliderToggle {
     display: block;
     cursor: pointer;
-    z-index: 17005;
+    z-index: 900;
   }
   .sliderToggle.active {
     display: none;
