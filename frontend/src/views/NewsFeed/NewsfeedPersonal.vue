@@ -25,24 +25,10 @@
       <div id="newsfeed" class="newsfeed" onscroll="scrollFunction">
         <GroupNav v-if="Category == 2" :isHome="true" />
         <NewsFeedRecommend
-          v-if="Category == 4 || Category == 1"
-          :reco="reco"
           :Category="Category"
         />
-        <mountain-banner v-else-if="Category == 3" />
         <!-- 임시로 자리차지하기 -->
-        <div class="newsfeed-recommend-place" v-else>
-          <p
-            style="padding-top : 40px; padding-bottom:40px; text-align :center;"
-          >
-            박수를 가장 많이 받은 게시물
-          </p>
-          <p
-            style="display:flex;justify-content:center;align-items:center;height:240px;background-color:rgba(0,0,0,0.5);border-radius:5px;"
-          >
-            캐러셀이 있는 장소
-          </p>
-        </div>
+
         <NewsFeedList
           :feed="feed"
           :Category="Category"
@@ -63,7 +49,6 @@ import { indoorsList } from "@/api/indoors.js";
 import { groupList } from "@/api/group.js";
 import { outdoorsList } from "@/api/outdoors.js";
 import { workerList } from "@/api/worker.js";
-import MountainBanner from "../../components/NewsFeed/Recommend/MountainBanner.vue";
 import GroupNav from "../../components/GroupFeed/GroupNav.vue";
 
 export default {
@@ -73,13 +58,11 @@ export default {
     NewsFeedRecommend,
     NewsFeedList,
     Sidebar,
-    MountainBanner,
     GroupNav,
   },
   data() {
     return {
       feed: [],
-      reco: [],
       Category: null,
       height: 0,
       page: 0,

@@ -13,6 +13,13 @@ function indoorReco(success, fail) {
     .catch(fail);
 }
 
+function outdoorReco(success, fail) {
+  instance
+    .get(`outdoors/recommend`)
+    .then(success)
+    .catch(fail);
+}
 export {
   indoorReco,
+  outdoorReco
 }

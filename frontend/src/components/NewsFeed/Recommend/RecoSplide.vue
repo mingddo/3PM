@@ -10,6 +10,7 @@
 import "@/assets/css/splide.css";
 import { mapState } from 'vuex'
 import { indoorReco } from "@/api/reco.js";
+import { outdoorReco } from "@/api/reco.js";
 import RecommendCard from './RecommendCard.vue';
 
 export default {
@@ -62,11 +63,18 @@ export default {
           }
         )
       } else if (this.Category == 2) {
-        // 청산별곡
-        this.placeName = '대전'
-        this.$emit('setPlace', this.placeName)
+         // 핵인싸
+        
+        // this.placeName = '대전'
+        // this.$emit('setPlace', this.placeName)
       } else if (this.Category == 3) {
-        // 핵인싸
+        // 청산별곡
+        outdoorReco(
+          (res) => {
+            console.log('결론', res.data.feedList)
+            this.c = res.data.feedList
+          }
+        )
       } else if (this.Category == 4) {
         // 워커홀릭
         this.c = [

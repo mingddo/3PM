@@ -47,14 +47,16 @@
 
       <div class="feed-comment-like-nested">
         <div class="feed-comment-like-btn">
-          <img
+          <img width="17px" v-if="comment.clap" src="@/assets/icons/clap_cancel_icon.svg" alt="" @click="likeComment">
+          <img width="17px" v-else src="@/assets/icons/clap_icon.svg" alt="" @click="likeComment">
+          <!-- <img
             :src="
               comment.clap
                 ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png'
                 : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'
             "
             @click="likeComment"
-          />
+          /> -->
           <span @click="commentUserList">{{ comment_info.clapCnt }}</span>
           <!-- </i> -->
         </div>
