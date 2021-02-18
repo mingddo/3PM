@@ -264,6 +264,12 @@ public class GroupController {
         return ResponseEntity.ok().build();
     }
 
-
+    @ApiOperation(value = "해당 그룹 게시글이 내가 가입한 그룹인지 여부 리턴")
+    @GetMapping("/feeds/{feedId}")
+    public ResponseEntity<Boolean> isMyGroup(@PathVariable("feedId") Long feedId, HttpServletRequest request) {
+        User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+        boolean isGroup = insiderService.isMyGroup(user, feedId);
+        return new ResponseEntity<>(isGroup, HttpStatus.OK);
+    }
 
 }

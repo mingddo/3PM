@@ -155,7 +155,7 @@
               공유하기
             </div>
           </div>
-          <Comment :id="fd.id" :Category="Number(Category)" />
+          <Comment :id="fd.id" :Category="Number(Category)" @createComment="setFeedDetail" />
         </section>
       </div>
     </div>

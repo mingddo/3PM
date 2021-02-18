@@ -344,4 +344,19 @@ public class InsiderService {
         }
         return new FeedListResponseDto(insiderResDtos, num + 1);
     }
+
+    public boolean isMyGroup(User user, Long feedId) {
+        Insider insider = insiderRepository.findById(feedId).orElseThrow();
+        List<Long> groupIds = user.getGroupMembers().stream()
+                .map(groupMember -> groupMember.getGroup().getId())
+                .collect(Collectors.toList());
+        Long feedGroupId = insider.getGroup().getId();
+
+        for (Long groupId : groupIds) {
+            if (groupId == feedGroupId) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -160,6 +160,8 @@ export default {
       }
     },
     setComment (num) {
+      this.$emit("createComment")
+
       if (num == 0) {
         this.comments = []
       }
