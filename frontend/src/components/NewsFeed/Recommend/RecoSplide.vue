@@ -19,7 +19,6 @@ export default {
   components: { RecommendCard },
   props: {
     Category: Number,
-    placeName: String,
   },
   data() {
     return {
@@ -75,7 +74,6 @@ export default {
         outdoorReco(
           (res) => {
             this.c = res.data.feedList
-            console.log('청산별곡 추천데이터', res)
           },
           (err) => {
             console.log(err)
@@ -113,7 +111,7 @@ export default {
             link: "http://www.moel.go.kr/policy/policyinfo/aged/list.do"
           },
         ];
-        if (this.age < 60) {
+        // if (this.age > 60) {
           this.c.push({
             tags: [
             '#50살',
@@ -128,7 +126,7 @@ export default {
             files: ['워커홀릭_추천3.png',],
             link: "https://50plus.or.kr/"
           })
-        } else {
+        // } else {
           this.c.push({
             tags: [
             '#60살',
@@ -143,7 +141,7 @@ export default {
             files: ['워커홀릭_추천4.jpg',],
             link: "https://www.seniorro.or.kr:4431/seniorro/main/main.do"
           })
-        }
+        // }
       }
     },
   },

@@ -134,6 +134,7 @@
   margin: 10px;
 }
 .newsfeed-detail-not-member-btn:hover {
+  cursor: pointer;
   text-decoration: underline;
 }
 /* NewsfeedPersonal */
