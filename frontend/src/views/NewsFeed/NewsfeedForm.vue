@@ -46,7 +46,46 @@
 
           <div class="newsfeed-form-tag-input-container">
             <div class="tag-input-frame">
-                <Mentionable
+              <div
+                class="searchResultList"
+                @keyup.down="selectValue('down')"
+                @keyup.up="selectValue('up')"
+                @mouseover="removeValue"
+              >
+                <form @submit.prevent="Allsearch" class="search_input">
+                  <div class="inputframe">
+                    <label for="search"></label>
+                    <input
+                      class="r"
+                      required
+                      type="text"
+                      id="search"
+                      placeholder="태그를 입력해 주세요"
+                      v-model.trim="keyword"
+                      @input="autoTag"
+                      autocomplete="off"
+                      ref="search"
+                    />
+                  </div>
+                </form>
+                <ul
+                  class="r"
+                  :class="[autotag ? 'autocompleteUl' : 'autocompleteUl active']"
+                  tabindex="0"
+                >
+                  <li
+                    class="autoImtem"
+                    tabindex="-1"
+                    v-for="(tag, idx) in tags"
+                    :key="idx"
+                    @click="addTag(tag.value)"
+                    @keyup.enter="addTag(tag.value)"
+                  >
+                    {{ tag.value }}
+                  </li>
+                </ul>
+              </div>
+                <!-- <Mentionable
                   :keys="['#']"
                   :items="items"
                   offset="10"
@@ -63,7 +102,7 @@
                     @keyup.space="addTag"
                     autocomplete="off"
                   />
-                </Mentionable>
+                </Mentionable> -->
                 <i class="far fa-question-circle" @click="qtToggle"></i>
             </div>
             <div :class="[!tagToggle ? 'tag-describe' : 'tag-describe active']">
@@ -195,10 +234,9 @@
 <script>
 // import NewsFeedHeader from '../../components/NewsFeed/NewsFeedHeader.vue';
 import '@/assets/css/mention.css'
-import { Mentionable } from 'vue-mention'
-import { searchAutoTag } from '@/api/feed.js'
+// import { Mentionable } from 'vue-mention'
 import { getprofileInfo } from '@/api/mypage.js'
-
+import { autocompleteTag} from "@/api/search.js";
 import { createIndoors } from '@/api/indoors.js'
 import { updateIndoors } from '@/api/indoors.js'
 import { uploadIndoorsFile } from '@/api/indoors.js'
@@ -228,12 +266,15 @@ export default {
     // NewsFeedHeader,
     Sidebar,
     Inputmap,
-    Mentionable,
+    // Mentionable,
     GroupNav,
     NewsFeedProfile
   },
   data() {
     return {
+      tags: [],
+      autotag: false,
+      keyword: "",
       uploadingImg: false,
       city_code: {
         '서울': 1 ,   
@@ -295,6 +336,79 @@ export default {
   },
 
   methods: {
+    // 방향키로 태그리스트 이동 및 엔터로 검색창에 반영
+    changeValue(str) {
+      this.keyword = str;
+      this.autotag = false;
+      this.tags = [];
+      this.removeValue();
+      this.$refs.search.focus();
+    },
+    selectValue(keycode, str) {
+      let hasClass = false;
+      if (document.querySelector(".r").classList != null) {
+        hasClass = document.querySelector(".r").classList.contains("key");
+      }
+
+      const isTags = this.tags.length != 0;
+      if (keycode === "down" && isTags) {
+        if (!hasClass) {
+          const thisEl = document.querySelectorAll(".r li")[0];
+          document.querySelector(".r").classList.add("key");
+          thisEl.classList.add("selected-li");
+          thisEl.focus();
+        } else {
+          const lastEl = document.querySelector(".r li:last-child");
+          const thisEl = document.querySelector(".r li.selected-li");
+          const nextEl = thisEl.nextElementSibling;
+          if (!lastEl.classList.contains("selected-li")) {
+            thisEl.classList.remove("selected-li");
+            nextEl.classList.add("selected-li");
+            nextEl.focus();
+          }
+        }
+      }
+      if (keycode === "up" && hasClass) {
+        const firstEl = document.querySelectorAll(".r li")[0];
+        const thisEl = document.querySelector(".r li.selected-li");
+        const prevEl = thisEl.previousElementSibling;
+        if (!firstEl.classList.contains("selected-li")) {
+          thisEl.classList.remove("selected-li");
+          prevEl.classList.add("selected-li");
+          prevEl.focus();
+        } else {
+          this.$refs.search.focus();
+        }
+      }
+      if (keycode === "enter" && hasClass) {
+        this.changeValue(str);
+      }
+    },
+    removeValue() {
+      if (document.querySelector(".r").classList.contains("key")) {
+        document.querySelector(".r").classList.remove("key");
+        document
+          .querySelector(".r li.selected-li")
+          .classList.remove("selected-li");
+      }
+    },
+    autoTag(e) {
+      if (e.target.value) {
+        this.keyword = e.target.value;
+        autocompleteTag(
+          this.keyword,
+          (res) => {
+            if (res.data) {
+              this.autotag = true;
+              this.tags = res.data;
+            }
+          },
+          (err) => {
+            console.error(err);
+          }
+        ) 
+      }
+    },
     selectCate (c) {
       console.log(c)
       this.Category = c + 1
@@ -346,28 +460,8 @@ export default {
       this.fileList.splice(check, 1)
       this.totalLen = this.form.filePaths.length + this.fileList.length
     },
-    tagApi (tag) {
-      searchAutoTag(
-        tag,
-        (res) => {
-          this.items = res.data
-        },
-        (err) => {
-          console.log(err)
-        }
-      )
-    },
-    autoTag (e) {
-      this.inputTag = e.target.value;
-      if (this.inputTag == '') {this.inputTag = '#'}
-      let tmpTag = this.inputTag.split('#')[1]
-        tmpTag = tmpTag.replace(/ /g , '')
-      if (tmpTag) {
-        this.tagApi(tmpTag)
-      }
-    },
-    addTag (t) {
-      let tag = t.target.value.split('#')[1]
+    addTag (tag) {
+      // let tag = t.target.value.split('#')[1]
       if (!tag) {
         this.$swal.fire({
           icon: 'warning',
@@ -387,6 +481,9 @@ export default {
             })
           } else {
             this.form.tags.push(tag);
+            this.keyword = ""
+            this.tags = []
+            this.autotag = false;
           }
         }
       }
@@ -805,14 +902,6 @@ export default {
           next(false);
         }
       })
-
-      // const answer =
-      //   window.confirm('작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?')      
-      // if (answer) {
-      //   next();
-      // } else {
-      //   next(false);
-      // }
     }
   },
   computed: {
