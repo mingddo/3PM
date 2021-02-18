@@ -74,6 +74,7 @@
         </div>
         <div class="home-section-text">
           <div class="home-section-title">
+            <img style="margin-right: 10px;" src="@/assets/img/logo_ver3.png" width=24px alt="" >
             오후 세시
           </div>
           <div class="home-section-content">

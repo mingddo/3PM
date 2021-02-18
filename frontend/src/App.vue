@@ -7,6 +7,7 @@
     >
       <div :class="[navslider ? 'sliderFrame active' : 'sliderFrame']">
         <div class="sliderTitle">
+          <img style="margin-right: 10px;" src="@/assets/img/logo_ver3.png" width=24px alt="" >
           오후 세시
         </div>
         <div class="slider-nav-content">
@@ -109,8 +110,9 @@
         class="fas fa-bars"
         :class="[userStatus ? 'sliderToggle' : 'sliderToggle active']"
       ></i>
-      <div>
-        <span @click="goToHome" style="cursor:pointer;">오후세시</span>
+      <div style="display:flex; align-items:center;">
+        <img style="margin-right: 10px;" src="@/assets/img/logo_ver3.png" width=24px alt="" >
+        <span @click="goToHome" style="cursor:pointer; font-weight: 500">오후세시</span>
       </div>
       <span style="width:60px">
         <img
@@ -588,11 +590,9 @@ export default {
   .feed-box {
 
   }
-  .feed-group-box {
-    padding : 10px 0 0 0;
-  }
   .feed-content-box {
     padding: 0;
+    margin-top:10px;
   }
   .feed-content-box-img-container {
     background-color: rgb(0, 0, 0, 0.8)

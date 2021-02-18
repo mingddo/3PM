@@ -198,11 +198,15 @@ button.active {
 .home-section-title {
   font-size: 24px;
   font-weight: bolder;
+  display: flex;
+  align-items: center;
+  margin: 10px;
 }
 .home-section-content {
+  margin-top: 20px;
   font-size: 18px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 .home-section-img {
   width: 100%;
@@ -273,7 +277,8 @@ button.active {
   top: 30vh;
   position: fixed;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2), 0px 0px 50px rgba(0, 0, 0, 0.2);
-  background-color: rgba(0, 0, 0, 0.2);
+  /* background-color: rgba(0, 0, 0, 0.2); */
+  background-color: var(--light-brown);
   box-sizing: border-box;
   border-radius: 50%;
   transition: all 0.8s;
