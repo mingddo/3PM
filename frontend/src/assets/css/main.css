@@ -358,7 +358,7 @@ button.active {
   height: 100vh;
   padding-top: 80px;
   display: flex;
-  background-color: #fff9f3;
+  background-color: var(--white-color);
   flex-direction: column;
   border-radius: 5px;
   justify-content: flex-start;

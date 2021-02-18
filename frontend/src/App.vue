@@ -122,7 +122,8 @@
           height="80%"
         />
         <!-- <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i> -->
-        <img style="cursor:pointer; " src="https://img.icons8.com/flat_round/20/000000/bell.png"/>
+        <img style="cursor:pointer; " src="@/assets/icons/bell_icon.svg" width=20px/>
+        
       </span>
     </div>
 
@@ -180,7 +181,6 @@ export default {
       }
     },
     toggleslidernavbar() {
-      console.log("토글된다");
       this.navslider = !this.navslider;
     },
     goToHome() {
@@ -262,7 +262,6 @@ export default {
       });
     },
     goToLogout() {
-      console.log("로그아웃");
       this.navslider = false;
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
@@ -318,11 +317,7 @@ export default {
   watch: {
     $route() {
       this.scrolled = false;
-      console.log("스크롤 탑 함수");
       window.scrollTo({ top: 0, behavior: "auto" });
-    },
-    userStatus: function() {
-      console.log(this.userStatus);
     },
   },
   computed: {
@@ -345,15 +340,6 @@ export default {
     font-size: 16px;
   }
   .side-bar {
-    /* position: absolute;
-    top: 0px;
-    justify-content: space-between;
-    width: 100%;
-    height: 50px;
-    flex-direction: row;
-    padding: 0;
-    border-radius: 0;
-    z-index: 1500; */
     display: none;
   }
   .nav-content {
@@ -428,11 +414,16 @@ export default {
     height: 200px;
     margin-top: 50px;
   }
+  .newsfeed-header-text {
+    margin-bottom: 60px;
+    margin-right: 30px;
+  }
   .newsfeed-header-title {
-    font-size: 50px;
+    font-size: 24px;
+    margin-bottom: 10px;
   }
   .newsfeed-header-intro {
-    font-size: 8px;
+    font-size: 12px;
   }
   .newsfeed-body {
     margin-top: 0px;

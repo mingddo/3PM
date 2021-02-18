@@ -247,7 +247,6 @@ export default {
       });
     },
     goToLogout() {
-      console.log("사이드바 로그아웃");
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
       });

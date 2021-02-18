@@ -4,6 +4,9 @@
       <div class="feed-group-name">{{ fd.groupName }}</div>
       <img class="feed-group-box-img" src="https://static.thenounproject.com/png/64410-200.png" alt=""> 
     </div>
+    <div v-if="Category == 2" style="padding: 0 10px; margin-bottom: 5px;">
+      <hr style="border-top: 2px solid var(--point-colo);">
+    </div>
     <div class="feed-userprofile-box">
       <NewsFeedProfile
         :proImg="fd.user.img !== null ? fd.user.img : defaultImg"
@@ -64,11 +67,13 @@
     <div class="feed-footer">
       <div class="feed-footer-box" @click="goToDetail">
         <div>
-          <img src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"/>
+          <img width="17px" src="@/assets/icons/clap_icon.svg" alt="">
+          <!-- <img src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"/> -->
           <span v-if="fd.likeCnt">{{ fd.likeCnt }}</span> <span v-else> 0</span>
         </div>
         <div>
-          <img src="https://img.icons8.com/ios/17/000000/topic.png"/>
+          <img width="17px" src="@/assets/icons/comment_icon.svg" alt="">
+          <!-- <img src="https://img.icons8.com/ios/17/000000/topic.png"/> -->
           <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
           <span v-else> 0</span>
         </div>
@@ -107,7 +112,6 @@ export default {
       let d = new Date();
       let todayDate = d.getDate();
       let todayMonth = d.getMonth() + 1;
-      console.log(todayMonth);
       if (this.fd) {
         let date = this.fd.date.split("T")[0];
         this.time = this.fd.date.split("T")[1];
@@ -157,7 +161,6 @@ export default {
       });
     },
     goToDetail() {
-      console.log("마이페이지에서 카테고리 기ㅏ기", this.Category);
       if (this.Category == 2) {
         this.$router.push({
           name: "NewsfeedDetail",
