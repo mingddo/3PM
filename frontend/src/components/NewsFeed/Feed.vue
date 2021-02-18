@@ -112,7 +112,6 @@ export default {
       let d = new Date();
       let todayDate = d.getDate();
       let todayMonth = d.getMonth() + 1;
-      console.log(todayMonth);
       if (this.fd) {
         let date = this.fd.date.split("T")[0];
         this.time = this.fd.date.split("T")[1];
@@ -162,7 +161,6 @@ export default {
       });
     },
     goToDetail() {
-      console.log("마이페이지에서 카테고리 기ㅏ기", this.Category);
       if (this.Category == 2) {
         this.$router.push({
           name: "NewsfeedDetail",

@@ -449,6 +449,9 @@ export default {
           this.Allsearch();
         }
       }
+      else {
+        this.$router.push({name : "NotFound"});
+      }
     },
     filterchange1() {
       if (this.keyword === "") {

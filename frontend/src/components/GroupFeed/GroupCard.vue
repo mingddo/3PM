@@ -46,8 +46,7 @@ export default {
         if (result.isConfirmed) {
           secedeGroup(
             this.group.id,
-            (res) => {
-              console.log(res)
+            () => {
               // alert('그룹에 탈퇴되었습니다!')
               this.$swal.fire({
                 icon: 'success',

@@ -103,7 +103,6 @@ export default {
       this.delIdx = this.comments.findIndex((item) => {
         return item.id == commentId
       })
-      console.log('삭제', this.delIdx)
       this.comments = this.comments.splice(this.delIdx, 1)
     },
     iSound(a) {
@@ -135,20 +134,17 @@ export default {
         if (results == !null) {
           let cnt = results.length
           for (let i = 1; i <= cnt; i++) {
-            console.log(i)
             let slice = this.commentInput.split('@')[i]
             let mentioned = slice.split(' ')[0]
             if (mentioned) {
               this.mention.push(mentioned)
             }
           }
-          console.log(this.mention)
         }
         createComment(
           this.id,
           { "content" : this.commentInput},
-          (r) => {
-            console.log(r)
+          () => {
             this.comments = [];
             this.setComment(0)
           },
@@ -164,7 +160,6 @@ export default {
       }
     },
     setComment (num) {
-      console.log('하,,,', num)
       if (num == 0) {
         this.comments = []
       }
@@ -174,7 +169,6 @@ export default {
         (res) => {
           this.page = res.data.endNum
           let comment = res.data.comments;
-          console.log('comment', comment)
           if (comment && comment.length < 10) {
             this.last = true;
           }
@@ -215,13 +209,10 @@ export default {
           cnt = results.length
         }
         let mentionedUser = this.commentInput.split('@')[cnt]
-        let saveMention = mentionedUser.split(' ')[0]
-        console.log(saveMention)
         if (mentionedUser) {
           searchAutoUser(
             mentionedUser,
             (res) => {
-              console.log(res)
               this.items = res.data
             },
             (err) => {

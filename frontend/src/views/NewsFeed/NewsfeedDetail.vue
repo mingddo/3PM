@@ -229,7 +229,6 @@ export default {
         this.fd.id,
         (res) => {
           this.clapedUsers = res.data.user;
-          console.log(this.clapedUsers);
         },
         (err) => {
           console.log(err);
@@ -326,7 +325,6 @@ export default {
             getprofileGroups(
               this.userpk,
               (res) => {
-                console.log(res)
                 this.groupList = res.data
                 this.groupModal = true;
               },
@@ -401,13 +399,11 @@ export default {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
       this.Category = this.$route.query.Category;
-      console.log("카테고리", this.Category);
       if (this.Category == 1) {
         readIndoors(
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -422,12 +418,14 @@ export default {
         );
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
+        if(!this.$route.query.group) {
+          this.$router.push({name : "NotFound"});
+        }
         getGroupfeedsDetail(
           this.$route.query.group,
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -443,21 +441,26 @@ export default {
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 3) {
         // 청산별곡 get 요청
-        readOutdoors(this.$route.query.id, (res) => {
-          this.fd = res.data;
-          console.log(this.fd);
-          this.date = this.fd.date.split("T")[0];
-          this.time = this.fd.date.split("T")[1];
-          this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>");
-          this.placeName = this.fd.placeName;
-          this.address = this.fd.address;
-          this.longitude = this.fd.lng;
-          this.latitude = this.fd.lat;
-          let st = this.fd.content.split(" ")[0]
-          if (st == '<b>[공유]</b>') {
-            this.isShare = true;
+        readOutdoors(
+          this.$route.query.id, 
+          (res) => {
+            this.fd = res.data;
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>");
+            this.placeName = this.fd.placeName;
+            this.address = this.fd.address;
+            this.longitude = this.fd.lng;
+            this.latitude = this.fd.lat;
+            let st = this.fd.content.split(" ")[0]
+            if (st == '<b>[공유]</b>') {
+              this.isShare = true;
+            }
+          },
+          (err) => {
+            console.log(err);
           }
-        });
+        );
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
         // 워커홀릭 get 요청
@@ -465,7 +468,6 @@ export default {
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -480,12 +482,26 @@ export default {
         );
       }
     },
+    checkCategory() {
+      return new Promise((resolve) => {
+        const Category = this.$route.query.Category;
+        const CategoryPattern = /^[1-4]$/;
+        const patternCheck = CategoryPattern.test(Category);
+        resolve(patternCheck)
+      })
+    }
   },
   created() {
     if (!this.$store.state.userStatus) {
       this.$router.push({name : "Home"});
     }
     this.setFeedDetail();
+    this.checkCategory()
+    .then((res)=>{ 
+      if (!res) {
+        this.$router.push({name : "NotFound"});
+      }
+    })
   },
   computed: {
     ...mapState({
