@@ -650,17 +650,21 @@
   margin-top: auto;
   /* justify-content: flex-end; */
   align-items: flex-end;
+  margin-bottom: 150px;
+  margin-right: 100px;
 }
 .newsfeed-header-title {
+  
   /* position: relative; */
-  margin-top: auto;
+  /* margin-top: auto; */
   /* display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: right; */
   /* margin-top: 100px; */
   /* bottom: 0; */
-  font-size: 150px;
+  margin-bottom: 20px;
+  font-size: 60px;
   color: white;
   font-family: 'SDSamliphopangche_Outline';
   /* font-family: 'HSBombaram3_Regular'; */

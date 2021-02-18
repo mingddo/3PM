@@ -341,15 +341,6 @@ export default {
     font-size: 16px;
   }
   .side-bar {
-    /* position: absolute;
-    top: 0px;
-    justify-content: space-between;
-    width: 100%;
-    height: 50px;
-    flex-direction: row;
-    padding: 0;
-    border-radius: 0;
-    z-index: 1500; */
     display: none;
   }
   .nav-content {
@@ -424,11 +415,16 @@ export default {
     height: 200px;
     margin-top: 50px;
   }
+  .newsfeed-header-text {
+    margin-bottom: 60px;
+    margin-right: 30px;
+  }
   .newsfeed-header-title {
-    font-size: 50px;
+    font-size: 24px;
+    margin-bottom: 10px;
   }
   .newsfeed-header-intro {
-    font-size: 8px;
+    font-size: 12px;
   }
   .newsfeed-body {
     margin-top: 0px;
