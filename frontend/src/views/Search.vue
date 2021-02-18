@@ -168,7 +168,6 @@ import {
 } from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
-import Swal from 'sweetalert2';
 
 // 방향키로 페이지 창 못 움직이게 하는 코드
 window.addEventListener(
@@ -305,8 +304,12 @@ export default {
       console.log(this.$route.query.query);
       this.autotag = false;
       if (this.keyword === "") {
-        // alert("검색어를 입력해주세요");
-        Swal.fire("검색어를 입력해주세요", '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '검색어를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
       if (this.$route.query.query === "") {

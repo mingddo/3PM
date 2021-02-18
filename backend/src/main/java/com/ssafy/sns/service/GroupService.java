@@ -108,8 +108,6 @@ public class GroupService {
         GroupMember leader = getGroupMember(user, group);
         if (!leader.isLeader()) {
             throw new Exception("권한이 없습니다.");
-        } else if (group.getGroupMembers().size() > 1) {
-            throw new Exception("그룹원이 남아 있습니다.");
         }
 
         List<GroupMember> members = group.getGroupMembers();

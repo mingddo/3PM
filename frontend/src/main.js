@@ -9,6 +9,19 @@ import VueRx from 'vue-rx'
 
 import VuejsClipper from "vuejs-clipper/dist/vuejs-clipper.umd";
 import "vuejs-clipper/dist/vuejs-clipper.css";
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+
+const options = {
+  confirmButtonColor: '#d33',
+  cancelButtonColor: '#b29887', 
+  width: '250px',
+  position: 'top',
+};
+// install vue-sweetalert2
+Vue.use(VueSweetalert2, options);
+
 // install vue-rx
 Vue.use(VueRx)
 // install vuejs-clipper

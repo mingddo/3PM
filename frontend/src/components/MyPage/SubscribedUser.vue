@@ -16,7 +16,6 @@
 
 <script>
 import { followToggle } from "@/api/mypage.js";
-import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -28,13 +27,10 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
     },
     deleteSubscribe() { 
-      Swal.fire({ 
-        title: '구독 취소하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '구독 취소하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '구독 취소하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {

@@ -176,7 +176,6 @@ import {
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 import {getNotice} from "@/api/notice.js"
-import Swal from 'sweetalert2';
 
 export default {
   components: {
@@ -464,21 +463,31 @@ export default {
     },
     onClickFollowToggle() {
       if (this.subscribed === true) {
-        Swal.fire({ 
-          title: '구독을 취소하시겠어요?', 
-          text: '', 
-          icon: 'warning', showCancelButton: true, 
-          confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', 
-          confirmButtonText: '네', cancelButtonText: '아니요' 
-        }).then((result) => { 
-          if (result.isConfirmed) { 
-            Swal.fire( '구독 취소가 완료되었습니다.', '', 'success' );
+        this.$swal.fire({
+          icon: 'warning',
+          text: '구독을 취소하시겠어요?',
+          showCancelButton: true,
+          confirmButtonText: '취소하기', cancelButtonText: '돌아가기'
+        }).then((result) => {         
+          if (result.isConfirmed) {
+            this.$swal.fire({
+              icon: 'success',
+              text: '구독 취소가 완료되었습니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.followToggle()
           } 
         })
+
       }
       else {
-        Swal.fire( '구독이 완료되었습니다.', '', 'success' );
+        this.$swal.fire({
+          icon: 'success',
+          text: '구독이 완료되었습니다',
+          showConfirmButton: false,
+          timer: 1500
+        })
         this.followToggle()
       }
     },

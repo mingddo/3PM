@@ -212,7 +212,6 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
 import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'NewsfeedForm',
@@ -354,14 +353,22 @@ export default {
     addTag (t) {
       let tag = t.target.value.split('#')[1]
       if (!tag) {
-        // alert('태그를 입력해주세요!')
-        Swal.fire('태그를 입력해주세요', '', 'warning');
+        this.$swal.fire({
+          icon: 'warning',
+          text: '태그를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         if (this.form.tags) {
           let check = this.form.tags.findIndex(element => element === tag)
           if (check !== -1) {
-            // alert('이미 존재하는 태그입니다')
-            Swal.fire('이미 존재하는 태그입니다', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '이미 존재하는 태그입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
             this.form.tags.push(tag);
           }
@@ -442,8 +449,12 @@ export default {
       if (files.length) {
         this.totalLen = this.form.filePaths.length + this.fileList.length
         if (this.totalLen > 5) {
-          // alert('더이상 이미지를 올릴 수 없습니다')
-          Swal.fire('더이상 이미지를 올릴 수 없습니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '더이상 이미지를 올릴 수 없습니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         } else {
           this.selectedFile = files[0]
           this.fileList.push(this.selectedFile)
@@ -524,14 +535,22 @@ export default {
             },
             (err) => {
               console.log(err)
-              // alert('인증된 유저만 작성 가능합니다.')
-              Swal.fire('인증된 유저만 작성 가능합니다', '', 'error');
+              this.$swal.fire({
+                icon: 'error',
+                text: '인증된 유저만 작성 가능합니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
           )
         } else if (this.Category == 2) {
           if (this.selectedGroup == null) {
-            // alert('그룹을 선택해주세요!')
-            Swal.fire('그룹을 선택해주세요', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '그룹을 선택해주세요',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
             // 핵인싸 create 요청
             createGroupFeed(
@@ -600,14 +619,22 @@ export default {
             },
             (err) => {
               console.log(err)
-              // alert('다시 로그인해주세요')
-              Swal.fire('다시 로그인해주세요', '', 'error');
+              this.$swal.fire({
+                icon: 'error',
+                text: '다시 로그인해주세요',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
           )
         } else {
           // 404 페이지 이동
-          // alert('잘못된 접근입니다.')
-          Swal.fire('잘못된 접근입니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '잘못된 접근입니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
 
       } else {
@@ -631,8 +658,12 @@ export default {
               },
               (err) => {
                 console.log(err)
-                // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else if (this.Category == 2) {
@@ -679,9 +710,13 @@ export default {
                 }
               },
               (err) => {
-                console.log(err)
-                // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                console.log(err);
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else if (this.Category == 4) {
@@ -703,18 +738,32 @@ export default {
               (err) => {
                 console.log(err)
                 // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else {
             // 404 페이지 이동
-            // alert('잘못된 접근입니다.')
-            Swal.fire('잘못된 접근입니다', '', 'error');
+            // alert('잘못된 접근입니다.')            
+            this.$swal.fire({
+              icon: 'error',
+              text: '잘못된 접근입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
           
         } else {
-          // alert('본인만 수정할 수 있습니다!!!')
-          Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '본인만 수정할 수 있습니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
       }
     },
@@ -731,15 +780,12 @@ export default {
     if (this.completed) {
       next();
     } else {
-      Swal.fire({ 
-        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '나가기', 
-        cancelButtonText: '취소'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           next();
