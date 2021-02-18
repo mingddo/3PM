@@ -213,7 +213,6 @@ public class OutdoorServiceImpl implements FeedService {
             if(outdoor == null) {
                 continue;
             }
-            System.out.println("hi");
             outdoorResponseDtoList.add(new OutdoorResponseDto(outdoor,
                     (int) commentRepository.findListById(outdoor).count(),
                     feedClapRepository.findClapAll(outdoor).size(),
