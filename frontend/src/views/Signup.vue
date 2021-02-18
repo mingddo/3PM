@@ -78,6 +78,7 @@ export default {
           this.setRefToken(refToken);
           this.setUserStatus(true);
           this.$router.push({name : "Home"});
+          Swal.fire('회원가입 하셨어요!!', '', 'success');
         },
         (err) => {
           console.log(err);
