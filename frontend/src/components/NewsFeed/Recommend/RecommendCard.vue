@@ -8,8 +8,11 @@
           </span>
         </div>
         <div class="content_preview">
+          <div v-if="Category == 2" @click="goToGroupDetail" style="cursor:pointer; margin-bottom:20px">
+            {{ op.groupName }}
+          </div>
           <div class="imgFrame">
-            <img v-if="op.user" :src="op.user.img" alt="" />
+            <img v-if="op.user" :src="`https://dtbqjjy7vxgz8.cloudfront.net/${op.user.img}`" alt="" />
           </div>
           <div v-if="op.user" class="preview_username" @click="goToProfile">{{ op.user.nickname }}</div>
           <div class="preview_content" v-html="contentBox ? contentBox : op.content">
@@ -40,6 +43,12 @@ export default {
     this.setContentIndent();
   },
   methods : {
+    goToGroupDetail () {
+      this.$router.push({
+        name: "groupdetail",
+        query: { groupId: this.op.groupId},
+      });
+    },
     goToProfile () {
       this.$router.push({
         name: "MyPage",

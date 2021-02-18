@@ -1,5 +1,8 @@
 <template>
   <section class="feed-list-frame">
+    <div class="feed-header">
+      최신게시물
+    </div>
     <div class="feed-create-btn-place">
       <!-- <i class="fas fa-plus feed-create-btn" @click="goToCreateForm">글쓰기</i> -->
       <img

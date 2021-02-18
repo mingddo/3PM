@@ -19,6 +19,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  padding: 10px;
 }
 .profileInfo1 > div {
   margin: 10px;
@@ -75,6 +76,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 5px;
 }
 
 .profile_none {
@@ -88,6 +90,9 @@
   justify-content: space-around;
   align-items: center;
   cursor: pointer;
+}
+.profileDetailInfo h3 {
+  margin-bottom: 5px;
 }
 
 .myPageHeaderhr {

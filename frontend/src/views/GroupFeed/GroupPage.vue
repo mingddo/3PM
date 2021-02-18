@@ -6,7 +6,11 @@
         <GroupNav :isHome="false"/>
         <GroupReco :recoGroup="recoGroup"/>
         <!-- <GroupRecommend :recoGroup="recoGroup"/> -->
-        <div class="group-create-btn" @click="goto_create_group">그룹 만들기</div>
+        <div class="group-create-btn" @click="goto_create_group">
+          <img width=40px src="@/assets/icons/group_icon.svg" alt="">
+          <div>그룹만들기</div>
+          
+        </div>
         <!-- <GroupCard v-for="(group, idx) in groupList" :key="idx" :group="group"/> -->
         <section class="group-page-content">
           <div class="group-page-content-header">내 그룹</div>
@@ -84,14 +88,23 @@ export default {
 
 <style>
 .group-create-btn {
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
   position: fixed;
+  text-align: center;
   bottom: 25px;
   right: 10px;
-  border-radius: 10px;
-  border: 1px solid black;
-  background-color: rgba(255,255,255,0.5);
-  padding: 10px;
+  border-radius: 50%;
+  /* border: 1px solid black; */
+  background-color: var(--white-color);
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
+.group-create-btn > div {
+  font-size: 12px;
+  font-family: 'CookieRun-Regular';
+} 
 .group-page-content {
   min-height: 300px;
 }

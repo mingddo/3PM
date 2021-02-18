@@ -213,7 +213,13 @@
   color: var(--bold-brown)
 }
 /* NewsfeedList */
-
+.feed-header {
+  font-size: 24px;
+  font-weight: bold;
+  /* background-color: #fff9f3; */
+  border-radius: 5px;
+  padding: 20px 10px;
+}
 .feed-box {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   margin-bottom: 24px;
@@ -304,7 +310,7 @@
   width: 90%;
   padding: 10px;
   border: 0;
-  background-color: transparent;
+  background-color: #fff9f3;
   border-bottom: 2px solid rgb(158, 127, 109);
 }
 .newsfeed-form-tag-container {
@@ -319,7 +325,7 @@
   width: 100%;
   padding: 10px;
   border: none;
-  background-color: #fffcf9;
+  background-color: #fff9f3;
   border-radius: 5px;
 }
 .newsfeed-form-content-input:focus {

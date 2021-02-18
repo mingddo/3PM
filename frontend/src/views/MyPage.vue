@@ -455,6 +455,7 @@ export default {
         this.profile_user,
         (res) => {
           this.profileinfo = res.data;
+          console.log(res.data)
         },
         (err) => {
           console.log(err);
