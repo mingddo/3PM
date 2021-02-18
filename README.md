@@ -1,4 +1,4 @@
-## 👨‍👨‍👧‍👦 팀원소개
+## 👨‍👨‍👧‍ 팀원소개
 
 - 팀명 : 상원없는 상원팀
 - 팀원 소개
@@ -27,36 +27,28 @@
 - **슬로건** : '오늘도 후회없는 세(새)인생 시작'
 
 
-## 기술스택
 
-### Frontend
-
-  Vue.js, Vuetify
-
-### Backend
-
-#### 기술스택
-    
-    Java, Spring, JPA, MariaDB
-
-#### 개발 환경
-
-- JDK
-    - 11
-    
-- IDE
-    - IntelliJ IDEA Ultimate
-
-- Spring Boot
-    - 2.4.2
-    
-- 빌드
-    - Gradle
 
 
 ## 💨 기술 흐름도
 ![기술흐름도1](/uploads/1444e7e687ce6d9c00fc27c4faccd6a3/기술흐름도1.png)
 ![기술흐름도2](/uploads/b4689b5f1a6a48136717953bd1be6f6c/기술흐름도2.png)
+
+
+<details><summary>Frontend 자세히</summary>
+    Vue.js
+</details>
+<details><summary>Backend 자세히</summary>
+    Java, Spring, JPA, MariaDB
+    - JDK
+        - 11
+    - IDE
+        - IntelliJ IDEA Ultimate
+    - Spring Boot
+        - 2.4.2
+    - 빌드
+        - Gradle
+</details>
 
 
 ## 🐱‍🏍 개발 목표
@@ -269,8 +261,6 @@ Commit template 추가 방법
 ```
 
 ## Frontend 개발 규칙
-
-
 1. .vue 파일명 : 대문자 시작 + 카멜케이스
 ```
 my page -> MyPage.vue
