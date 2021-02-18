@@ -442,6 +442,7 @@ export default {
         readOutdoors(
           this.$route.query.id, 
           (res) => {
+            console.log('청산별곡 글', res.data)
             this.fd = res.data;
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];

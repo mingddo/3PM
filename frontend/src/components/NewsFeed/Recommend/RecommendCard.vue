@@ -1,6 +1,11 @@
 <template>
   <div class="recommend_card" id="recoContent" :style="`background-image: url(https://dtbqjjy7vxgz8.cloudfront.net/${ op.files && op.files.length > 0 ? op.files[0] : defaultImg}); background-size: auto 100%`">
     <div class="recommend_contentFrame">
+      <div v-if="Category == 3">
+        <div class="place">
+          <span class="place-city"> {{ city_code[op.code] }} </span> <span> {{ op.placeName}} </span> 
+        </div>
+      </div>
       <div class="recommend_preview">
         <div class="tag">
           <span v-for="(tag,idx) in op.tags" :key="idx">
@@ -28,6 +33,8 @@
 </template>
 
 <script>
+
+import { mapActions } from 'vuex'
 export default {
   props: {
     op: Object,
@@ -35,14 +42,39 @@ export default {
   },
   data() {
     return {
-      defaultImg : [`20210217092232025_cate1.jpg`, `20210218071826309_cate2.jpg`, `20210217092619464_cate33.jpg`][this.Category - 1],
-      contentBox: this.op.content
+      defaultImg : [`꽃보다집_추천.jpg`, `핵인싸_추천.jpg`, `청산별곡_추천.jpg`][this.Category - 1],
+      contentBox: this.op.content,
+      city_code: {
+        1 : '서울',   
+        2 : '경기',   
+        3 : '광주',   
+        4 : '대구',   
+        5 : '대전',   
+        6 : '부산',   
+        7 : '울산',   
+        8 : '인천',   
+        9 : '강원',   
+        10: '경남',   
+        11: '경북',   
+        12: '전남',   
+        13: '전북',   
+        14: '충북',   
+        15: '충남',   
+        16: '제주',   
+        17: '세종'   
+      },
     };
   },
   created () {
     this.setContentIndent();
+    this.setPlace();
   },
   methods : {
+    ...mapActions(['setPlaceName']),
+    setPlace () {
+      console.log(this.op)
+      this.setPlaceName(this.op.code)
+    },
     goToGroupDetail () {
       this.$router.push({
         name: "groupdetail",
@@ -157,6 +189,16 @@ export default {
   border-radius: 5px;
   overflow: hidden;
 }
+.place {
+  padding: 10px;
+  background-color: rgb(57, 58, 58, 0.9);
+  height: 45px;
+  color: var(--white-color)
+}
+.place-city {
+  font-size: 24px;
+}
+
 .tag {
   width: 200px;
   height: 20px;
@@ -197,6 +239,9 @@ export default {
   height: 300px;
 }
 
+.recommend_contentFrame:hover .place {
+  display: none;
+}
 .recommend_contentFrame:hover .tag {
   display: none;
 }

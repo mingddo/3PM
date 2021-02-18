@@ -7,7 +7,7 @@
     <div class="newsfeed-like-list-body">
       <div class="newsfeed-like-list-user" v-for="(user, idx) in users" :key="idx">
         <div class="newsfeed-like-list-userProfile">
-          <NewsFeedProfile :proImg="user.img"/>
+          <NewsFeedProfile :proImg="user.img? user.img : user.profileImg"/>
           {{ user.nickname }}
         </div>
         <div class="newsfeed-like-list-btn">

@@ -70,12 +70,15 @@ export default {
           }
         )
         // this.placeName = '대전'
-        // this.$emit('setPlace', this.placeName)
       } else if (this.Category == 3) {
         // 청산별곡
         outdoorReco(
           (res) => {
             this.c = res.data.feedList
+            console.log('청산별곡 추천데이터', res)
+          },
+          (err) => {
+            console.log(err)
           }
         )
       } else if (this.Category == 4) {
@@ -89,10 +92,10 @@ export default {
             ],
             user: {
               nickname: 'wikiHow',
-              img: '20210218062130421_5.gif'
+              img: 'wikiHow_pro.png'
             },
             content: "요즘 유튜버가 그렇게 HOT🔥하다는데? \n 어떻게 시작하는지 A부터 Z까지",
-            files: ['20210217074141785_박막례할머니.jpg',],
+            files: ['워커홀릭_추천1.jpg',],
             link: "https://ko.wikihow.com/%EC%9C%A0%ED%8A%9C%EB%B8%8C-%EC%B1%84%EB%84%90-%EB%A7%8C%EB%93%9C%EB%8A%94-%EB%B2%95"
           },
           {
@@ -103,9 +106,9 @@ export default {
             ],
             user: {
               nickname: '고용노동부',
-              img: '20210218062155940_5.gif'
+              img: '고용노동부_pro.png'
             },
-            files: ['20210217074141796_고용노동부.jpg',],
+            files: ['워커홀릭_추천2.jpg',],
             content: "나한테 맞는 정책 뭐가있을까? \n 놓칠 수 없는 정책 모음",
             link: "http://www.moel.go.kr/policy/policyinfo/aged/list.do"
           },
@@ -119,10 +122,10 @@ export default {
             ],
             user: {
               nickname: '50plus',
-              img: '20210218062053699_5.gif'
+              img: '50플러스_pro.png'
             },
             content: "50대, 인생 제2막 시작! \n 뭐부터 준비하면 좋을까?",
-            files: ['20210217074524610_서울50jp.jpg',],
+            files: ['워커홀릭_추천3.png',],
             link: "https://50plus.or.kr/"
           })
         } else {
@@ -134,10 +137,10 @@ export default {
             ],
             user: {
               nickname: '일자리 여기',
-              img: '20210218061934048_5.gif'
+              img: '일자리여기_pro.png'
             },
             content: "아직 현역인 우리들!💪 \n 나한테 맞는 일자리 뭐가 있을까?",
-            files: ['20210217074141799_일자리여기.jpg',],
+            files: ['워커홀릭_추천4.jpg',],
             link: "https://www.seniorro.or.kr:4431/seniorro/main/main.do"
           })
         }
