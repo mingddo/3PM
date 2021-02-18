@@ -34,9 +34,9 @@ export default {
       if (this.Category == 4) {
         this.title = '취업 정보, 한눈👁‍🗨에 보기'
       } else if (this.Category == 2) {
-        this.title = `핵인싸`
+        this.title = `인기 게시물`
       } else if (this.Category == 3) {
-        this.title = `청산별곡`
+        this.title = `${this.placeName} 어떠세요?`
       } else if (this.Category == 1) {
         this.title = `인기 게시물`
       }
