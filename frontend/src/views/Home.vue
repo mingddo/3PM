@@ -153,7 +153,6 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { getUser } from "@/api/login.js";
-import Swal from 'sweetalert2';
 
 export default {
   name: "Home",
@@ -287,7 +286,14 @@ export default {
                 this.setRefToken(refToken);
                 this.setUserStatus(true);
                 this.setUserInfo(user_age);
-                Swal.fire('로그인', '카카오 로그인 완료', 'success');
+                                
+                this.$swal.fire({
+                  icon: 'success',
+                  text: '로그인 완료',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+                
               }
               // false -> user 정보가 없으면 Signup
               else {
@@ -315,12 +321,14 @@ export default {
         this.setAuthToken(null);
         this.setKakaoId(null);
         this.setUserStatus(null);
-        // alert("logout");
-        Swal.fire({
+        
+        this.$swal.fire({
           icon: 'success',
-          title: '로그아웃',
-          text: '카카오 로그아웃 완료'
+          text: '로그아웃',
+          showConfirmButton: false,
+          timer: 1500
         })
+      
       });
     },
 

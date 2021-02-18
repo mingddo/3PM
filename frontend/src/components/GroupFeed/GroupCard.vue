@@ -29,7 +29,6 @@
 <script>
 import { mapState } from 'vuex'
 import { secedeGroup } from '@/api/group.js'
-import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -37,13 +36,10 @@ export default {
   },
   methods: {
     secede () {
-      Swal.fire({ 
-        title: '정말로 탈퇴하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '정말로 탈퇴하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '탈퇴하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
@@ -53,7 +49,12 @@ export default {
             (res) => {
               console.log(res)
               // alert('그룹에 탈퇴되었습니다!')
-              Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+              this.$swal.fire({
+                icon: 'success',
+                text: '그룹에 탈퇴되었습니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
               this.isjoined = false
             },
             (err) => {

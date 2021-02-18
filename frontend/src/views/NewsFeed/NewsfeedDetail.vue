@@ -181,7 +181,6 @@ import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
 import Location from "../../components/NewsFeed/Detail/Location.vue";
 import Comment from "../../components/NewsFeed/Detail/Comment.vue";
 import GroupNav from "../../components/GroupFeed/GroupNav.vue";
-import Swal from 'sweetalert2';
 
 export default {
   name: "NewsfeedDetail",
@@ -247,13 +246,22 @@ export default {
         this.fd.id,
         (res) => {
           if (!this.fd.clap) {
-            // alert(`좋아요!`);
-            Swal.fire('좋아요!', '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: '좋아요',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.fd.likeCnt = this.fd.likeCnt + 1;
             this.fd.clap = true;
           } else {
             // alert("좋아요 취소!");
-            Swal.fire('좋아요 취소!', '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: '좋아요 취소',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.fd.likeCnt = this.fd.likeCnt - 1;
             this.fd.clap = false;
           }
@@ -282,15 +290,12 @@ export default {
     shareFeed() {
       // const answer = window.confirm("내 피드에 공유하시겠습니까?");
 
-      Swal.fire({
-        title: "내 피드에 공유하시겠습니까?",
-        text: '',
+      this.$swal.fire({
+        text: '내 피드에 공유하시겠습니까?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '공유하기', 
-        cancelButtonText: '취소하기'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           if (this.fd.files) {
@@ -356,7 +361,12 @@ export default {
             )
           } else {
             // alert('잘못된 접근입니다.')
-            Swal.fire('잘못된 접근입니다.', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '잘못된 접근입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
           // this.$router.push({
           //   name: "NewsfeedForm",

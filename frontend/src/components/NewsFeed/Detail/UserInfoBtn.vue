@@ -23,7 +23,7 @@
 <script>
 import { mapState } from "vuex";
 import { followToggle } from "@/api/mypage.js";
-import Swal from 'sweetalert2';
+
 
 export default {
   name: "UserInfoBtn",
@@ -47,12 +47,22 @@ export default {
           console.log(res);
           if (this.followState) {
             // alert(`${this.name} 님의 소식을 받을 수 있어요!`);
-            Swal.fire(`${this.name} 님의 소식을 받을 수 있어요`, '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: `${this.name} 님의 소식을 받을 수 있어요`,
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.followState = false;
             this.drop = true;
           } else {
             // alert(`${this.name} 님의 소식을 더이상 받지 않을 거에요!`);
-            Swal.fire(`${this.name} 님의 소식을 더이상 받지 않을 거에요`, '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: `${this.name} 님의 소식을 더이상 받지 않을 거에요`,
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.followState = true;
             this.drop = true;
           }
