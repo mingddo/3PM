@@ -4,6 +4,8 @@
       <p>사용하실 닉네임을 입력해주세요.</p>
       <div class="signup-input">
         <input @input="nickname = $event.target.value" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력" @keyup="nicknameValidate" @keydown="nicknameValidate">
+        <div class="signup-guide" v-if="!isPossibleName" style="color:red;">영어/한글/숫자 4자 이상 10자 이내로 입력</div>
+        <div class="signup-guide" v-if="!isOverlapped" style="color:var(--bold-brown"> 사용가능한 닉네임 입니다. </div>
         <button 
         @click="checkOverlap"
         :disabled="!isPossibleName"
@@ -173,9 +175,10 @@ export default {
     color: #000;
     border: 1px solid #000;
     border-radius: 5px;
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
   }
   .signup-input button {
+    margin-top: 1rem;
     background-color: #b29887;
     color: black;
     border-radius: 5px;
@@ -186,6 +189,9 @@ export default {
     box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
     cursor: pointer;
     font-weight: bold;
+  }
+  .signup-guide {
+    margin-left: 10px;
   }
   .disabledBtn {
     opacity: .2;

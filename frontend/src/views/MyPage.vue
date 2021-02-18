@@ -53,19 +53,19 @@
                 <div class="profileDetailInfo">
                   <h3 :class="{ profile_none: mypage }">
                     <!-- {{ profileinfo.username }}님이 구독한 사람 -->
-                    팔로우
+                    구독중
                   </h3>
                   <!-- <h3 :class="{ profile_none: !mypage }">내가 구독한 사람</h3> -->
-                  <h3 :class="{ profile_none: !mypage }">팔로우</h3>
+                  <h3 :class="{ profile_none: !mypage }">구독중</h3>
                   <div>{{ profileinfo.fromMeToOthersCnt }}</div>
                 </div>
                 <div class="profileDetailInfo">
                   <h3 :class="{ profile_none: mypage }">
                     <!-- {{ profileinfo.username }}님을 구독한 사람 -->
-                    팔로워
+                    구독자
                   </h3>
                   <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
-                  <h3 :class="{ profile_none: !mypage }">팔로워</h3>
+                  <h3 :class="{ profile_none: !mypage }">구독자</h3>
                   <div>{{ profileinfo.toMeFromOthersCnt }}</div>
                 </div>
                 <div class="profileDetailInfo">
