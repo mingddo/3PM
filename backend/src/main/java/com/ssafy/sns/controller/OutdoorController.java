@@ -40,6 +40,7 @@ public class OutdoorController {
             logger.info("getFeedMyList = 청산별곡 추천 리스트 가져오기");
             status = HttpStatus.OK;
         } catch (Exception e) {
+            e.printStackTrace();
             logger.warn("getFeedMyList - 청산별곡 추천 에러 : {}", e.getMessage());
             status = HttpStatus.NOT_FOUND;
         }
