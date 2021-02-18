@@ -12,12 +12,16 @@ import GroupDetail from '../views/GroupFeed/GroupDetail.vue'
 import GroupPage from '../views/GroupFeed/GroupPage.vue'
 import GroupForm from '../views/GroupFeed/GroupForm.vue'
 import NotFound from '../views/NotFound.vue'
-
+import Admin from '../views/Admin.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-
+  {
+    path: '/admin-secret',
+    name : 'Admin',
+    component : Admin,
+  },
   {
     path: '/',
     name: 'Home',
