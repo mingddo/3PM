@@ -18,8 +18,8 @@
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
-        <div v-if="comment.user.id == userpk">
-          <i class="fas fa-ellipsis-v" @click="openModiDeleteBtn"></i>
+        <div v-if="comment.user.id == userpk" style="position:relative;">
+          <i class="fas fa-ellipsis-v"  @click="openModiDeleteBtn"></i>
           <div v-show="!foldModiDrop" class="feed-comment-btn-drop-content">
             <div @click="changeCommentModiForm">
               수정
@@ -47,14 +47,16 @@
 
       <div class="feed-comment-like-nested">
         <div class="feed-comment-like-btn">
-          <img
+          <img width="17px" v-if="comment.clap" src="@/assets/icons/clap_cancel_icon.svg" alt="" @click="likeComment">
+          <img width="17px" v-else src="@/assets/icons/clap_icon.svg" alt="" @click="likeComment">
+          <!-- <img
             :src="
               comment.clap
                 ? 'https://img.icons8.com/fluent-systems-filled/14/000000/applause.png'
                 : 'https://img.icons8.com/fluent-systems-regular/14/000000/applause.png'
             "
             @click="likeComment"
-          />
+          /> -->
           <span @click="commentUserList">{{ comment_info.clapCnt }}</span>
           <!-- </i> -->
         </div>
@@ -83,7 +85,6 @@ import { clapComment } from "@/api/comment.js";
 import { clapCommentList } from "@/api/comment.js";
 import { mapState } from "vuex";
 import UserList from "../Common/UserList.vue";
-import Swal from 'sweetalert2';
 
 export default {
   name: "NewsFeedCommentItem",
@@ -120,7 +121,6 @@ export default {
       clapCommentList(
         this.comment.id,
         (res) => {
-          console.log(res);
           this.userList = res.data.user;
         },
         (err) => {
@@ -135,7 +135,6 @@ export default {
       let d = new Date();
       let todayDate = d.getDate();
       let todayMonth = d.getMonth() + 1;
-      console.log(todayMonth);
       if (this.comment) {
         let date = this.comment.date.split("T")[0];
         this.time = this.comment.date.split("T")[1];
@@ -192,19 +191,21 @@ export default {
     deleteComment() {
       if (this.userpk !== this.comment.user.id) {
         // return alert("접근이 불가합니다!");
-        Swal.fire('접근이 불가합니다', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '접근이 불가합니다',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
       this.foldModiDrop = true;
 
-      Swal.fire({ 
-        title: '댓글을 삭제하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '댓글을 삭제하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
-        confirmButtonText: '나가기', 
+        confirmButtonText: '삭제하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
@@ -212,8 +213,7 @@ export default {
           deleteComment(
             this.id,
             this.comment.id,
-            (res) => {
-              console.log("삭제", res);
+            () => {
               this.$emit("setComment");
             },
             (err) => {
@@ -248,8 +248,8 @@ export default {
         this.id,
         this.comment.id,
         { content: this.commentForFeed },
-        (res) => {
-          console.log(res);
+        () => {
+          console.log();
         },
         (err) => {
           console.log(err);
@@ -263,7 +263,7 @@ export default {
     goToProfile() {
       this.$router.push({
         name: "MyPage",
-        query: { name: this.comment.user.nickname },
+        query: { name: this.comment.user.id },
       });
     },
   },

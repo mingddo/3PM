@@ -1,6 +1,11 @@
 <template>
   <div>
     <div class="container">
+      <p>카카오 아이디를 입력해주세요.</p>
+      <div class="signup-input">
+        <input @input="kakaoId = $event.target.value" type="text" placeholder="카카오아이디 중복되지 않게 해주세용">
+      </div>
+
       <p>사용하실 닉네임을 입력해주세요.</p>
       <div class="signup-input">
         <input @input="nickname = $event.target.value" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력" @keyup="nicknameValidate" @keydown="nicknameValidate">
@@ -9,6 +14,7 @@
         :disabled="!isPossibleName"
         :class="{disabledBtn:!isPossibleName}">중복확인</button>
       </div>
+
       <div class="signup-input">
         <button 
         @click="onClickSignup"
@@ -31,10 +37,11 @@ export default {
       isPossibleName : false,
       isOverlapped : true,
       checkedName : '',
+      kakaoId : '',
     }
   },
   computed : {
-    ...mapState(['userStatus','kakaoId','userId']),
+    ...mapState(['userStatus','userId']),
   },
   watch : {
     isPossibleName : function() {
@@ -46,20 +53,6 @@ export default {
       if (this.nickname !== this.checkedName) {
         this.isOverlapped = true
       }
-    }
-  },
-  mounted() {
-    if (!this.$store.state.kakaoId) {
-      this.$router.push({name : "Home"});
-    }
-    if(this.userStatus) {
-      this.$swal.fire({
-        icon: 'success',
-        text: '회원가입 하셨어요',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      this.$router.push({name : "Home"});
     }
   },
   methods : {

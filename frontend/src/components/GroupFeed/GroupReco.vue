@@ -156,6 +156,7 @@ export default {
 .group-reco-name:hover {
   text-decoration: underline;
   cursor: pointer;
+  color: #b29887;
 }
 .group-reco-description {
   font-size: 14px;

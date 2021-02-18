@@ -43,28 +43,14 @@ export default {
   },
   methods: {
     setRecommend () {
-      console.log('reco', this.recoGroup)
       for (let i of this.recoGroup) {
-        console.log('i', i)
         let obj = {}
         obj.name = i.name;
         obj.member = i.memberCnt;
         obj.img = i.groupImg;
         obj.description = i.description;
-        console.log(obj)
         this.c.push(obj)
       }
-      console.log('c', this.c)
-      // this.c = [
-      //   { name: '안녕'},
-      //   { name:' 머야'},
-      //   { name: '제발'}
-      // ]
-      // this.c = [
-      //   { name: '안녕'},
-      //   { name:' 머야'},
-      //   { name: '제발'}
-      // ]
     },
   },
 };

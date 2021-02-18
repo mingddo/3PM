@@ -59,7 +59,6 @@
             </div>            
             <div v-html="result.indoorResponseDtoList[0].content"></div>
           </div>
-          <div class="resultthumbnail"></div>
         </div>
         <div class="resultBottomFrame">
           <div>👏🏻 {{ result.indoorResponseDtoList[0].likeCnt }}</div>
@@ -98,7 +97,6 @@ export default {
     },
 
     goToDetail() {
-      console.log("마이페이지에서 카테고리 기ㅏ기", this.result.indoorResponseDtoList[0]);
       if (this.result.indoorResponseDtoList[0].category == 2) {
         this.$router.push({
           name: "NewsfeedDetail",
@@ -141,9 +139,7 @@ export default {
             }
           }
         );
-        console.log(idxz);
         this.result.indoorResponseDtoList[0].tags.splice(idxz[0], 1);
-        console.log("여기!!", this.result.indoorResponseDtoList[0].tags);
       }
     },
   },

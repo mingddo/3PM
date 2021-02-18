@@ -24,8 +24,11 @@
           </div>
         </div>
         <section v-if="fd" v-cloak class="feed-detail">
-          <div v-if="Category == 2">
+          <div v-if="Category == 2" style="margin-left: 10px; margin-bottom: 10px; cursor: pointer;" @click="goToGroupDetail">
             {{ fd.groupName }}
+          </div>
+          <div v-if="Category == 2" style="padding: 0 10px; margin-bottom: 5px;">
+            <hr style="border-top: 2px solid var(--point-colo);">
           </div>
           <div class="feed-detail-userprofile">
             <div class="feed-detail-userprofile-box">
@@ -85,10 +88,8 @@
             </div>
             <div v-if="fd.content" class="feed-detail-content">
               <p v-html="fd.content">
-                <!-- {{fd.content}} -->
               </p>
             </div>
-            <!-- <div v-if="Category == 2 || Category == 3"> -->
             <Location
               v-if="Category == 3 && latitude && longitude"
               :address="address"
@@ -108,15 +109,11 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
-              <span v-if="fd.clap">👏🏻</span>
-              <img
-                v-if="!fd.clap"
-                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
-              />
+              <img width="17px" src="@/assets/icons/clap_icon.svg" style="cursor:pointer;">
               <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
             </span>
             <span>
-              <i class="far fa-comment"></i>
+              <img width="17px" src="@/assets/icons/comment_icon.svg" alt="">
               <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
               <span v-else> 0</span>
             </span>
@@ -129,18 +126,16 @@
           />
           <div class="feed-detail-like-comment-share-btn-box">
             <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-              <img
-                v-if="!fd.clap"
-                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
-              />
-              <span v-if="fd.clap">👏🏻</span>
+
+              <img width="17px" v-if="fd.clap" src="@/assets/icons/clap_cancel_icon.svg" alt="">
+              <img width="17px" v-else src="@/assets/icons/clap_icon.svg" alt="">
               {{ fd.clap ? "고민해볼래요" : "굉장해요!" }}
             </div>
             <div
               class="feed-detail-like-comment-share-btn"
               @click="focusComment"
             >
-              <i class="far fa-comment"></i>
+              <img width="17px" src="@/assets/icons/comment_icon.svg" alt="">
               댓글달기
             </div>
             <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
@@ -181,7 +176,6 @@ import UserInfoBtn from "../../components/NewsFeed/Detail/UserInfoBtn.vue";
 import Location from "../../components/NewsFeed/Detail/Location.vue";
 import Comment from "../../components/NewsFeed/Detail/Comment.vue";
 import GroupNav from "../../components/GroupFeed/GroupNav.vue";
-import Swal from 'sweetalert2';
 
 export default {
   name: "NewsfeedDetail",
@@ -235,7 +229,6 @@ export default {
         this.fd.id,
         (res) => {
           this.clapedUsers = res.data.user;
-          console.log(this.clapedUsers);
         },
         (err) => {
           console.log(err);
@@ -245,20 +238,27 @@ export default {
     likeFeed() {
       clapFeed(
         this.fd.id,
-        (res) => {
+        () => {
           if (!this.fd.clap) {
-            // alert(`좋아요!`);
-            Swal.fire('좋아요!', '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: '좋아요',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.fd.likeCnt = this.fd.likeCnt + 1;
             this.fd.clap = true;
           } else {
             // alert("좋아요 취소!");
-            Swal.fire('좋아요 취소!', '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: '좋아요 취소',
+              showConfirmButton: false,
+              timer: 1500
+            })
             this.fd.likeCnt = this.fd.likeCnt - 1;
             this.fd.clap = false;
           }
-
-          console.log(res);
         },
         (err) => {
           console.log(err);
@@ -282,15 +282,12 @@ export default {
     shareFeed() {
       // const answer = window.confirm("내 피드에 공유하시겠습니까?");
 
-      Swal.fire({
-        title: "내 피드에 공유하시겠습니까?",
-        text: '',
+      this.$swal.fire({
+        text: '내 피드에 공유하시겠습니까?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '공유하기', 
-        cancelButtonText: '취소하기'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           if (this.fd.files) {
@@ -326,7 +323,6 @@ export default {
             getprofileGroups(
               this.userpk,
               (res) => {
-                console.log(res)
                 this.groupList = res.data
                 this.groupModal = true;
               },
@@ -356,7 +352,12 @@ export default {
             )
           } else {
             // alert('잘못된 접근입니다.')
-            Swal.fire('잘못된 접근입니다.', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '잘못된 접근입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
           // this.$router.push({
           //   name: "NewsfeedForm",
@@ -376,6 +377,12 @@ export default {
       let input = document.getElementById("comment");
       input.focus();
     },
+    goToGroupDetail () {
+      this.$router.push({
+        name: "groupdetail",
+        query: { groupId: this.fd.groupId},
+      });
+    },
     goToProfile() {
       this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } });
     },
@@ -390,13 +397,11 @@ export default {
       // feed.pk 를 활용하여 detail 페이지 요청 보내기
       // 현재는 가상 데이터 하나만 고정해서 보여주기
       this.Category = this.$route.query.Category;
-      console.log("카테고리", this.Category);
       if (this.Category == 1) {
         readIndoors(
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -411,12 +416,14 @@ export default {
         );
       } else if (this.Category == 2) {
         // 핵인싸 get 요청
+        if(!this.$route.query.group) {
+          this.$router.push({name : "NotFound"});
+        }
         getGroupfeedsDetail(
           this.$route.query.group,
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -432,21 +439,26 @@ export default {
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 3) {
         // 청산별곡 get 요청
-        readOutdoors(this.$route.query.id, (res) => {
-          this.fd = res.data;
-          console.log(this.fd);
-          this.date = this.fd.date.split("T")[0];
-          this.time = this.fd.date.split("T")[1];
-          this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>");
-          this.placeName = this.fd.placeName;
-          this.address = this.fd.address;
-          this.longitude = this.fd.lng;
-          this.latitude = this.fd.lat;
-          let st = this.fd.content.split(" ")[0]
-          if (st == '<b>[공유]</b>') {
-            this.isShare = true;
+        readOutdoors(
+          this.$route.query.id, 
+          (res) => {
+            this.fd = res.data;
+            this.date = this.fd.date.split("T")[0];
+            this.time = this.fd.date.split("T")[1];
+            this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>");
+            this.placeName = this.fd.placeName;
+            this.address = this.fd.address;
+            this.longitude = this.fd.lng;
+            this.latitude = this.fd.lat;
+            let st = this.fd.content.split(" ")[0]
+            if (st == '<b>[공유]</b>') {
+              this.isShare = true;
+            }
+          },
+          (err) => {
+            console.log(err);
           }
-        });
+        );
         // latitude / longitude / placeName 설정해주기~
       } else if (this.Category == 4) {
         // 워커홀릭 get 요청
@@ -454,7 +466,6 @@ export default {
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(res.data);
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -469,12 +480,26 @@ export default {
         );
       }
     },
+    checkCategory() {
+      return new Promise((resolve) => {
+        const Category = this.$route.query.Category;
+        const CategoryPattern = /^[1-4]$/;
+        const patternCheck = CategoryPattern.test(Category);
+        resolve(patternCheck)
+      })
+    }
   },
   created() {
     if (!this.$store.state.userStatus) {
       this.$router.push({name : "Home"});
     }
     this.setFeedDetail();
+    this.checkCategory()
+    .then((res)=>{ 
+      if (!res) {
+        this.$router.push({name : "NotFound"});
+      }
+    })
   },
   computed: {
     ...mapState({

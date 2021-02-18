@@ -100,7 +100,6 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 import NewsFeedList from '../../components/NewsFeed/NewsFeedList.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
 import UserList from '../../components/NewsFeed/Common/UserList.vue'
-import Swal from 'sweetalert2';
 
 export default {
   components: { Sidebar, NewsFeedList, GroupNav, UserList },
@@ -148,15 +147,12 @@ export default {
       this.memberModal = true;
     },
     groupDelete () {
-      Swal.fire({ 
-        title: '한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '한번 삭제된 그룹 데이터는 복원되지 않습니다. 삭제하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '삭제하기', 
-        cancelButtonText: '취소'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           deleteGroup(
@@ -189,8 +185,7 @@ export default {
         updateGroupInfo(
           this.group_info.id,
           this.group,
-          (res) => {
-            console.log(res)
+          () => {
           },
           (err) => {
             console.log(err)
@@ -202,8 +197,7 @@ export default {
           createGroupImg(
             this.group_info.id,
             formData,
-            (res) => {
-              console.log(res)
+            () => {
             },
             (err) => {
               console.log(err)
@@ -214,21 +208,23 @@ export default {
       this.modiForm = !this.modiForm;
     },
     secede () {
-      Swal.fire({ 
-        title: '정말로 탈퇴하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '정말로 탈퇴하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '탈퇴하기', 
-        cancelButtonText: '취소'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           secedeGroup(
             this.group_info.id,
             () => {            
-              Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+              this.$swal.fire({
+                icon: 'success',
+                text: '그룹에 탈퇴되었습니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
               this.isjoined = false 
             },
             (err) => {
@@ -257,7 +253,12 @@ export default {
         this.group_info.id,
         () => {
           // alert('그룹에 가입되었습니다!')
-          Swal.fire('그룹에 가입되었습니다', '', 'success');
+          this.$swal.fire({
+            icon: 'success',
+            text: '그룹에 가입되었습니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
           this.isjoined = true 
         },
         (err) => {
@@ -368,7 +369,7 @@ export default {
 }
 .group-detail-img-space {
   margin: auto;
-  width: 100%;
+  width: auto;
   height: 60%;
   border-radius: 20px;
   text-align: left;
@@ -378,14 +379,16 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(0, 0, 0, 0.8);
 }
 .group-detail-body {
   display: flex;
   justify-content: space-between;
 }
 .group-detail-img {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
+  max-height: 300px;
   object-fit: cover;
 }
 .group-detail-img-form{
@@ -464,7 +467,6 @@ export default {
   text-align: center;
 }
 .group-detail-join-btn {
-  width: 100%;
   height: 50px;
   justify-content: center;
   display: flex;

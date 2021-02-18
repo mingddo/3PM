@@ -104,6 +104,10 @@ public class S3Service {
 
     // 파일 삭제
     public void deleteFile(String fileName) throws IOException {
+        if ("default.gif".equals(fileName)) {
+            return;
+        }
+
         boolean isExistObject = s3Client.doesObjectExist(bucket, fileName);
 
         if (isExistObject) {

@@ -20,7 +20,7 @@
     </div>
     <div class="group-page-member">
       <i class="fas fa-users">{{ group.memberCnt}}</i>
-      <div  v-if="group.leaderId != userpk && group.memberCnt > 1" @click="secede">그룹탈퇴하기</div>
+      <div style="cursor: pointer" v-if="group.leaderId != userpk && group.memberCnt > 1" @click="secede">탈퇴</div>
     </div>
 
   </div>
@@ -29,7 +29,6 @@
 <script>
 import { mapState } from 'vuex'
 import { secedeGroup } from '@/api/group.js'
-import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -37,23 +36,24 @@ export default {
   },
   methods: {
     secede () {
-      Swal.fire({ 
-        title: '정말로 탈퇴하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '정말로 탈퇴하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '탈퇴하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           secedeGroup(
             this.group.id,
-            (res) => {
-              console.log(res)
+            () => {
               // alert('그룹에 탈퇴되었습니다!')
-              Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
+              this.$swal.fire({
+                icon: 'success',
+                text: '그룹에 탈퇴되었습니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
               this.isjoined = false
             },
             (err) => {
@@ -78,11 +78,14 @@ export default {
 <style>
 .group-page-card {
   display: flex;
+  width: 100%;
   justify-content: space-between;
-  border-bottom: 1px solid lightgrey;
-  padding : 20px;
-  background-color: #fffcf9 ;
+  /* border-bottom: 1px solid lightgrey; */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  padding : 15px;
+  background-color: var(--white-color);
   border-radius: 10px;
+  margin: auto;
   margin-bottom: 10px;
 }
 .group-page-group {
@@ -93,8 +96,8 @@ export default {
 }
 .group-page-img-space {
   cursor: pointer;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   text-align: left;
   border: solid 1px rgba(0, 0, 0, 0.2);
   border-radius: 100%;
@@ -109,13 +112,16 @@ export default {
   min-width: 120px;
   padding : 20px;
 }
+.group-page-info > div {
+  margin: 10px;
+}
 .group-page-name {
   cursor:pointer;
   font-size: 24px;
 }
 .group-page-name:hover {
   text-decoration: underline;
-  color: lightgray
+  color: #b29887;
 }
 .group-page-member {
   display: flex;
@@ -127,8 +133,8 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .group-page-img-space {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
   }
 }
 </style>

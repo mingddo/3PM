@@ -135,7 +135,6 @@ import Practice from "../components/Practice.vue";
 import { userInfoDetail, editUserInfo } from "@/api/mypage.js";
 import { checkOverlapped } from "@/api/signup.js";
 import Sidebar from "../components/Common/Sidebar.vue";
-import Swal from 'sweetalert2';
 
 export default {
   components: { Practice, Sidebar },
@@ -186,7 +185,6 @@ export default {
       userInfoDetail(
         this.$store.state.userId,
         (res) => {
-          console.log("여기", res.data);
           this.userInfo = res.data;
           this.nickname = res.data.nickname;
           this.introduce = res.data.introduce;
@@ -201,21 +199,22 @@ export default {
       this.nickname = this.userInfo.nickname;
     },
     editProfile() {
-      console.log("고고", this.changeURL);
       const formData = new FormData();
       if (this.changeURL) {
         formData.append("file", this.changeURL);
       }
       formData.append("nickname", this.userInfo.nickname);
       formData.append("introduce", this.userInfo.introduce);
-      console.log(formData);
       editUserInfo(
         this.$store.state.userId,
         formData,
-        (res) => {
-          console.log(res);
-          // alert("내 정보가 수정되었어요!");
-          Swal.fire('내 정보가 수정되었어요!', '', 'success');
+        () => {
+          this.$swal.fire({
+            icon: 'success',
+            text: '내 정보가 수정되었어요',
+            showConfirmButton: false,
+            timer: 1500
+          })
           this.completed = true;
           this.$router.push({
             name: "MyPage",
@@ -244,31 +243,45 @@ export default {
       }
     },
     checkOverlap() {
-      console.log("중복 확인 들어온다");
       // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
-      console.log(this.nickname);
       if (this.userInfo.nickname === this.nickname) {
-        // alert("현재 닉네임과 같습니다.");
-        Swal.fire('현재 닉네임과 같습니다.', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '현재 닉네임과 같습니다',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         checkOverlapped(
           {
             username: this.nickname,
           },
           (res) => {
-            console.log(res);
             this.isOverlapped = res.data;
             if (this.isOverlapped) {
-              // alert("사용 불가능한 아이디입니다 😥😥😥😥");
-              Swal.fire('사용 불가능한 아이디입니다', '', 'error');
+              this.$swal.fire({
+                icon: 'error',
+                text: '사용 불가능한 닉네임입니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
             } else {
-              // alert("사용 가능한 아이디입니다 😆😆😆😆");
-              Swal.fire('사용 가능한 아이디입니다', '', 'success');
+              this.$swal.fire({
+                icon: 'success',
+                text: '사용 가능한 닉네임입니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
           },
           (err) => {
-            // alert("err", err);
-            Swal.fire('err', err, 'error');
+            console.log(err)
+            this.$swal.fire({
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 1500
+            })
+
           }
         );
       }
@@ -284,12 +297,11 @@ export default {
     if (this.completed) {
       next();
     } else {
-      Swal.fire({ 
-        title: '수정 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
-        text: '', 
-        icon: 'warning', showCancelButton: true, 
-        confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', 
-        confirmButtonText: '네', cancelButtonText: '아니요' 
+      this.$swal.fire({
+        icon: 'warning',
+        text: '수정 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?',
+        showCancelButton: true,
+        confirmButtonText: '나가기', cancelButtonText: '돌아가기'
       }).then((result) => {         
         if (result.isConfirmed) { 
           next();       
@@ -298,14 +310,6 @@ export default {
         }
       })
 
-      // const answer = window.confirm(
-      //   "수정 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?"
-      // );
-      // if (answer) {
-      //   next();
-      // } else {
-      //   next(false);
-      // }
     }
   },
   watch: {

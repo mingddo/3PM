@@ -47,6 +47,12 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'CookieRun-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 /* 'Iropke Batang'; */
 @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
 
@@ -358,7 +364,7 @@ button.active {
   height: 100vh;
   padding-top: 80px;
   display: flex;
-  background-color: #fff9f3;
+  background-color: var(--white-color);
   flex-direction: column;
   border-radius: 5px;
   justify-content: flex-start;

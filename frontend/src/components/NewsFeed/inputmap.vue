@@ -96,12 +96,9 @@ export default {
   },
   methods: {
     displayCenterInfo(result, status) {
-      console.log('정보 찾기')
     if (status === kakao.maps.services.Status.OK) {
-        console.log('ok', result)
         // var infoDiv = document.getElementById('centerAddr');
         for(let i = 0; i < result.length; i++) {
-          console.log('결과', result)
           this.keyword = result[i].address.address_name
           this.location.placeName = null
           this.location.address = result[i].address.address_name
@@ -109,8 +106,6 @@ export default {
           this.location.lng = this.lng
           this.location.lat = this.lat
           this.$emit('sendLocation', this.location)
-          // this.keyword = result[i].address_name
-          // console.log(this.keyword)
           this.searchPlaces();
           
         }
@@ -124,12 +119,10 @@ export default {
       this.location = {}
       this.lat = position.coords.latitude;
       this.lng = position.coords.longitude;
-      console.log(this.lat, this.lng)
       this.panto (this.lat, this.lng)
       let firstPlacePosition = new kakao.maps.LatLng(this.lat, this.lng)
       this.addMarker(firstPlacePosition, 0)
       let geocoder = new kakao.maps.services.Geocoder();
-      // console.log(geocoder)
       // geocoder.coord2RegionCode(this.lng, this.lat, this.displayCenterInfo);
       geocoder.coord2Address(this.lng, this.lat, this.displayCenterInfo);      
     },
@@ -148,7 +141,6 @@ export default {
     },
     select (item) {
       this.location = {}
-      console.log('선택', item)
       this.selected = true;
       this.selectLocation = item
       this.lat = item.y
@@ -159,7 +151,6 @@ export default {
       this.location.lat = item.y
       this.location.address = item.address_name
       this.location.city = item.address_name.split(' ')[0]
-      console.log('도시', this.location.city)
       this.setMap()
       this.$emit('sendLocation', this.location)
       this.setZoomable(false);
@@ -186,7 +177,6 @@ export default {
         this.fold = false;
         this.place = new kakao.maps.services.Places();
         this.infowindow = new kakao.maps.InfoWindow({zIndex:1});
-        console.log(this.infowindow)
         this.setZoomable(true);
         this.place.keywordSearch(this.keyword, this.placeSearchCB)
       } else {
@@ -209,7 +199,6 @@ export default {
       }
     },
     displayInfowindow(marker, title) {
-      console.log('title', title)
       let content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
       this.infowindow.setContent(content);
       this.infowindow.open(this.map, marker);
@@ -218,7 +207,6 @@ export default {
       this.items = places
       // let listEl = document.getElementById('placesList')
       let menuEl = document.getElementById('menu_wrap')
-      console.log(menuEl)
       let bounds = new kakao.maps.LatLngBounds()
 
       // this.removeAllChildNods(listEl);
@@ -285,7 +273,6 @@ export default {
       }
       for (i=1; i<=pagination.last; i++) {
         let el = document.createElement('button');
-        console.log('el', el)
         el.href = "#";
         el.innerHTML = i;
 

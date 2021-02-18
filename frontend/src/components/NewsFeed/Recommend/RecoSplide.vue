@@ -10,6 +10,8 @@
 import "@/assets/css/splide.css";
 import { mapState } from 'vuex'
 import { indoorReco } from "@/api/reco.js";
+import { groupFeedReco } from "@/api/reco.js";
+import { outdoorReco } from "@/api/reco.js";
 import RecommendCard from './RecommendCard.vue';
 
 export default {
@@ -57,16 +59,25 @@ export default {
         // 꽃보다 집 추천
         indoorReco(
           (res) => {
-            console.log(res.data.feedList)
             this.c = res.data.feedList
           }
         )
       } else if (this.Category == 2) {
-        // 청산별곡
-        this.placeName = '대전'
-        this.$emit('setPlace', this.placeName)
+         // 핵인싸
+        groupFeedReco(
+          (res) => {
+            this.c = res.data
+          }
+        )
+        // this.placeName = '대전'
+        // this.$emit('setPlace', this.placeName)
       } else if (this.Category == 3) {
-        // 핵인싸
+        // 청산별곡
+        outdoorReco(
+          (res) => {
+            this.c = res.data.feedList
+          }
+        )
       } else if (this.Category == 4) {
         // 워커홀릭
         this.c = [
@@ -78,7 +89,7 @@ export default {
             ],
             user: {
               nickname: 'wikiHow',
-              img: 'https://play-lh.googleusercontent.com/PRyVT9EUZs5elFJfMugM-cRUQM9rzegZiLdheMh-4Oc_ehFmG5lQN6vuFxOx_AN7r50'
+              img: '20210218062130421_5.gif'
             },
             content: "요즘 유튜버가 그렇게 HOT🔥하다는데? \n 어떻게 시작하는지 A부터 Z까지",
             files: ['20210217074141785_박막례할머니.jpg',],
@@ -92,7 +103,7 @@ export default {
             ],
             user: {
               nickname: '고용노동부',
-              img: 'http://www.moel.go.kr/local/viewer/BBS/2016//2016050311203436f524d8ae404370bd02a8c123cab48b.hwp.files/BIN0001.png'
+              img: '20210218062155940_5.gif'
             },
             files: ['20210217074141796_고용노동부.jpg',],
             content: "나한테 맞는 정책 뭐가있을까? \n 놓칠 수 없는 정책 모음",
@@ -108,7 +119,7 @@ export default {
             ],
             user: {
               nickname: '50plus',
-              img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzfVyF3TTwhO3Ki5GVTXlfbo5QmjghtOdA6w&usqp=CAU'
+              img: '20210218062053699_5.gif'
             },
             content: "50대, 인생 제2막 시작! \n 뭐부터 준비하면 좋을까?",
             files: ['20210217074524610_서울50jp.jpg',],
@@ -123,7 +134,7 @@ export default {
             ],
             user: {
               nickname: '일자리 여기',
-              img: 'https://www.seniorro.or.kr:4431/img/main/m13.png'
+              img: '20210218061934048_5.gif'
             },
             content: "아직 현역인 우리들!💪 \n 나한테 맞는 일자리 뭐가 있을까?",
             files: ['20210217074141799_일자리여기.jpg',],

@@ -80,8 +80,8 @@ export default {
 
 <style scoped>
 .profileImgFrame {
-  width : 100px;
-  height: 100px;
+  width : 60px;
+  height: 60px;
 }
 .activityContent {
   width: 80%;
@@ -99,7 +99,7 @@ export default {
 }
 .activityComponentFrame {
   cursor: pointer;
-  background-color: #fffcf9;
+  background-color: var(--white-color);
   width: 100%;
   margin: auto;
   padding: 15px 0;

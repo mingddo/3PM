@@ -137,7 +137,6 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import Swal from 'sweetalert2';
 
 export default {
   name: "Nav",
@@ -248,7 +247,6 @@ export default {
       });
     },
     goToLogout() {
-      console.log("사이드바 로그아웃");
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
       });
@@ -317,7 +315,12 @@ export default {
       this.sideBarToggle(e);
       setTimeout(() => {
         // alert("setting 창으로 가기");
-        Swal.fire('Setting 으로 가기', '', 'success');
+        this.$swal.fire({
+          icon: 'success',
+          text: 'Setting 으로 가기',
+          showConfirmButton: false,
+          timer: 1500
+        })
         location.reload();
       }, 10);
     },
@@ -334,7 +337,12 @@ export default {
           this.setKakaoId(null);
           this.setUserStatus(null);
           // alert("logout");
-          Swal.fire('Logout', '', 'success');
+          this.$swal.fire({
+            icon: 'success',
+            text: 'Logout',
+            showConfirmButton: false,
+            timer: 1500
+          })
           resolve();
         });
       });

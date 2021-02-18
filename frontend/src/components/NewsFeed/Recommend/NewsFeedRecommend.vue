@@ -34,11 +34,11 @@ export default {
       if (this.Category == 4) {
         this.title = '취업 정보, 한눈👁‍🗨에 보기'
       } else if (this.Category == 2) {
-        this.title = `핵인싸`
+        this.title = `인기 게시물`
       } else if (this.Category == 3) {
-        this.title = `청산별곡`
+        this.title = `${this.placeName} 어떠세요?`
       } else if (this.Category == 1) {
-        this.title = `오늘의 인기 게시물`
+        this.title = `인기 게시물`
       }
     },
   },
@@ -51,12 +51,12 @@ export default {
   margin: 15px 0;
 } */
 .banner-header {
-  padding-top : 40px; 
-  padding-bottom:40px; 
-  text-align:center;
+  padding : 20px 10px; 
+  /* padding-bottom:20px;  */
+  /* text-align:center; */
   font-size: 24px;
   font-weight: bold;
-  background-color: #fff9f3;
+  /* background-color: #fff9f3; */
   border-radius: 5px;
   /* color: white; */
 }

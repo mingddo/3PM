@@ -8,6 +8,13 @@
       <div class="newsfeed newsfeed-form">
         <GroupNav v-if="Category == 2" :isHome="true"/>
         <section class="newsfeed-form-content">
+          <div class="newsfeed-form-category"> <span class="highlight" @click="changeCategory">{{ Category_list[Category - 1] }}</span> </div>
+          <div v-if="changeCate" class="newsfeed-form-group">
+            <div v-for="(cate, idx) of Category_list" :key="idx">
+              <button @click="selectCate(idx)">{{ cate }}</button>
+            </div>
+            <button @click="changeCategory"> 닫기 </button>
+          </div>
           <div class="newsfeed-form-profile">
             <NewsFeedProfile  :userId="userpk" :proImg="myImg ? myImg : defaultImg"/>
             <div class="newsfeed-form-profile-name">
@@ -16,13 +23,14 @@
             <div v-if="Category == 2" class="newsfeed-form-group-container">
               <div v-if="!fixGroup" @click="chooseGroup" class="newsfeed-form-group-btn highlight">{{ groupName }}</div>
               <div v-else class="highlight">{{ groupName }}</div>
+
               <div v-if="select" class="newsfeed-form-group">
                 <div class="newsfeed-form-group-list" v-if="groupList.length > 0">
                   <div v-for="(group, idx) of groupList" :key="idx">
                     <button @click="selectGroup(group)">{{ group.name }}</button>
                   </div>
                 </div>
-                <div class="newsfeed-for  m-group-none" v-else>
+                <div class="newsfeed-form-group-none" v-else>
                   가입된 그룹이 없습니다. 그룹에 가입해주세요!
                   <div class="newsfeed-form-group-redirect-btn" @click="goToGroupPage">
                     그룹 찾으러 가기
@@ -32,6 +40,7 @@
                   <button @click="chooseGroup">닫기</button>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -212,7 +221,6 @@ import Sidebar from '../../components/Common/Sidebar.vue';
 import Inputmap from '../../components/NewsFeed/inputmap.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue'
 import NewsFeedProfile from '../../components/NewsFeed/Common/NewsFeedProfile.vue'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'NewsfeedForm',
@@ -281,10 +289,20 @@ export default {
       selectLocation: false,
       totalLen: null,
       // selectedVideo: null,
+      Category_list : ['꽃보다 집', '핵인싸', '청산별곡', '워커홀릭'],
+      changeCate: false,
     };
   },
 
   methods: {
+    selectCate (c) {
+      console.log(c)
+      this.Category = c + 1
+      this.changeCate = false
+    },
+    changeCategory () {
+      this.changeCate = !this.changeCate;
+    },
     goToGroupPage () {
       this.completed = true;
       this.$router.push({ name: 'grouppage' })
@@ -333,7 +351,6 @@ export default {
         tag,
         (res) => {
           this.items = res.data
-          console.log(this.items)
         },
         (err) => {
           console.log(err)
@@ -341,27 +358,33 @@ export default {
       )
     },
     autoTag (e) {
-      console.log(e)
       this.inputTag = e.target.value;
       if (this.inputTag == '') {this.inputTag = '#'}
       let tmpTag = this.inputTag.split('#')[1]
         tmpTag = tmpTag.replace(/ /g , '')
       if (tmpTag) {
-        console.log('api요청', tmpTag)
         this.tagApi(tmpTag)
       }
     },
     addTag (t) {
       let tag = t.target.value.split('#')[1]
       if (!tag) {
-        // alert('태그를 입력해주세요!')
-        Swal.fire('태그를 입력해주세요', '', 'warning');
+        this.$swal.fire({
+          icon: 'warning',
+          text: '태그를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         if (this.form.tags) {
           let check = this.form.tags.findIndex(element => element === tag)
           if (check !== -1) {
-            // alert('이미 존재하는 태그입니다')
-            Swal.fire('이미 존재하는 태그입니다', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '이미 존재하는 태그입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
             this.form.tags.push(tag);
           }
@@ -397,7 +420,6 @@ export default {
           getprofileGroups(
             this.userpk,
             (res) => {
-              console.log(res)
               this.groupList = res.data
             },
             (err) => {
@@ -438,12 +460,15 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
-      console.log('files', files)
       if (files.length) {
         this.totalLen = this.form.filePaths.length + this.fileList.length
         if (this.totalLen > 5) {
-          // alert('더이상 이미지를 올릴 수 없습니다')
-          Swal.fire('더이상 이미지를 올릴 수 없습니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '더이상 이미지를 올릴 수 없습니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         } else {
           this.selectedFile = files[0]
           this.fileList.push(this.selectedFile)
@@ -524,14 +549,22 @@ export default {
             },
             (err) => {
               console.log(err)
-              // alert('인증된 유저만 작성 가능합니다.')
-              Swal.fire('인증된 유저만 작성 가능합니다', '', 'error');
+              this.$swal.fire({
+                icon: 'error',
+                text: '인증된 유저만 작성 가능합니다',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
           )
         } else if (this.Category == 2) {
           if (this.selectedGroup == null) {
-            // alert('그룹을 선택해주세요!')
-            Swal.fire('그룹을 선택해주세요', '', 'error');
+            this.$swal.fire({
+              icon: 'error',
+              text: '그룹을 선택해주세요',
+              showConfirmButton: false,
+              timer: 1500
+            })
           } else {
             // 핵인싸 create 요청
             createGroupFeed(
@@ -600,21 +633,28 @@ export default {
             },
             (err) => {
               console.log(err)
-              // alert('다시 로그인해주세요')
-              Swal.fire('다시 로그인해주세요', '', 'error');
+              this.$swal.fire({
+                icon: 'error',
+                text: '다시 로그인해주세요',
+                showConfirmButton: false,
+                timer: 1500
+              })
             }
           )
         } else {
           // 404 페이지 이동
-          // alert('잘못된 접근입니다.')
-          Swal.fire('잘못된 접근입니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '잘못된 접근입니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
 
       } else {
         // axios put 요청
         if (this.userpk == this.$route.params.feed.user.id) {
           if (this.Category == 1) {
-            console.log(this.$route.params.feed.id)
             updateIndoors (
               this.$route.params.feed.id,
               this.form,
@@ -631,8 +671,12 @@ export default {
               },
               (err) => {
                 console.log(err)
-                // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else if (this.Category == 2) {
@@ -663,7 +707,6 @@ export default {
             this.form.address = this.location.address || this.location.address_name
             this.form.placeName = this.location.placeName || this.location.place_name
             this.form.code = this.city_code[this.location.city]
-            console.log(this.form)
             updateOutdoors(
               this.$route.params.feed.id,
               this.form,
@@ -679,9 +722,13 @@ export default {
                 }
               },
               (err) => {
-                console.log(err)
-                // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                console.log(err);
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else if (this.Category == 4) {
@@ -703,18 +750,32 @@ export default {
               (err) => {
                 console.log(err)
                 // alert('본인만 수정할 수 있습니다.')
-                Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+                this.$swal.fire({
+                  icon: 'error',
+                  text: '본인만 수정할 수 있습니다',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
               }
             )
           } else {
             // 404 페이지 이동
-            // alert('잘못된 접근입니다.')
-            Swal.fire('잘못된 접근입니다', '', 'error');
+            // alert('잘못된 접근입니다.')            
+            this.$swal.fire({
+              icon: 'error',
+              text: '잘못된 접근입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
           
         } else {
-          // alert('본인만 수정할 수 있습니다!!!')
-          Swal.fire('본인만 수정할 수 있습니다', '', 'error');
+          this.$swal.fire({
+            icon: 'error',
+            text: '본인만 수정할 수 있습니다',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
       }
     },
@@ -731,15 +792,12 @@ export default {
     if (this.completed) {
       next();
     } else {
-      Swal.fire({ 
-        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '나가기', 
-        cancelButtonText: '취소'
+        cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           next();

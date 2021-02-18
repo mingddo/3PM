@@ -168,7 +168,6 @@ import {
 } from "@/api/search.js";
 import GroupResult from "../components/Search/GroupResult.vue";
 import Sidebar from "@/components/Common/Sidebar.vue";
-import Swal from 'sweetalert2';
 
 // 방향키로 페이지 창 못 움직이게 하는 코드
 window.addEventListener(
@@ -302,15 +301,17 @@ export default {
     },
     Allsearch() {
       this.$route.query.query = this.keyword;
-      console.log(this.$route.query.query);
       this.autotag = false;
       if (this.keyword === "") {
-        // alert("검색어를 입력해주세요");
-        Swal.fire("검색어를 입력해주세요", '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '검색어를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
       if (this.$route.query.query === "") {
-        console.log("쿼리가 없고 검색어가 있을 때");
         this.$router.push({
           name: "Search",
           params: { filter: "all" },
@@ -325,7 +326,6 @@ export default {
           searchall(
             this.keyword,
             (res) => {
-              console.log(res.data.groupList.body);
               if (
                 res.data.feedList.body.length === 0 &&
                 res.data.userList.body.length === 0 &&
@@ -339,7 +339,6 @@ export default {
               } else {
                 this.search_result_all = res.data;
                 this.search_result_feed = res.data.feedList.body;
-                console.log(this.search_result_all);
                 this.loaded = true;
                 this.loading = false;
               }
@@ -352,7 +351,6 @@ export default {
           searchfeed(
             this.keyword,
             (res) => {
-              console.log(res);
               if (res.data.length === 0) {
                 this.loaded = false;
                 this.loading = false;
@@ -371,7 +369,6 @@ export default {
           searchuser(
             this.keyword,
             (res) => {
-              console.log(res);
               if (res.data.length === 0) {
                 this.loaded = false;
                 this.loading = false;
@@ -390,7 +387,6 @@ export default {
           searchgroup(
             this.keyword,
             (res) => {
-              console.log("그룹 검색", res);
               if (res.data.length === 0) {
                 this.loaded = false;
                 this.loading = false;
@@ -445,6 +441,9 @@ export default {
           this.keyword = this.$route.query.query;
           this.Allsearch();
         }
+      }
+      else {
+        this.$router.push({name : "NotFound"});
       }
     },
     filterchange1() {

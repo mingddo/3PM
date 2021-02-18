@@ -47,7 +47,6 @@ import { searchAutoUser } from '@/api/comment.js'
 import { getprofileInfo } from '@/api/mypage.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'Comment',
@@ -80,6 +79,14 @@ export default {
     this.setComment(0);
     this.getImg();
   },
+  watch : {
+    commentInput : function () {
+      if (this.commentInput.length > 200) {
+        this.commentInput.slice(0,200)
+        alert('200자 이내로 작성해주세요')
+      }
+    }
+  },
   methods: {
     getImg () {
       getprofileInfo(
@@ -96,7 +103,6 @@ export default {
       this.delIdx = this.comments.findIndex((item) => {
         return item.id == commentId
       })
-      console.log('삭제', this.delIdx)
       this.comments = this.comments.splice(this.delIdx, 1)
     },
     iSound(a) {
@@ -117,26 +123,28 @@ export default {
     createComment () {
       if (!this.commentInput) {
         // alert('내용을 입력해주세요')
-        Swal.fire('내용을 입력해주세요', '', 'success');
+        this.$swal.fire({
+          icon: 'success',
+          text: '내용을 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         let results = this.commentInput.match(/@/g); 
         if (results == !null) {
           let cnt = results.length
           for (let i = 1; i <= cnt; i++) {
-            console.log(i)
             let slice = this.commentInput.split('@')[i]
             let mentioned = slice.split(' ')[0]
             if (mentioned) {
               this.mention.push(mentioned)
             }
           }
-          console.log(this.mention)
         }
         createComment(
           this.id,
           { "content" : this.commentInput},
-          (r) => {
-            console.log(r)
+          () => {
             this.comments = [];
             this.setComment(0)
           },
@@ -152,7 +160,6 @@ export default {
       }
     },
     setComment (num) {
-      console.log('하,,,', num)
       if (num == 0) {
         this.comments = []
       }
@@ -162,7 +169,6 @@ export default {
         (res) => {
           this.page = res.data.endNum
           let comment = res.data.comments;
-          console.log('comment', comment)
           if (comment && comment.length < 10) {
             this.last = true;
           }
@@ -203,13 +209,10 @@ export default {
           cnt = results.length
         }
         let mentionedUser = this.commentInput.split('@')[cnt]
-        let saveMention = mentionedUser.split(' ')[0]
-        console.log(saveMention)
         if (mentionedUser) {
           searchAutoUser(
             mentionedUser,
             (res) => {
-              console.log(res)
               this.items = res.data
             },
             (err) => {

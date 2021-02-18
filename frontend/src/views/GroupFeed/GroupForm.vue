@@ -53,7 +53,6 @@ import { createGroup } from '@/api/group.js'
 import { createGroupImg } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
-import Swal from 'sweetalert2';
 
 export default {
   components: { Sidebar, GroupNav },
@@ -81,8 +80,6 @@ export default {
         let reader = new FileReader();
         reader.onload = (e) => {
           this.imageUrl = e.target.result;
-          console.log(this.imageUrl)
-          // this.previewUrl.push(this.imageUrl)
         }
         reader.readAsDataURL(this.selectedFile);
       }
@@ -93,8 +90,7 @@ export default {
       createGroupImg(
         id,
         formData,
-        (res) => {
-          console.log(res)
+        () => {
         },
         (err) => {
           console.log(err)
@@ -105,10 +101,20 @@ export default {
       this.completed = true;
       if (!this.form.name) {
         // alert('그룹 이름을 입력해주세요')
-        Swal.fire('그룹 이름을 입력해주세요', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '그룹 이름을 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else if (!this.form.description) {
         // alert('그룹 소개를 입력해주세요')
-        Swal.fire('그룹 소개를 입력해주세요', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '그룹 소개를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         createGroup(
           this.form,
@@ -122,7 +128,6 @@ export default {
             } else {
               this.$router.push({ name: 'groupdetail', query: { groupId: res.data.id }})
             }
-            console.log(res)
           },
           (err) => {
             console.log(err)
@@ -135,13 +140,10 @@ export default {
     if (this.completed) {
       next();
     } else {
-      Swal.fire({ 
-        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '나가기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
@@ -177,7 +179,7 @@ export default {
   width: 90%;
   padding: 10px;
   border: 0;
-  background-color: transparent;
+  background-color: #fff9f3;
   border-bottom: 2px solid #9e7f6d;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -186,7 +188,7 @@ export default {
   width: 100%;
   padding: 10px;
   border: none;
-  background-color: #fffcf9;
+  background-color: #fff9f3;
   border-radius: 10px;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -208,6 +210,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #fff9f3;
 
   /* margin: 24px;
   position: relative;

@@ -88,10 +88,10 @@
             꽃보다 집
           </div>
           <div class="home-section-content">
-            다른 사람들과 함께하는 활동을 좋아하는 핵인싸, 당신을 위한
-            카테고리입니다. 같은 관심사를 가진 사람들과 함께 그룹을 만들어 모일
-            수 있습니다. 나의 그룹 사람들과 함께 정보, 사진 공유를 해보는 것은
-            어떨까요?
+            새로운 취미 배우기를 좋아하고 집에서 활동하기를 좋아하는
+            당신을 위한 카테고리입니다.
+            배운 취미를 다른 사람들과 공유 하다보면
+            어느새 장인이 되어 있지 않을까요?
           </div>
         </div>
         <div class="home-section-img">
@@ -153,7 +153,6 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { getUser } from "@/api/login.js";
-import Swal from 'sweetalert2';
 
 export default {
   name: "Home",
@@ -287,7 +286,14 @@ export default {
                 this.setRefToken(refToken);
                 this.setUserStatus(true);
                 this.setUserInfo(user_age);
-                Swal.fire('로그인', '카카오 로그인 완료', 'success');
+                                
+                this.$swal.fire({
+                  icon: 'success',
+                  text: '로그인 완료',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+                
               }
               // false -> user 정보가 없으면 Signup
               else {
@@ -315,12 +321,14 @@ export default {
         this.setAuthToken(null);
         this.setKakaoId(null);
         this.setUserStatus(null);
-        // alert("logout");
-        Swal.fire({
+        
+        this.$swal.fire({
           icon: 'success',
-          title: '로그아웃',
-          text: '카카오 로그아웃 완료'
+          text: '로그아웃',
+          showConfirmButton: false,
+          timer: 1500
         })
+      
       });
     },
 
@@ -329,9 +337,8 @@ export default {
       window.Kakao.API.request({
         url: "/v1/user/unlink",
       })
-        .then((res) => {
+        .then(() => {
           localStorage.clear();
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);

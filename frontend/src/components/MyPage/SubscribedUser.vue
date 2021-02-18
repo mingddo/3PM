@@ -16,7 +16,6 @@
 
 <script>
 import { followToggle } from "@/api/mypage.js";
-import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -28,21 +27,17 @@ export default {
       this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
     },
     deleteSubscribe() { 
-      Swal.fire({ 
-        title: '구독 취소하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '구독 취소하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '구독 취소하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {
           followToggle(
             this.subscriber.id,
-            (res) => {
-              console.log(res)
+            () => {
               this.$emit('decrement')},
             (err) => {console.log(err);}
           );
@@ -79,7 +74,7 @@ export default {
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  background-color: #fffcf9;
+  background-color: var(--white-color);
 }
 .subscribedComponentFrame:hover {
   background-color: rgba(0,0,0,0.15);
