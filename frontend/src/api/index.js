@@ -33,17 +33,7 @@ function AuthorizationInstance () {
     return response
   }, async function (error) {
     const errorAPI = error.config;
-
-    if (error.response.data.result === 'fail' && !errorAPI.retry) {
-      errorAPI.retry = true;
-      
-      const vuex_data = localStorage.getItem('vuex');
-      const accToken = vuex_data ? JSON.parse(vuex_data).authToken : null;
-      errorAPI.headers["Authorization"] = accToken
-
-      return axios(errorAPI)
-    }
-    else if (error.response.data.result === 'expire' && !errorAPI.retry) {
+    if (error.response.data.result === 'expire' || error.response.data.result === 'fail') {
       errorAPI.retry = true;
       await updateAccToken()
       .then((res)=> {
@@ -55,6 +45,9 @@ function AuthorizationInstance () {
       })
       return axios(errorAPI)
    }
+    else if (error.response.status === 404 || error.response.status=== 505 ) {
+      window.location.replace(`${window.location.origin/404}`);
+    }
    return Promise.reject(error)
   })
   return instance

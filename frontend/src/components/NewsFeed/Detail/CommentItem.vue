@@ -264,7 +264,7 @@ export default {
     goToProfile() {
       this.$router.push({
         name: "MyPage",
-        query: { name: this.comment.user.nickname },
+        query: { name: this.comment.user.id },
       });
     },
   },

@@ -467,7 +467,6 @@ export default {
   text-align: center;
 }
 .group-detail-join-btn {
-  width: 100%;
   height: 50px;
   justify-content: center;
   display: flex;
