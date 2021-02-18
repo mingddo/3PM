@@ -252,7 +252,10 @@
 .newsfeed-form {
   margin-top: 70px;
 }
-
+.newsfeed-form-category {
+  margin: 10px 30px;
+  cursor: pointer;
+}
 .newsfeed-form-profile {
   padding: 10px;
   display: flex;

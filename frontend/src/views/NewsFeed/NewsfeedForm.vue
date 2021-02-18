@@ -8,6 +8,13 @@
       <div class="newsfeed newsfeed-form">
         <GroupNav v-if="Category == 2" :isHome="true"/>
         <section class="newsfeed-form-content">
+          <div class="newsfeed-form-category"> <span class="highlight" @click="changeCategory">{{ Category_list[Category - 1] }}</span> </div>
+          <div v-if="changeCate" class="newsfeed-form-group">
+            <div v-for="(cate, idx) of Category_list" :key="idx">
+              <button @click="selectCate(idx)">{{ cate }}</button>
+            </div>
+            <button @click="changeCategory"> 닫기 </button>
+          </div>
           <div class="newsfeed-form-profile">
             <NewsFeedProfile  :userId="userpk" :proImg="myImg ? myImg : defaultImg"/>
             <div class="newsfeed-form-profile-name">
@@ -16,13 +23,14 @@
             <div v-if="Category == 2" class="newsfeed-form-group-container">
               <div v-if="!fixGroup" @click="chooseGroup" class="newsfeed-form-group-btn highlight">{{ groupName }}</div>
               <div v-else class="highlight">{{ groupName }}</div>
+
               <div v-if="select" class="newsfeed-form-group">
                 <div class="newsfeed-form-group-list" v-if="groupList.length > 0">
                   <div v-for="(group, idx) of groupList" :key="idx">
                     <button @click="selectGroup(group)">{{ group.name }}</button>
                   </div>
                 </div>
-                <div class="newsfeed-for  m-group-none" v-else>
+                <div class="newsfeed-form-group-none" v-else>
                   가입된 그룹이 없습니다. 그룹에 가입해주세요!
                   <div class="newsfeed-form-group-redirect-btn" @click="goToGroupPage">
                     그룹 찾으러 가기
@@ -32,6 +40,7 @@
                   <button @click="chooseGroup">닫기</button>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -280,10 +289,20 @@ export default {
       selectLocation: false,
       totalLen: null,
       // selectedVideo: null,
+      Category_list : ['꽃보다 집', '핵인싸', '청산별곡', '워커홀릭'],
+      changeCate: false,
     };
   },
 
   methods: {
+    selectCate (c) {
+      console.log(c)
+      this.Category = c + 1
+      this.changeCate = false
+    },
+    changeCategory () {
+      this.changeCate = !this.changeCate;
+    },
     goToGroupPage () {
       this.completed = true;
       this.$router.push({ name: 'grouppage' })
