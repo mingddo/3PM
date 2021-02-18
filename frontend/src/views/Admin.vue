@@ -1,25 +1,13 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container">  
       <p>카카오 아이디를 입력해주세요.</p>
       <div class="signup-input">
         <input @input="kakaoId = $event.target.value" type="text" placeholder="카카오아이디 중복되지 않게 해주세용">
       </div>
 
-      <p>사용하실 닉네임을 입력해주세요.</p>
       <div class="signup-input">
-        <input @input="nickname = $event.target.value" type="text" placeholder="영어/한글/숫자 4자 이상 10자 이내로 입력" @keyup="nicknameValidate" @keydown="nicknameValidate">
-        <button 
-        @click="checkOverlap"
-        :disabled="!isPossibleName"
-        :class="{disabledBtn:!isPossibleName}">중복확인</button>
-      </div>
-
-      <div class="signup-input">
-        <button 
-        @click="onClickSignup"
-        :disabled="isOverlapped"
-        :class="{disabledBtn:isOverlapped}">회원가입</button>
+        <button @click="onClickLogin">로그인</button>
       </div>
     </div>
   </div>
@@ -27,7 +15,7 @@
 
 <script>
 import {mapActions,mapState} from 'vuex'
-import { createUser,checkOverlapped } from '@/api/signup.js'
+import { getUser } from "@/api/login.js";
 
 export default {
   name: 'Signup',
@@ -40,100 +28,56 @@ export default {
       kakaoId : '',
     }
   },
-  computed : {
-    ...mapState(['userStatus','userId']),
-  },
-  watch : {
-    isPossibleName : function() {
-      if (this.isPossibleName === false) {
-        this.isOverlapped = true
-      }
-    },
-    nickname : function() {
-      if (this.nickname !== this.checkedName) {
-        this.isOverlapped = true
-      }
-    }
+  computed: {
+    ...mapState([
+      "userStatus",
+      "kakaoId",
+      "userId",
+      "authToken",
+      "userInfo",
+      "refToken",
+    ]),
   },
   methods : {
-    ...mapActions(['setUserStatus','setAuthToken','setRefToken','setUserId']),
-    onClickSignup() {
-      const kakaoId = this.kakaoId;
-      createUser(
+    ...mapActions(['setUserStatus','setKakaoId','setAuthToken','setRefToken','setUserId']),
+    onClickLogin(){
+      getUser(
         {
-        "kakaoId" : kakaoId,
-        "username" : this.nickname,
+          kakaoId: this.kakaoId,
         },
         (res) => {
-          const responseUserId = res.data.id;
-          const authToken = res.data['accToken'];
-          const refToken = res.data["refToken"];
-
-          this.setUserId(responseUserId);
-          this.setAuthToken(authToken);
-          this.setRefToken(refToken);
-          this.setUserStatus(true);
-          this.$router.push({name : "Home"});
-          this.$swal.fire({
-            icon: 'success',
-            text: '회원가입 완료',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        },
-        (err) => {
-          console.log(err);
-        }
-
-      );
-    },
-    nicknameValidate() {
-      const nickname = this.nickname;
-      const nicknamePattern = /^[a-zA-Z0-9가-힣]{4,10}$/;
-      const patternCheck = nicknamePattern.test(nickname);
-      if (nickname.length >= 10 || !patternCheck) {
-        this.isPossibleName = false;
-      }
-      else {
-        this.isPossibleName = true;
-      }
-    },
-    checkOverlap() {
-      checkOverlapped(
-        {
-          'username' : this.nickname,
-        },
-        (res) => {
-          this.isOverlapped = res.data;
-          if(this.isOverlapped) {
-            this.$swal.fire({
-              icon: 'error',
-              text: '사용 불가능한 아이디입니다',
-              showConfirmButton: false,
-              timer: 1500
-            })
-          }
-          else {
-            this.checkedName = this.nickname;
+          this.setKakaoId(this.kakaoId);
+          // true -> user 정보가 있으면  Home
+          if (res.data) {
+            // 세션에 토큰 설정
+            // console.log("getUser 정보", res.data);
+            const responseUserId = res.data.id;
+            const authToken = res.data["accToken"];
+            const refToken = res.data["refToken"];
+            this.setUserId(responseUserId);
+            this.setAuthToken(authToken);
+            this.setRefToken(refToken);
+            this.setUserStatus(true);
             this.$swal.fire({
               icon: 'success',
-              text: '사용 가능한 아이디입니다',
+              text: '로그인 완료',
               showConfirmButton: false,
               timer: 1500
             })
+          this.$router.push({ name: "Home" });
+
+          }
+          // false -> user 정보가 없으면 Signup
+          else {
+            // 세션에 카카오 ID 설정
+            this.$router.push({ name: "Signup" });
           }
         },
         (err) => {
           console.log(err);
-          this.$swal.fire({
-            icon: 'error',
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }
-      )
-    },
-  },
+        })
+      }
+  }
 };
 </script>
 
