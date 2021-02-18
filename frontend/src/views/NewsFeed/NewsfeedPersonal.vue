@@ -113,7 +113,6 @@ export default {
           this.page,
           (res) => {
             this.page = res.data.endNum;
-            console.log(this.page);
             let feeds = res.data.feedList;
             if (feeds && feeds.length < 10) {
               this.last = true;
@@ -137,7 +136,6 @@ export default {
           (res) => {
             this.page = this.page + 1;
             let feeds = res.data.feedList;
-            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }
@@ -160,7 +158,6 @@ export default {
           (res) => {
             this.page = res.data.endNum;
             let feeds = res.data.feedList;
-            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }
@@ -178,13 +175,11 @@ export default {
         this.headerIntro = '열정 넘치는 당신을 위한 일자리, 복지 정보 공유 SNS'
         this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
-        console.log("워커홀릭");
         workerList(
           this.page,
           (res) => {
             this.page = res.data.endNum;
             let feeds = res.data.feedList;
-            console.log(feeds);
             if (feeds && feeds.length < 10) {
               this.last = true;
             }
@@ -251,6 +246,15 @@ export default {
         this.headerImg = this.headerImgs[3];
       }
     },
+    checkCategory() {
+
+      return new Promise((resolve) => {
+        const Category = this.$route.query.Category;
+        const CategoryPattern = /^[1-4]$/;
+        const patternCheck = CategoryPattern.test(Category);
+        resolve(patternCheck)
+      })
+    }
   },
   created() {
     if (!this.$store.state.userStatus) {
@@ -261,6 +265,12 @@ export default {
   mounted() {
     this.setScroll();
     this.checkImageNum();
+    this.checkCategory()
+    .then((res)=>{ 
+      if (!res) {
+        this.$router.push({name : "NotFound"});
+      }
+    })
   },
 };
 </script>

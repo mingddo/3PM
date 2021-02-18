@@ -180,7 +180,6 @@ export default {
       }
     },
     toggleslidernavbar() {
-      console.log("토글된다");
       this.navslider = !this.navslider;
     },
     goToHome() {
@@ -262,7 +261,6 @@ export default {
       });
     },
     goToLogout() {
-      console.log("로그아웃");
       this.navslider = false;
       this.kakaoLogout().then(() => {
         this.$router.push({ name: "Home" });
@@ -318,11 +316,7 @@ export default {
   watch: {
     $route() {
       this.scrolled = false;
-      console.log("스크롤 탑 함수");
       window.scrollTo({ top: 0, behavior: "auto" });
-    },
-    userStatus: function() {
-      console.log(this.userStatus);
     },
   },
   computed: {

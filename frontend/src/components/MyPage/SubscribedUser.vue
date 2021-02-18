@@ -37,8 +37,7 @@ export default {
         if (result.isConfirmed) {
           followToggle(
             this.subscriber.id,
-            (res) => {
-              console.log(res)
+            () => {
               this.$emit('decrement')},
             (err) => {console.log(err);}
           );

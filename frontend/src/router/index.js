@@ -75,7 +75,7 @@ const routes = [
   },
   {
     path: "/404",
-    name: "notFound",
+    name: "NotFound",
     component: NotFound
 },
 {
