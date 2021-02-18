@@ -337,9 +337,8 @@ export default {
       window.Kakao.API.request({
         url: "/v1/user/unlink",
       })
-        .then((res) => {
+        .then(() => {
           localStorage.clear();
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);

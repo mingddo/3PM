@@ -185,7 +185,6 @@ export default {
       userInfoDetail(
         this.$store.state.userId,
         (res) => {
-          console.log("여기", res.data);
           this.userInfo = res.data;
           this.nickname = res.data.nickname;
           this.introduce = res.data.introduce;
@@ -200,19 +199,16 @@ export default {
       this.nickname = this.userInfo.nickname;
     },
     editProfile() {
-      console.log("고고", this.changeURL);
       const formData = new FormData();
       if (this.changeURL) {
         formData.append("file", this.changeURL);
       }
       formData.append("nickname", this.userInfo.nickname);
       formData.append("introduce", this.userInfo.introduce);
-      console.log(formData);
       editUserInfo(
         this.$store.state.userId,
         formData,
-        (res) => {
-          console.log(res);
+        () => {
           this.$swal.fire({
             icon: 'success',
             text: '내 정보가 수정되었어요',
@@ -247,9 +243,7 @@ export default {
       }
     },
     checkOverlap() {
-      console.log("중복 확인 들어온다");
       // DB에 중복된 닉네임이 있는지 확인하여 회원가입 버튼 활성화
-      console.log(this.nickname);
       if (this.userInfo.nickname === this.nickname) {
         this.$swal.fire({
           icon: 'error',
@@ -263,7 +257,6 @@ export default {
             username: this.nickname,
           },
           (res) => {
-            console.log(res);
             this.isOverlapped = res.data;
             if (this.isOverlapped) {
               this.$swal.fire({

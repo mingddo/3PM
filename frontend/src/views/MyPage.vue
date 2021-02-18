@@ -545,7 +545,6 @@ export default {
         this.profile_user,
         this.current_user_activity.page_no,
         (res) => {
-          console.log('getActiviy',res.data)
           this.current_user_activity.page_no = res.data.endNum
             let notices = res.data.noticeResponseDtos;
             if (notices.length < 10) {

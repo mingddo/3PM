@@ -80,8 +80,6 @@ export default {
         let reader = new FileReader();
         reader.onload = (e) => {
           this.imageUrl = e.target.result;
-          console.log(this.imageUrl)
-          // this.previewUrl.push(this.imageUrl)
         }
         reader.readAsDataURL(this.selectedFile);
       }
@@ -92,8 +90,7 @@ export default {
       createGroupImg(
         id,
         formData,
-        (res) => {
-          console.log(res)
+        () => {
         },
         (err) => {
           console.log(err)
@@ -131,7 +128,6 @@ export default {
             } else {
               this.$router.push({ name: 'groupdetail', query: { groupId: res.data.id }})
             }
-            console.log(res)
           },
           (err) => {
             console.log(err)

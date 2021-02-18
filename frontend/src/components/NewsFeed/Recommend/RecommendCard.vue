@@ -48,7 +48,6 @@ export default {
     },
     setContentIndent () {
       if (this.op.content) {
-        console.log('content', this.contentBox)
         this.contentBox = this.op.content
         this.contentBox = this.contentBox.replace(/(\n|\r\n)/g, '<br>')
       }

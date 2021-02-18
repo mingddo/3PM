@@ -58,7 +58,6 @@ export default {
         // 꽃보다 집 추천
         indoorReco(
           (res) => {
-            console.log(res.data.feedList)
             this.c = res.data.feedList
           }
         )
@@ -71,7 +70,6 @@ export default {
         // 청산별곡
         outdoorReco(
           (res) => {
-            console.log('결론', res.data.feedList)
             this.c = res.data.feedList
           }
         )
