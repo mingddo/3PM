@@ -148,6 +148,27 @@ public class GroupController {
         return new ResponseEntity(feedListResponseDto, status);
     }
 
+    @ApiOperation(value = "그룹 추천 게시글 5개")
+    @GetMapping("/feeds/recommend")
+    public ResponseEntity<List<InsiderResDto>> getGroupRecommend(HttpServletRequest request) {
+        User user = userService.findUserById(jwtService.findId(request.getHeader("Authorization")));
+
+        HttpStatus status = HttpStatus.ACCEPTED;
+
+        List<InsiderResDto> insiderResDtos = null;
+        try {
+            insiderResDtos = insiderService.getGroupRecommend(user.getId());
+            logger.info("getGroupFeedsByUser = 핵인싸 그룹 추천 피드 가져오기 : {}");
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            logger.warn("getGroupFeedsByUser - 핵인싸 에러 : {}", e.getMessage());
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity(insiderResDtos, status);
+    }
+
+
     @ApiOperation(value = "그룹 게시글 조회", response = InsiderResDto.class)
     @GetMapping("/{groupId}/feeds")
     public ResponseEntity<List<InsiderResDto>> getGroupFeeds(@PathVariable("groupId") Long groupId,
@@ -242,4 +263,7 @@ public class GroupController {
 
         return ResponseEntity.ok().build();
     }
+
+
+
 }
