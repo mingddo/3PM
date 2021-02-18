@@ -396,6 +396,10 @@ export default {
   .searchFilterTilte {
     font-size: 16px;
   }
+  .autocompleteUl {
+    width: 85%;
+    margin-left : 15px;
+  }
   .Groups-resultCategoryTitle {
     margin-top: 10px;
   }
@@ -420,15 +424,20 @@ export default {
     height: 200px;
     margin-top: 50px;
   }
+  .newsfeed-header-title {
+    font-size: 50px;
+  }
+  .newsfeed-header-intro {
+    font-size: 8px;
+  }
   .newsfeed-body {
     margin-top: 0px;
-
     padding-top: 0;
   }
   .sliderToggle {
     display: block;
     cursor: pointer;
-    z-index: 17005;
+    z-index: 900;
   }
   .sliderToggle.active {
     display: none;

@@ -113,7 +113,7 @@ export default {
 .deleteSubscribe {
   background-color: salmon;
   min-width: 80px;
-  z-index: 10000;
+  z-index: 100;
   margin-left: auto;
 }
 </style>

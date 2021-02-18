@@ -69,7 +69,8 @@ input:focus {
   /* position: absolute;
   left : 350px;
   right : 50px; */
-  width: 70%;
+  /* margin: 0 auto; */
+  width: 50%;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -153,14 +154,15 @@ input:focus {
   width: 100%;
   padding-top: 16px;
   padding-bottom: 16px;
-  z-index: 500;
+  z-index: 0;
+  position :relaltive;
 }
 .autocompleteUl.active {
   display: none;
 }
 .autocompleteUl {
-  position: fixed;
-  width: 65%;
+  position: absoulte;
+  width: 90%;
   margin-left: 24px;
   background-color: white;
   padding: 10px 0;

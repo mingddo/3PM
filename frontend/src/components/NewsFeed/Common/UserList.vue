@@ -72,7 +72,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 700;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.7);
@@ -126,7 +126,7 @@ export default {
   z-index: 102;
   background-color: white;
 }
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 900px) {
   .newsfeed-like-list-body {
     width: 100%;
     height: 60vh;
