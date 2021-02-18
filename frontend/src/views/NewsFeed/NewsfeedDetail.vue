@@ -238,7 +238,7 @@ export default {
     likeFeed() {
       clapFeed(
         this.fd.id,
-        (res) => {
+        () => {
           if (!this.fd.clap) {
             this.$swal.fire({
               icon: 'success',
@@ -259,8 +259,6 @@ export default {
             this.fd.likeCnt = this.fd.likeCnt - 1;
             this.fd.clap = false;
           }
-
-          console.log(res);
         },
         (err) => {
           console.log(err);

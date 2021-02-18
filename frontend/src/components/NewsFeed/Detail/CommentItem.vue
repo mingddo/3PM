@@ -121,7 +121,6 @@ export default {
       clapCommentList(
         this.comment.id,
         (res) => {
-          console.log(res);
           this.userList = res.data.user;
         },
         (err) => {
@@ -136,7 +135,6 @@ export default {
       let d = new Date();
       let todayDate = d.getDate();
       let todayMonth = d.getMonth() + 1;
-      console.log(todayMonth);
       if (this.comment) {
         let date = this.comment.date.split("T")[0];
         this.time = this.comment.date.split("T")[1];
@@ -215,8 +213,7 @@ export default {
           deleteComment(
             this.id,
             this.comment.id,
-            (res) => {
-              console.log("삭제", res);
+            () => {
               this.$emit("setComment");
             },
             (err) => {
@@ -251,8 +248,8 @@ export default {
         this.id,
         this.comment.id,
         { content: this.commentForFeed },
-        (res) => {
-          console.log(res);
+        () => {
+          console.log();
         },
         (err) => {
           console.log(err);
