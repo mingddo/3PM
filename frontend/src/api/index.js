@@ -46,7 +46,8 @@ function AuthorizationInstance () {
       return axios(errorAPI)
    }
     else if (error.response.status === 404 || error.response.status=== 505 ) {
-      window.location.replace(`${window.location.origin/404}`);
+      // window.location.replace(`${window.location.origin/404}`);
+      console.log('여기에서 404로 리다이렉트!')
     }
    return Promise.reject(error)
   })
