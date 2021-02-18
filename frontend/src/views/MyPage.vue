@@ -455,6 +455,7 @@ export default {
         this.profile_user,
         (res) => {
           this.profileinfo = res.data;
+          console.log(res.data)
         },
         (err) => {
           console.log(err);
@@ -582,6 +583,9 @@ export default {
     this.getGroups();
     if(!this.mypage) {
       this.checkIsFollowingUser()
+    }
+    if (this.$route.query.activetab == 2) {
+      this.activetab = 2;
     }
     
   },

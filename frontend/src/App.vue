@@ -122,7 +122,12 @@
           height="80%"
         />
         <!-- <i class="fas fa-bell" style="color:yellow; font-size:18px;"></i> -->
-        <img style="cursor:pointer; " src="@/assets/icons/bell_icon.svg" width=20px/>
+        <img 
+          style="cursor:pointer; " 
+          src="@/assets/icons/bell_icon.svg" 
+          width=20px
+          @click="goToNotification"
+        />
         
       </span>
     </div>
@@ -253,6 +258,14 @@ export default {
         }
       });
     },
+    goToNotification() {
+      this.$router.push({ name: "MyPage", query: { activetab: "2" } }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
+    },
+
     goToSetting() {
       this.navslider = false;
       this.$router.push({ name: "MyPageEdit" }).catch((err) => {
@@ -365,8 +378,8 @@ export default {
     margin-top: 50px;
   }
   .profileImgFrame {
-    width: 90px;
-    height: 90px;
+    width: 45px;
+    height: 45px;
   }
   .searchFrame {
     width: 100%;

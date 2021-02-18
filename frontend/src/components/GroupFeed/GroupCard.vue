@@ -78,11 +78,14 @@ export default {
 <style>
 .group-page-card {
   display: flex;
+  width: 100%;
   justify-content: space-between;
-  border-bottom: 1px solid lightgrey;
-  padding : 20px;
-  background-color: #fffcf9 ;
+  /* border-bottom: 1px solid lightgrey; */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  padding : 15px;
+  background-color: var(--white-color);
   border-radius: 10px;
+  margin: auto;
   margin-bottom: 10px;
 }
 .group-page-group {
@@ -93,8 +96,8 @@ export default {
 }
 .group-page-img-space {
   cursor: pointer;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   text-align: left;
   border: solid 1px rgba(0, 0, 0, 0.2);
   border-radius: 100%;
@@ -108,6 +111,9 @@ export default {
 .group-page-info {
   min-width: 120px;
   padding : 20px;
+}
+.group-page-info > div {
+  margin: 10px;
 }
 .group-page-name {
   cursor:pointer;
@@ -127,8 +133,8 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .group-page-img-space {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
   }
 }
 </style>

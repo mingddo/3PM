@@ -91,6 +91,6 @@ export default {
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  background-color: #fffcf9;
+  background-color: var(--white-color);
 }
 </style>

@@ -179,7 +179,7 @@ export default {
   width: 90%;
   padding: 10px;
   border: 0;
-  background-color: transparent;
+  background-color: #fff9f3;
   border-bottom: 2px solid #9e7f6d;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -188,7 +188,7 @@ export default {
   width: 100%;
   padding: 10px;
   border: none;
-  background-color: #fffcf9;
+  background-color: #fff9f3;
   border-radius: 10px;
   margin-top: 30px;
   margin-bottom: 30px;
@@ -210,6 +210,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #fff9f3;
 
   /* margin: 24px;
   position: relative;
