@@ -12,12 +12,21 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 @RequiredArgsConstructor
 @EnableJpaAuditing
 @SpringBootApplication
 public class SnsApplication implements WebMvcConfigurer {
+
+	@PostConstruct
+	public void started() {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+		System.out.println("현재시각 : " + new Date());
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SnsApplication.class, args);

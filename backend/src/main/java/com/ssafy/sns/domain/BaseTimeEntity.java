@@ -22,5 +22,12 @@ public abstract class BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+//    public LocalDateTime getCreatedDate() {
+//        return createdDate.plusHours(9);
+//    }
+//
+//    public LocalDateTime getModifiedDate() {
+//        return modifiedDate.plusHours(9);
+//    }
 }
 
