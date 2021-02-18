@@ -700,7 +700,6 @@ export default {
           createOutdoors(
             this.form,
             (res) => {
-              console.log('청산별곡 글쓰기', res)
               if (this.fileSelect) {
                 this.imgUpload(res.data);
                 this.uploadingImg = true;

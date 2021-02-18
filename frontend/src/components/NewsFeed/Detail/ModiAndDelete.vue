@@ -65,7 +65,6 @@ export default {
                 this.fd.groupId,
                 this.fd.id,
                 () => {
-                  console.log()
                   this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
                 },
                 (err) => {

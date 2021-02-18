@@ -72,7 +72,6 @@ export default {
   methods : {
     ...mapActions(['setPlaceName']),
     setPlace () {
-      console.log(this.op)
       this.setPlaceName(this.op.code)
     },
     goToGroupDetail () {
