@@ -116,7 +116,26 @@
 .feed-detail-comment-btn {
   width: 5%;
 }
-
+.newsfeed-detail-not-member {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 700;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.newsfeed-detail-not-member > div {
+  color: white;
+  margin: 10px;
+}
+.newsfeed-detail-not-member-btn:hover {
+  text-decoration: underline;
+}
 /* NewsfeedPersonal */
 .upper-navbar {
   position: fixed;

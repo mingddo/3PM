@@ -4,6 +4,18 @@
       <Sidebar />
       <div class="newsfeed-D">
         <GroupNav v-if="Category == 2" :isHome="true" />
+        <div v-if="Category == 2&&!isMember" class="newsfeed-detail-not-member">
+          <div>
+            자세한 내용을 알고 싶다면?
+          </div>
+          <div>
+            그룹에 가입해주세요
+          </div>
+          <div @click="goToGroupPage" class="newsfeed-detail-not-member-btn">
+            그룹으로 이동하기
+          </div>
+        </div>
+
         <div v-if="groupModal" class="newsfeed-form-group-container">
           <div class="newsfeed-form-group">
             <span class="newsfeed-share-group-selector">그룹 선택해주세요</span>
@@ -157,6 +169,7 @@ import { readIndoors } from "@/api/indoors.js";
 import { createIndoors } from '@/api/indoors.js'
 
 import { getGroupfeedsDetail } from "@/api/group.js";
+import { getIsGroupMember } from "@/api/group.js";
 import { createGroupFeed } from '@/api/group.js'
 import { getprofileGroups } from '@/api/mypage.js'
 
@@ -211,6 +224,7 @@ export default {
       groupList: [],
       sel_group_id: null,
       isShare: false,
+      isMember: true,
     };
   },
   methods: {
@@ -402,6 +416,7 @@ export default {
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
+            console.log(this.fd)
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -431,6 +446,16 @@ export default {
             if (st == '<b>[공유]</b>') {
               this.isShare = true;
             }
+            getIsGroupMember(
+              this.fd.id,
+              (res) => {
+                console.log('그룹가입여부', res.data)
+                this.isMember = res.data
+              },
+              (err) => {
+                console.log(err)
+              }
+            )
           },
           (err) => {
             console.log(err);

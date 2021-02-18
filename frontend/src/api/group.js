@@ -2,6 +2,7 @@ import { AuthorizationInstance } from './index.js'
 
 const instance = AuthorizationInstance();
 
+
 // get 요청
 function groupList(id, success, fail) {
   instance
@@ -42,6 +43,13 @@ function getGroupfeeds(group_id, pk, success, fail) {
 function getGroupfeedsDetail(group_id, feed_id, success, fail) {
   instance
     .get(`groups/${group_id}/feeds/${feed_id}`)
+    .then(success)
+    .catch(fail)
+}
+
+function getIsGroupMember(id, success, fail) {
+  instance
+    .get(`groups/feeds/${id}`)
     .then(success)
     .catch(fail)
 }
@@ -125,6 +133,7 @@ export{
   getGroupDetail, 
   getGroupfeeds, 
   getGroupfeedsDetail,
+  getIsGroupMember,
   createGroup, 
   createGroupFeed, 
   uploadGroupFile,
