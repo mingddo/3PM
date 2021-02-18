@@ -194,7 +194,11 @@ public class OutdoorServiceImpl implements FeedService {
         Outdoor[] recommends = new Outdoor[18]; // 1 ~ 17 사용
         int cnt = 0;
         for (Outdoor outdoor : outdoors) {
+            if (outdoor.getCode() == null) {
+                continue;
+            }
             int code = outdoor.getCode();
+
             if (recommends[code] == null) {
                 recommends[code] = outdoor;
                 cnt++;
