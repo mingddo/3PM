@@ -79,6 +79,14 @@ export default {
     this.setComment(0);
     this.getImg();
   },
+  watch : {
+    commentInput : function () {
+      if (this.commentInput.length > 200) {
+        this.commentInput.slice(0,200)
+        alert('200자 이내로 작성해주세요')
+      }
+    }
+  },
   methods: {
     getImg () {
       getprofileInfo(

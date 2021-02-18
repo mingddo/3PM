@@ -357,7 +357,7 @@ export default {
 
 <style>
 .group-detail {
-  width: 70%;
+  width: 50%;
   margin-top: 80px;
   border-radius: 50px;
 }
@@ -516,7 +516,7 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 768px) {
 .group-detail {
     margin-top: 100px;
     width: 100%;

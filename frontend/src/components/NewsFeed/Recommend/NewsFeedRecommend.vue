@@ -55,6 +55,10 @@ export default {
   padding-bottom:40px; 
   text-align:center;
   font-size: 24px;
+  font-weight: bold;
+  background-color: #fff9f3;
+  border-radius: 5px;
+  /* color: white; */
 }
 
 </style>

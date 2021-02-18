@@ -9,6 +9,15 @@
           `)`,
       }"
     >
+    <div class="newsfeed-header-text">
+
+      <div class="newsfeed-header-title animate__animated animate__fadeIn">
+        {{ headerTitle }}
+      </div>
+      <div class="newsfeed-header-intro animate__animated animate__fadeIn" v-html="headerIntro">
+        
+      </div>
+    </div>
       <NewsFeedHeader :Category="Category" />
     </div>
     <div class="newsfeed-body">
@@ -90,11 +99,15 @@ export default {
         require("../../assets/header/chungsan.jpg"),
         require("../../assets/header/work.jpg"),
       ],
+      headerTitle: null,
+      headerIntro: null
     };
   },
   methods: {
     setFeedList() {
       if (this.$route.query.Category == 1) {
+        this.headerTitle = '꽃보다 집'
+        this.headerIntro = '내 인생을 사는 당신을 위한 취미 일상 공유 SNS'
         this.Category = 1;
         indoorsList(
           this.page,
@@ -115,6 +128,8 @@ export default {
           }
         );
       } else if (this.$route.query.Category == 2) {
+        this.headerTitle = '핵인싸'
+        this.headerIntro = '언제나 모임의 중심이 되는 당신을 위한 그룹 SNS'
         this.Category = 2;
         // 핵인싸 axios Get 무한스크롤 요청보내기
         groupList(
@@ -136,6 +151,8 @@ export default {
           }
         );
       } else if (this.$route.query.Category == 3) {
+        this.headerTitle = '청산별곡'
+        this.headerIntro = '속세를 떠나고픈 당신을 위한 자연 공유 SNS'
         this.Category = 3;
         // 청산별곡 axios Get 무한스크롤 요청보내기
         outdoorsList(
@@ -157,6 +174,8 @@ export default {
           }
         );
       } else if (this.$route.query.Category == 4) {
+        this.headerTitle = '워커홀릭'
+        this.headerIntro = '열정 넘치는 당신을 위한 일자리, 복지 정보 공유 SNS'
         this.Category = 4;
         // 워커홀릭 axios Get 무한스크롤 요청보내기
         console.log("워커홀릭");

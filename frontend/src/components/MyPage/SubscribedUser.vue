@@ -70,11 +70,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 7px;
+  margin-bottom : 10px;
   padding: 10px;
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  background-color: #fffcf9;
 }
 .subscribedComponentFrame:hover {
   background-color: rgba(0,0,0,0.15);
@@ -108,7 +109,7 @@ export default {
 .deleteSubscribe {
   background-color: salmon;
   min-width: 80px;
-  z-index: 10000;
+  z-index: 100;
   margin-left: auto;
 }
 </style>

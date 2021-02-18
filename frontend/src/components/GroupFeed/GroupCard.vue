@@ -63,22 +63,6 @@ export default {
           )
         }
       });
-
-      // const answer = window.confirm('정말로 탈퇴하시겠습니까?')
-      // if (answer) {
-      //   secedeGroup(
-      //     this.group.id,
-      //     (res) => {
-      //       console.log(res)
-      //       // alert('그룹에 탈퇴되었습니다!')
-      //       Swal.fire('그룹에 탈퇴되었습니다', '', 'success');
-      //       this.isjoined = false
-      //     },
-      //     (err) => {
-      //       console.log(err)
-      //     }
-      //   )
-      // }
     },
     goToGroupDetail () {
       this.$router.push({ name : 'groupdetail', query: { groupId: this.group.id}})

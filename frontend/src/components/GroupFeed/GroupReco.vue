@@ -113,7 +113,7 @@ export default {
   margin: 0 10px;
   position: absolute;
   left: 0;
-  z-index: 1000;
+  z-index: 100;
   font-size: 20px;
 }
 .group-reco-next-btn {
@@ -121,7 +121,7 @@ export default {
   cursor: pointer;
   margin: 0 10px;
   right: 0;
-  z-index: 1000;
+  z-index: 100;
   font-size: 20px;
 }
 .group-img-section {
