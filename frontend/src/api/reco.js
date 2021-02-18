@@ -19,7 +19,15 @@ function outdoorReco(success, fail) {
     .then(success)
     .catch(fail);
 }
+
+function groupFeedReco(success, fail) {
+  instance
+    .get(`groups/feeds/recommend`)
+    .then(success)
+    .catch(fail);
+}
 export {
   indoorReco,
-  outdoorReco
+  outdoorReco,
+  groupFeedReco
 }

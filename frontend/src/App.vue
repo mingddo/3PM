@@ -365,8 +365,8 @@ export default {
     margin-top: 50px;
   }
   .profileImgFrame {
-    width: 90px;
-    height: 90px;
+    width: 45px;
+    height: 45px;
   }
   .searchFrame {
     width: 100%;

@@ -371,7 +371,7 @@ export default {
 }
 .group-detail-img-space {
   margin: auto;
-  width: 100%;
+  width: auto;
   height: 60%;
   border-radius: 20px;
   text-align: left;
@@ -387,8 +387,9 @@ export default {
   justify-content: space-between;
 }
 .group-detail-img {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
+  max-height: 300px;
   object-fit: cover;
 }
 .group-detail-img-form{
