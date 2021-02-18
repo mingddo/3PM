@@ -481,9 +481,11 @@ export default {
             })
           } else {
             this.form.tags.push(tag);
+            this.removeValue()
             this.keyword = ""
             this.tags = []
             this.autotag = false;
+            this.$refs.search.focus();
           }
         }
       }
