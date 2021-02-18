@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setImg(dto.getProfileImg());
         }
+        user.setIntroduce("");
 
         return userRepository.save(user);
     }
