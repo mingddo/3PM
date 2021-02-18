@@ -18,8 +18,8 @@
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
-        <div v-if="comment.user.id == userpk">
-          <i class="fas fa-ellipsis-v" @click="openModiDeleteBtn"></i>
+        <div v-if="comment.user.id == userpk" style="position:relative;">
+          <i class="fas fa-ellipsis-v"  @click="openModiDeleteBtn"></i>
           <div v-show="!foldModiDrop" class="feed-comment-btn-drop-content">
             <div @click="changeCommentModiForm">
               수정

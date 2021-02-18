@@ -13,9 +13,6 @@
           구독취소
         </span>
       </div>
-      <div v-else @click="goToSetting">
-        설정
-      </div>
     </div>
   </div>
 </template>

@@ -578,7 +578,7 @@ export default {
     height: 45px;
   }
   .feed-box {
-    padding: 0;
+
   }
   .feed-group-box {
     padding : 10px 0 0 0;
