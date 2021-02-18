@@ -63,13 +63,13 @@ public class S3Service {
         String fileName = date.format(new Date()) + "_" + file.getOriginalFilename();
 
         // key가 존재하면 기존 파일은 삭제
-        if (!"".equals(currentFilePath) && currentFilePath != null && "default.gif".equals(currentFilePath)) {
-            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
-
-            if (isExistObject) {
-                s3Client.deleteObject(bucket, currentFilePath);
-            }
-        }
+//        if (!"".equals(currentFilePath) && currentFilePath != null && "default.gif".equals(currentFilePath)) {
+//            boolean isExistObject = s3Client.doesObjectExist(bucket, currentFilePath);
+//
+//            if (isExistObject) {
+//                s3Client.deleteObject(bucket, currentFilePath);
+//            }
+//        }
 
         // 파일 업로드
         byte[] bytes = IOUtils.toByteArray(file.getInputStream());
