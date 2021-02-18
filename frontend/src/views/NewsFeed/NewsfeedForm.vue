@@ -52,7 +52,7 @@
                 @keyup.up="selectValue('up')"
                 @mouseover="removeValue"
               >
-                <form @submit.prevent="Allsearch" class="search_input">
+                <form @submit.prevent="autoTag" class="search_input">
                   <div class="inputframe">
                     <label for="search"></label>
                     <input
@@ -63,6 +63,7 @@
                       placeholder="태그를 입력해 주세요"
                       v-model.trim="keyword"
                       @input="autoTag"
+                      @keyup.enter="addTag(keyword)"
                       autocomplete="off"
                       ref="search"
                     />
@@ -334,7 +335,14 @@ export default {
       changeCate: false,
     };
   },
-
+  watch: {
+    keyword() {
+      this.removeValue();
+      if (this.keyword === "") {
+        this.autotag = false;
+      }
+    },
+  },
   methods: {
     // 방향키로 태그리스트 이동 및 엔터로 검색창에 반영
     changeValue(str) {
@@ -410,7 +418,6 @@ export default {
       }
     },
     selectCate (c) {
-      console.log(c)
       this.Category = c + 1
       this.changeCate = false
     },
@@ -461,7 +468,6 @@ export default {
       this.totalLen = this.form.filePaths.length + this.fileList.length
     },
     addTag (tag) {
-      // let tag = t.target.value.split('#')[1]
       if (!tag) {
         this.$swal.fire({
           icon: 'warning',
