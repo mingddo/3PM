@@ -167,7 +167,7 @@ export default {
   methods: {
     introgoback() {
       this.introduceedit = false;
-      this.introduce = this.userInfo.introduce;
+      this.introduce = this.userInfo.introduce == null ? '' : this.userInfo.introduce;
     },
     saveintroduce() {
       this.userInfo.introduce = this.introduce;
