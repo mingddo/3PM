@@ -74,11 +74,12 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 7px;
+  margin-bottom : 10px;
   padding: 10px;
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  background-color: #fffcf9;
 }
 .subscribedComponentFrame:hover {
   background-color: rgba(0,0,0,0.15);

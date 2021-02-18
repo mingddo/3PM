@@ -7,9 +7,7 @@
     <div class="newsfeed-like-list-body">
       <div class="newsfeed-like-list-user" v-for="(user, idx) in users" :key="idx">
         <div class="newsfeed-like-list-userProfile">
-          <NewsFeedProfile
-            :proImg="user.img !== null ? user.img : defaultImg"
-          />
+          <NewsFeedProfile :proImg="user.profileImg"/>
           {{ user.nickname }}
         </div>
         <div class="newsfeed-like-list-btn">
@@ -49,7 +47,7 @@ export default {
       if (this.type == 1) {
         this.title = '이 글에 👏박수를 친 사람들'
       } else if (this.type == 2) {
-        this.title = '멤버'
+        this.title = '그룹 멤버'
       } else if (this.type == 3) {
         this.title = '이 댓글에 👏박수를 친 사람들'
       }
@@ -99,9 +97,10 @@ export default {
 .newsfeed-like-list-body {
   background-color: white;
   margin-top: 10px;
-  overflow: scroll;
+  overflow: auto;
   height: 60vh;
   width: 80vh;
+  border-radius: 10px;
 }
 .newsfeed-like-list-user {
   padding: 10px;
@@ -117,8 +116,6 @@ export default {
   width: 30vh;
   text-align: center;
   margin-top:10px;
-  /* position: sticky;
-  bottom: 0; */
 }
 .newsfeed-like-list-btn {
   margin: auto;

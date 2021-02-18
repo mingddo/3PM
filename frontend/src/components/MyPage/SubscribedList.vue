@@ -13,7 +13,7 @@
         />
       </div>
       <div v-else class="subscribedContent">
-        구독하는 사람이 없습니다.
+        <div class="subscribedComponentFrame">구독하는 사람이 없습니다.</div>
       </div>
     </div>
   </div>
@@ -69,17 +69,28 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
-  background: #fff;
 }
 
 .subscribedContent {
   width: 100%;
-  margin: 10px;
   padding: 15px 0;
   display: flex;
   flex-wrap: wrap;
   /* flex-direction: column;
   justify-content: center;
   align-items: flex-start; */
+}
+.subscribedComponentFrame {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom : 10px;
+  padding: 10px;
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #fffcf9;
 }
 </style>

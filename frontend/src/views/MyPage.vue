@@ -476,13 +476,6 @@ export default {
             this.followToggle()
           } 
         })
-
-        // if (confirm('구독을 취소하시겠어요?')) {
-        //   this.followToggle()
-        // }
-        // else {
-        //   return
-        // }
       }
       else {
         Swal.fire( '구독이 완료되었습니다.', '', 'success' );
@@ -543,6 +536,7 @@ export default {
         this.profile_user,
         this.current_user_activity.page_no,
         (res) => {
+          console.log('getActiviy',res.data)
           this.current_user_activity.page_no = res.data.endNum
             let notices = res.data.noticeResponseDtos;
             if (notices.length < 10) {
