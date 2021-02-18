@@ -571,7 +571,6 @@
   padding-bottom: 15px;
   max-height: 300px;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
 }
 .feed-content-box div {

@@ -59,7 +59,6 @@
             </div>            
             <div v-html="result.indoorResponseDtoList[0].content"></div>
           </div>
-          <div class="resultthumbnail"></div>
         </div>
         <div class="resultBottomFrame">
           <div>👏🏻 {{ result.indoorResponseDtoList[0].likeCnt }}</div>
