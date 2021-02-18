@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import RecoSplide from './RecoSplide.vue';
 
 export default {
@@ -20,7 +21,6 @@ export default {
   data() {
     return {
       title: null,
-      placeName: null,
     };
   },
   mounted () {
@@ -34,13 +34,16 @@ export default {
       if (this.Category == 4) {
         this.title = '취업 정보, 한눈👁‍🗨에 보기'
       } else if (this.Category == 2) {
-        this.title = `인기 게시물`
+        this.title = `그룹 인기 게시물`
       } else if (this.Category == 3) {
-        this.title = `${this.placeName} 어떠세요?`
+        this.title = `지역별 인기 게시물`
       } else if (this.Category == 1) {
         this.title = `인기 게시물`
       }
     },
+  },
+  computed : {
+    ...mapState(['placeName'])
   },
 };
 </script>
