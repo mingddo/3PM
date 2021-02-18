@@ -20,7 +20,7 @@
     </div>
     <div class="group-page-member">
       <i class="fas fa-users">{{ group.memberCnt}}</i>
-      <div  v-if="group.leaderId != userpk && group.memberCnt > 1" @click="secede">그룹탈퇴하기</div>
+      <div style="cursor: pointer" v-if="group.leaderId != userpk && group.memberCnt > 1" @click="secede">탈퇴</div>
     </div>
 
   </div>
@@ -116,7 +116,7 @@ export default {
 }
 .group-page-name:hover {
   text-decoration: underline;
-  color: lightgray
+  color: #b29887;
 }
 .group-page-member {
   display: flex;

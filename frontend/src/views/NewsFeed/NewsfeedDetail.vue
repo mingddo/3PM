@@ -24,8 +24,11 @@
           </div>
         </div>
         <section v-if="fd" v-cloak class="feed-detail">
-          <div v-if="Category == 2">
+          <div v-if="Category == 2" style="margin-left: 10px; margin-bottom: 10px; cursor: pointer;" @click="goToGroupDetail">
             {{ fd.groupName }}
+          </div>
+          <div v-if="Category == 2" style="padding: 0 10px; margin-bottom: 5px;">
+            <hr style="border-top: 2px solid var(--point-colo);">
           </div>
           <div class="feed-detail-userprofile">
             <div class="feed-detail-userprofile-box">
@@ -85,10 +88,8 @@
             </div>
             <div v-if="fd.content" class="feed-detail-content">
               <p v-html="fd.content">
-                <!-- {{fd.content}} -->
               </p>
             </div>
-            <!-- <div v-if="Category == 2 || Category == 3"> -->
             <Location
               v-if="Category == 3 && latitude && longitude"
               :address="address"
@@ -108,15 +109,11 @@
 
           <div class="feed-detail-like-comment">
             <span @click="clapedList">
-              <span v-if="fd.clap">👏🏻</span>
-              <img
-                v-if="!fd.clap"
-                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
-              />
+              <img width="17px" src="@/assets/icons/clap_icon.svg" style="cursor:pointer;">
               <span>{{ fd.likeCnt ? fd.likeCnt : 0 }}</span>
             </span>
             <span>
-              <i class="far fa-comment"></i>
+              <img width="17px" src="@/assets/icons/comment_icon.svg" alt="">
               <span v-if="fd.commentCnt">{{ fd.commentCnt }}</span>
               <span v-else> 0</span>
             </span>
@@ -129,18 +126,16 @@
           />
           <div class="feed-detail-like-comment-share-btn-box">
             <div @click="likeFeed" class="feed-detail-like-comment-share-btn">
-              <img
-                v-if="!fd.clap"
-                src="https://img.icons8.com/fluent-systems-regular/17/000000/applause.png"
-              />
-              <span v-if="fd.clap">👏🏻</span>
+
+              <img width="17px" v-if="fd.clap" src="@/assets/icons/clap_cancel_icon.svg" alt="">
+              <img width="17px" v-else src="@/assets/icons/clap_icon.svg" alt="">
               {{ fd.clap ? "고민해볼래요" : "굉장해요!" }}
             </div>
             <div
               class="feed-detail-like-comment-share-btn"
               @click="focusComment"
             >
-              <i class="far fa-comment"></i>
+              <img width="17px" src="@/assets/icons/comment_icon.svg" alt="">
               댓글달기
             </div>
             <div class="feed-detail-like-comment-share-btn" @click="shareFeed">
@@ -385,6 +380,12 @@ export default {
     focusComment() {
       let input = document.getElementById("comment");
       input.focus();
+    },
+    goToGroupDetail () {
+      this.$router.push({
+        name: "groupdetail",
+        query: { groupId: this.fd.groupId},
+      });
     },
     goToProfile() {
       this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } });
