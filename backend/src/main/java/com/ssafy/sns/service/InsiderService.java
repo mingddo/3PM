@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -39,6 +40,102 @@ public class InsiderService {
     private final GroupRepository groupRepository;
     private final FollowServiceImpl followService;
 
+
+    public List<InsiderResDto> getGroupRecommend(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        List<Insider> insiders = insiderRepository.findAll();
+        List<InsiderResDto> insiderResDtos = new ArrayList<>();
+        List<Insider> recommends = new ArrayList<>();
+        // 1. 멤버 많은 그룹 최신 글
+        insiders.sort((o1, o2) -> {
+            if (o1.getGroup().getGroupMembers().size() == o2.getGroup().getGroupMembers().size()) {
+                return o2.getCreatedDate().compareTo(o1.getCreatedDate());
+            }
+            return o1.getGroup().getGroupMembers().size() - o2.getGroup().getGroupMembers().size();
+        });
+        recommends.add(insiders.get(0));
+        // 2. 멤버 많은 그룹 좋아요 수 많은 글
+        insiders.sort((o1, o2) -> {
+            if (o1.getGroup().getGroupMembers().size() == o2.getGroup().getGroupMembers().size()) {
+                return o2.getFeedClapList().size() - o1.getFeedClapList().size();
+            }
+            return o1.getGroup().getGroupMembers().size() - o2.getGroup().getGroupMembers().size();
+        });
+        for (Insider insider : insiders) {
+            boolean isIn = false;
+            for (Insider recommend: recommends) {
+                if (insider.getId() == recommend.getId()) {
+                    isIn = true;
+                }
+            }
+            if (!isIn) {
+                recommends.add(insider);
+                break;
+            }
+        }
+        // 3. 멤버 많은 그룹 좋아요 수 많은 글
+        insiders.sort((o1, o2) -> o2.getFeedClapList().size() - o1.getFeedClapList().size());
+        for (Insider insider : insiders) {
+            boolean isIn = false;
+            for (Insider recommend: recommends) {
+                if (insider.getId() == recommend.getId()) {
+                    isIn = true;
+                }
+            }
+            if (!isIn) {
+                recommends.add(insider);
+                break;
+            }
+        }
+        // 4. 가장 최근 그룹 피드
+        insiders.sort((o1, o2) -> o2.getGroup().getCreatedDate().compareTo(o1.getGroup().getCreatedDate()));
+        for (Insider insider : insiders) {
+            boolean isIn = false;
+            for (Insider recommend: recommends) {
+                if (insider.getId() == recommend.getId()) {
+                    isIn = true;
+                }
+            }
+            if (!isIn) {
+                recommends.add(insider);
+                break;
+            }
+        }
+        // 5. 팔로워 가장 많은 사람이 쓴 최신 글
+        insiders.sort((o1, o2) -> {
+            int o1Cnt = followService.toMeFromOthers(o1.getUser().getId());
+            int o2Cnt = followService.toMeFromOthers(o2.getUser().getId());
+            if (o1Cnt == o2Cnt) {
+                return o2.getCreatedDate().compareTo(o1.getCreatedDate());
+            }
+            return o2Cnt - o1Cnt;
+        });
+        for (Insider insider : insiders) {
+            boolean isIn = false;
+            for (Insider recommend: recommends) {
+                if (insider.getId() == recommend.getId()) {
+                    isIn = true;
+                }
+            }
+            if (!isIn) {
+                recommends.add(insider);
+                break;
+            }
+        }
+
+        for (Insider insider : recommends) {
+            insiderResDtos.add(new InsiderResDto(insider,
+                    (int) commentRepository.findListById(insider).count(),
+                    feedClapRepository.findClapAll(insider).size(),
+                    feedClapRepository.findClap(user, insider).isPresent(),
+                    2,
+                    followService.isFollow(userId, insider),
+                    insider.getGroup().getId(),
+                    insider.getGroup().getName()));
+        }
+
+        return insiderResDtos;
+    }
 
     // 그룹 카테고리의 모든 게시물 출력 (10개씩)
     public FeedListResponseDto findAll(Long userId, int num) {

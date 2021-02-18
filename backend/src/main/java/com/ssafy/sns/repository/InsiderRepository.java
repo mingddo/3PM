@@ -17,5 +17,4 @@ public interface InsiderRepository extends JpaRepository<Insider, Long> {
     Optional<Insider> findByGroupIdAndId(Long groupId, Long id);
 
     List<Insider> findAllByUserId(Long userId, Pageable pageable);
-
 }
