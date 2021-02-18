@@ -20,7 +20,7 @@
                 <img
                   v-else
                   class="pofileImg"
-                  src="http://www.topstarnews.net/news/photo/201903/598316_280802_2053.jpg"
+                  src="https://dtbqjjy7vxgz8.cloudfront.net/default.gif"
                   alt="프로필사진"
                 />
               </div>
