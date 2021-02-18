@@ -129,7 +129,7 @@ export default {
   z-index: 102;
   background-color: white;
 }
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 900px) {
   .newsfeed-like-list-body {
     width: 100%;
     height: 60vh;

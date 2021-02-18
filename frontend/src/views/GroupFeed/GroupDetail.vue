@@ -464,7 +464,7 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 768px) {
 .group-detail {
     margin-top: 100px;
     width: 100%;
