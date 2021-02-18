@@ -1,4 +1,4 @@
-## 👨‍👨‍👧‍ 팀원소개
+## ‍ 👨‍👨‍👧‍👦‍ 팀원소개
 
 - 팀명 : 상원없는 상원팀
 - 팀원 소개
@@ -35,10 +35,10 @@
 ![기술흐름도2](/uploads/b4689b5f1a6a48136717953bd1be6f6c/기술흐름도2.png)
 
 
-<details><summary>Frontend 자세히</summary>
+<details><summary>Frontend 자세히</summary><p>
     Vue.js
-</details>
-<details><summary>Backend 자세히</summary>
+</p></details>
+<details><summary>Backend 자세히</summary><p>
     Java, Spring, JPA, MariaDB
     - JDK
         - 11
@@ -48,10 +48,10 @@
         - 2.4.2
     - 빌드
         - Gradle
-</details>
+</p></details>
 
 
-## 🐱‍🏍 개발 목표
+## 🚩 개발 목표
 ### 제 2의 인생을 시작하는 오팔 세대를 위한 라이프 스타일 공유 SNS
 ![목표](/uploads/c15faa709ac03a0a5fc16257d1a97d63/목표.PNG)
 
