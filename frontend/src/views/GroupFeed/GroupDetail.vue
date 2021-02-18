@@ -226,6 +226,8 @@ export default {
                 timer: 1500
               })
               this.isjoined = false 
+              this.getgroupInfo();
+
             },
             (err) => {
               console.log(err)
@@ -260,6 +262,8 @@ export default {
             timer: 1500
           })
           this.isjoined = true 
+          this.getgroupInfo();
+
         },
         (err) => {
           console.log(err)
