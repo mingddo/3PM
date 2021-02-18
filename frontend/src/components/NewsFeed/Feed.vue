@@ -1,8 +1,8 @@
 <template>
   <article>
     <div class="feed-group-box" v-if="Category == 2" @click="goToGroupDetail">
+      <img src="@/assets/icons/group_icon.svg" class="feed-group-box-img" alt="">
       <div class="feed-group-name">{{ fd.groupName }}</div>
-      <img class="feed-group-box-img" src="https://static.thenounproject.com/png/64410-200.png" alt=""> 
     </div>
     <div v-if="Category == 2" style="padding: 0 10px; margin-bottom: 5px;">
       <hr style="border-top: 2px solid var(--point-colo);">
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div class="feed-content-box">
+    <div class="feed-content-box" @click="goToDetail">
       <div
         class="feed-content-box-img-container"
         v-if="fd.files.length != 0"

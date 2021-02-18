@@ -379,6 +379,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(0, 0, 0, 0.8);
 }
 .group-detail-body {
   display: flex;

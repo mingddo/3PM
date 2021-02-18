@@ -67,7 +67,6 @@ export default {
         groupFeedReco(
           (res) => {
             this.c = res.data
-            console.log('그룹추첮ㄴ', res.data)
           }
         )
         // this.placeName = '대전'
