@@ -287,6 +287,7 @@ export default {
                 this.setRefToken(refToken);
                 this.setUserStatus(true);
                 this.setUserInfo(user_age);
+                Swal.fire('로그인', '카카오 로그인 완료', 'success');
               }
               // false -> user 정보가 없으면 Signup
               else {
@@ -338,8 +339,7 @@ export default {
     },
     onClickLogin() {
       this.kakaoLogin()
-        .then(() => {
-          Swal.fire('로그인', '카카오 로그인 완료', 'success');
+        .then(() => {          
           this.$router.push({name: "Home"}).catch((err) => {
             if (err.name !== "NavigationDuplicated") {
               console.log(err)
