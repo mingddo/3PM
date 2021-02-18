@@ -584,6 +584,9 @@ export default {
     if(!this.mypage) {
       this.checkIsFollowingUser()
     }
+    if (this.$route.query.activetab == 2) {
+      this.activetab = 2;
+    }
     
   },
 };

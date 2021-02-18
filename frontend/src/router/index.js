@@ -12,6 +12,7 @@ import GroupDetail from '../views/GroupFeed/GroupDetail.vue'
 import GroupPage from '../views/GroupFeed/GroupPage.vue'
 import GroupForm from '../views/GroupFeed/GroupForm.vue'
 import NotFound from '../views/NotFound.vue'
+// import { compile, component } from 'vue/types/umd'
 
 
 Vue.use(VueRouter)
