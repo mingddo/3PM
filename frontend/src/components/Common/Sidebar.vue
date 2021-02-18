@@ -326,7 +326,11 @@ export default {
     },
     onClickSidebarLogout() {
       this.kakaoLogout().then(() => {
-        this.$router.push({ name: "Home" });
+        this.$router.push({ name: "Home" }).catch((err) => {
+          if (err.name === "NavigationDuplicated") {
+            location.reload();
+          }
+        });
       });
     },
     kakaoLogout() {

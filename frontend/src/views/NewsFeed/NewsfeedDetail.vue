@@ -416,7 +416,6 @@ export default {
           this.$route.query.id,
           (res) => {
             this.fd = res.data;
-            console.log(this.fd)
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];
             this.fd.content = this.fd.content.replace(/(\n|\r\n)/g, "<br>"); // 엔터 반영하는 코드..? 맞나 form 정상되면 테스트
@@ -449,7 +448,6 @@ export default {
             getIsGroupMember(
               this.fd.id,
               (res) => {
-                console.log('그룹가입여부', res.data)
                 this.isMember = res.data
               },
               (err) => {
@@ -467,7 +465,6 @@ export default {
         readOutdoors(
           this.$route.query.id, 
           (res) => {
-            console.log('청산별곡 글', res.data)
             this.fd = res.data;
             this.date = this.fd.date.split("T")[0];
             this.time = this.fd.date.split("T")[1];

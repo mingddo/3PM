@@ -48,7 +48,11 @@ export default {
         // type 4 그룹
       if (type === 1) {
         // 팔로우하기, 그럼 클릭했을때는 상대방 프로필로 가야한다
-        this.$router.push({ name: 'MyPage', query: { name: this.activity.other.id}})
+        this.$router.push({ name: 'MyPage', query: { name: this.activity.other.id}}).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
       }
       else if (type === 4 ) {
         this.$router.push({ name : 'groupdetail', query: { groupId: this.activity.group.id}})

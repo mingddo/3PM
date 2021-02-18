@@ -48,14 +48,13 @@
       <div
         class="feed-content-box-img-container"
         v-if="fd.files.length != 0"
-        @click="goToDetail"
       >
         <img
           :src="`https://dtbqjjy7vxgz8.cloudfront.net/${fd.files[0]}`"
           alt="업로드 파일"
         />
       </div>
-      <div v-else @click="goToDetail">
+      <div v-else>
         <p v-html="content">
           <!-- {{ fd.content }} -->
         </p>
@@ -145,7 +144,11 @@ export default {
       }
     },
     goToProfile() {
-      this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } });
+      this.$router.push({ name: "MyPage", query: { name: this.fd.user.id } }).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     goToSearchTag(tag) {
       this.$router.push({

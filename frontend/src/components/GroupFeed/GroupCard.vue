@@ -64,7 +64,11 @@ export default {
       });
     },
     goToGroupDetail () {
-      this.$router.push({ name : 'groupdetail', query: { groupId: this.group.id}})
+      this.$router.push({ name : 'groupdetail', query: { groupId: this.group.id}}).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
   },
   computed: {
