@@ -332,7 +332,6 @@ export default {
         tag,
         (res) => {
           this.items = res.data
-          console.log(this.items)
         },
         (err) => {
           console.log(err)
@@ -340,13 +339,11 @@ export default {
       )
     },
     autoTag (e) {
-      console.log(e)
       this.inputTag = e.target.value;
       if (this.inputTag == '') {this.inputTag = '#'}
       let tmpTag = this.inputTag.split('#')[1]
         tmpTag = tmpTag.replace(/ /g , '')
       if (tmpTag) {
-        console.log('api요청', tmpTag)
         this.tagApi(tmpTag)
       }
     },
@@ -404,7 +401,6 @@ export default {
           getprofileGroups(
             this.userpk,
             (res) => {
-              console.log(res)
               this.groupList = res.data
             },
             (err) => {
@@ -445,7 +441,6 @@ export default {
     },
     selectFile (e) {
       let files = e.target.files || e.dataTransfer.files;
-      console.log('files', files)
       if (files.length) {
         this.totalLen = this.form.filePaths.length + this.fileList.length
         if (this.totalLen > 5) {
@@ -641,7 +636,6 @@ export default {
         // axios put 요청
         if (this.userpk == this.$route.params.feed.user.id) {
           if (this.Category == 1) {
-            console.log(this.$route.params.feed.id)
             updateIndoors (
               this.$route.params.feed.id,
               this.form,
@@ -694,7 +688,6 @@ export default {
             this.form.address = this.location.address || this.location.address_name
             this.form.placeName = this.location.placeName || this.location.place_name
             this.form.code = this.city_code[this.location.city]
-            console.log(this.form)
             updateOutdoors(
               this.$route.params.feed.id,
               this.form,

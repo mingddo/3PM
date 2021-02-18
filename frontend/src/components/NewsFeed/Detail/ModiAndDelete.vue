@@ -50,7 +50,6 @@ export default {
         }).then(result => {
           if (result.isConfirmed) {
             if (this.Category == 1) {
-              console.log('삭제할 id', this.fd.id)
               deleteIndoors(
                 this.fd.id,
                 () => {
@@ -65,8 +64,8 @@ export default {
               deleteGroupFeed(
                 this.fd.groupId,
                 this.fd.id,
-                (res) => {
-                  console.log(res)
+                () => {
+                  console.log()
                   this.$router.push({name: 'NewsfeedPersonal', query: { Category: this.Category}})
                 },
                 (err) => {

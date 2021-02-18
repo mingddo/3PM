@@ -185,8 +185,7 @@ export default {
         updateGroupInfo(
           this.group_info.id,
           this.group,
-          (res) => {
-            console.log(res)
+          () => {
           },
           (err) => {
             console.log(err)
@@ -198,8 +197,7 @@ export default {
           createGroupImg(
             this.group_info.id,
             formData,
-            (res) => {
-              console.log(res)
+            () => {
             },
             (err) => {
               console.log(err)

@@ -40,8 +40,7 @@ export default {
     subscribe() {
       followToggle(
         this.id,
-        (res) => {
-          console.log(res);
+        () => {
           if (this.followState) {
             // alert(`${this.name} 님의 소식을 받을 수 있어요!`);
             this.$swal.fire({

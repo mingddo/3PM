@@ -53,7 +53,6 @@ export default {
           } else {
             this.recoGroup = res.data.slice(0, 9)
           }
-          console.log('그룹', this.recoGroup)
         },
         (err) => {
           console.log(err)
