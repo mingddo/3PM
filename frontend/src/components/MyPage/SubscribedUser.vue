@@ -24,7 +24,11 @@ export default {
   methods : {
     goToProfile (e) {
       if (e.target.classList.value === "deleteSubscribe") return
-      this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}})
+      this.$router.push({ name: 'MyPage', query: { name: this.subscriber.id}}).catch((err) => {
+        if (err.name === "NavigationDuplicated") {
+          location.reload();
+        }
+      });
     },
     deleteSubscribe() { 
       this.$swal.fire({ 

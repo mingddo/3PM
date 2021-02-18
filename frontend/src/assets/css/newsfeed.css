@@ -643,6 +643,7 @@
   align-items: center;
 }
 .feed-footer-box {
+  cursor: pointer;
   display: flex;
   padding: 20px 20px 0 20px;
   justify-content: space-between;
