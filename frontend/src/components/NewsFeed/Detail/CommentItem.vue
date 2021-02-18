@@ -18,8 +18,8 @@
           </div>
         </div>
         <!--댓글 작성자 본인의 경우 // vuex 저장 내용으로 user 정보 비교하여 확인-->
-        <div v-if="comment.user.id == userpk">
-          <i class="fas fa-ellipsis-v" @click="openModiDeleteBtn"></i>
+        <div v-if="comment.user.id == userpk" style="position:relative;">
+          <i class="fas fa-ellipsis-v"  @click="openModiDeleteBtn"></i>
           <div v-show="!foldModiDrop" class="feed-comment-btn-drop-content">
             <div @click="changeCommentModiForm">
               수정
@@ -83,7 +83,6 @@ import { clapComment } from "@/api/comment.js";
 import { clapCommentList } from "@/api/comment.js";
 import { mapState } from "vuex";
 import UserList from "../Common/UserList.vue";
-import Swal from 'sweetalert2';
 
 export default {
   name: "NewsFeedCommentItem",
@@ -192,19 +191,21 @@ export default {
     deleteComment() {
       if (this.userpk !== this.comment.user.id) {
         // return alert("접근이 불가합니다!");
-        Swal.fire('접근이 불가합니다', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '접근이 불가합니다',
+          showConfirmButton: false,
+          timer: 1500
+        })
         return;
       }
       this.foldModiDrop = true;
 
-      Swal.fire({ 
-        title: '댓글을 삭제하시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '댓글을 삭제하시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
-        confirmButtonText: '나가기', 
+        confirmButtonText: '삭제하기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
         if (result.isConfirmed) {

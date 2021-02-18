@@ -137,7 +137,6 @@ import "@/assets/css/main.css";
 import "@/assets/css/newsfeed.css";
 import "@/assets/css/mypage.css";
 import "@/assets/css/search.css";
-import Swal from 'sweetalert2';
 
 export default {
   components: {},
@@ -277,7 +276,12 @@ export default {
           this.setKakaoId(null);
           this.setUserStatus(null);
           // alert("logout");
-          Swal.fire('Logout', '', 'success');
+          this.$swal.fire({
+            icon: 'success',
+            text: '로그아웃',
+            showConfirmButton: false,
+            timer: 1500
+          })
           resolve();
         });
       });
@@ -574,7 +578,7 @@ export default {
     height: 45px;
   }
   .feed-box {
-    padding: 0;
+
   }
   .feed-group-box {
     padding : 10px 0 0 0;

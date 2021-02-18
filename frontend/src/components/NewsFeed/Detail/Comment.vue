@@ -47,7 +47,6 @@ import { searchAutoUser } from '@/api/comment.js'
 import { getprofileInfo } from '@/api/mypage.js'
 import CommentItem from './CommentItem.vue';
 import NewsFeedProfile from '../Common/NewsFeedProfile.vue'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'Comment',
@@ -79,6 +78,14 @@ export default {
   created () {
     this.setComment(0);
     this.getImg();
+  },
+  watch : {
+    commentInput : function () {
+      if (this.commentInput.length > 200) {
+        this.commentInput.slice(0,200)
+        alert('200자 이내로 작성해주세요')
+      }
+    }
   },
   methods: {
     getImg () {
@@ -117,7 +124,12 @@ export default {
     createComment () {
       if (!this.commentInput) {
         // alert('내용을 입력해주세요')
-        Swal.fire('내용을 입력해주세요', '', 'success');
+        this.$swal.fire({
+          icon: 'success',
+          text: '내용을 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         let results = this.commentInput.match(/@/g); 
         if (results == !null) {

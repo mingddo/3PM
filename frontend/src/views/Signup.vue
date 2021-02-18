@@ -22,7 +22,6 @@
 <script>
 import {mapActions,mapState} from 'vuex'
 import { createUser,checkOverlapped } from '@/api/signup.js'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'Signup',
@@ -54,8 +53,12 @@ export default {
       this.$router.push({name : "Home"});
     }
     if(this.userStatus) {
-      // alert('회원가입 하셨어요!!')
-      Swal.fire('회원가입 하셨어요!!', '', 'success');
+      this.$swal.fire({
+        icon: 'success',
+        text: '회원가입 하셨어요',
+        showConfirmButton: false,
+        timer: 1500
+      })
       this.$router.push({name : "Home"});
     }
   },
@@ -78,7 +81,12 @@ export default {
           this.setRefToken(refToken);
           this.setUserStatus(true);
           this.$router.push({name : "Home"});
-          Swal.fire('회원가입 하셨어요!!', '', 'success');
+          this.$swal.fire({
+            icon: 'success',
+            text: '회원가입 완료',
+            showConfirmButton: false,
+            timer: 1500
+          })
         },
         (err) => {
           console.log(err);
@@ -105,18 +113,30 @@ export default {
         (res) => {
           this.isOverlapped = res.data;
           if(this.isOverlapped) {
-            // alert('사용 불가능한 아이디입니다');
-            Swal.fire('사용 불가능한 아이디입니다', '', 'error');
-            }
+            this.$swal.fire({
+              icon: 'error',
+              text: '사용 불가능한 아이디입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
           else {
             this.checkedName = this.nickname;
-            // alert('사용 가능한 아이디입니다');
-            Swal.fire('사용 가능한 아이디입니다', '', 'success');
+            this.$swal.fire({
+              icon: 'success',
+              text: '사용 가능한 아이디입니다',
+              showConfirmButton: false,
+              timer: 1500
+            })
           }
         },
         (err) => {
-          // alert('err',err);
-          Swal.fire('ERROR', err, 'error');
+          console.log(err);
+          this.$swal.fire({
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
       )
     },

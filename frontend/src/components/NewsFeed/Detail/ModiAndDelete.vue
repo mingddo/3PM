@@ -15,7 +15,6 @@ import { deleteGroupFeed } from '@/api/group.js'
 import { deleteOutdoors } from '@/api/outdoors.js'
 import { deleteWorker } from '@/api/worker.js'
 import { mapState } from 'vuex'
-import Swal from 'sweetalert2';
 
 export default {
   name: 'ModiAndDelete',
@@ -42,13 +41,10 @@ export default {
     },
     deleteFeed () {
       if (this.userpk == this.fd.user.id) {
-        Swal.fire({ 
-          title: '정말로 삭제하시겠습니까?', 
-          text: '', 
+        this.$swal.fire({ 
+          text: '정말로 삭제하시겠습니까?', 
           icon: 'warning', 
           showCancelButton: true, 
-          confirmButtonColor: '#3085d6', 
-          cancelButtonColor: '#d33', 
           confirmButtonText: '삭제하기', 
           cancelButtonText: '돌아가기'
         }).then(result => {

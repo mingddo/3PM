@@ -53,7 +53,6 @@ import { createGroup } from '@/api/group.js'
 import { createGroupImg } from '@/api/group.js'
 import Sidebar from '../../components/Common/Sidebar.vue';
 import GroupNav from '../../components/GroupFeed/GroupNav.vue';
-import Swal from 'sweetalert2';
 
 export default {
   components: { Sidebar, GroupNav },
@@ -105,10 +104,20 @@ export default {
       this.completed = true;
       if (!this.form.name) {
         // alert('그룹 이름을 입력해주세요')
-        Swal.fire('그룹 이름을 입력해주세요', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '그룹 이름을 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else if (!this.form.description) {
         // alert('그룹 소개를 입력해주세요')
-        Swal.fire('그룹 소개를 입력해주세요', '', 'error');
+        this.$swal.fire({
+          icon: 'error',
+          text: '그룹 소개를 입력해주세요',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         createGroup(
           this.form,
@@ -135,13 +144,10 @@ export default {
     if (this.completed) {
       next();
     } else {
-      Swal.fire({ 
-        title: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
-        text: '', 
+      this.$swal.fire({ 
+        text: '작성 중인 내용이 저장되지 않았습니다. 화면을 나가시겠습니까?', 
         icon: 'warning', 
         showCancelButton: true, 
-        confirmButtonColor: '#3085d6', 
-        cancelButtonColor: '#d33', 
         confirmButtonText: '나가기', 
         cancelButtonText: '돌아가기'
       }).then(result => {
