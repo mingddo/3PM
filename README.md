@@ -210,8 +210,8 @@
 
 
 ## 🎀 최종 산출물
-    [최종발표 UCC](https://youtu.be/71-hPuw0H1g)
-    [최종발표 PDF](산출물/3pm_최종.pdf)
+[최종발표 UCC](https://youtu.be/71-hPuw0H1g)
+[최종발표 PDF](산출물/3pm_최종.pdf)
 
 
 ## 🔐 Git 규칙
