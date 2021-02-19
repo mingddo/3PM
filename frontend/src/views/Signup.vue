@@ -156,7 +156,7 @@ export default {
     max-width: 800px;
   }
   .container p {
-    font-size: 1.5rem;
+    font-size: 1.15rem;
     font-weight: bold;
   }
   ::placeholder {
