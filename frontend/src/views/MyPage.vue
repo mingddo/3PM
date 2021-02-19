@@ -66,7 +66,7 @@
                   </h3>
                   <!-- <h3 :class="{ profile_none: !mypage }">나를 구독한 사람</h3> -->
                   <h3 :class="{ profile_none: !mypage }">구독자</h3>
-                  <div>{{ profileinfo.toMeFromOthersCnt }}</div>
+                  <div style="cursor:pointer;" @click="getFollower">{{ profileinfo.toMeFromOthersCnt }}</div>
                 </div>
                 <div class="profileDetailInfo">
                   <h3 :class="{ profile_none: mypage }">
@@ -96,7 +96,7 @@
                     <a
                       @click.prevent="activetab = 3"
                       :class="[activetab === 3 ? 'active' : '']"
-                      >구독자</a
+                      >구독중</a
                     >
                     <div
                       :class="[activetab === 3 ? 'active' : '']"
@@ -129,6 +129,7 @@
               </div>
             </div>
           </div>
+          <UserList @closeList="closeList" v-if="openFollower" :type="4" :users="current_user_followerList"/>
         </header>
         <article class="myPagearticleFrame">
           <div class="myPagearticle">
@@ -173,9 +174,11 @@ import {
   getprofileFeedWorker,
   followToggle,
   followingList,
+  followerList
 } from "@/api/mypage.js";
 import Sidebar from "@/components/Common/Sidebar.vue";
 import {getNotice} from "@/api/notice.js"
+import UserList from '../components/NewsFeed/Common/UserList.vue';
 
 export default {
   components: {
@@ -184,6 +187,7 @@ export default {
     SubscribedList,
     GroupList,
     NewsFeedList,
+    UserList,
   },
   data() {
     return {
@@ -237,6 +241,7 @@ export default {
       extra : 100,
       currentFeedName : 'indoor',
       current_user_followingList: [],
+      current_user_followerList: [],
       current_user_activity : {
         last : false,
         next : false,
@@ -244,9 +249,16 @@ export default {
         list : [],
         extra : 100,
       },
+      openFollower: false,
     };
   },
   methods: {
+    closeList () {
+      this.openFollower = false;
+    },
+    getFollower () {
+      this.openFollower = true;
+    },
     onClickFeedIndoor() {
       this.currentFeedName = 'indoor'
       this.resetFeedObj('indoor')
@@ -530,6 +542,16 @@ export default {
       );
     },    
     getfollowingList() {
+      followerList (
+        this.profile_user,
+        (res) => {
+          this.current_user_followerList = res.data;
+          console.log(this.current_user_followerList)
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
       followingList(
         this.profile_user,
         (res) => {
