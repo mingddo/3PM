@@ -50,6 +50,8 @@ export default {
         this.title = '그룹 멤버'
       } else if (this.type == 3) {
         this.title = '이 댓글에 👏박수를 친 사람들'
+      } else if (this.type == 4) {
+        this.title = '나를 구독한 사람들'
       }
     },
     closeList () {
