@@ -2,17 +2,26 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Signup from '../views/Signup.vue'
-import Login from '../views/Login.vue'
 import NewsfeedPersonal from '../views/NewsFeed/NewsfeedPersonal.vue'
 import NewsfeedDetail from '../views/NewsFeed/NewsfeedDetail.vue'
 import NewsfeedForm from '../views/NewsFeed/NewsfeedForm.vue'
 import MyPage from '../views/MyPage.vue'
 import MyPageEdit from '../views/MyPageEdit.vue'
 import Search from '../views/Search.vue'
+import GroupDetail from '../views/GroupFeed/GroupDetail.vue'
+import GroupPage from '../views/GroupFeed/GroupPage.vue'
+import GroupForm from '../views/GroupFeed/GroupForm.vue'
+import NotFound from '../views/NotFound.vue'
+import Admin from '../views/Admin.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/admin-secret',
+    name : 'Admin',
+    component : Admin,
+  },
   {
     path: '/',
     name: 'Home',
@@ -22,11 +31,6 @@ const routes = [
     path: '/signup',
     name: 'Signup',
     component: Signup
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
   },
   {
     path: '/mypage',
@@ -54,10 +58,34 @@ const routes = [
     component: NewsfeedForm
   },
   {
-    path: '/search',
+    path: '/search/:filter',
     name: 'Search',
     component: Search
   },
+  {
+    path: '/groupdetail',
+    name: 'groupdetail',
+    component: GroupDetail
+  },
+  {
+    path: '/grouppage',
+    name: 'grouppage',
+    component: GroupPage
+  },
+  {
+    path: '/groupform',
+    name: 'groupform',
+    component: GroupForm
+  },
+  {
+    path: "/404",
+    name: "NotFound",
+    component: NotFound
+},
+{
+  path: '/:pathMatch(.*)*',
+  redirect: "/404"
+},
 ]
 
 const router = new VueRouter({

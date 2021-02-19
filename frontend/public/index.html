@@ -4,11 +4,21 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="icon" href="<%= BASE_URL %>logo_ver3.png" width="30px">
+    <!-- <link rel="stylesheet" href="@/assets/css/style.scss"> -->
+    <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
+    <title>오후 세시</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://kit.fontawesome.com/82060ad290.js" crossorigin="anonymous"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>Kakao.init('466fa429c4ae3db0819f75ebf5e3f512');</script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4eefdb70288a52331d930637bf0a9161&libraries=services,clusterer,drawing"></script>
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
   </head>
   <body>
     <noscript>

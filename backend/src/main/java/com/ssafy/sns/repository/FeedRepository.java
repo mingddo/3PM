@@ -1,27 +1,25 @@
 package com.ssafy.sns.repository;
 
-import com.ssafy.sns.domain.newsfeed.Indoor;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
+import com.ssafy.sns.domain.newsfeed.Feed;
 
 import java.util.List;
 
 public interface FeedRepository {
 
     // 내가 쓴글 불러오기
-    public List<Indoor> findMyList(Long id, int num);
+    List<Feed> findMyList(Long id, int num, Object category);
 
     // 한페이지 불러오기
-    public List<Indoor> findList(int num);
+    List<Feed> findList(int num, Object category);
 
     // 피드 글 불러오기
-    public Indoor findOne(Long id);
+    Feed findById(Long feedId);
 
     // 피드 글쓰기
-    public Long save(Indoor indoor);
+    Feed save(Feed feed);
 
     // 피드 글삭제
-    public void remove(Long id);
+    void remove(Feed feed);
 
-    // 피드 글수정
-    public Long update(Long indoorId, IndoorRequestDto indoorDto);
+    Object findCategory(Long feedId);
 }

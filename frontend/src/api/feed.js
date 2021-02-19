@@ -1,46 +1,39 @@
-import { createInstance } from './index.js'
+import { AuthorizationInstance } from './index.js'
 
-const instance = createInstance();
+const instance = AuthorizationInstance();
 
-function createFeed(feed, success, fail) {
+// 피드 crud
+
+// 태그 자동완성
+function searchAutoTag(key, success, fail) {
   instance
-    .post('feed', feed)
+    .get(`search/auto/tag`, {
+      params: {
+        hashtag: key,
+      }
+    })
     .then(success)
     .catch(fail);
 }
 
-function readFeed(feed_pk, success, fail) {
+// 피드 좋아요
+function clapFeed(pk, success, fail) {
   instance
-    .get(`feed/${feed_pk}`)
+    .post(`feeds/${pk}/claps`)
     .then(success)
     .catch(fail);
 }
 
-function updateFeed(feed_pk, feed, success, fail) {
+// 피드 좋아요 리스트
+function clapFeedList(pk, success, fail) {
   instance
-    .put(`feed/${feed_pk}`, feed)
+    .get(`feeds/${pk}/claps`)
     .then(success)
     .catch(fail);
-}
-
-function deleteFeed(feed_pk, success, fail) {
-  instance
-  .delete(`feed/${feed_pk}`)
-  .then(success)
-  .catch(fail);
-}
-
-function feedList(list_pk, success, fail) {
-  instance
-  .get(`feed/list/${list_pk}`)
-  .then(success)
-  .catch(fail);
 }
 
 export {
-  createFeed,
-  readFeed,
-  updateFeed,
-  deleteFeed,
-  feedList
+  clapFeed,
+  clapFeedList,
+  searchAutoTag
 }

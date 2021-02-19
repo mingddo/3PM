@@ -1,0 +1,25 @@
+.open {
+  background-color: white;
+  /* margin-left: 300px; */
+  /* background-color: red; */
+
+}
+/* .v-popover {
+  background-color: red;
+}
+.popper {
+  background-color: blue;
+} */
+.mentionable {
+  width: 80%;
+  margin-top: auto;
+}
+.mention-item {
+  padding: 4px 10px;
+  border-radius: 4px;
+  /* background-color: red; */
+}
+
+.mention-selected {
+  background: lightgrey;
+}

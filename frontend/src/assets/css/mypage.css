@@ -1,0 +1,544 @@
+/* mypage */
+.myPageHeaderFrame {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.myPageHeader {
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.profileInfo1 {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+}
+.profileInfo1 > div {
+  margin: 10px;
+}
+.profileInfo1 h1 {
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+}
+.myPageInroduce {
+}
+
+.myPageSubscribe {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  margin: 15px;
+}
+
+.myPageSubscribed {
+  width: 100%;
+  height: 50px;
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  align-items: center;
+  background-color: #b29887;
+
+}
+
+.profielSubscribedNone {
+  display: none;
+}
+
+.profileInfoDetailFrame {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileInfoDetail {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.profile_none {
+  display: none;
+}
+
+.profileDetailInfo {
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  /* cursor: pointer; */
+}
+.profileDetailInfo h3 {
+  margin-bottom: 5px;
+}
+
+.myPageHeaderhr {
+  width: 100%;
+  height: 1px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.5px 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.myPageBottom {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myPageTabLink {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.myPageTabLink a {
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.myPageTabLinkContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.activeBar {
+  width: 100%;
+  height: 3px;
+}
+.activeBar.active {
+  border-bottom: solid 3px var(--bold-brown);
+}
+
+.myPageTabLink a:hover {
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  cursor: pointer;
+}
+
+.myPageTabLink a.active {
+  color: var(--bold-brown);
+}
+
+.settings {
+  height: 30px;
+  margin-right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #e4e6e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.myPagearticleFrame {
+  width: 100%;
+  height: auto;
+  padding: 15px 0;
+}
+
+.myPagearticle {
+}
+
+.myPageActivity {
+  width: 100%;
+  border-radius: 10px;
+}
+.myPageActivity-feed-filter-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.myPagemainSection {
+  width: 50%;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.profileImgFrame {
+  margin: 5px;
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pofileImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* activity */
+.ActivityComponent {
+  padding: 15px;
+  width: 100%;
+  /* background-color: white; */
+}
+.myPageActivityHeader {
+  width: 100%;
+  margin: auto;
+  /* padding: 5px 50px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.myPageActivityhr {
+  width: 90%;
+}
+
+.myPageActivityHeaderMoreInfo {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fa-angle-right {
+  font-size: 30px;
+}
+
+.myPageActivityContentFrame {
+  width: 100%;
+  margin: auto;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+/* mypage activity */
+
+.activityComponentFrame {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px 0;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  border-radius: 10px;
+}
+.activityComponentFrame:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+.activityContent {
+  width: 80%;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.mypageEdit {
+  width: 50%;
+  margin-top: 80px;
+  /* margin: 80px auto; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.edit-profieImg-component {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.editImg-upload-title {
+  font-size: 24px;
+  margin: 24px;
+  width: auto;
+}
+.select-Edit-Img {
+  margin-bottom: 12px;
+}
+.select-Edit-Img-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-brown);
+  color: var(--black-color);
+  padding: 10px;
+}
+
+.edit-btn-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
+  margin: 24px 0;
+}
+
+.edit-btn-container > button {
+  color: var(--black-color);
+  background-color: var(--bold-brown);
+  width: 100px;
+  padding: 10px;
+}
+.write-introduce {
+  display: none;
+}
+.write-introduce.active {
+  display: block;
+}
+
+.profile-edit-img-frame {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 70%;
+  overflow: hidden;
+  background-color: #fffcf9;
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+.profile-edit-img-frame > div {
+  width: 100%;
+  height: 100%;
+}
+.profile-edit-img-frame > div > img {
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+}
+.mypageEdit-Toggle-Img {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background: var(--white-color);
+  border-radius: 5px;
+  box-shadow: 0px 3px 5px rgb(0 0 0 / 15%);
+}
+.myPageEdit-Header-Title {
+  font-size: 35px;
+  font-weight: 700;
+  text-align: center;
+  margin: 24px;
+}
+.edit-profile-Img-btn {
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #d1bbad;
+  color: black;
+}
+
+.nicknameEdit-frame {
+  width: 85%;
+  margin: 24px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.introEdit-frame {
+  width: 85%;
+  margin: 12px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.introEdit-frame > input {
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid #b29887;
+  font-size: 17px;
+  width: 70%;
+  margin-bottom: 12px;
+}
+.nicknameexist {
+  font-size: 17px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60%;
+  background: #fffcf9;
+  padding-left: 5px;
+}
+.nicknameEditForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.nickname-warn {
+  width: 100%;
+  font-size: 17px;
+  word-break: keep-all;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nicknameEdit-btn {
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: #d1bbad;
+  color: black;
+  margin-left: 24px;
+}
+.intro-Edit-btn {
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: #d1bbad;
+  color: black;
+  font-size: 17px;
+  margin-top: 12px;
+}
+.intro-content {
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.highlight {
+  background-color: #f5f730;
+  padding: 5px 5px;
+}
+.highlight-warn {
+  background-color: #f5f730;
+  padding: 3px 5px;
+  color: rgb(194, 3, 3);
+}
+.nickname-edit-input-frame {
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.nickname-edit-input-frame-btn {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.nickname-edit-input-frame > input {
+  width: 50%;
+  height: 25px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid #b29887;
+}
+.edit-dupli-btn {
+  border-radius: 5px;
+  width: 25%;
+  padding: 10px;
+  background-color: #b29887;
+  color: black;
+}
+.edit-nickname-confirm-btn {
+  width: 150px;
+  font-size: 15px;
+  padding: 5px;
+  color: black;
+  background-color: #b29887;
+  border-radius: 5px;
+  margin: 0 10px;
+}
+
+.edit-nickname-back-btn {
+  width: 150px;
+  font-size: 15px;
+  padding: 5px;
+  color: black;
+  background-color: #d1bbad;
+  border-radius: 5px;
+  margin: 0 10px;
+}
+
+.profile-intro-frame {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+}
+.prrfile-content-frame {
+  width: 60%;
+  word-break: keep-all;
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fffcf9;
+  padding: 12px;
+}
+.save-Edit-profile {
+  font-size: 17px;
+  width: 300px;
+  background-color: #b29887;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: black;
+  font-weight: 700;
+  padding: 10px;
+  margin: 24px;
+}
+.profile-intro-frame-title-container {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.myPageEdit_valid {
+  background-color: #aca9a7;
+  color: gray;
+}

@@ -1,6 +1,7 @@
 package com.ssafy.sns.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,5 +22,12 @@ public abstract class BaseTimeEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
 
+//    public LocalDateTime getCreatedDate() {
+//        return createdDate.plusHours(9);
+//    }
+//
+//    public LocalDateTime getModifiedDate() {
+//        return modifiedDate.plusHours(9);
+//    }
 }
 

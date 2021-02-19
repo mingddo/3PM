@@ -1,26 +1,29 @@
 package com.ssafy.sns.service;
 
-import com.ssafy.sns.dto.newsfeed.IndoorListResponseDto;
-import com.ssafy.sns.dto.newsfeed.IndoorRequestDto;
-import com.ssafy.sns.dto.newsfeed.IndoorResponseDto;
+import com.ssafy.sns.dto.newsfeed.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface FeedService {
 
     // 내가 쓴 글 불러오기
-    public IndoorListResponseDto readMyList(Long id, int num);
+    FeedListResponseDto findMyList(Long userId, Long targetId, int num);
 
     // 한페이지 불러오기
-    public IndoorListResponseDto readList(int num);
+    FeedListResponseDto readList(Long userId, int num);
 
     // 피드 글 불러오기
-    public IndoorResponseDto read(Long id);
+    FeedResponseDto read(Long userId, Long feedId);
 
-    // 피드 글쓰기
-    public Long write(IndoorRequestDto indoorRequestDto);
+    Long write(Long userId, FeedRequestDto feedRequestDto);
+
+    // 피드 파일 첨부
+    void uploadFiles(Long feedId, MultipartFile file) throws IOException;
 
     // 피드 글삭제
-    public void delete(Long id);
+    void delete(Long userId, Long feedId) throws IOException;
 
     // 피드 글수정
-    public Long modify(Long indoorId, IndoorRequestDto indoorRequestDto);
+    void modify(Long userId, Long feedId, FeedRequestDto feedRequestDto) throws IOException;
 }
