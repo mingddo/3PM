@@ -155,14 +155,14 @@ input:focus {
   padding-top: 16px;
   padding-bottom: 16px;
   z-index: 0;
-  position :relaltive;
+  position: relaltive;
 }
 .autocompleteUl.active {
   display: none;
 }
 .autocompleteUl {
-  position: absoulte;
-  width: 90%;
+  position: absolute;
+  width: 45%;
   margin-left: 24px;
   background-color: white;
   padding: 10px 0;
@@ -316,7 +316,7 @@ input:focus {
   justify-content: space-between;
   align-items: flex-end;
 }
-.resultDetailFrame> iframe {
+.resultDetailFrame > iframe {
   width: 100%;
   max-height: 300px;
   object-fit: contain;
